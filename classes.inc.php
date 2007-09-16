@@ -1711,7 +1711,7 @@ class Equipment{
             $t->assign('Comments', $r);
         }
     }
- function get_equipment_overview(){
+    function get_equipment_overview(){
         global $t, $_lang, $globals, $_config;/*{{{*/
 
         /**
@@ -1728,6 +1728,34 @@ class Equipment{
         }/*}}}*/
     }
 
+    function get_equipment_overview_table(){
+        global $t, $_lang, $globals, $_config;
+        set_config_table_prefix($this->table_prefix);
+        $equiplist = parse_mysql_query('equiplist.sql');
+        
+        $count = count($equiplist);
+        if ($count == 0) {
+            $t->assign('equip_none', $_lang['equip_none'] );
+        } else {
+            $t->assign('equip_title_object', $_lang['equip_title_object'] );
+            $t->assign('equip_title_manufacturer', $_lang['equip_title_manufacturer'] );
+
+            for ($i=0; $i<$count; $i++) {
+                $t->assign('logbook_place_linktitle', $_lang['logbook_place_linktitle'] );
+                if ($equiplist[$i]['Manufacturer'] == "") {
+                    $Manufacturer = "-";
+                } else {
+                    $Manufacturer = $equiplist[$i]['Manufacturer'] ;
+                }
+                $rowdata[$i] = array (
+                        'id' =>  $equiplist[$i]['ID'] ,
+                        'object' => $equiplist[$i]['Object'],
+                        'manufacturer' => $Manufacturer);
+            }
+            $t->assign('cells', $rowdata);
+        }
+
+    }
     /**
      * get_equipment_overview_grid 
      * 
