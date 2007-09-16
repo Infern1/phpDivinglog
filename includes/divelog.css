@@ -1,0 +1,62 @@
+ body
+ {
+ text-align: center;
+  margin: 0px; /* we willen geen margin */
+     padding: 0px; /* we willen geen padding */
+}
+
+div#content
+ {
+ margin: 0,  auto;
+ text-align: left;
+ width: 700px;
+
+}
+
+tr.divesection td { 
+	font-weight: bold; 
+	color: #000000; 
+	font-size: 9pt; 
+	background-color: #D3D3D3;
+	padding-bottom: 3px;
+}
+tr.divetitle td { 
+	font-weight: normal; 
+	color: #808080;
+	font-size: 9pt;
+	line-height: 140%;
+	text-decoration: none;
+}
+tr.divecontent td { 
+	font-weight: normal; 
+	color: #000000;
+	font-size: 9pt;
+	line-height: 140%;
+	text-decoration: none;
+	padding-bottom: 5px;
+}
+tr.divelogtitle td { 
+	font-weight: bold; 
+	color: #000000;
+	font-size: 8pt;
+	line-height: 140%;
+	text-decoration: none;
+	background-color: #D3D3D3;
+	padding-bottom: 5px;
+}
+a.divelogcrumbs:link,
+a.divelogcrumbs:visited {
+	color: #808080;
+	text-decoration: none;
+}
+a.divelogcrumbs:hover {
+	color: #000000;
+	text-decoration: underline;
+}
+.divelogcrumbs {
+	color: #808080;
+	font-size: 8pt;
+	line-height: 140%;
+	text-decoration: none;
+	margin-left: 0px;
+}
