@@ -20,6 +20,15 @@ class HandleRequest {
     var $site_nr;
     var $diver_choice;
     /**
+     * view_request
+     * 0 = overview
+     * 1 = details
+     * 
+     * @var mixed
+     * @access public
+     */
+    var $view_request;
+    /**
      * request_type 
      * 1 = dives ; 
      * 2 = divesite 
@@ -60,6 +69,9 @@ class HandleRequest {
     function get_request_type(){
         return $this->get_request_type;
     }
+    function get_view_request(){
+        return $this->view_request;
+    }
     function get_multiuser(){
         return $this->multiuser;
     }
@@ -74,25 +86,29 @@ class HandleRequest {
         if($this->multiuser){
             // The url should contain a least one select person, other wise return to the person chooser
             // Get the last two parts of the array
-            $split_request_in = GetRequestVar($this->request_uri, $this->request_file_depth);
-            $split_request = array_values($split_request_in);
-            $file_req = array_keys($split_request_in); 
-            
+            $split_request = GetRequestVar($this->request_uri, $this->request_file_depth);
+            $file_req = $split_request[0];
+
             //check if the user is set, otherwise show person chooser
-            if(!empty($split_request[0]) && Users::is_valid_user($split_request[0])){
-                $this->user_id = check_number($split_request[0]);
-            
-                switch($file_req[0]) {
+            if(!empty($split_request[0]) && Users::is_valid_user($split_request[1])){
+                $this->user_id = check_number($split_request[1]);
+                
+                switch($file_req) {
                     case "index.php":
-                        $this->dive_nr = check_number($split_request[1]);
+                        $this->dive_nr = check_number($split_request[2]);
+                        if(!empty($this->dive_nr )){
+                            $this->view_request = 1;
+                        } else {
+                            $this->view_request = 0;    
+                        }
                         $this->request_type = 1;
                         break;
                     case 'divesite.php':
-                        $this->site_nr = check_number($split_request[1]);
+                        $this->site_nr = check_number($split_request[2]);
                         $this->request_type = 2;
                         break;
                     case 'equipment.php':
-                        $this->equipment_nr = check_number($split_request[1]);
+                        $this->equipment_nr = check_number($split_request[2]);
                         $this->request_type = 3;
                         break;
                     case 'divestats.php':
@@ -100,7 +116,7 @@ class HandleRequest {
                         break;
                     case 'drawprofile.php':
                         $this->request_type = 5;
-                        $this->dive_nr = check_number($split_request[1]);
+                        $this->dive_nr = check_number($split_request[2]);
                         break;
                     case 'divesummary.php':
                         break;
@@ -117,30 +133,30 @@ class HandleRequest {
         else {
             //Find what the client wants to see and if a record is requested set it
             $split_request = GetRequestVar($this->request_uri, $this->request_file_depth);
-            $file_req = array_keys($split_request); 
-            switch($file_req[0]) {
+            $file_req = $split_request[0];
+            switch($file_req) {
                 case 'index.php':
-                    $this->dive_nr = check_number($file_req[1]);
+                    $this->dive_nr = check_number($split_request[1]);
                     $this->request_type = 1;
                     break;
                 case 'divesite.php':
-                    $this->site_nr = check_number($file_req[1]);
+                    $this->site_nr = check_number($split_request[1]);
                     $this->request_type = 2;
                     break;
                 case 'equipment.php':
-                    $this->equipment_nr = check_number($file_req[1]);
+                    $this->equipment_nr = check_number($split_request[1]);
                     $this->request_type = 3;
                     break;
                 case 'divestats.php':
-                    $this->user_id = check_number($file_req[1]);
+                    $this->user_id = check_number($split_request[1]);
                     $this->request_type = 4;
                     break;
                 case 'drawprofile.php':
-                    $this->dive_nr = check_number($file_req[1]);
+                    $this->dive_nr = check_number($split_request[1]);
                     $this->request_type = 5;
                     break;
                 case 'divesummary.php':
-                    $this->user_id = check_number($file_req[1]);
+                    $this->user_id = check_number($split_request[1]);
                 default:
                     //defaults to main page
                     break;
@@ -535,6 +551,7 @@ class Divelog {
     var $table_prefix;
     var $profile_info;
     var $averagedepth;
+    var $page_request;
     var $sac;
     var $request_type; // request_type = 0 overview request_type = 1 details
    
@@ -562,17 +579,20 @@ class Divelog {
     function set_divelog_info($request){
         //We need to extract the info from the request/*{{{*/
         if(!$request->diver_choice){
-            if($this->multiuser){
-                $this->user_id = $request->get_user_id();
+            //Find request type
+            //$this->request_type =  $request->get_view_request();
+            $this->user_id = $request->get_user_id();
+            if($request->get_view_request() == 1){
+                $this->request_type = 1;
                 $this->dive_nr = $request->get_dive_nr();
+            } else {
+                $this->request_type = 0;
+            }
+            if($this->multiuser){
                 $user = new User();
                 $user->set_user_id($this->user_id);
                 $this->table_prefix = $user->get_table_prefix();
-            } else {
-                $this->user_id = $request->get_user_id();
-                $this->dive_nr = $request->get_dive_nr();
-
-            }
+            } 
         } else {
             $this->request_type = 3;
         }
@@ -1031,14 +1051,15 @@ class Divelog {
      * @return void
      */
     function get_dive_overview_table(){
-        global $t, $_lang, $globals, $_config;/*{{{*/
+        global $db, $t, $_lang, $globals, $_config;/*{{{*/
         set_config_table_prefix($this->table_prefix);
         //    Get the details of the dives to be listed
         $recentdivelist = parse_mysql_query('recentdivelist.sql');
         $recentdivelist_query = sql_file('recentdivelist.sql');
+        echo $recentdivelist_query;
         $count = count($recentdivelist);
         reset_config_table_prefix();
-        for($i=0; $i<$count; $i++){
+  /*      for($i=0; $i<$count; $i++){
             if ($recentdivelist[$i]['Divedate'] == ""){
                 $Divedate = "-";
             } else {
@@ -1075,8 +1096,50 @@ class Divelog {
                     'depth' => $Depth ,
                     'divetime' => $Divetime ,
                     'location' => $location);            
+        }*/
+/*
+        $pagerOptions = array( 
+                    'mode' => 'Sliding', 
+                    'delta' => 3, 
+                    'perPage' => 10,
+                    'append' => false, 
+                    'path' => '',
+                    'fileName' => 'javascript:revealDiv(%d)', 
+                    'itemData' => $rowdata, ); */
+        $pager_options = array( 
+                    'mode' => 'Sliding', 
+                    'perPage' => 10, 
+                    'append' => false,
+                    'currentPage' => 2,
+                    'path' => $this->user_id,
+                    'fileName' => '/%d/',
+                    'delta' => 2, );    
+      //  $pager =& Pager::factory($pagerOptions);
+        $paged_data = Pager_Wrapper_MDB2($db, $recentdivelist_query, $pager_options);
+        print_r($paged_data);
+        //$data = $pager->getPageData(); 
+        if (!is_array($data)) { 
+            $data = array(); 
         }
-        $t->assign('cells', $rowdata);/*}}}*/
+       // $n_pages =  $pager->numPages() ;
+       /* for ($i=1; $i <= $n_pages; ++$i) {
+          //print_r(array_keys($pager->getPageData($i)));
+          $data .= ($pager->getPageData($i));
+
+          $page[] = ($pager->getPageData($i));
+        }
+
+       //$t->assign('items', $data);
+        $links = $pager->getLinks();
+        $t->assign('pages', $links['pages']);
+        $t->assign('n_pages' ,$n_pages ); 
+        $pagearr = range(0, $pager->numPages());
+        $t->assign('n_pages_arr', $pagearr);
+        $t->assign('cellsa', $data);
+        //$t->assign('cellsa', $page);
+        $t->assign('cells', $page); */
+        //print_r($rowdata); 
+        /*}}}*/
     }
 
     /**

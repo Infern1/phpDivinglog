@@ -57,7 +57,6 @@ if ($divelog->get_request_type() == 1) {
     $pagetitle = $_lang['dive_details_pagetitle'].$result[0]['Number'];
     $t->assign('colspanlinks','5');	
     //include($_config['header']);
-
     // Show Dive Information
     //	Show main dive details
     $divelog->set_main_dive_details();

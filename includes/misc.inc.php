@@ -189,7 +189,7 @@ function check_number($number)
 
 function GetRequestVar($url, $request_file_depth=0){ 
 
-    $number_folders = $request_file_depth ; //number of folders from the root of the script
+    $number_folders =  $request_file_depth ; //number of folders from the root of the script
     $adres = $url;
     //$adres = $_SERVER['REQUEST_URI'];
     $adres = substr($adres,1);
@@ -198,10 +198,8 @@ function GetRequestVar($url, $request_file_depth=0){
     $paginas = array();
     for($i = $number_folders; $i< count($array) ; $i++)
     {
-        $array_key = $array[$i]; //neem arraykey, bijvoorbeeld id
-        if(isset($array[$i + 1])){ 
-            $array_value = $array[$i]; //neem arrayvalue, bij id hoort 33, bij id hoort 33 in dit voorbeeld 
-            $paginas[$array_value] = $array[$i + 1]; 
+        if(!empty($array[$i])){ 
+            $paginas[] = $array[$i]; 
         }  
     }
     return $paginas;
