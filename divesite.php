@@ -81,6 +81,8 @@ if($divesite->get_request_type() == 1){
 } else {
     echo "strange...";
 }
+
+$t->assign('base_page','divesite.php');
 $t->assign('colspanlinks','4');
 $t->display('divesite.tpl');
 ?>
