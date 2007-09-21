@@ -48,6 +48,8 @@ $divelog = new Divelog();
 $divelog->set_divelog_info($request);
 $result = $divelog->get_divelog_info();
 global $_config;
+//print_r($divelog);
+//print_r($request);
 if ($divelog->get_request_type() == 1) {
     //	We have a dive number, so display the dive details
     $links->get_std_links();/*{{{*/

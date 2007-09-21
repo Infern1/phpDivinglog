@@ -44,6 +44,8 @@ $_lang['dive_log'] = "Dive Log";
 $_lang['dive_sites'] = "Dive Sites";
 $_lang['dive_stats'] = "Dive Statistics";
 $_lang['dive_equip'] = "Dive Equipment";
+$_lang['diver_choice_linktitle'] = "Show diveroverview";
+$_lang['diver_choice'] = "Diver overview";
 
 $_lang['dive_log_linktitle'] = "Show the Dive Log";
 $_lang['dive_sites_linktitle'] = "List the Dive Sites";

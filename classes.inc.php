@@ -108,9 +108,11 @@ class HandleRequest {
                     if(isset($split_request[2])){
                         $this->requested_page = $split_request[3];
                     }
-                } else {
+                }elseif(isset($split_request[2])) {
                     $t->assign('dive_detail' ,1);
                     $this->view_request = 1;    
+                } else {
+                    $this->diver_choice = true;
                 }
 
                 switch($file_req) {
@@ -149,7 +151,18 @@ class HandleRequest {
             //Find what the client wants to see and if a record is requested set it
             $split_request = GetRequestVar($this->request_uri, $this->request_file_depth);
             $file_req = $split_request[0];
-            switch($file_req) {
+            
+            if($split_request[1] == 'list' ){
+                $this->view_request = 0;
+                if(isset($split_request[1])){
+                    $this->requested_page = $split_request[2];
+                }
+            } elseif(isset($split_request[1])) {
+                $t->assign('dive_detail' ,1);
+                $this->view_request = 1;    
+            }
+
+           switch($file_req) {
                 case 'index.php':
                     $this->dive_nr = check_number($split_request[1]);
                     $this->request_type = 1;
@@ -385,6 +398,8 @@ class TopLevelMenu {
     function get_std_links(){
         global $t, $_lang;
         //	Dive Log, Dive Sites, Dive Statistics
+        $t->assign('diver_choice_linktitle', $_lang['diver_choice_linktitle']);
+        $t->assign('diver_choice', $_lang['diver_choice']);
         $t->assign('dive_log_linktitle', $_lang['dive_log_linktitle']);
         $t->assign('dive_log', $_lang['dive_log']);
         $t->assign('dive_sites_linktitle', $_lang['dive_sites_linktitle']);
@@ -409,6 +424,8 @@ class TopLevelMenu {
         // Start filling the data in the links_overview.tpl file
         $t->assign('base_page','index.php');
         //	Dive Sites, Dive Statistics
+        $t->assign('diver_choice_linktitle', $_lang['diver_choice_linktitle']);
+        $t->assign('diver_choice', $_lang['diver_choice']);
         $t->assign('dive_log',$_lang['dive_log']);
         $t->assign('dive_log_linktitle', $_lang['dive_log_linktitle']);
         $t->assign('dive_sites_linktitle', $_lang['dive_sites_linktitle']);
@@ -522,6 +539,8 @@ class TopLevelMenu {
                 }
 
                 //	Dive Log, Dive Sites, Dive Statistics
+                $t->assign('diver_choice_linktitle', $_lang['diver_choice_linktitle']);
+                $t->assign('diver_choice', $_lang['diver_choice']);
                 $t->assign('dive_log_linktitle', $_lang['dive_log_linktitle']);
                 $t->assign('dive_log', $_lang['dive_log']);
                 $t->assign('dive_sites_linktitle', $_lang['dive_sites_linktitle']);
@@ -1074,12 +1093,23 @@ class Divelog {
   /*      for($i=0; $i<$count; $i++){
           $Divedate =  date( $_lang['dlog_divedate_format'], strtotime($recentdivelist[$i]['Divedate']));
         }*/
+		$t->assign('dlog_title_number', $_lang['dlog_title_number'] );
+		$t->assign('dlog_title_divedate', $_lang['dlog_title_divedate']);
+		$t->assign('dlog_title_depth', $_lang['dlog_title_depth'] );
+		$t->assign('dlog_title_divetime', $_lang['dlog_title_divetime'] );
+		$t->assign('dlog_title_location', $_lang['dlog_title_location'] );
+
+        if(!empty($this->multiuser)){
+            $path = $_config['web_root'].'/index.php/'.$this->user_id.'/list';
+        } else {
+            $path = $_config['web_root'].'/index.php/list';
+        }
         $pager_options = array( 
                     'mode' => 'Sliding', 
                     'perPage' => $_config['max_list'], 
                     'append' => false,
                     'currentPage' => $this->requested_page,
-                    'path' => $_config['web_root'].'/index.php/'.$this->user_id.'/list',
+                    'path' => $path ,
                     'fileName' => '%d',
                     'delta' => 2, );    
         $paged_data = Pager_Wrapper_MDB2($db, $recentdivelist_query, $pager_options);
@@ -1439,7 +1469,8 @@ class Divesite{
                     $placetable.Place AS Place, 
                     $logbooktable.City AS City,
                     $placetable.MaxDepth AS MaxDepth
-                    FROM $placetable INNER JOIN $logbooktable ON $placetable.ID = $logbooktable.PlaceID";
+                    FROM $placetable INNER JOIN $logbooktable ON $placetable.ID = $logbooktable.PlaceID
+                    ";
 
         /**
          * When view_type = 1 display the ajax grid if type = 2 display old fashioned table 
@@ -1466,7 +1497,12 @@ class Divesite{
         set_config_table_prefix($this->table_prefix);
         //    Get the page header
         //    Get the details of the locations to be listed
-        $locationlist_query = $sql;
+        $locationlist_query = $sql." ORDER BY Place";
+		$t->assign('dsite_title_place',   $_lang['dsite_title_place']);
+		$t->assign('dsite_title_city',    $_lang['dsite_title_city']);
+		$t->assign('dsite_title_country', $_lang['dsite_title_country']);
+		$t->assign('dsite_title_maxdepth', $_lang['dsite_title_maxdepth']);
+
         $pager_options1 = array( 
                 'mode' => 'Sliding', 
                 'perPage' => $_config['max_list'], 
@@ -1746,6 +1782,7 @@ class Equipment{
         $t->assign('equip_title_object', $_lang['equip_title_object'] );
         $t->assign('equip_title_manufacturer', $_lang['equip_title_manufacturer'] );
         $t->assign('logbook_place_linktitle', $_lang['logbook_place_linktitle'] );
+
         $pager_options = array( 
                     'mode' => 'Sliding', 
                     'perPage' => $_config['max_list'], 
