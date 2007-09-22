@@ -78,7 +78,7 @@ if ($divelog->get_request_type() == 1) {
     $divelog->set_equipment();
     // Comments
     $divelog->set_comments();
-    //$t->assign('links',$links);/*}}}*/
+    $t->assign('links',$links);/*}}}*/
 }elseif($divelog->get_request_type() == 0){
     $links->get_ovv_links();
     $divelog->get_dive_overview();

@@ -683,6 +683,8 @@ class Divelog {
     function set_main_dive_details(){
         global $t, $_lang;/*{{{*/
 	    $result =  $this->result; 
+        
+        $t->assign('pagetitle',$_lang['dive_details_pagetitle'].$result[0]['Number']);
         $t->assign('logbook_divedate', $_lang['logbook_divedate'] );
 	    $t->assign('logbook_entrytime', $_lang['logbook_entrytime'] );
 	    $t->assign('logbook_divetime', $_lang['logbook_divetime'] );
@@ -792,10 +794,10 @@ class Divelog {
      * @return void
      */
     function set_dive_profile(){
-        global $t, $_lang, $globals;/*{{{*/
+        global $t, $_lang, $globals, $_config;/*{{{*/
         $result =  $this->result; 
         $profile = $result[0]['Profile'];
-        if($profile) {
+        if($profile && $_config['show_profile'] == true) {
             $t->assign('profile','1');
             $t->assign('get_nr',$this->dive_nr);
             $t->assign('dive_profile_title', $_lang['dive_profile_title'] . $result[0]['Number'] );
@@ -1074,7 +1076,9 @@ class Divelog {
         }
         else{
             echo 'no view_type defined!';
-        }/*}}}*/
+        }
+        $t->assign('pagetitle',$_lang['dive_log']);
+        /*}}}*/
     }
 
     /**
@@ -1133,6 +1137,7 @@ class Divelog {
         $objGrid->friendlyHTML(); 
         $objGrid->conectadb($_config['database_server']  , $_config['database_username'], $_config['database_password'], $_config['database_db']); 
         $objGrid -> tabla ($this->table_prefix."Logbook");
+        $objGrid -> pathtoimages($_config['abs_url_path']. "/images/");
         $recentdivelist_query = sql_file('recentdivelist.sql');
         if($this->multiuser){
             $url =  "/index.php/".$this->user_id."/";
@@ -1142,6 +1147,7 @@ class Divelog {
         $objGrid -> keyfield("Number"); 
         $t->assign('grid_header' , $objGrid -> getHeader(NULL, $_config['abs_url_path']. '/js/dgscripts.js', $_config['abs_url_path']. '/css/dgstyle.css'));
         //        $objGrid -> paginationmode('links');
+        $objGrid->message['display'] = $_lang['display_rows_dives'];
         $objGrid -> orderby("Number", "DESC"); 
         //Total width should be 700px 5+100+80+250+400
         if($this->multiuser){
@@ -1343,6 +1349,7 @@ class Divesite{
         global $globals, $_config, $t , $_lang;/*{{{*/
         //	Show main site details
         $result = $this->result;
+        $t->assign('pagetitle',$_lang['dive_site_pagetitle'].$result[0]['Place']);
         $t->assign('divesite_id', $this->divesite_nr);
         $t->assign('place_place',   $_lang['place_place']);
         $t->assign('place_city',    $_lang['place_city']);
@@ -1483,7 +1490,9 @@ class Divesite{
         }
         else{
             echo 'no view_type defined!';
-        }/*}}}*/
+        }
+        $t->assign('pagetitle',$_lang['dive_sites']);
+        /*}}}*/
     }
 
     /**
@@ -1564,10 +1573,12 @@ class Divesite{
             } else {
                 $url =  "/divesite.php/";
             }
+            $objGrid -> pathtoimages($_config['abs_url_path']. "/images/");
             $objGrid -> keyfield("ID"); 
             $t->assign('grid_header' , $objGrid -> getHeader(NULL, $_config['abs_url_path']. '/js/dgscripts.js', $_config['abs_url_path']. '/css/dgstyle.css'));
             //        $objGrid -> paginationmode('links');
             $objGrid -> orderby("Place", "ASC"); 
+            $objGrid->message['display'] = $_lang['display_rows_divesites'];
             $objGrid->sqlstatement($sql);
             if($this->multiuser){
                 $objGrid -> FormatColumn("Place", $_lang['dsite_title_place'], 0, 0, 1,"250" , "left","link:open_url(%s\,'$url'),ID");  
@@ -1694,6 +1705,7 @@ class Equipment{
     function set_main_equipment_details(){
         global $t, $_lang;/*{{{*/
 	    $result =  $this->result; 
+        $t->assign('pagetitle',$_lang['equip_details_pagetitle'].$result[0]['Object']);
         $t->assign('Object',$result[0]['Object'] );
         $t->assign('Manufacturer', $result[0]['Manufacturer']);
         $t->assign('equip_shop', $_lang['equip_shop'] );
@@ -1770,7 +1782,9 @@ class Equipment{
         }
         else{
             echo 'no view_type defined!';
-        }/*}}}*/
+        }
+        $t->assign('pagetitle',$_lang['dive_equip']);
+        /*}}}*/
     }
 
     function get_equipment_overview_table(){
@@ -1814,7 +1828,9 @@ class Equipment{
         } else {
             $url =  "/equipment.php/";
         }
-       $objGrid -> keyfield("ID");
+         $objGrid -> pathtoimages($_config['abs_url_path']. "/images/");
+         $objGrid->message['display'] = $_lang['display_rows_equipment'];
+         $objGrid -> keyfield("ID");
        $t->assign('grid_header' , $objGrid -> getHeader(NULL, $_config['abs_url_path']. '/js/dgscripts.js', $_config['abs_url_path']. '/css/dgstyle.css'));
         $objGrid -> orderby("Manufacturer", "ASC"); 
         //        $objGrid -> FormatColumn("ID", $_lang['equip_title_object'], 5, 5, 5, "5", "center","link:open_url(%s\,'$url'),ID"); 

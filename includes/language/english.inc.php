@@ -170,6 +170,9 @@ $_lang['site_dive_plural'] = " dives at this location:";
 $_lang['site_sect_comments'] = "Comments:";
 $_lang['site_google_link'] = "Google Map of ";
 
+$_lang['display_rows_dives'] = 'Displaying dives';
+$_lang['display_rows_divesites'] = 'Displaying divesites';
+$_lang['display_rows_equipment'] = 'Displaying equipment';
 
 // Dive Site List related values
 
