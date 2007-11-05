@@ -3,8 +3,7 @@
 // File: 	EN.INC.PHP
 // Description: English language file for error messages
 // Created: 	2006-01-25
-// Author:	Johan Persson (johanp@aditus.nu)
-// Ver:		$Id: en.inc.php 633 2006-05-26 00:51:54Z ljp $
+// Ver:		$Id: en.inc.php 838 2007-01-22 21:01:22Z ljp $
 //
 // Copyright (c) Aditus Consulting. All rights reserved.
 //========================================================================
@@ -146,7 +145,8 @@ HTTP headers have already been sent.<br>Caused by output from file <b>%s</b> at 
 **  jpgraph_mgraph
 */
 
-12001 => array("You are using GD 2.x and are trying to use a background images on a non truecolor image. To use background images with GD 2.x it is necessary to enable truecolor by setting the USE_TRUECOLOR constant to TRUE. Due to a bug in GD 2.0.1 using any truetype fonts with truecolor images will result in very poor quality fonts.",0),
+/* 12001 => array("You are using GD 2.x and are trying to use a background images on a non truecolor image. To use background images with GD 2.x it is necessary to enable truecolor by setting the USE_TRUECOLOR constant to TRUE. Due to a bug in GD 2.0.1 using any truetype fonts with truecolor images will result in very poor quality fonts.",0),*/
+
 12002 => array('Incorrect file name for MGraph::SetBackgroundImage() : %s Must have a valid image extension (jpg,gif,png) when using auto detection of image type',1),
 12003 => array('Unknown file extension (%s) in MGraph::SetBackgroundImage() for filename: %s',2),
 12004 => array('The image format of your background image (%s) is not supported in your system configuration. ',1),
@@ -157,7 +157,6 @@ HTTP headers have already been sent.<br>Caused by output from file <b>%s</b> at 
 12009 => array('Your PHP installation does not support the chosen graphic format: %s',1),
 12010 => array('Can\'t create or stream image to file %s Check that PHP has enough permission to write a file to the current directory.',1),
 12011 => array('Can\'t create truecolor image. Check that you really have GD2 library installed.',0),
-12012 => array('Can\'t create image. Check that you really have GD2 library installed.',0),
 
 /*
 **  jpgraph_pie3d
@@ -260,8 +259,7 @@ HTTP headers have already been sent.<br>Caused by output from file <b>%s</b> at 
 **  jpgraph
 */
 
-25001 => array('This PHP installation is not configured with the GD library. Please recompile PHP with GD support to run JpGraph. (Neither function imagetypes() nor imagecreatefromstring() does exist)',0),
-25002 => array('Your PHP installation does not seem to have the required GD library. Please see the PHP documentation on how to install and enable the GD library.',0),
+25002 => array('Your PHP installation does not seem to have the required GD 2.x library enabled. Please see the PHP documentation, "Image" section. Make sure that "php_gd2.dll" statement is uncomment in the [modules] section in the php.ini file.',0),
 25003 => array('General PHP error : At %s:%d : %s',3),
 25004 => array('General PHP error : %s ',1),
 25005 => array('Can\'t access PHP_SELF, PHP global variable. You can\'t run PHP from command line if you want to use the \'auto\' naming of cache or image files.',0),
@@ -362,7 +360,7 @@ HTTP headers have already been sent.<br>Caused by output from file <b>%s</b> at 
 25093 => array('Can not read font file "%s" in call to Image::GetBBoxTTF. Please make sure that you have set a font before calling this method and that the font is installed in the TTF directory.',1),
 25094 => array('Direction for text most be given as an angle between 0 and 90.',0),
 25095 => array('Unknown font font family specification. ',0),
-25096 => array('Can\'t allocate any more colors in palette image. Image has already allocated maximum of %d colors and the palette  is now full. Change to a truecolor image instead',0),
+25096 => array('Can\'t allocate any more colors.',0),
 25097 => array('Color specified as empty string in PushColor().',0),
 25098 => array('Negative Color stack index. Unmatched call to PopColor()',0),
 25099 => array('Parameters for brightness and Contrast out of range [-1,1]',0), 
@@ -447,6 +445,7 @@ HTTP headers have already been sent.<br>Caused by output from file <b>%s</b> at 
 22018 => array('You have specified data for the same compass direction twice, once with text and once with index (Index=%d)',1),
 22019 => array('Index for direction must be between 0 and 15. You can\'t specify angles for a Regular Windplot, only index and compass directions.',0),
 22020 => array('Windrose plot is too large to fit the specified Graph size. Please use WindrosePlot::SetSize() to make the plot smaller or increase the size of the Graph in the initial WindroseGraph() call.',0),
+22021 => array('It is only possible to add Text, IconPlot or WindrosePlot to a Windrose Graph',0),
 
 /*
 **  jpgraph_odometer

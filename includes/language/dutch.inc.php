@@ -42,6 +42,8 @@ $_lang['dive_log_linktitle']            = "Toon logboek";
 $_lang['dive_sites_linktitle']          = "Toon duiklocatie's";
 $_lang['dive_stats_linktitle']          = "Toon duikstatistieken";
 $_lang['dive_equip_linktitle']          = "Toon duikuitrusting";
+$_lang['diver_choice_linktitle'] = "Toon duikeroverzicht";
+$_lang['diver_choice'] = "Duiker overzicht";
 
 // Dive Entry / Logbook related values
 $_lang['dive_details_pagetitle']        = "Duiknummer ";
@@ -120,6 +122,7 @@ $_lang['dlog_title_depth']              = "Diepte";
 $_lang['dlog_title_divetime']           = "Duiktijd";
 $_lang['dlog_title_location']           = "Locatie";
 $_lang['dlog_number_title']             = "Details duiknummer ";
+$_lang['dlog_title_place']              = "Duikstek";
 
 // based on the PHP date() function
 $_lang['dlog_divedate_format']          = "d-M-Y";
@@ -146,6 +149,10 @@ $_lang['dsite_title_place']             = "Duiklocatie";
 $_lang['dsite_title_city']              = "Stad/Eiland";
 $_lang['dsite_title_country']           = "Land";
 $_lang['dsite_title_maxdepth']          = "Maximum diepte";
+
+$_lang['display_rows_dives'] = 'Duiken weergave';
+$_lang['display_rows_divesites'] = 'Duikstekken weergave';
+$_lang['display_rows_equipment'] = 'Uitrusting weergave';
 
 // Dive Statistics related values
 $_lang['stats_sect_stats']              = "Duikstatistieken:";

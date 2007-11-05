@@ -28,15 +28,12 @@
  * /**************************************************************************
  */
 
-// include_once misc file
-$misc_filename = "includes/misc.inc.php";
-$config_file = "../config.inc.php";
+$config_file = "./config.inc.php";
 require_once ($config_file);
-require_once ($misc_filename);
 
 $request = new HandleRequest();
 $request->set_request_uri($_SERVER['REQUEST_URI']);
-$request->set_file_depth(1);
+$request->set_file_depth(0);
 $request->handle_url();
 $links = new TopLevelMenu($request);
 
@@ -76,7 +73,8 @@ if($request->get_multiuser()){
     $t->assign('colspanlinks','4');
     // Dive Statistics
     $divestats->set_all_statistics();
-    $dbinfo = parse_mysql_query('dbinfo.sql');
+    
+    //$dbinfo = parse_mysql_query('dbinfo.sql');
 }
 /*
 echo "<table class=\"divetable\" cellspacing=\"0\" cellpadding=\"0\" width=\"100%\">\n";

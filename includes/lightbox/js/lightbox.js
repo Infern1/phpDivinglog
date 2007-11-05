@@ -1,8 +1,8 @@
 // -----------------------------------------------------------------------------------
 //
-//	Lightbox v2.03
+//	Lightbox v2.03.3
 //	by Lokesh Dhakar - http://www.huddletogether.com
-//	4/9/06
+//	5/21/06
 //
 //	For more information on this script, visit:
 //	http://huddletogether.com/projects/lightbox2/
@@ -10,7 +10,7 @@
 //	Licensed under the Creative Commons Attribution 2.5 License - http://creativecommons.org/licenses/by/2.5/
 //	
 //	Credit also due to those who have helped, inspired, and made their code available to the public.
-//	Including: Scott Upton(uptonic.com), Peter-Paul Koch(quirksmode.org), Thomas Fuchs(mir.aculo.us), and others.
+//	Including: Scott Upton(uptonic.com), Peter-Paul Koch(quirksmode.com), Thomas Fuchs(mir.aculo.us), and others.
 //
 //
 // -----------------------------------------------------------------------------------
@@ -28,6 +28,7 @@
 
 	Lightbox Class Declaration
 	- initialize()
+	- updateImageList()
 	- start()
 	- changeImage()
 	- resizeImageContainer()
@@ -112,6 +113,10 @@ Object.extend(Element, {
 	   	element = $(element);
     	element.style.top = t +"px";
 	},
+	setLeft: function(element,l) {
+	   	element = $(element);
+    	element.style.left = l +"px";
+	},
 	setSrc: function(element,src) {
     	element = $(element);
     	element.src = src; 
@@ -175,42 +180,15 @@ var Lightbox = Class.create();
 Lightbox.prototype = {
 	
 	// initialize()
-	// Constructor runs on completion of the DOM loading. Loops through anchor tags looking for 
-	// 'lightbox' references and applies onclick events to appropriate links. The 2nd section of
+	// Constructor runs on completion of the DOM loading. Calls updateImageList and then
 	// the function inserts html at the bottom of the page which is used to display the shadow 
 	// overlay and the image container.
 	//
 	initialize: function() {	
-		if (!document.getElementsByTagName){ return; }
-		var anchors = document.getElementsByTagName('a');
-		var areas = document.getElementsByTagName('area');
+		
+		this.updateImageList();
 
-		// loop through all anchor tags
-		for (var i=0; i<anchors.length; i++){
-			var anchor = anchors[i];
-			
-			var relAttribute = String(anchor.getAttribute('rel'));
-			
-			// use the string.match() method to catch 'lightbox' references in the rel attribute
-			if (anchor.getAttribute('href') && (relAttribute.toLowerCase().match('lightbox'))){
-				anchor.onclick = function () {myLightbox.start(this); return false;}
-			}
-		}
-
-		// loop through all area tags
-		// todo: combine anchor & area tag loops
-		for (var i=0; i< areas.length; i++){
-			var area = areas[i];
-			
-			var relAttribute = String(area.getAttribute('rel'));
-			
-			// use the string.match() method to catch 'lightbox' references in the rel attribute
-			if (area.getAttribute('href') && (relAttribute.toLowerCase().match('lightbox'))){
-				area.onclick = function () {myLightbox.start(this); return false;}
-			}
-		}
-
-		// The rest of this code inserts html at the bottom of the page that looks similar to this:
+		// Code inserts html at the bottom of the page that looks similar to this:
 		//
 		//	<div id="overlay"></div>
 		//	<div id="lightbox">
@@ -349,6 +327,44 @@ Lightbox.prototype = {
 		objBottomNavCloseImage.setAttribute('src', fileBottomNavCloseImage);
 		objBottomNavCloseLink.appendChild(objBottomNavCloseImage);
 	},
+
+
+	//
+	// updateImageList()
+	// Loops through anchor tags looking for 'lightbox' references and applies onclick
+	// events to appropriate links. You can rerun after dynamically adding images w/ajax.
+	//
+	updateImageList: function() {	
+		if (!document.getElementsByTagName){ return; }
+		var anchors = document.getElementsByTagName('a');
+		var areas = document.getElementsByTagName('area');
+
+		// loop through all anchor tags
+		for (var i=0; i<anchors.length; i++){
+			var anchor = anchors[i];
+			
+			var relAttribute = String(anchor.getAttribute('rel'));
+			
+			// use the string.match() method to catch 'lightbox' references in the rel attribute
+			if (anchor.getAttribute('href') && (relAttribute.toLowerCase().match('lightbox'))){
+				anchor.onclick = function () {myLightbox.start(this); return false;}
+			}
+		}
+
+		// loop through all area tags
+		// todo: combine anchor & area tag loops
+		for (var i=0; i< areas.length; i++){
+			var area = areas[i];
+			
+			var relAttribute = String(area.getAttribute('rel'));
+			
+			// use the string.match() method to catch 'lightbox' references in the rel attribute
+			if (area.getAttribute('href') && (relAttribute.toLowerCase().match('lightbox'))){
+				area.onclick = function () {myLightbox.start(this); return false;}
+			}
+		}
+	},
+	
 	
 	//
 	//	start()
@@ -361,6 +377,7 @@ Lightbox.prototype = {
 
 		// stretch overlay to fill page and fade in
 		var arrayPageSize = getPageSize();
+		Element.setWidth('overlay', arrayPageSize[0]);
 		Element.setHeight('overlay', arrayPageSize[1]);
 
 		new Effect.Appear('overlay', { duration: overlayDuration, from: 0.0, to: overlayOpacity });
@@ -389,11 +406,13 @@ Lightbox.prototype = {
 			while(imageArray[imageNum][0] != imageLink.getAttribute('href')) { imageNum++;}
 		}
 
-		// calculate top offset for the lightbox and display 
+		// calculate top and left offset for the lightbox 
 		var arrayPageScroll = getPageScroll();
 		var lightboxTop = arrayPageScroll[1] + (arrayPageSize[3] / 10);
-
+		var lightboxLeft = arrayPageScroll[0];
 		Element.setTop('lightbox', lightboxTop);
+		Element.setLeft('lightbox', lightboxLeft);
+		
 		Element.show('lightbox');
 		
 		this.changeImage(imageNum);
@@ -422,6 +441,8 @@ Lightbox.prototype = {
 		imgPreloader.onload=function(){
 			Element.setSrc('lightboxImage', imageArray[activeImage][0]);
 			myLightbox.resizeImageContainer(imgPreloader.width, imgPreloader.height);
+			
+			imgPreloader.onload=function(){};	//	clear onLoad, IE behaves irratically with animated gifs otherwise 
 		}
 		imgPreloader.src = imageArray[activeImage][0];
 	},
@@ -479,8 +500,11 @@ Lightbox.prototype = {
 	//
 	updateDetails: function() {
 	
-		Element.show('caption');
-		Element.setInnerHTML( 'caption', imageArray[activeImage][1]);
+		// if caption is not null
+		if(imageArray[activeImage][1]){
+			Element.show('caption');
+			Element.setInnerHTML( 'caption', imageArray[activeImage][1]);
+		}
 		
 		// if image is part of set display 'Image x of x' 
 		if(imageArray.length > 1){
@@ -606,21 +630,24 @@ Lightbox.prototype = {
 //
 // getPageScroll()
 // Returns array with x,y page scroll values.
-// Core code from - quirksmode.org
+// Core code from - quirksmode.com
 //
 function getPageScroll(){
 
-	var yScroll;
+	var xScroll, yScroll;
 
 	if (self.pageYOffset) {
 		yScroll = self.pageYOffset;
+		xScroll = self.pageXOffset;
 	} else if (document.documentElement && document.documentElement.scrollTop){	 // Explorer 6 Strict
 		yScroll = document.documentElement.scrollTop;
+		xScroll = document.documentElement.scrollLeft;
 	} else if (document.body) {// all other Explorers
 		yScroll = document.body.scrollTop;
+		xScroll = document.body.scrollLeft;	
 	}
 
-	arrayPageScroll = new Array('',yScroll) 
+	arrayPageScroll = new Array(xScroll,yScroll) 
 	return arrayPageScroll;
 }
 
@@ -629,7 +656,7 @@ function getPageScroll(){
 //
 // getPageSize()
 // Returns array with page width, height and window width, height
-// Core code from - quirksmode.org
+// Core code from - quirksmode.com
 // Edit for Firefox by pHaez
 //
 function getPageSize(){
@@ -637,7 +664,7 @@ function getPageSize(){
 	var xScroll, yScroll;
 	
 	if (window.innerHeight && window.scrollMaxY) {	
-		xScroll = document.body.scrollWidth;
+		xScroll = window.innerWidth + window.scrollMaxX;
 		yScroll = window.innerHeight + window.scrollMaxY;
 	} else if (document.body.scrollHeight > document.body.offsetHeight){ // all but Explorer Mac
 		xScroll = document.body.scrollWidth;
@@ -648,8 +675,16 @@ function getPageSize(){
 	}
 	
 	var windowWidth, windowHeight;
+	
+//	console.log(self.innerWidth);
+//	console.log(document.documentElement.clientWidth);
+
 	if (self.innerHeight) {	// all except Explorer
-		windowWidth = self.innerWidth;
+		if(document.documentElement.clientWidth){
+			windowWidth = document.documentElement.clientWidth; 
+		} else {
+			windowWidth = self.innerWidth;
+		}
 		windowHeight = self.innerHeight;
 	} else if (document.documentElement && document.documentElement.clientHeight) { // Explorer 6 Strict Mode
 		windowWidth = document.documentElement.clientWidth;
@@ -666,12 +701,16 @@ function getPageSize(){
 		pageHeight = yScroll;
 	}
 
+//	console.log("xScroll " + xScroll)
+//	console.log("windowWidth " + windowWidth)
+
 	// for small pages with total width less then width of the viewport
 	if(xScroll < windowWidth){	
-		pageWidth = windowWidth;
+		pageWidth = xScroll;		
 	} else {
-		pageWidth = xScroll;
+		pageWidth = windowWidth;
 	}
+//	console.log("pageWidth " + pageWidth)
 
 	arrayPageSize = new Array(pageWidth,pageHeight,windowWidth,windowHeight) 
 	return arrayPageSize;
@@ -742,7 +781,7 @@ function hideFlash(){
 		flashObjects[i].style.visibility = "hidden";
 	}
 
-	var flashEmbeds = document.getElementsByTagName("embeds");
+	var flashEmbeds = document.getElementsByTagName("embed");
 	for (i = 0; i < flashEmbeds.length; i++) {
 		flashEmbeds[i].style.visibility = "hidden";
 	}

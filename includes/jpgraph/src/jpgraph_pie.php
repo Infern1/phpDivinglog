@@ -3,8 +3,7 @@
 // File:	JPGRAPH_PIE.PHP
 // Description:	Pie plot extension for JpGraph
 // Created: 	2001-02-14
-// Author:	Johan Persson (johanp@aditus.nu)
-// Ver:		$Id: jpgraph_pie.php 624 2006-05-07 10:47:14Z ljp $
+// Ver:		$Id: jpgraph_pie.php 846 2007-03-10 10:36:47Z ljp $
 //
 // Copyright (c) Aditus Consulting. All rights reserved.
 //========================================================================
@@ -271,7 +270,7 @@ class PiePlot {
    	else {
 	    $this->setslicecolors = array_slice($this->setslicecolors,0,$n);
 	    $numcolors=count($this->setslicecolors); 
-	    if( $graph->pieaa && is_a($this,'PiePlot') ) { 
+	    if( $graph->pieaa && !is_a($this,'PiePlot3D') ) { 
 		$this->setslicecolors = array_reverse($this->setslicecolors);
 	    }
 	}
@@ -450,6 +449,8 @@ class PiePlot {
 		if( empty($this->explode_radius[$j]) )
 		    $this->explode_radius[$j]=0;
 
+		if( $d < 0.00001 ) continue;
+
 		$la = 2*M_PI - (abs($angle2-$angle1)/2.0+$angle1);
 
 		$xcm = $xc + $this->explode_radius[$j]*cos($la)*$expscale;
@@ -458,8 +459,7 @@ class PiePlot {
 		$xcm += $this->ishadowdrop*$expscale;
 		$ycm += $this->ishadowdrop*$expscale;
 
-		$img->CakeSlice($xcm,$ycm,$radius,$radius,
-				$angle1*180/M_PI,$angle2*180/M_PI,$this->ishadowcolor);
+		$img->CakeSlice($xcm,$ycm,$radius,$radius,$angle1*180/M_PI,$angle2*180/M_PI,$this->ishadowcolor);
 		
 	    }
 	}
@@ -477,7 +477,7 @@ class PiePlot {
 	    $angle2 = $this->startangle+2*M_PI*$accsum/$sum;
 	    $this->la[$i] = 2*M_PI - (abs($angle2-$angle1)/2.0+$angle1);
 
-	    if( $d == 0 ) continue;
+	    if( $d < 0.00001 ) continue;
 
 	    if( $this->setslicecolors==null )
 		$slicecolor=$colors[$ta[$i%$numcolors]];

@@ -1,15 +1,17 @@
  body
  {
- text-align: center;
-  margin: 0px; /* we willen geen margin */
-     padding: 0px; /* we willen geen padding */
+ margin: 0; 
+ padding: 0;
+ /* text-align: center;*/
 }
 
 div#content
  {
- margin: 0,  auto;
  text-align: left;
- width: 700px;
+ width: 900px;
+/*width: 80%;*/
+ margin-right: auto;
+ margin-left: auto;
 
 }
 

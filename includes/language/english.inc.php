@@ -186,8 +186,8 @@ $_lang['dsite_title_maxdepth'] = "Max Depth";
 
 // Dive Statistics related values
 
-$_lang['stats_sect_stats'] = "Rob's Diving Statistics:";
-$_lang['stats_sect_certs'] = "Rob's Diving Certifications:";
+$_lang['stats_sect_stats'] = "Diving Statistics:";
+$_lang['stats_sect_certs'] = "Diving Certifications:";
 
 $_lang['stats_totaldives'] = "Total # of dives:";
 $_lang['stats_divedatemax'] = "Last Dive:";
@@ -279,11 +279,11 @@ $_lang['unit_length_short_imp'] = "ft";
 $_lang['unit_pressure'] = "bar";
 $_lang['unit_pressure_imp'] = "psi";
 $_lang['unit_rate'] = "litres/min";
-$_lang['unit_rate_imp'] = "cu&nbsp;ft/min";
+$_lang['unit_rate_imp'] = "cu ft/min";
 $_lang['unit_temp'] = "°C";
 $_lang['unit_temp_imp'] = "°F";
 $_lang['unit_volume'] = "litres";
-$_lang['unit_volume_imp'] = "cu&nbsp;ft";
+$_lang['unit_volume_imp'] = "cu ft";
 $_lang['unit_weight'] = "kg";
 $_lang['unit_weight_imp'] = "lbs";
 $_lang['unit_time'] = "minutes";

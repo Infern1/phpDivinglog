@@ -4,7 +4,7 @@
 // Description: German language file for error messages
 // Created: 	2006-03-06
 // Author:	Timo Leopold (timo@leopold-hh.de)
-// Ver:		$Id: de.inc.php 633 2006-05-26 00:51:54Z ljp $
+// Ver:		$Id: de.inc.php 838 2007-01-22 21:01:22Z ljp $
 //
 // Copyright (c)
 //========================================================================
@@ -447,7 +447,7 @@ HTTP header wurden bereits gesendet.<br>Fehler in der Datei <b>%s</b> in der Zei
 22018 => array('Du hast für dieselbe Kompassrichtung zweimal Daten angegeben, einmal mit Text und einmal mit einem Index (Index=%d)',1),
 22019 => array('Der Index für eine Richtung muss zwischen 0 und 15 sein. Winkel dürfen nicht für einen regelmäßigen Windplot angegeben werden, sondern entweder ein Index oder eine Kompassrichtung.',0),
 22020 => array('Der Windrosenplot ist zu groß für die angegebene Bildgröße. Benutze entweder WindrosePlot::SetSize(), um den Plot kleiner zu machen oder vergrößere das Bild im ursprünglichen Aufruf von WindroseGraph().',0),
-
+22021 => array('It is only possible to add Text, IconPlot or WindrosePlot to a Windrose Graph',0),
 /*
 **  jpgraph_odometer
 */

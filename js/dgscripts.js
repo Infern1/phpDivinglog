@@ -121,7 +121,7 @@ function DG_setsearch(campo,fldvalue){
 
 function DG_checkAjaxSearch(id, fldvalue){
 	dato = DG_gvv(id);
-	if (dato != '0'){
+/*	if (dato != '0'){
 		DG_svv(id) = dato+1;
 		if (dato == 40){
 			DG_sii("searchBox") = "<input type='text' id='dg_schrstr' class='input' size='35' value='"+fldvalue+"' onkeypress='return DG_bl_enter(event)' /><input type='hidden' id='boxshr' name='boxshr' value='0' />";
@@ -131,7 +131,7 @@ function DG_checkAjaxSearch(id, fldvalue){
 		}
 	}else{
 		document.getElementById("imgsearch").style.display='inline';
-	}
+	}*/
 }
 
 function DG_Do(action, p1, p2, p3){

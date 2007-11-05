@@ -27,15 +27,14 @@ GNU General Public License for more details.
 
 /***************************************************************************/
 
+
 // include_once misc file
-$misc_filename = "includes/misc.inc.php";
-$config_file = "../config.inc.php";
+$config_file = "./config.inc.php";
 require_once ($config_file);
-require_once ($misc_filename);
 
 $request = new HandleRequest();
 $request->set_request_uri($_SERVER['REQUEST_URI']);
-$request->set_file_depth(1);
+$request->set_file_depth(0);
 $request->handle_url();
 //print_r($request);
 
@@ -88,7 +87,6 @@ if ($divelog->get_request_type() == 1) {
     echo "shouldn't come here!";
     exit;
 }
-
 // Get the page footer
 //include ($_config['footer_index']);
 $t->assign('colspanlinks','5');

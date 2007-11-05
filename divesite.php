@@ -30,14 +30,12 @@
  */
 
 // include_once misc file
-$misc_filename = "includes/misc.inc.php";
-$config_file = "../config.inc.php";
+$config_file = "./config.inc.php";
 require_once ($config_file);
-require_once ($misc_filename);
 
 $request = new HandleRequest();
 $request->set_request_uri($_SERVER['REQUEST_URI']);
-$request->set_file_depth(1);
+$request->set_file_depth(0);
 $request->handle_url();
 
 $links = new TopLevelMenu($request);
@@ -49,7 +47,7 @@ global $_config;
 
 if($divesite->get_request_type() == 1){
 
-    $t->assign('divesite_id',$get_loc);
+    $t->assign('divesite_id',$divesite->divesite_nr);
     //	Get the page header
     $pagetitle = $_lang['dive_site_pagetitle'].$result[0]['Place'];
     $t->assign('pagetitle',$pagetitle);

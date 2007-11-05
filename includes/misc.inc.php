@@ -27,7 +27,7 @@
  * /**************************************************************************
  */
 
-require_once('../config.inc.php');
+global $_config;
 
 /**
  * htmlentities_array HTML on screen function
@@ -43,7 +43,7 @@ function htmlentities_array($arr = array())
 		if (is_array($val)) {
 			$rs[$key] = htmlentities_array($val);
 		} else {
-			$rs[$key] = htmlentities($val, ENT_QUOTES);
+            $rs[$key] = htmlentities($val, ENT_QUOTES, "UTF-8");
 		}
 	}
 	return $rs;
@@ -59,21 +59,21 @@ if(!isset($_config['language'])) {
 // first get the default english values
 // so that we'll have values for anything not in the specified language file
 if ($_config['language'] != "english") {
-	if (!file_exists('includes/language/english.inc.php')) {
+	if (!file_exists($_config['app_root'] .'/includes/language/english.inc.php')) {
 		print "<p>Language file includes/language/english.inc.php not found.</p>";
 		exit;
 	}
-	include ('includes/language/english.inc.php');
+	include_once ($_config['app_root'] .  '/includes/language/english.inc.php');
 }
 
 // include the specified language file
-$language_filename = "includes/language/". $_config['language'] .".inc.php";
+$language_filename =  $_config['app_root'] . "/includes/language/". $_config['language'] .".inc.php";
 if (!file_exists($language_filename)) {
    print "<p>Language file '". $language_filename ."' not found.</p>";
    exit;
 }
 $_lang = array();
-include ($language_filename);
+include_once ($language_filename);
 
 // Convert applicable characters in the language file to entities
 $_lang = htmlentities_array($_lang);	
@@ -103,14 +103,14 @@ function sql_file($filename)
 
 	if ($location) {
 		$contents = implode('', file($location));
-		eval ("\$contents = \"$contents\";");
-		//Support the "'" character from a HTTP GET variabele
+        eval ("\$contents = \"$contents\";");
+		        //Support the "'" character from a HTTP GET variabele
 		$contents = str_replace ("\'", "'", $contents);	
 	     
 		/* Handles debug-information: if debugging is enabled by setting	*/
 		/* $debug =1 in the script, thiswrites debug output.			*/
 	
-		if ($debug) {
+		if ($_config['debug']) {
 			echo "<hr>\n<b>".$location.":</b><br>\n<br>\n";
 			echo nl2br(htmlentities($contents))."<br>\n<hr>\n";
 		}
@@ -151,7 +151,7 @@ function parse_mysql_query($filename)
 		for($i=0; $query_output = mysql_fetch_assoc($server_query); $i++) {
 			while(list($key, $val) = each($query_output)) {
 				if(is_string($val)) {
-					$val = utf8_encode($val);
+					//$val = utf8_encode($val);
 					$query_output[$key] = $val;
 				}
 			}
@@ -186,11 +186,22 @@ function check_number($number)
 	return $get;
 }
 
-
+/**
+ * GetRequestVar get the info from the url request and split it into chunks
+ *
+ * @param mixed $url
+ * @param mixes $request_file_depth
+ * @access public
+ * return void
+ */
 function GetRequestVar($url, $request_file_depth=0){ 
 
     $number_folders =  $request_file_depth ; //number of folders from the root of the script
     $adres = $url;
+    $possessid = strpos($adres,"?PHPSESSID");
+    if ($possessid !== false) {
+        $adres = substr($adres,0,$possessid);
+    }
     //$adres = $_SERVER['REQUEST_URI'];
     $adres = substr($adres,1);
     $adres = $adres."/";
@@ -229,9 +240,9 @@ function GetProfileData($result){
 		$sac = (($result[0]['PresS'] - $result[0]['PresE']) * $result[0]['Tanksize']) / ($divetime * ($averagedepth / 10 + 1));
 
 		if ($_config['length']) {
-			$averagedepth = MetreToFeet($averagedepth, 2) ."&nbsp;". $_lang['unit_length_imp'];
+			$averagedepth = MetreToFeet($averagedepth, 2) ."&nbsp;";
 		} else {
-			$averagedepth = number_format($averagedepth, 2) ."&nbsp;". $_lang['unit_length'];
+			$averagedepth = number_format($averagedepth, 2) ."&nbsp;";
 		}
 		if ($_config['volume']) {
 			$sac = LitreToCuft($sac, 1) ."&nbsp;". $_lang['unit_rate_imp'];
@@ -241,28 +252,28 @@ function GetProfileData($result){
         return array('averagedepth' => $averagedepth , 'sac' => $sac);
 }
 
-define("MetreToFeet", "calc:(Depth*3.2808399)");
-function MetreToFeet($value, $precision) 
+define('MetreToFeet', "calc:(Depth*3.2808399)");
+function MetreToFeet($value, $precision = 2) 
 {
 	return round(($value * 3.2808399), $precision);
 }
  
-function BarToPsi($value, $precision) 
+function BarToPsi($value, $precision = 2) 
 {
 	return round(($value * 14.503774), $precision);
 }
 
-function KgToLbs($value, $precision) 
+function KgToLbs($value, $precision = 2) 
 {
 	return round(($value * 2.2046226), $precision);
 }
 
-function CelsiusToFahrenh($value, $precision) 
+function CelsiusToFahrenh($value, $precision = 2) 
 {
 	return round((($value * (9 / 5)) + 32), $precision);
 }
  
-function LitreToCuft($value, $precision) 
+function LitreToCuft($value, $precision = 2) 
 {
 	return round(($value * 7), $precision);
 }
@@ -387,4 +398,25 @@ function reset_config_table_prefix(){
     unset($_config['table_prefix']);
 }
 
+/**
+ * count_all count non-empty elements in an array of any dimension
+ * 
+ * @param mixed $arg 
+ * @access public
+ * @return void
+ */
+function count_all($arg)
+{
+    // skip if argument is empty 
+    if ($arg){ 
+        // not an array, return 1 (base case) 
+        if(!is_array($arg)) 
+            return 1; 
+    // else call recursively for all elements $arg 
+    $count =0;
+    foreach($arg as $key => $val) 
+        $count += count_all($val); 
+        return $count;       
+    } 
+} 
 ?>

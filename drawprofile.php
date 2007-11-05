@@ -28,13 +28,6 @@
  * /**************************************************************************
  */
 
-include_once ("includes/jpgraph/src/jpgraph.php");
-include_once ("includes/jpgraph/src/jpgraph_line.php");
-$config_file = "../config.inc.php";
-$misc_filename = "includes/misc.inc.php";
-require_once ($misc_filename);
-require_once ($config_file);
-
 // Callback to negate the argument
 function _cb_negate($aVal)
 {
@@ -58,10 +51,15 @@ function toMetres($aVal)
 {
     return round(- ($aVal * 0.3048));
 } 
+
+$config_file = "./config.inc.php";
+require_once ($config_file);
+
+
 global $_config;
 $request = new HandleRequest();
 $request->set_request_uri($_SERVER['REQUEST_URI']);
-$request->set_file_depth(1);
+$request->set_file_depth(0);
 $request->handle_url();
 if($request->get_multiuser()){
     //get the prefix for a user_id
@@ -152,7 +150,7 @@ if (!$profile) {
 } 
 
 // Basic graph setup
-$graph = new Graph(550, 400, "auto");
+$graph =& new Graph(550, 400, "auto");
 
 // Set margins, colours, scale etc. for whole graph
 $graph->SetScale("linlin", 0, 0, $xdata[0], $xdata[(count($xdata)-1)]);
