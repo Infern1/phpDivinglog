@@ -199,7 +199,7 @@ function GetRequestVar($url, $request_file_depth=0){
     $number_folders =  $request_file_depth ; //number of folders from the root of the script
     $adres = $url;
     $possessid = strpos($adres,"?PHPSESSID");
-    if ($possessid !== false) {
+    if ($possessid != false) {
         $adres = substr($adres,0,$possessid);
     }
     //$adres = $_SERVER['REQUEST_URI'];

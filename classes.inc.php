@@ -1848,8 +1848,8 @@ class Equipment{
         global $t, $_config,$globals,  $_lang;/*{{{*/
 	    $result =  $this->result; 
         $t->assign('pagetitle',$_lang['equip_details_pagetitle'].$result[0]['Object']);
-        $t->assign('equip_object',$result[0]['Object'] );
-        $t->assign('equip_manufacturer', $result[0]['Manufacturer']);
+        $t->assign('equip_object',$_lang['equip_object'] );
+        $t->assign('equip_manufacturer', $_lang['equip_manufacturer']);
         $t->assign('equip_shop', $_lang['equip_shop'] );
         $t->assign('equip_datep',$_lang['equip_datep']);
         $t->assign('equip_price',$_lang['equip_price']);
