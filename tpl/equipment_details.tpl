@@ -2,11 +2,9 @@
 {include file='links_details.tpl'}
 <!-- End include links_details -->
 <table class="divetable" cellspacing="0" cellpadding="0" width="100%">
-
-    <tr>
-        <td colspan="4" class="spacing">&nbsp;</td> 
-    </tr>
-
+    <tr class="divesection">
+	    <td colspan="4">&nbsp;</td>
+	</tr>
     {* Show main equipment details *}
 	<tr class="divetitle">
 	<td colspan="2">{$equip_object}</td>
@@ -85,8 +83,11 @@
         <tr>
             <td colspan="4">{$Comments}</td>
         </tr>
-	{/if}
-	<!-- Include links_details -->
+    {/if}
+	   <tr class="divesection">
+	    <td colspan="4">&nbsp;</td>
+	</tr>
+    <!-- Include links_details -->
 	{include file='links_details.tpl'}
     <!-- End include links_details -->
     </table>

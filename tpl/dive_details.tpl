@@ -2,10 +2,10 @@
 {include file='links_details.tpl'}
 <!-- End include links_details -->
    <table class="divetable" cellspacing="0" cellpadding="0" width="100%">
+    <tr class="divesection">
+	    <td colspan="4">&nbsp;</td>
+	</tr>
 
-    <tr>
-        <td colspan="4" class="spacing">&nbsp;</td>
-    </tr>
 {* Show Dive Information *}
 
     {* Show main dive details *}
@@ -334,8 +334,12 @@
         <tr>
         <td colspan="4">{$Comments}</td>
         </tr>    
-    {/if}
-    {* Show the links again *}
+        <tr class="divesection">
+	    <td colspan="4">&nbsp;</td>
+	</tr>
+
+   {/if}
+   {* Show the links again *}
 	<!-- Include links_details -->
 {include file='links_details.tpl'}
 <!-- End include links_details -->

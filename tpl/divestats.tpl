@@ -225,7 +225,10 @@ title="{$dlog_number_title}{$DepthMinNr}">{$DepthMinNr}</a></td>
     {/section}
     {/if}
 	</tr>
-	</table>
+    <tr class="divesection">
+	    <td colspan="5">&nbsp;</td>
+	</tr>
+</table>
 {/if}
 <!-- Include links_overview -->
 	{include file='links_overview.tpl'}
