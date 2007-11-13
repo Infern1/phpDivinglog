@@ -382,8 +382,8 @@ class datagrid{
                         'errormsg'    => 'Oshibka:',
                         'errorscript' => 'Oshibka SQL v skripte:',
                         'display'     => 'Pokazany polya',
-                        'to'          => 'po',
-                        'of'          => 'iz'
+                        'to'          => iconv("WINDOWS-1251","UTF-8",'по'),
+                        'of'          => 'из'
                             );
                 break;
 
