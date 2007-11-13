@@ -294,7 +294,6 @@ class User {
  */
 
 class TableGrid{
-/*{{{*/
     var $language;
     var $gridtable;
 
@@ -306,7 +305,6 @@ class TableGrid{
      */
     function TableGrid(){
         global $_config;
-        $this->language = $_config['language'];
         $objGrid = new datagrid;
         $objGrid->friendlyHTML(); 
         $objGrid->conectadb($_config['database_server']  , $_config['database_username'], $_config['database_password'], $_config['database_db']); 
@@ -314,6 +312,7 @@ class TableGrid{
         $this->SetGridLanguage($objGrid);
         $objGrid->datarows($_config['max_list']);
         $this->gridtable  =& $objGrid;
+        $this->SetGridLanguage();
     }
     
     /**
@@ -337,38 +336,48 @@ class TableGrid{
     /**
      * SetGridLanguage 
      * 
-     * @param mixed $objGrid 
+     * @param  void
      * @access public
      * @return void
      */
-    function SetGridLanguage($objGrid){
-        switch ($this->language){
-            case 'nederlands': case 'dutch' :
-                $objGrid->language("ne");
-                break;
-            case 'deutch': case 'german' :
-                $objGrid->language("de");
-                break;
-            case 'russian': case 'russian' :
-                $objGrid->language("ru");
-                break;
-            case 'espa.ol': case 'es' :
-                $objGrid->language("es");
-                break;
-            case 'francais': case 'fr' :
-                $objGrid->language("fr");
-                break;
-            case 'italian' : case 'it' :
-                $objGrid->language("it");
-                break;
-            case '.e.tina': case 'cs' :
-                $objGrid->language("cs");
-                break;
-            case 'portuguese' : case 'portugese' :
-                $objGrid->language("pt");
-                break;
-        }
-    }/*}}}*/
+    function SetGridLanguage(){
+        global $_lang;
+        $this->gridtable->message['cancel'] = $_lang['grid_cancel'];
+        $this->gridtable->message['close'] = $_lang['grid_close'];
+        $this->gridtable->message['save'] = $_lang['grid_save'];
+        $this->gridtable->message['saving'] = $_lang['grid_saving'];
+        $this->gridtable->message['loading'] = $_lang['grid_loading'];
+        $this->gridtable->message['edit'] = $_lang['grid_edit'];
+        $this->gridtable->message['delete'] = $_lang['grid_delete'];
+        $this->gridtable->message['add'] = $_lang['grid_add'];
+        $this->gridtable->message['view'] = $_lang['grid_view'];
+        $this->gridtable->message['addRecord'] = $_lang['grid_addRecord'];
+        $this->gridtable->message['edtRecord'] = $_lang['grid_edtRecord'];
+        $this->gridtable->message['chkRecord'] = $_lang['grid_chkRecord'];
+        $this->gridtable->message['false'] = $_lang['grid_false'];
+        $this->gridtable->message['true'] = $_lang['grid_true'];
+        $this->gridtable->message['prev'] = $_lang['grid_prev'];
+        $this->gridtable->message['next'] = $_lang['grid_next'];
+        $this->gridtable->message['confirm'] = $_lang['grid_confirm'];
+        $this->gridtable->message['search'] = $_lang['grid_search'];
+        $this->gridtable->message['resetSearch'] = $_lang['grid_resetSearch'];
+        $this->gridtable->message['doublefield'] = $_lang['grid_doublefield'];
+        $this->gridtable->message['norecords'] = $_lang['grid_norecords'];
+        $this->gridtable->message['errcode'] = $_lang['grid_errcode'];
+        $this->gridtable->message['noinsearch'] = $_lang['grid_noinsearch'];
+        $this->gridtable->message['noformdef'] = $_lang['grid_noformdef'];
+        $this->gridtable->message['cannotadd'] = $_lang['grid_cannotadd'];
+        $this->gridtable->message['cannotedit'] = $_lang['grid_cannotedit'];
+        $this->gridtable->message['cannotsearch'] = $_lang['grid_cannotsearch'];
+        $this->gridtable->message['cannotdel'] = $_lang['grid_cannotdel'];
+        $this->gridtable->message['sqlerror'] = $_lang['grid_sqlerror'];
+        $this->gridtable->message['errormsg'] = $_lang['grid_errormsg'];
+        $this->gridtable->message['errorscript'] = $_lang['grid_errorscript'];
+        $this->gridtable->message['display'] = $_lang['grid_display'];
+        $this->gridtable->message['to'] = $_lang['grid_to'];
+        $this->gridtable->message['of'] = $_lang['grid_of'];
+   
+    }
 }
 /**
  * Users get the info for the defined user in the config file 
@@ -472,9 +481,9 @@ class Users{
         $this->get_divers();
         $this->get_table_prefix();
         $this->set_user_data();
-
         return $this->user_array;
-    }/*}}}*/
+    }
+    /*}}}*/
 }
 /**
  * TopLevelMenu class to generate the standard top level menu
