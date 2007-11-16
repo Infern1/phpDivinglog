@@ -294,7 +294,7 @@ class User {
  */
 
 class TableGrid{
-    var $language;
+    var $language;/*{{{*/
     var $gridtable;
 
     /**
@@ -305,6 +305,7 @@ class TableGrid{
      */
     function TableGrid(){
         global $_config;
+        $this->language = $_config['language'];
         $objGrid = new datagrid;
         $objGrid->friendlyHTML(); 
         $objGrid->conectadb($_config['database_server']  , $_config['database_username'], $_config['database_password'], $_config['database_db']); 
@@ -340,47 +341,73 @@ class TableGrid{
      * @return void
      */
     function SetGridLanguage(){
-        global $_lang, $_config;
-        if(!isset($_lang['grid_cancel'])){
-            echo "<center><strong>ERROR some language variables are not set for your language ".$_config['language']. "</strong></center><br>";
-        } else {
-            $this->gridtable->message['cancel'] = $_lang['grid_cancel'];
-            $this->gridtable->message['close'] = $_lang['grid_close'];
-            $this->gridtable->message['save'] = $_lang['grid_save'];
-            $this->gridtable->message['saving'] = $_lang['grid_saving'];
-            $this->gridtable->message['loading'] = $_lang['grid_loading'];
-            $this->gridtable->message['edit'] = $_lang['grid_edit'];
-            $this->gridtable->message['delete'] = $_lang['grid_delete'];
-            $this->gridtable->message['add'] = $_lang['grid_add'];
-            $this->gridtable->message['view'] = $_lang['grid_view'];
-            $this->gridtable->message['addRecord'] = $_lang['grid_addRecord'];
-            $this->gridtable->message['edtRecord'] = $_lang['grid_edtRecord'];
-            $this->gridtable->message['chkRecord'] = $_lang['grid_chkRecord'];
-            $this->gridtable->message['false'] = $_lang['grid_false'];
-            $this->gridtable->message['true'] = $_lang['grid_true'];
-            $this->gridtable->message['prev'] = $_lang['grid_prev'];
-            $this->gridtable->message['next'] = $_lang['grid_next'];
-            $this->gridtable->message['confirm'] = $_lang['grid_confirm'];
-            $this->gridtable->message['search'] = $_lang['grid_search'];
-            $this->gridtable->message['resetSearch'] = $_lang['grid_resetSearch'];
-            $this->gridtable->message['doublefield'] = $_lang['grid_doublefield'];
-            $this->gridtable->message['norecords'] = $_lang['grid_norecords'];
-            $this->gridtable->message['errcode'] = $_lang['grid_errcode'];
-            $this->gridtable->message['noinsearch'] = $_lang['grid_noinsearch'];
-            $this->gridtable->message['noformdef'] = $_lang['grid_noformdef'];
-            $this->gridtable->message['cannotadd'] = $_lang['grid_cannotadd'];
-            $this->gridtable->message['cannotedit'] = $_lang['grid_cannotedit'];
-            $this->gridtable->message['cannotsearch'] = $_lang['grid_cannotsearch'];
-            $this->gridtable->message['cannotdel'] = $_lang['grid_cannotdel'];
-            $this->gridtable->message['sqlerror'] = $_lang['grid_sqlerror'];
-            $this->gridtable->message['errormsg'] = $_lang['grid_errormsg'];
-            $this->gridtable->message['errorscript'] = $_lang['grid_errorscript'];
-            $this->gridtable->message['display'] = $_lang['grid_display'];
-            $this->gridtable->message['to'] = $_lang['grid_to'];
-            $this->gridtable->message['of'] = $_lang['grid_of'];
+        global $_lang, $_config;/*{{{*/
+        switch ($this->language){
+            case 'nederlands': case 'dutch' :
+                $this->gridtable->language("ne");
+                break;
+            case 'deutch': case 'german' :
+                $objGrid->language("de");
+                break;
+           case 'espa.ol': case 'es' :
+                $objGrid->language("es");
+                break;
+            case 'francais': case 'fr' :
+                $objGrid->language("fr");
+                break;
+            case 'italian' : case 'it' :
+                $objGrid->language("it");
+                break;
+            case '.e.tina': case 'cs' :
+                $objGrid->language("cs");
+                break;
+            case 'portuguese' : case 'portugese' :
+                $objGrid->language("pt");
+                break;
+            default:
+                if(!isset($_lang['grid_cancel'])){
+                    echo "<center><strong>ERROR no language found for the grid (".$_config['language']. ") fix your language file</strong></center><br>";
+                } else {
+                    $this->gridtable->message['cancel'] = $_lang['grid_cancel'];
+                    $this->gridtable->message['close'] = $_lang['grid_close'];
+                    $this->gridtable->message['save'] = $_lang['grid_save'];
+                    $this->gridtable->message['saving'] = $_lang['grid_saving'];
+                    $this->gridtable->message['loading'] = $_lang['grid_loading'];
+                    $this->gridtable->message['edit'] = $_lang['grid_edit'];
+                    $this->gridtable->message['delete'] = $_lang['grid_delete'];
+                    $this->gridtable->message['add'] = $_lang['grid_add'];
+                    $this->gridtable->message['view'] = $_lang['grid_view'];
+                    $this->gridtable->message['addRecord'] = $_lang['grid_addRecord'];
+                    $this->gridtable->message['edtRecord'] = $_lang['grid_edtRecord'];
+                    $this->gridtable->message['chkRecord'] = $_lang['grid_chkRecord'];
+                    $this->gridtable->message['false'] = $_lang['grid_false'];
+                    $this->gridtable->message['true'] = $_lang['grid_true'];
+                    $this->gridtable->message['prev'] = $_lang['grid_prev'];
+                    $this->gridtable->message['next'] = $_lang['grid_next'];
+                    $this->gridtable->message['confirm'] = $_lang['grid_confirm'];
+                    $this->gridtable->message['search'] = $_lang['grid_search'];
+                    $this->gridtable->message['resetSearch'] = $_lang['grid_resetSearch'];
+                    $this->gridtable->message['doublefield'] = $_lang['grid_doublefield'];
+                    $this->gridtable->message['norecords'] = $_lang['grid_norecords'];
+                    $this->gridtable->message['errcode'] = $_lang['grid_errcode'];
+                    $this->gridtable->message['noinsearch'] = $_lang['grid_noinsearch'];
+                    $this->gridtable->message['noformdef'] = $_lang['grid_noformdef'];
+                    $this->gridtable->message['cannotadd'] = $_lang['grid_cannotadd'];
+                    $this->gridtable->message['cannotedit'] = $_lang['grid_cannotedit'];
+                    $this->gridtable->message['cannotsearch'] = $_lang['grid_cannotsearch'];
+                    $this->gridtable->message['cannotdel'] = $_lang['grid_cannotdel'];
+                    $this->gridtable->message['sqlerror'] = $_lang['grid_sqlerror'];
+                    $this->gridtable->message['errormsg'] = $_lang['grid_errormsg'];
+                    $this->gridtable->message['errorscript'] = $_lang['grid_errorscript'];
+                    $this->gridtable->message['display'] = $_lang['grid_display'];
+                    $this->gridtable->message['to'] = $_lang['grid_to'];
+                    $this->gridtable->message['of'] = $_lang['grid_of'];
+                }
         }
+        
+        /*}}}*/
    
-    }
+    }/*}}}*/
 }
 /**
  * Users get the info for the defined user in the config file 
@@ -1746,8 +1773,8 @@ class Divesite{
             } else{
                 $objGrid -> FormatColumn("Place", $_lang['dsite_title_place'], 0, 0, 1,"250" , "left","link:open_url(%s\,'$url'),ID"); 
             }
-            $objGrid -> FormatColumn("Country", $_lang['dsite_title_country'], 180, 100, 0, "100", "left" ); 
-            $objGrid -> FormatColumn("City", $_lang['dsite_title_city'], 180, 100, 0, "200", "left" ); 
+            $objGrid -> FormatColumn("Country", $_lang['dsite_title_country'], 180, 100, 4, "100", "left" ); 
+            $objGrid -> FormatColumn("City", $_lang['dsite_title_city'], 180, 100, 4, "200", "left" ); 
             $objGrid -> FormatColumn("MaxDepth", $_lang['dsite_title_maxdepth'], 12, 12, 0, "80", "left","sign:".$_lang['unit_length_short']  );
             $grid = $GridClass->get_grid($objGrid);
             $t->assign('grid_display' ,1);
