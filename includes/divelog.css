@@ -1,4 +1,4 @@
- body
+ body, table, td, th, input, textarea, select
  {
  font: normal 12px arial, helvetica, "liberation sans", "dejavu sans condensed", sans-serif;
  margin: 0; 
