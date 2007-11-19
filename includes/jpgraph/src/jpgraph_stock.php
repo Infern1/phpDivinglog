@@ -3,7 +3,7 @@
 // File: 	JPGRAPH_STOCK.PHP
 // Description:	Stock plot extension for JpGraph
 // Created: 	2003-01-27
-// Ver:		$Id: jpgraph_stock.php 782 2006-10-08 08:09:02Z ljp $
+// Ver:		$Id: jpgraph_stock.php 907 2007-08-31 22:47:57Z ljp $
 //
 // Copyright (c) Aditus Consulting. All rights reserved.
 //========================================================================
@@ -139,9 +139,9 @@ class StockPlot extends Plot {
 		$this->csimareas .= ' href="'.$this->csimtargets[$i].'"';
 		if( !empty($this->csimalts[$i]) ) {
 		    $sval=$this->csimalts[$i];
-		    $this->csimareas .= " title=\"$sval\" ";
+		    $this->csimareas .= " title=\"$sval\" alt=\"$sval\" ";
 		}
-		$this->csimareas.= " alt=\"$sval\" />\n";
+		$this->csimareas.= "  />\n";
 	    }
 	}			
 	return true;

@@ -3,7 +3,7 @@
 // File: 	JPGRAPH_UTILS.INC
 // Description: Collection of non-essential "nice to have" utilities 
 // Created: 	2005-11-20
-// Ver:		$Id: jpgraph_utils.inc.php 859 2007-03-23 19:12:08Z ljp $
+// Ver:		$Id: jpgraph_utils.inc.php 894 2007-04-18 21:26:50Z ljp $
 //
 // Copyright (c) Aditus Consulting. All rights reserved.
 //========================================================================
@@ -94,7 +94,10 @@ class  SymChar {
 	array('int','222B'),
     /* Misc */
 	array('copy','00A9'),
-	array('para','00A7'));
+	array('para','00A7'),
+	array('tm','2122'),   /* Trademark symbol */
+	array('rtm','00AE')   /* Registered trademark */
+);
 
 	$n = count($iSymbols);
 	$i=0;

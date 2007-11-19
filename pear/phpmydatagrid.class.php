@@ -672,7 +672,32 @@ class datagrid{
 		$this->delBtn = $bolDel;
 		$this->chkBtn = $bolChk;
 	}
+    
+    /**
+     * Check if a file exists in the include path
+     *
+     * @version     1.2.1
+     * @author      Aidan Lister <aidan@php.net>
+     * @link        http://aidanlister.com/repos/v/function.file_exists_incpath.php
+     * @param       string     $file       Name of the file to look for
+     * @return      mixed      The full path if file exists, FALSE if it does not
+     */ 
+    function file_exists_incpath ($file)
+    {
+        $paths = explode(PATH_SEPARATOR, get_include_path());
 
+        foreach ($paths as $path) {
+            // Formulate the absolute path
+            $fullpath = $path . DIRECTORY_SEPARATOR . $file;
+
+            // Check it
+            if (file_exists($fullpath)) {
+                return $fullpath;
+            }
+        }
+
+        return false;
+    }
 	# paginationmode: Defines the pagination style
 	function paginationmode ($pgm){
 		$pgm=strtolower($pgm);
@@ -1310,7 +1335,7 @@ class datagrid{
 			if ($order == $this->fieldsArray[$fldName]['strfieldName']){
 				if (!empty($orderExpr)){
 					$arrowName = $this->imgpath.$this->images["$orderExpr"];
-					if (file_exists($arrowName)) $strHeader.= "<img src='$arrowName' alt='$orderExpr' width='10' height='10' $sl>$br";
+					if (!$this->file_exists_incpath($arrowName)) $strHeader.= "<img src='$arrowName' alt='$orderExpr' width='10' height='10' $sl>$br";
 				}
 			}
 			if ($this->orderArrows and !in_array($this->fieldsArray[$fldName]['inputtype'], array(2,3,4))){

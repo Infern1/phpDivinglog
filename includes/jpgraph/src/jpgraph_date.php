@@ -3,7 +3,7 @@
 // File:	JPGRAPH_DATE.PHP
 // Description:	Classes to handle Date scaling
 // Created: 	2005-05-02
-// Ver:		$Id: jpgraph_date.php 782 2006-10-08 08:09:02Z ljp $
+// Ver:		$Id: jpgraph_date.php 911 2007-09-26 21:00:09Z ljp $
 //
 // Copyright (c) Aditus Consulting. All rights reserved.
 //========================================================================
@@ -252,7 +252,7 @@ class DateScale extends LinearScale {
 
 		/* Intervall larger than 30 days (approx 1 month) */
 		SECPERDAY*30,array(array(SECPERDAY*14,SECPERDAY*7,SECPERDAY*2, SECPERDAY),
-				   array(SECPERDAY,SECPERDAY.SECPERDAY,SECPERDAY), 
+				   array(SECPERDAY,SECPERDAY,SECPERDAY,SECPERDAY), 
 				   array(0,DAYADJ_WEEK, 0,DAYADJ_1, 0,DAYADJ_1, 0,DAYADJ_1)),
 
 		/* Intervall larger than 7 days */

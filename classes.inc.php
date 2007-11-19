@@ -2084,6 +2084,11 @@ class Divestats{
     var $WatertempMinNr;
     var $WatertempMaxNr;
     var $depthrange;
+    var $depthrange1_per;
+    var $depthrange2_per;
+    var $depthrange3_per;
+    var $depthrange4_per;
+    var $depthrange5_per;
     var $end;
     var $divecert;
     var $number_cert;
@@ -2244,27 +2249,31 @@ class Divestats{
             $globals['stats'] = "Depth <= 18";
             $divestatsother = parse_mysql_query('divestatsother.sql');
             $this->depthrange[0] = $divestatsother[0]['Count'];
+            $this->depthrange1_per = round(($this->depthrange[0] / $this->end) * 100);
 
             // Get the number of 2nd depth range dives
             $globals['stats'] = "Depth > 18 AND Depth <= 30";
             $divestatsother = parse_mysql_query('divestatsother.sql');
             $this->depthrange[1] = $divestatsother[0]['Count'];
+            $this->depthrange2_per =  round(($this->depthrange[1] / $this->end) * 100);
 
             // Get the number of 3rd depth range dives
             $globals['stats'] = "Depth > 30 AND Depth <= 40";
             $divestatsother = parse_mysql_query('divestatsother.sql');
             $this->depthrange[2] = $divestatsother[0]['Count'];
+            $this->depthrange3_per =  round(($this->depthrange[2] / $this->end) * 100);
 
             // Get the number of 4th depth range dives
             $globals['stats'] = "Depth > 40 AND Depth <= 55";
             $divestatsother = parse_mysql_query('divestatsother.sql');
             $this->depthrange[3] = $divestatsother[0]['Count'];
+            $this->depthrange4_per =  round(($this->depthrange[3] / $this->end) * 100);
 
             // Get the number of 5th depth range dives
             $globals['stats'] = "Depth > 55";
             $divestatsother = parse_mysql_query('divestatsother.sql');
             $this->depthrange[4] = $divestatsother[0]['Count'];
-
+            $this->depthrange5_per = round(($this->depthrange[4] / $this->end) * 100);
 
             $this->divecert = parse_mysql_query('brevetlist.sql');
             $this->number_cert = count($this->divecert);
@@ -2372,23 +2381,23 @@ class Divestats{
         // Show dive depth table
         $t->assign('stats_depth1m',  $_config['length'] ? $_lang['stats_depth1i'] : $_lang['stats_depth1m']);
         $t->assign('depthrange1',$this->depthrange[0] );
-        $t->assign('depthrange1_per' , round(($this->depthrange[0] / $this->end) * 100));
+        $t->assign('depthrange1_per' , $this->depthrange1_per);
 
         $t->assign('stats_depth2m',  $_config['length'] ? $_lang['stats_depth2i'] : $_lang['stats_depth2m']);
         $t->assign('depthrange2',  $this->depthrange[1]  );
-        $t->assign('depthrange2_per', round(($this->depthrange[1] / $this->end) * 100));
+        $t->assign('depthrange2_per', $this->depthrange2_per);
 
         $t->assign('stats_depth3m',  $_config['length'] ? $_lang['stats_depth3i'] : $_lang['stats_depth3m']) ;
         $t->assign('depthrange3', $this->depthrange[2]);
-        $t->assign('depthrange3_per', round(($this->depthrange[2] / $this->end) * 100));
+        $t->assign('depthrange3_per', $this->depthrange3_per);
 
         $t->assign('stats_depth4m',  $_config['length'] ? $_lang['stats_depth4i'] : $_lang['stats_depth4m']);
         $t->assign('depthrange4', $this->depthrange[3]);
-        $t->assign('depthrange4_per', round(($this->depthrange[3] / $this->end) * 100) );
+        $t->assign('depthrange4_per', $this->depthrange4_per );
 
         $t->assign('stats_depth5m',  $_config['length'] ? $_lang['stats_depth5i'] : $_lang['stats_depth5m']);
         $t->assign('depthrange5', $this->depthrange[4]);
-        $t->assign('depthrange5_per', round(($this->depthrange[4] / $this->end) * 100));
+        $t->assign('depthrange5_per', $this->depthrange5_per);
 
         // Show water temp details
         $t->assign('stats_watertempmin', $_lang['stats_watertempmin']);

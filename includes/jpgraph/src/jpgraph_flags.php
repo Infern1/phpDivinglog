@@ -3,7 +3,7 @@
 // File:	JPGRAPH_FLAGS.PHP
 // Description:	Class Jpfile. Handles plotmarks
 // Created: 	2003-06-28
-// Ver:		$Id: jpgraph_flags.php 810 2006-12-03 23:50:31Z ljp $
+// Ver:		$Id: jpgraph_flags.php 926 2007-10-13 18:22:39Z ljp $
 //
 // Copyright (c) Aditus Consulting. All rights reserved.
 //========================================================================
@@ -35,6 +35,7 @@ class FlagImages {
     'Commonwealth of Australia' => 'astl',
     'Republic of Austria' => 'aust',
     'Azerbaijani Republic' => 'azer',
+    'Bangladesh' => 'bngl',
     'British Antarctic Territory' => 'bant',
     'Kingdom of Belgium' => 'belg',
     'British Overseas Territory of Bermuda' => 'berm',
@@ -203,6 +204,7 @@ class FlagImages {
     'Sark' => 'sark',
     'Scotland' => 'scot',
     'Principality of Seborga' => 'sebo',
+    'Republic of Serbia' => 'serb',
     'Republic of Sierra Leone' => 'sile',
     'Republic of Singapore' => 'sing',
     'Republic of Korea' => 'skor',

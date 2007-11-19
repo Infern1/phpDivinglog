@@ -85,35 +85,16 @@ title="{$dlog_number_title}{$DepthMinNr}">{$DepthMinNr}</a></td>
 
 {* Show dive depth tablea *}
 <tr class="divecontent">
- <td>&nbsp;</td>
- <td align="right">{$stats_depth1m}&nbsp;&nbsp;</td>
- <td>{$depthrange1} ({$depthrange1_per}%)</td>
- <td>&nbsp;</td>
-</tr>
-<tr class="divecontent">
- <td>&nbsp;</td>
- <td align="right">{$stats_depth2m}&nbsp;&nbsp;</td>
- <td>{$depthrange2} ({$depthrange2_per}%)</td>
- <td>&nbsp;</td>
-</tr>
-<tr class="divecontent">
- <td>&nbsp;</td>
- <td align="right">{$stats_depth3m}&nbsp;&nbsp;</td>
- <td>{$depthrange3} ({$depthrange3_per}%)</td>
- <td>&nbsp;</td>
-</tr>
-<tr class="divecontent">
- <td>&nbsp;</td>
- <td align="right">{$stats_depth4m}&nbsp;&nbsp;</td>
- <td>{$depthrange4} ({$depthrange4_per}%)</td>
- <td>&nbsp;</td>
-</tr>
-<tr class="divecontent">
- <td>&nbsp;</td>
- <td align="right">{$stats_depth5m}&nbsp;&nbsp;</td>
- <td>{$depthrange5} ({$depthrange5_per}%)</td>
- <td>&nbsp;</td>
-</tr>
+<td colspan="4">
+<center>
+            {if isset($multiuser_id)}
+		        <img src="{$app_path}/drawpiechart.php/{$multiuser_id}/{$get_nr}"  alt="" title="">
+            {else}
+                <img src="{$app_path}/drawpiechart.php"  alt="" title="">
+            {/if}
+		    </center>
+		    </td>
+
 
 {* Show water temp details *}
 <tr class="divetitle">

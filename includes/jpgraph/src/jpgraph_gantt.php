@@ -3,7 +3,7 @@
 // File:	JPGRAPH_GANTT.PHP
 // Description:	JpGraph Gantt plot extension
 // Created: 	2001-11-12
-// Ver:		$Id: jpgraph_gantt.php 857 2007-03-23 19:03:13Z ljp $
+// Ver:		$Id: jpgraph_gantt.php 880 2007-03-28 15:41:56Z ljp $
 //
 // Copyright (c) Aditus Consulting. All rights reserved.
 //========================================================================
@@ -1682,8 +1682,7 @@ class TextProperty {
 		    if( is_array($aY) ) $aY=$aY[0];
 		    $aImg->StrokeText($aX,$aY,str_replace("\t"," ",$this->iText));
 		}
-		else {
-		    $n = count($this->iText);
+		elseif( is_array($this->iText) && ($n = count($this->iText)) > 0 ) {
 		    $ax = is_array($aX) ;
 		    $ay = is_array($aY) ;
 		    if( $ax && $ay ) {

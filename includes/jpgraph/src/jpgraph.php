@@ -3,7 +3,7 @@
 // File:	JPGRAPH.PHP
 // Description:	PHP Graph Plotting library. Base module.
 // Created: 	2001-01-08
-// Ver:		$Id: jpgraph.php 875 2007-03-25 10:53:39Z ljp $
+// Ver:		$Id: jpgraph.php 915 2007-09-26 21:05:16Z ljp $
 //
 // Copyright 2006 (c) Aditus Consulting. All rights reserved.
 //========================================================================
@@ -15,7 +15,7 @@ require_once('jpgraph_ttf.inc.php');
 require_once 'jpgraph_gradient.php';
 
 // Version info
-DEFINE('JPG_VERSION','1.21');
+DEFINE('JPG_VERSION','1.22');
 
 // Minimum required PHP version
 DEFINE('MIN_PHPVERSION','4.3.1');
@@ -259,6 +259,8 @@ function GenImgName() {
     if( $supported & IMG_PNG )	   $img_format="png";
     elseif( $supported & IMG_GIF ) $img_format="gif";
     elseif( $supported & IMG_JPG ) $img_format="jpeg";
+    elseif( $supported & IMG_WBMP ) $img_format="wbmp";
+    elseif( $supported & IMG_XPM ) $img_format="xpm";
 
     if( !isset($_SERVER['PHP_SELF']) )
 	JpGraphError::RaiseL(25005);
@@ -2141,7 +2143,9 @@ class Graph {
 	$supported = imagetypes();
 	if( ( $ext == 'jpg' && !($supported & IMG_JPG) ) ||
 	    ( $ext == 'gif' && !($supported & IMG_GIF) ) ||
-	    ( $ext == 'png' && !($supported & IMG_PNG) ) ) {
+	    ( $ext == 'png' && !($supported & IMG_PNG) ) ||
+	    ( $ext == 'bmp' && !($supported & IMG_WBMP) ) ||
+	    ( $ext == 'xpm' && !($supported & IMG_XPM) ) ) {
 	    JpGraphError::RaiseL(25037,$aFile);//('The image format of your background image ('.$aFile.') is not supported in your system configuration. ');
 	}
 
@@ -4242,7 +4246,7 @@ class LinearTicks extends Ticks {
 		while( round($abs_pos) <= $limit ) {
 		    $this->ticks_pos[] = round($abs_pos);
 		    $this->ticks_label[] = $label;
-		    if( $i % $step == 0 && $j < $nbrmajticks ) {
+		    if( $step == 0 || $i % $step == 0 && $j < $nbrmajticks ) {
 			$this->maj_ticks_pos[$j] = round($abs_pos);
 			$this->maj_ticklabels_pos[$j] = round($abs_pos);
 			$this->maj_ticks_label[$j]=$this->_doLabelFormat($label,$j,$nbrmajticks);
@@ -4258,7 +4262,7 @@ class LinearTicks extends Ticks {
 		while( round($abs_pos) >= $limit ) {
 		    $this->ticks_pos[$i] = round($abs_pos); 
 		    $this->ticks_label[$i]=$label;
-		    if( $i % $step == 0 && $j < $nbrmajticks ) {
+		    if( $step == 0 || $i % $step == 0 && $j < $nbrmajticks ) {
 			$this->maj_ticks_pos[$j] = round($abs_pos);
 			$this->maj_ticklabels_pos[$j] = round($abs_pos);
 			$this->maj_ticks_label[$j]=$this->_doLabelFormat($label,$j,$nbrmajticks);

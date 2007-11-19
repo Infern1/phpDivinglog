@@ -1443,3 +1443,24 @@ r10: 2005-05-29 10:11  ljp
 	* Fixed #181, #182 Scale positions for icon plots and also add rotation of icons
 	Modified files: jpgraph.php, jpgraph_iconplot.php
 
+CHANGELOG 1.21 - 1.22
+---------------------
+* Removed deprecated method call in example
+* Handle NULL text input data for Gantt charts more gracefully
+* Updated *.inc file name for PDF417 to *.inc.php
+* FR#427 - Feature request to add trademark symbol to SymChar class 
+* Wrong unicode value for TM
+* PR#432 - Unquoted % sign in error message 22001
+* Make minimum automatic margin smaller
+* FS#442 - Fixed possible undefined sval for CSIM when no alt titles are given
+* FS#443 - Add support for russian LED characters
+* FS#-444 Divide by zero in certain date scale ranges
+* Added support for XPM and WBMP. Fixed a potential divide by zero error in tick calculations
+* Updated CSIM examples to not include the filename in the StrokeCSIM() call since this is no longer strictly necessary
+* Add format testing for wbmp and xpm iagte formats
+* Added flags for Bangladesh and Republic of Serbia
+* PR#447 - Add workaround for bug in PHP 4.4.7 function imagefilledarc()
+* Updated LED examples with new API for Stroke()
+* FS#445 - Example code: Image::SetAntiAliasing() expects boolean
+* FS#250 - Off by one - rounding error for filled gradients
+

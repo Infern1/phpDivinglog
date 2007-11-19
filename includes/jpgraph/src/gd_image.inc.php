@@ -3,7 +3,7 @@
 // File:	GD_IMAGE.INC.PHP
 // Description:	GD Instance of Image class
 // Created: 	2006-05-06
-// Ver:		$Id: gd_image.inc.php 835 2007-01-15 18:57:41Z ljp $
+// Ver:		$Id: gd_image.inc.php 928 2007-10-17 21:32:59Z ljp $
 //
 // Copyright (c) Aditus Consulting. All rights reserved.
 //========================================================================
@@ -743,15 +743,16 @@ class Image {
 	
     function SetAutoMargin() {	
 	GLOBAL $gJpgBrandTiming;
-	$min_bm=10;
+	$min_bm=5;
 	/*
 	if( $gJpgBrandTiming )
 	    $min_bm=15;		
 	*/
 	$lm = min(40,$this->width/7);
 	$rm = min(20,$this->width/10);
-	$tm = max(20,$this->height/7);
+	$tm = max(5,$this->height/7);
 	$bm = max($min_bm,$this->height/7);
+	
 	$this->SetMargin($lm,$rm,$tm,$bm);		
     }
 
@@ -1360,6 +1361,13 @@ class Image {
 	while( $e < 0 ) $e += 360;
 	if( $style=="" ) 
 	    $style=IMG_ARC_PIE;
+	
+	// Workaround for bug in 4.4.7 which will not draw a correct 360
+	// degree slice with any other angles than 0,360
+	if( 360-abs($s-$e) < 0.01 ) {
+	    $s = 0;
+	    $e = 360;
+	}
 	imagefilledarc($this->img,round($xc),round($yc),round($w),round($h),
 		       round($s),round($e),$this->current_color,$style);
     }
@@ -1372,6 +1380,7 @@ class Image {
 	$s = round($s); $e = round($e);
 	$w = round($w); $h = round($h);
 	$xc = round($xc); $yc = round($yc);
+
 	$this->PushColor($fillcolor);
 	$this->FilledArc($xc,$yc,2*$w,2*$h,$s,$e);
 	$this->PopColor();
@@ -1379,6 +1388,15 @@ class Image {
 	    $this->PushColor($arccolor);
 	    // We add 2 pixels to make the Arc() better aligned with the filled arc. 
 	    imagefilledarc($this->img,$xc,$yc,2*$w,2*$h,$s,$e,$this->current_color,IMG_ARC_NOFILL | IMG_ARC_EDGED ) ;
+
+	    // Workaround for bug in 4.4.7 which will not draw a correct 360
+	    // degree slice with any other angles than 0,360. Unfortunately we cannot just
+	    // adjust the angles since the interior ar edge is drawn correct but not the surrounding
+	    // circle. This workaround can only be used with perfect circle shaped arcs
+	    if( 360-abs($s-$e) < 0.01 && $w==$h ) {
+		$this->Circle($xc,$yc,$w);
+	    }
+
 	    $this->PopColor();
 	}
     }
@@ -1918,18 +1936,26 @@ class Image {
 		$this->img_format="jpeg";
 	    elseif( $supported & IMG_GIF )
 		$this->img_format="gif";
+	    elseif( $supported & IMG_WBMP )
+		$this->img_format="wbmp";
+	    elseif( $supported & IMG_XPM )
+		$this->img_format="xpm";
 	    else
 		JpGraphError::RaiseL(25109);//("Your PHP (and GD-lib) installation does not appear to support any known graphic formats. You need to first make sure GD is compiled as a module to PHP. If you also want to use JPEG images you must get the JPEG library. Please see the PHP docs for details.");
 				
 	    return true;
 	}
 	else {
-	    if( $aFormat=="jpeg" || $aFormat=="png" || $aFormat=="gif" ) {
+	    if( $aFormat=="jpeg" || $aFormat=="png" || $aFormat=="gif" || $aFormat=="wbmp" || $aFormat=="xpm") {
 		if( $aFormat=="jpeg" && !($supported & IMG_JPG) )
 		    $tst=false;
 		elseif( $aFormat=="png" && !($supported & IMG_PNG) ) 
 		    $tst=false;
 		elseif( $aFormat=="gif" && !($supported & IMG_GIF) ) 	
+		    $tst=false;
+		elseif( $aFormat=="wbmp" && !($supported & IMG_WBMP) ) 	
+		    $tst=false;
+		elseif( $aFormat=="xpm" && !($supported & IMG_XPM) ) 	
 		    $tst=false;
 		else {
 		    $this->img_format=$aFormat;
