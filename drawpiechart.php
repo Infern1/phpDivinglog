@@ -21,24 +21,27 @@ if($request->get_multiuser()){
 }
 reset_config_table_prefix();
 
-
+//print_r($divestats);
 $data =
 array($divestats->depthrange1_per,$divestats->depthrange2_per,$divestats->depthrange3_per,$divestats->depthrange4_per,$divestats->depthrange5_per);
 
-$graph = new PieGraph(600,200,"auto");
+$graph = new PieGraph(650,200,"auto");
 $graph->SetShadow();
-
+;
 //$graph->title->Set("A simple Pie plot");
 $graph->SetFrame(false);
 $p1 = new PiePlot($data);
 //$legends = array('April (%d)','May (%d)','June (%d)');
-$legends = array(   $_config['length'] ? $_lang['stats_depth1i'] : $_lang['stats_depth1m'] .'(%d%%)',
-                    $_config['length'] ? $_lang['stats_depth2i'] : $_lang['stats_depth2m'] .'(%d%%)' ,
-                    $_config['length'] ? $_lang['stats_depth3i'] : $_lang['stats_depth3m'] .'(%d%%)',
-                    $_config['length'] ? $_lang['stats_depth4i'] : $_lang['stats_depth4m'] .'(%d%%)',
-                    $_config['length'] ? $_lang['stats_depth5i'] : $_lang['stats_depth5m'] .'(%d%%)'                        
+$legends = array(   
+$_config['length'] ? $_lang['stats_depth1i'] : $_lang['stats_depth1m'] . $divestats->depthrange[0].' (%d%%)',
+$_config['length'] ? $_lang['stats_depth2i'] : $_lang['stats_depth2m'] . $divestats->depthrange[1].' (%d%%)' ,
+$_config['length'] ? $_lang['stats_depth3i'] : $_lang['stats_depth3m'] . $divestats->depthrange[2].' (%d%%)',
+$_config['length'] ? $_lang['stats_depth4i'] : $_lang['stats_depth4m'] . $divestats->depthrange[3].' (%d%%)',
+$_config['length'] ? $_lang['stats_depth5i'] : $_lang['stats_depth5m'] . $divestats->depthrange[4].' (%d%%)'                        
                         );
 $p1->SetLegends($legends);
+//$p1->SetSliceColors(array('cadetblue1', 'lightskyblue3','skyblue3','dodgerblue','dodgerblue4'));
+$p1->SetTheme('water');
 $graph->legend->SetFont(FF_VERDANA, FS_NORMAL, 8);
 $graph->legend->SetShadow(false);
 $graph->Add($p1);
