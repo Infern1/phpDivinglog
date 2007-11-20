@@ -153,6 +153,10 @@ class HandleRequest {
                         if($this->view_request == 1)
                             $this->dive_nr = check_number($split_request[2]);
                         break;
+                    case 'drawpiechart.php':
+                        $this->request_type = 5;
+                        $this->diver_choice = false;
+                        break;                   
                     case 'divesummary.php':
                         break;
                     default:
@@ -2196,12 +2200,12 @@ class Divestats{
             $this->brackishdives = $divestatsother[0]['Count'];
 
             // Get the number of deco dives
-            $globals['stats'] = "Deco = 'true'";
+            $globals['stats'] = "Deco = 'True'";
             $divestatsother = parse_mysql_query('divestatsother.sql');
             $this->decodives = $divestatsother[0]['Count'];
 
             // Get the number of rep dives
-            $globals['stats'] = "Rep = 'true'";
+            $globals['stats'] = "Rep = 'True'";
             $divestatsother = parse_mysql_query('divestatsother.sql');
             $this->repdives = $divestatsother[0]['Count'];
 
