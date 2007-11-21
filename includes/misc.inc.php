@@ -3,7 +3,10 @@
  * Filename:  includes/misc.inc.php
  * Function:  Miscellaneous functions file for phpDivingLog.
  * Last Modified: 2006-08-21
- * /***************************************************************************
+ * @Author  Lloyd Borrett - www.borrett.id.au Rob Lensen <rob@bsdfreaks.nl>
+ * @package phpdivinglog
+ * @version 2.0
+ * 
  * 
  * phpDivingLog
  * Copyright (C) 2006 Lloyd Borrett - http://www.borrett.id.au
@@ -276,6 +279,21 @@ function CelsiusToFahrenh($value, $precision = 2)
 function LitreToCuft($value, $precision = 2) 
 {
 	return round(($value * 7), $precision);
+}
+
+
+/**
+ * backhtmlentities resolve problem for displaying wrong characters
+ * 
+ * @param mixed $str_h 
+ * @access public
+ * @return void
+ */
+function backhtmlentities($str_h){
+   $trans = get_html_translation_table(HTML_ENTITIES);
+   $trans = array_flip($trans);
+   $str_h = strtr($str_h, $trans);
+   return $str_h;
 }
 
 /**

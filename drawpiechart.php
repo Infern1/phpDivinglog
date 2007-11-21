@@ -1,4 +1,13 @@
 <?php
+/**
+ * Filename:  drawpiechart..php
+ * Function:  Draws a pie chart at the divestats page.
+ * @Author  Rob Lensen <rob@bsdfreaks.nl>
+ * @package phpdivinglog
+ * @version 2.0
+ * Last Modified: 2007-06-16
+ */
+
 require_once './config.inc.php';
 require_once 'includes/jpgraph/src/jpgraph_pie.php';
 
@@ -33,11 +42,11 @@ $graph->SetFrame(false);
 $p1 = new PiePlot($data);
 //$legends = array('April (%d)','May (%d)','June (%d)');
 $legends = array(   
-$_config['length'] ? $_lang['stats_depth1i'] : $_lang['stats_depth1m'] . $divestats->depthrange[0].' (%d%%)',
-$_config['length'] ? $_lang['stats_depth2i'] : $_lang['stats_depth2m'] . $divestats->depthrange[1].' (%d%%)' ,
-$_config['length'] ? $_lang['stats_depth3i'] : $_lang['stats_depth3m'] . $divestats->depthrange[2].' (%d%%)',
-$_config['length'] ? $_lang['stats_depth4i'] : $_lang['stats_depth4m'] . $divestats->depthrange[3].' (%d%%)',
-$_config['length'] ? $_lang['stats_depth5i'] : $_lang['stats_depth5m'] . $divestats->depthrange[4].' (%d%%)'                        
+$_config['length'] ? backhtmlentities($_lang['stats_depth1i']) : backhtmlentities($_lang['stats_depth1m']) . $divestats->depthrange[0].' (%d%%)',
+$_config['length'] ? backhtmlentities($_lang['stats_depth2i']) : backhtmlentities($_lang['stats_depth2m']) . $divestats->depthrange[1].' (%d%%)' ,
+$_config['length'] ? backhtmlentities($_lang['stats_depth3i']) : backhtmlentities($_lang['stats_depth3m']) . $divestats->depthrange[2].' (%d%%)',
+$_config['length'] ? backhtmlentities($_lang['stats_depth4i']) : backhtmlentities($_lang['stats_depth4m']) . $divestats->depthrange[3].' (%d%%)',
+$_config['length'] ? backhtmlentities($_lang['stats_depth5i']) : backhtmlentities($_lang['stats_depth5m']) . $divestats->depthrange[4].' (%d%%)'                        
                         );
 $p1->SetLegends($legends);
 //$p1->SetSliceColors(array('cadetblue1', 'lightskyblue3','skyblue3','dodgerblue','dodgerblue4'));

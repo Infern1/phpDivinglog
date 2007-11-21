@@ -1,10 +1,13 @@
 <?php
-/***************************************************************************
-Filename: index.php
-Function: This file is the main root file for phpDivingLog.
-Version:  phpDivingLog v1.8 2006-08-25
-Last Modified: 2006-08-21
-/***************************************************************************
+/**
+ * Filename: index.php
+ * Function: This file is the main root file for phpDivingLog.
+ * @Author  Lloyd Borrett - www.borrett.id.au Rob Lensen <rob@bsdfreaks.nl>
+ * @package phpdivinglog
+ * @version 2.0
+ * Version:  phpDivingLog v1.8 2006-08-25
+ * Last Modified: 2006-08-21
+
 
 phpDivingLog
 Copyright (C) 2006 Lloyd Borrett - http://www.borrett.id.au
@@ -25,7 +28,7 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 GNU General Public License for more details.
 
-/***************************************************************************/
+*/
 
 
 // include_once misc file

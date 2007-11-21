@@ -1,10 +1,12 @@
 <?php
-/***************************************************************************
-Filename:  includes/language/english.inc.php
-Function:  English language file for phpDivingLog.
-Author:    Lloyd Borrett - www.borrett.id.au
-Last Modified: 2007-03-07
-/***************************************************************************/
+/**
+ * Filename:  includes/language/english.inc.php
+ * Function:  English language file for phpDivingLog.
+ * @Author:    Lloyd Borrett - www.borrett.id.au
+ * @package phpdivinglog
+ * @version 2.0
+ * Last Modified: 2007-03-07
+*/
 
 $_lang['yes'] = "Да";
 $_lang['no'] = "Нет";

@@ -3,6 +3,9 @@
  * Filename: equipment.php
  * Function: This file shows a list of dive equipment, or the details for a
  * piece of equipment, for phpDivingLog.
+ * @Author  Lloyd Borrett - www.borrett.id.au Rob Lensen <rob@bsdfreaks.nl>
+ * @package phpdivinglog
+ * @version 2.0
  * Version:  phpDivingLog v1.8 2006-08-25
  * Last Modified: 2006-08-21
  * /***************************************************************************

@@ -1,10 +1,12 @@
 <?php
-/***************************************************************************
-Filename:  includes/language/dutch.inc.php
-Function:  Dutch language file for phpDivingLog.
-Author:    Vasco Romijn - info@varomedia.nl
-Last Modified: 2007-07-25
-/***************************************************************************/
+/**
+ * Filename:  includes/language/dutch.inc.php
+ * Function:  Dutch language file for phpDivingLog.
+ * @package phpdivinglog
+ * @version 2.0
+ * @Author    Vasco Romijn - <info@varomedia.nl>
+ * Last Modified: 2007-07-25
+*/
 
 $_lang['yes']                           = "Ja";
 $_lang['no']                            = "Nee";

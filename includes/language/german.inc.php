@@ -1,10 +1,12 @@
 <?php
-/***************************************************************************
-Filename:      includes/language/german.inc.php
-Function:      German language file for phpDivingLog.
-Author:        Sven Knoch - www.divinglog.de
-Add. Changes:  Stefan Sypitzki - www.sypitzki.biz
-Last Modified: 2007-07-02
+/**
+ * Filename:      includes/language/german.inc.php
+ * Function:      German language file for phpDivingLog.
+ * @Author        Sven Knoch - www.divinglog.de
+ * @package phpdivinglog
+ * @version 2.0
+ * Add. Changes:  Stefan Sypitzki - www.sypitzki.biz
+ * Last Modified: 2007-07-02
 /***************************************************************************/
 
 $_lang['yes'] = "Ja";

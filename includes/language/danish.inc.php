@@ -1,9 +1,11 @@
 <?php
-/***************************************************************************
-Filename:  includes/language/danish.inc.php
-Function:  Danish language file for phpDivingLog.
-Author:    Henrik Absalon - www.absalon.org
-Last Modified: 2006-08-21
+/**
+ * Filename:  includes/language/danish.inc.php
+ * Function:  Danish language file for phpDivingLog.
+ * @Author    Henrik Absalon - www.absalon.org
+ * @package phpdivinglog
+ * @version 2.0
+ * Last Modified: 2006-08-21
 /***************************************************************************/
 
 $_lang['yes'] = "Ja";
