@@ -2,7 +2,7 @@
 /**
  * Filename: drawprofile.php
  * Function: This file uses JpGraph to draw the dive profile graph.
- * @Author  Lloyd Borrett - www.borrett.id.au Rob Lensen <rob@bsdfreaks.nl>
+ * @author  Lloyd Borrett - www.borrett.id.au Rob Lensen <rob@bsdfreaks.nl>
  * @package phpdivinglog
  * @version 2.0
  * Version:  phpDivingLog v1.8 2006-08-25

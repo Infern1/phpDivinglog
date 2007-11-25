@@ -3,7 +3,7 @@
  * Filename:  includes/misc.inc.php
  * Function:  Miscellaneous functions file for phpDivingLog.
  * Last Modified: 2006-08-21
- * @Author  Lloyd Borrett - www.borrett.id.au Rob Lensen <rob@bsdfreaks.nl>
+ * @author  Lloyd Borrett - www.borrett.id.au Rob Lensen <rob@bsdfreaks.nl>
  * @package phpdivinglog
  * @version 2.0
  * 

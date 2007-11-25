@@ -37,6 +37,9 @@ $_config['language'] = "english";
 $_config['web_root']        = 'http://www.mydivesite.com/divelog'; 
 /**
  * Your path where divelog is located
+ * EXAMPLE: http://www.foo.com/users/j/jo/john
+ * abs_url_path = /users/j/jo/john
+ * Nothing todo where phpdivinglog is installed on your harddrive!
  */
 $_config['abs_url_path']    = '/divelog'; 
 
@@ -152,7 +155,7 @@ $_config['volume'] = false;
  * application name and revision number
  */
 $_config['app_name'] = "phpDivingLog";
-$_config['app_version'] = "2.0b1";
+$_config['app_version'] = "2.0rc2";
 
 
 /**

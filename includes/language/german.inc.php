@@ -2,7 +2,7 @@
 /**
  * Filename:      includes/language/german.inc.php
  * Function:      German language file for phpDivingLog.
- * @Author        Sven Knoch - www.divinglog.de
+ * @author        Sven Knoch - www.divinglog.de
  * @package phpdivinglog
  * @version 2.0
  * Add. Changes:  Stefan Sypitzki - www.sypitzki.biz

@@ -3,7 +3,7 @@
  * Filename: divesummary.php
  * Function: This file displays some short details from phpDivingLog.
  * Version:  phpDivingLog v1.9 2007-03-07
- * @Author  Lloyd Borrett - www.borrett.id.au Rob Lensen <rob@bsdfreaks.nl>
+ * @author  Lloyd Borrett - www.borrett.id.au Rob Lensen <rob@bsdfreaks.nl>
  * @package phpdivinglog
  * @version 2.0
  * Last Modified: 2007-03-07

@@ -2,7 +2,7 @@
 /**
  * Filename: divestats.php
  * Function: This file displays the dive statistics for phpDivingLog.
- * @Author  Lloyd Borrett - www.borrett.id.au Rob Lensen <rob@bsdfreaks.nl>
+ * @author  Lloyd Borrett - www.borrett.id.au Rob Lensen <rob@bsdfreaks.nl>
  * @package phpdivinglog
  * Version:  phpDivingLog v1.9 2007-03-07
  * Last Modified: 2007-03-07

@@ -4,7 +4,7 @@
  * Function:  Dutch language file for phpDivingLog.
  * @package phpdivinglog
  * @version 2.0
- * @Author    Vasco Romijn - <info@varomedia.nl>
+ * @author    Vasco Romijn - <info@varomedia.nl>
  * Last Modified: 2007-07-25
 */
 

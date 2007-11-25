@@ -3,7 +3,7 @@
  * Filename: divesite.php
  * Function: This file shows a list of dive sites, or the details for a dive site,
  * for phpDivingLog.
- * @Author  Lloyd Borrett - www.borrett.id.au Rob Lensen <rob@bsdfreaks.nl>
+ * @author  Lloyd Borrett - www.borrett.id.au Rob Lensen <rob@bsdfreaks.nl>
  * @package phpdivinglog
  * Last Modified: 2006-08-21
  * /***************************************************************************

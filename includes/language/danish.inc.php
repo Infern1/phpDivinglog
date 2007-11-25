@@ -2,7 +2,7 @@
 /**
  * Filename:  includes/language/danish.inc.php
  * Function:  Danish language file for phpDivingLog.
- * @Author    Henrik Absalon - www.absalon.org
+ * @author    Henrik Absalon - www.absalon.org
  * @package phpdivinglog
  * @version 2.0
  * Last Modified: 2006-08-21

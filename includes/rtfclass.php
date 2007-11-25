@@ -2,7 +2,7 @@
 /**
  * Filename:  includes/rtfclass.php
  * Function:  RTF parsing class
- * @Author  Markus Fischer
+ * @author  Markus Fischer
  * @package phpdivinglog
  * @version 2.0
  * Last Modified: 2007-06-16

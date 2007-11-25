@@ -2,7 +2,7 @@
 /**
  * Filename:  includes/language/compare.php
  * Function:  Compares the language files
- * @Author  Lloyd Borrett - www.borrett.id.au Rob Lensen <rob@bsdfreaks.nl>
+ * @author  Lloyd Borrett - www.borrett.id.au Rob Lensen <rob@bsdfreaks.nl>
  * @package phpdivinglog
  * @version 2.0
  * Last Modified: 2007-06-16
