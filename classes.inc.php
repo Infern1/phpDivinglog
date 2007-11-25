@@ -347,26 +347,29 @@ class TableGrid{
     function SetGridLanguage(){
         global $_lang, $_config;/*{{{*/
         switch ($this->language){
+            case 'english' :
+                // Do nothing since default is english for phpmydatgrid
+                break;
             case 'nederlands': case 'dutch' :
                 $this->gridtable->language("ne");
                 break;
             case 'deutch': case 'german' :
-                $objGrid->language("de");
+                $this->gridtable->language("de");
                 break;
            case 'espa.ol': case 'es' :
-                $objGrid->language("es");
+                $this->gridtable->language("es");
                 break;
             case 'francais': case 'fr' :
-                $objGrid->language("fr");
+                $this->gridtable->language("fr");
                 break;
             case 'italian' : case 'it' :
-                $objGrid->language("it");
+                $this->gridtable->language("it");
                 break;
             case '.e.tina': case 'cs' :
-                $objGrid->language("cs");
+                $this->gridtable->language("cs");
                 break;
             case 'portuguese' : case 'portugese' :
-                $objGrid->language("pt");
+                $this->gridtable->language("pt");
                 break;
             default:
                 if(!isset($_lang['grid_cancel'])){

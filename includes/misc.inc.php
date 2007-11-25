@@ -220,6 +220,35 @@ function GetRequestVar($url, $request_file_depth=0){
 }
 
 /**
+ * is__writable It can accept files or folders, but folders should end with a trailing slash! The function attempts to actually
+ * write a file, so it will correctly return true when a file/folder can be written to when the user has ACL write access to it.
+ * 
+ * @param mixed $path 
+ * @access public
+ * @return void
+ */
+function is__writable($path) {
+//will work in despite of Windows ACLs bug
+//NOTE: use a trailing slash for folders!!!
+//see http://bugs.php.net/bug.php?id=27609
+//see http://bugs.php.net/bug.php?id=30931
+
+    if ($path{strlen($path)-1}=='/') // recursively return a temporary file path
+        return is__writable($path.uniqid(mt_rand()).'.tmp');
+    else if (is_dir($path))
+        return is__writable($path.'/'.uniqid(mt_rand()).'.tmp');
+    // check tmp file for read/write capabilities
+    $rm = file_exists($path);
+    $f = @fopen($path, 'a');
+    if ($f===false)
+        return false;
+    fclose($f);
+    if (!$rm)
+        unlink($path);
+    return true;
+}
+
+/**
  * GetProfileData Extract averagedepth and sac  info from the profile data
  * 
  * @param mixed $result 

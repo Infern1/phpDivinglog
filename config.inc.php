@@ -228,12 +228,24 @@ require_once 'MDB2.php';
 require_once 'includes/jpgraph/src/jpgraph.php';
 require_once 'includes/jpgraph/src/jpgraph_line.php';
 
+
+
+
 /**
  * Smarty part shouldn't need a change 
  */
 $t = new smarty;
 $t->template_dir = TEMPLATE_DIR;
+
 $t->compile_dir = $_config['app_root'] . '/compile';
+/**
+ * Before smarty we gonna check the rights in the compile dir 
+ */
+if(!is__writable($t->compile_dir."/")){
+echo "Change the right on ".  $t->compile_dir ." so the webuser can write<br>
+chmod -R 777 " .$t->compile_dir ;
+}
+
 $t->cache_dir = $_config['app_root'] . '/cache';
 $t->plugins_dir = array($_config['app_root'] . '/include', $_config['app_root'] . '/smarty/plugins');
 
