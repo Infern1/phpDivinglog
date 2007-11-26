@@ -86,13 +86,11 @@ title="{$dlog_number_title}{$DepthMinNr}">{$DepthMinNr}</a></td>
 {* Show dive depth tablea *}
 <tr class="divecontent">
 <td colspan="4">
-<center>
             {if isset($multiuser_id)}
 		        <img src="{$app_path}/drawpiechart.php/{$multiuser_id}/{$get_nr}"  alt="" title="">
             {else}
                 <img src="{$app_path}/drawpiechart.php"  alt="" title="">
             {/if}
-		    </center>
 		    </td>
 
 
@@ -205,7 +203,6 @@ title="{$dlog_number_title}{$DepthMinNr}">{$DepthMinNr}</a></td>
         {/if}
     {/section}
     {/if}
-	</tr>
     <tr class="divesection">
 	    <td colspan="5">&nbsp;</td>
 	</tr>

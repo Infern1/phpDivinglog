@@ -1286,9 +1286,6 @@ class Divelog {
         }
             $recentdivelist_query .=  " ORDER BY Number DESC";
         reset_config_table_prefix();
-  /*      for($i=0; $i<$count; $i++){
-          $Divedate =  date( $_lang['dlog_divedate_format'], strtotime($recentdivelist[$i]['Divedate']));
-        }*/
 		$t->assign('dlog_title_number', $_lang['dlog_title_number'] );
 		$t->assign('dlog_title_divedate', $_lang['dlog_title_divedate']);
 		$t->assign('dlog_title_depth', $_lang['dlog_title_depth'] );
@@ -1742,7 +1739,7 @@ class Divesite{
                 'fileName' => '%d',
                 'delta' => 2, );    
         $paged_data = Pager_Wrapper_MDB2($db, $locationlist_query, $pager_options1);
-           $t->assign('dsite_title_place',   $_lang['dsite_title_place']);
+        $t->assign('dsite_title_place',   $_lang['dsite_title_place']);
             $t->assign('dsite_title_city',    $_lang['dsite_title_city']);
             $t->assign('dsite_title_country', $_lang['dsite_title_country']);
             $t->assign('dsite_title_maxdepth', $_lang['dsite_title_maxdepth']);
