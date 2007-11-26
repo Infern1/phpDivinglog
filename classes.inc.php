@@ -1356,9 +1356,9 @@ class Divelog {
         $objGrid -> orderby("Number", "DESC"); 
         //Total width should be 700px 5+100+80+250+400
         if($this->multiuser){
-            $objGrid -> FormatColumn("Number", $_lang['dlog_title_number'], 5, 5, 5, "5", "center","link:open_url(%s\,'$url'),Number"); 
+            $objGrid -> FormatColumn("Number", $_lang['dlog_title_number'], 5, 5, 5, "20", "center","link:open_url(%s\,'$url'),Number"); 
         } else{
-            $objGrid -> FormatColumn("Number", $_lang['dlog_title_number'], 5, 5, 5, "5", "center","link:open_url(%s\,'$url'),Number"); 
+            $objGrid -> FormatColumn("Number", $_lang['dlog_title_number'], 5, 5, 5, "20", "center","link:open_url(%s\,'$url'),Number"); 
 
         }
         $objGrid -> FormatColumn("Divedate", $_lang['dlog_title_divedate'], 2, 4, 0, "80", "center", "date:dmy:-" ); 
