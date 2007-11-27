@@ -2,7 +2,7 @@
 /**
  * Filename:  includes/language/english.inc.php
  * Function:  English language file for phpDivingLog.
- * @author:    Lloyd Borrett - www.borrett.id.au
+ * @author    Lloyd Borrett - www.borrett.id.au
  * @package phpdivinglog
  * @version $Rev$
  * Last Modified: $Date$

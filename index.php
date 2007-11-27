@@ -31,7 +31,9 @@ GNU General Public License for more details.
 */
 
 
-// include_once misc file
+/**
+ * Include the config file 
+ */
 $config_file = "./config.inc.php";
 require_once ($config_file);
 

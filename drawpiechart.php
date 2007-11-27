@@ -6,6 +6,10 @@
  * @package phpdivinglog
  * @version $Rev$
  * Last Modified: $Date$
+*/
+
+/**
+ * Include the files 
  */
 
 require_once './config.inc.php';
