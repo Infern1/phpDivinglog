@@ -5,7 +5,7 @@
  * for phpDivingLog.
  * @author  Lloyd Borrett - www.borrett.id.au Rob Lensen <rob@bsdfreaks.nl>
  * @package phpdivinglog
- * @version: $Rev$
+ * @version $Rev$
  * Last Modified: $Date$
 */
 
