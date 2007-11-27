@@ -7,6 +7,7 @@
  * @version  $Rev$
  * Last Modified: $Date$
 */
+
 /**
  * 
  * phpDivingLog
@@ -30,25 +31,52 @@
  * 
 */
 
-// Callback to negate the argument
+/**
+ * _cb_negate Callback to negate the argument
+ * 
+ * @param mixed $aVal 
+ * @access protected
+ * @return void
+ */
 function _cb_negate($aVal)
 {
     return round(- $aVal, 2);
 } 
 
-// Callback to add minute symbol
+
+/**
+ * add_minute Callback to add minute symbol 
+ * 
+ * @param mixed $aVal 
+ * @access public
+ * @return void
+ */
 function add_minute($aVal)
 {
     return $aVal . '&#8242;';
 } 
 
-// Callback to convert metres to feet
+
+/**
+ * toFeet Callback to convert metres to feet
+ * 
+ * @param mixed $aVal 
+ * @access public
+ * @return void
+ */
 function toFeet($aVal)
 {
     return round(- ($aVal * 3.2808399));
 } 
 
-// Callback to convert feet to metres
+
+/**
+ * toMetres Callback to convert feet to metres
+ * 
+ * @param mixed $aVal 
+ * @access public
+ * @return void
+ */
 function toMetres($aVal)
 {
     return round(- ($aVal * 0.3048));
@@ -77,7 +105,9 @@ reset_config_table_prefix();
 $profile = $result[0]['Profile'];
 if (!$profile) {
 
-    // No profile data
+    /**
+     *  No profile data
+     */
     $temp = 0;
     $ydata = array();
     $xdata = array();
@@ -109,13 +139,17 @@ if (!$profile) {
 
 } else {
 
-    // Graph the profile data
+    /**
+     * Graph the profile data 
+     */
     $length = (strlen($profile) / 12);
     $start = 0;
     $ydata = array();
     $ydata_asc = array();
 
-    // Extract the data values from the profile data
+    /**
+     * Extract the data values from the profile data 
+     */
     for ($i = 0; $i < $length; $i++) {
         $ydata[$i] = substr(substr($profile, $start, 12), 0, 5) / 100;
         $decowarning[$i] = substr(substr($profile, $start, 12), 5, 1);
@@ -126,7 +160,9 @@ if (!$profile) {
         $start += 12;
     } 
 
-    // Use the profile interval time to assign time values to the data
+    /**
+     * Use the profile interval time to assign time values to the data 
+     */
     $profileint = ($result[0]['ProfileInt'] / 60);
     $xdata = array();
     $temp = 0;
@@ -135,7 +171,9 @@ if (!$profile) {
         $temp += $profileint;
     } 
 	
-    // Negate all profile data and convert units if required
+    /**
+     * Negate all profile data and convert units if required 
+     */
     $n = count($ydata);
     for($i = 0; $i < $n; ++$i) {
         if ($_config['length']) {
@@ -145,16 +183,22 @@ if (!$profile) {
         } 
     } 
 
-    // Calculate the average depth
+    /**
+     * Calculate the average depth 
+     */
     $n = count($ydata);
     $total = array_sum($ydata);
     $average_depth = $total / $n;
 } 
 
-// Basic graph setup
+/**
+ *  Basic graph setup
+ */
 $graph =& new Graph(550, 400, "auto");
 
-// Set margins, colours, scale etc. for whole graph
+/**
+ *  Set margins, colours, scale etc. for whole graph
+ */
 $graph->SetScale("linlin", 0, 0, $xdata[0], $xdata[(count($xdata)-1)]);
 if ($_config['graph_show_two_scales'] || $_config['graph_show_both_units']) {
     $graph->SetY2Scale("lin"); // Y2 axis
@@ -173,7 +217,9 @@ if ($_config['graph_background_image'] != "") {
     $graph->SetColor('#f3f3f3');
 } 
 
-// Set the graph title and font
+/**
+ * Set the graph title and font 
+ */
 $graph->title->Set($_lang['dive_profile_title'] . $result[0]['Number']);
 $graph->title->SetFont(FF_VERDANA, FS_BOLD, 12);
 if ($_config['graph_background_image'] != "") {
@@ -182,7 +228,9 @@ if ($_config['graph_background_image'] != "") {
     $graph->title->SetColor("#000000");
 } 
 
-// Set the x-axis and title it
+/**
+ *  Set the x-axis and title it
+ */
 $graph->xaxis->SetPos('min');
 
 $graph->xaxis->title->Set($_lang['dive_profile_xaxis_title']);
@@ -231,14 +279,18 @@ if ($_config['graph_background_image'] != "") {
     $graph->ygrid->SetColor("blue");
 } 
 
-// Set legend details
+/**
+ * Set legend details 
+ */
 $graph->legend->Pos(0.5, 0.99, 'center', 'bottom');
 $graph->legend->SetLayout(LEGEND_HOR);
 $graph->legend->SetLineWeight(2);
 $graph->legend->SetFont(FF_VERDANA, FS_NORMAL, 8);
 $graph->legend->SetShadow(false);
 
-// lp_depth is the depth data line
+/**
+ * lp_depth is the depth data line 
+ */
 $lp_depth = new LinePlot($ydata, $xdata);
 $lp_depth->SetLegend($_lang['dive_profile_depth_legend']);
 if ($_config['graph_background_image'] != "") {
@@ -291,7 +343,9 @@ for ($a = 0; $a < count($ydata); $a++) {
 } 
 
 if ($_config['graph_show_two_scales'] || $_config['graph_show_both_units']) {
-    // Create secondary Y2 scale
+    /**
+     * Create secondary Y2 scale 
+     */
     $l2plot = new LinePlot($ydata, $xdata);
     $l2plot->SetWeight(0); // Optimize
     if ($_config['graph_show_both_units']) {
@@ -323,7 +377,9 @@ if ($_config['graph_show_two_scales'] || $_config['graph_show_both_units']) {
     } 
 } 
 
-// lp_avg is the Average depth
+/**
+ * lp_avg is the Average depth 
+ */
 $lp_avg = new LinePlot($ydata_avg, $xdata);
 $lp_avg->SetWeight(1);
 $lp_avg->SetLegend($_lang['dive_profile_avgdepth_title']);
@@ -333,7 +389,9 @@ if ($_config['graph_background_image'] != "") {
     $lp_avg->SetColor("black");
 } 
 
-// lp_asc is the ascent warning
+/**
+ * lp_asc is the ascent warning 
+ */
 $lp_asc = new LinePlot($ydata_asc, $xdata);
 $lp_asc->SetWeight(2);
 $lp_asc->SetLegend($_lang['dive_profile_ascent_legend']);
@@ -343,7 +401,9 @@ if ($_config['graph_background_image'] != "") {
     $lp_asc->SetColor("red");
 } 
 
-// lp_desc is the descent warning
+/**
+ * lp_desc is the descent warning 
+ */
 $lp_desc = new LinePlot($ydata_desc, $xdata);
 $lp_desc->SetWeight(2);
 if ($_config['graph_background_image'] != "") {
@@ -352,7 +412,9 @@ if ($_config['graph_background_image'] != "") {
     $lp_desc->SetColor("red");
 } 
 
-// lp_deco is the deco warning
+/**
+ * lp_deco is the deco warning 
+ */
 $lp_deco = new LinePlot($ydata_deco, $xdata);
 $lp_deco->SetWeight(2);
 $lp_deco->SetLegend($_lang['dive_profile_deco_legend']);
@@ -362,7 +424,9 @@ if ($_config['graph_background_image'] != "") {
     $lp_deco->SetColor("green");
 } 
 
-// lp_rbt is the RBT warning
+/**
+ * lp_rbt is the RBT warning 
+ */
 $lp_rbt = new LinePlot($ydata_rbt, $xdata);
 $lp_rbt->SetWeight(2);
 $lp_rbt->SetLegend($_lang['dive_profile_rbt_legend']);
@@ -372,7 +436,9 @@ if ($_config['graph_background_image'] != "") {
     $lp_rbt->SetColor("purple");
 } 
 
-// lp_work is the work warning
+/**
+ * lp_work is the work warning 
+ */
 $lp_work = new LinePlot($ydata_work, $xdata);
 $lp_work->SetWeight(2);
 $lp_work->SetLegend($_lang['dive_profile_work_legend']);
@@ -382,7 +448,9 @@ if ($_config['graph_background_image'] != "") {
     $lp_work->SetColor("orange");
 } 
 
-// Add the graphs
+/**
+ * Add the graphs 
+ */
 $graph->Add($lp_depth);
 if ($_config['graph_show_two_scales'] || $_config['graph_show_both_units']) {
     $graph->AddY2($l2plot);
@@ -394,7 +462,9 @@ $graph->Add($lp_deco);
 $graph->Add($lp_rbt);
 $graph->Add($lp_work);
 
-// Output the graph to cache
+/**
+ * Output the graph to cache 
+ */
 $graph->Stroke();
 
 ?>

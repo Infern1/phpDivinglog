@@ -1,13 +1,4 @@
 <?php
-/**
- * Filename: divestats.php
- * Function: This file displays the dive statistics for phpDivingLog.
- * @author  Lloyd Borrett - www.borrett.id.au Rob Lensen <rob@bsdfreaks.nl>
- * @package phpdivinglog
- * @version  $Rev$
- * Last Modified: $Date$
-*/
-
 /** 
  * phpDivingLog
  * Copyright (C) 2006 Lloyd Borrett - http://www.borrett.id.au
@@ -29,6 +20,15 @@
  * GNU General Public License for more details.
  * 
  * 
+*/
+
+/**
+ * Filename: divestats.php
+ * Function: This file displays the dive statistics for phpDivingLog.
+ * @author  Lloyd Borrett - www.borrett.id.au Rob Lensen <rob@bsdfreaks.nl>
+ * @package phpdivinglog
+ * @version  $Rev$
+ * Last Modified: $Date$
 */
 
 $config_file = "./config.inc.php";

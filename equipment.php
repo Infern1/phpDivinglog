@@ -1,13 +1,4 @@
 <?php
-/**
- * Filename: equipment.php
- * Function: This file shows a list of dive equipment, or the details for a
- * piece of equipment, for phpDivingLog.
- * @author  Lloyd Borrett - www.borrett.id.au Rob Lensen <rob@bsdfreaks.nl>
- * @package phpdivinglog
- * @version $Rev$
- * Last Modified: $Date$
-*/
 /** 
  * 
  * phpDivingLog
@@ -31,7 +22,16 @@
  * 
 */
 
-// include_once misc file
+/**
+ * Filename: equipment.php
+ * Function: This file shows a list of dive equipment, or the details for a
+ * piece of equipment, for phpDivingLog.
+ * @author  Lloyd Borrett - www.borrett.id.au Rob Lensen <rob@bsdfreaks.nl>
+ * @package phpdivinglog
+ * @version $Rev$
+ * Last Modified: $Date$
+*/
+
 $config_file = "./config.inc.php";
 require_once ($config_file);
 

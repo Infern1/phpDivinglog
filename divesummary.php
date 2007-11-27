@@ -32,7 +32,9 @@
  * 
 */
 
-// include_once misc file
+/**
+ *Includes
+ */
 $misc_filename = "includes/misc.inc.php";
 if (!file_exists($misc_filename)) {
     print "<p>Misc file '" . $misc_filename . "' not found.</p>";

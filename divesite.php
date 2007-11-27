@@ -1,15 +1,5 @@
 <?php
 /**
- * Filename: divesite.php
- * Function: This file shows a list of dive sites, or the details for a dive site,
- * for phpDivingLog.
- * @author  Lloyd Borrett - www.borrett.id.au Rob Lensen <rob@bsdfreaks.nl>
- * @package phpdivinglog
- * @version $Rev$
- * Last Modified: $Date$
-*/
-
-/**
  * 
  * phpDivingLog
  * Copyright (C) 2006 Lloyd Borrett - http://www.borrett.id.au
@@ -33,7 +23,16 @@
  * 
 */
 
-// include_once misc file
+/**
+ * Filename: divesite.php
+ * Function: This file shows a list of dive sites, or the details for a dive site,
+ * for phpDivingLog.
+ * @author  Lloyd Borrett - www.borrett.id.au Rob Lensen <rob@bsdfreaks.nl>
+ * @package phpdivinglog
+ * @version $Rev$
+ * Last Modified: $Date$
+*/
+
 $config_file = "./config.inc.php";
 require_once ($config_file);
 
@@ -52,7 +51,9 @@ global $_config;
 if($divesite->get_request_type() == 1){
 
     $t->assign('divesite_id',$divesite->divesite_nr);
-    //	Get the page header
+    /**
+     * Get the page header 
+     */
     $pagetitle = $_lang['dive_site_pagetitle'].$result[0]['Place'];
     $t->assign('pagetitle',$pagetitle);
     $t->assign('colspanlinks','4');
@@ -68,7 +69,9 @@ if($divesite->get_request_type() == 1){
 } elseif($divesite->get_request_type() == 0) {
     $links->get_ovv_links();
     $divesite->get_divesite_overview();
-    //	Get the page header
+    /**
+     * Get the page header
+     */
     $pagetitle = $_lang['dive_sites'];
     $t->assign('pagetitle',$pagetitle);
     /*
