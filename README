@@ -19,10 +19,10 @@ DEPENDENCIES:
 	
     Included in the package:
     - JpGraph 1.22 (http://www.aditus.nu/jpgraph/)
-	- RTFClass (http://www.phpclasses.org/browse/file/7632.html)
-	  Rich Text Format - Parsing Class - (c) 2000 Markus Fischer
+    - RTFClass (http://www.phpclasses.org/browse/file/7632.html)
+      Rich Text Format - Parsing Class - (c) 2000 Markus Fischer
     - Lightbox JS v2.0 (http://www.huddletogether.com/projects/lightbox2/)
-	  Used to overlay dive pictures on the current page.
+      Used to overlay dive pictures on the current page.
 
 USAGE:
 	GOOGLE MAPS
