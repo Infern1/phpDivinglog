@@ -4,10 +4,11 @@
  * Function: This file displays the dive statistics for phpDivingLog.
  * @author  Lloyd Borrett - www.borrett.id.au Rob Lensen <rob@bsdfreaks.nl>
  * @package phpdivinglog
- * Version:  phpDivingLog v1.9 2007-03-07
- * Last Modified: 2007-03-07
- * /***************************************************************************
- * 
+ * @version:  $Rev$
+ * Last Modified: $Date$
+*/
+
+/** 
  * phpDivingLog
  * Copyright (C) 2006 Lloyd Borrett - http://www.borrett.id.au
  * 
@@ -27,8 +28,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  * 
- * /**************************************************************************
- */
+ * 
+*/
 
 $config_file = "./config.inc.php";
 require_once ($config_file);

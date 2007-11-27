@@ -2,12 +2,11 @@
 /**
  * Filename:  includes/config.inc.php
  * Function:  Configuration file for phpDivingLog.
- * @Author  Lloyd Borrett - www.borrett.id.au Rob Lensen <rob@bsdfreaks.nl>
+ * @author  Lloyd Borrett - www.borrett.id.au Rob Lensen <rob@bsdfreaks.nl>
  * @package phpDivinglog
- * @version 2.0
- * Last Modified: 2007-06-16
+ * @version $Rev$
+ * Last Modified: $Date$
  */
-
 
 /**
  *  database settings

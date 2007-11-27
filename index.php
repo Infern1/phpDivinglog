@@ -2,13 +2,13 @@
 /**
  * Filename: index.php
  * Function: This file is the main root file for phpDivingLog.
- * @Author  Lloyd Borrett - www.borrett.id.au Rob Lensen <rob@bsdfreaks.nl>
+ * @author  Lloyd Borrett - www.borrett.id.au Rob Lensen <rob@bsdfreaks.nl>
  * @package phpdivinglog
- * @version 2.0
- * Version:  phpDivingLog v1.8 2006-08-25
- * Last Modified: 2006-08-21
+ * @version $Rev$
+ * Last Modified: $Date$
+*/
 
-
+/*
 phpDivingLog
 Copyright (C) 2006 Lloyd Borrett - http://www.borrett.id.au
 

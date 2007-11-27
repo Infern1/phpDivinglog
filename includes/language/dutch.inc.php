@@ -3,9 +3,9 @@
  * Filename:  includes/language/dutch.inc.php
  * Function:  Dutch language file for phpDivingLog.
  * @package phpdivinglog
- * @version 2.0
+ * @version $Rev$
  * @author    Vasco Romijn - <info@varomedia.nl>
- * Last Modified: 2007-07-25
+ * Last Modified: $Date$
 */
 
 $_lang['yes']                           = "Ja";

@@ -4,8 +4,8 @@
  * Function:  English language file for phpDivingLog.
  * @author:    Lloyd Borrett - www.borrett.id.au
  * @package phpdivinglog
- * @version 2.0
- * Last Modified: 2007-03-07
+ * @version $Rev$
+ * Last Modified: $Date$
 */
 
 $_lang['yes'] = "Yes";

@@ -4,8 +4,8 @@
  * Function:  Draws a pie chart at the divestats page.
  * @author  Rob Lensen <rob@bsdfreaks.nl>
  * @package phpdivinglog
- * @version 2.0
- * Last Modified: 2007-06-16
+ * @version $Rev$
+ * Last Modified: $Date$
  */
 
 require_once './config.inc.php';

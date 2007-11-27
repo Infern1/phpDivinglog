@@ -5,8 +5,11 @@
  * for phpDivingLog.
  * @author  Lloyd Borrett - www.borrett.id.au Rob Lensen <rob@bsdfreaks.nl>
  * @package phpdivinglog
- * Last Modified: 2006-08-21
- * /***************************************************************************
+ * @version: $Rev$
+ * Last Modified: $Date$
+*/
+
+/**
  * 
  * phpDivingLog
  * Copyright (C) 2006 Lloyd Borrett - http://www.borrett.id.au
@@ -27,8 +30,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  * 
- * /**************************************************************************
- */
+ * 
+*/
 
 // include_once misc file
 $config_file = "./config.inc.php";

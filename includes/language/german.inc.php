@@ -4,9 +4,9 @@
  * Function:      German language file for phpDivingLog.
  * @author        Sven Knoch - www.divinglog.de
  * @package phpdivinglog
- * @version 2.0
+ * @version $Rev$
  * Add. Changes:  Stefan Sypitzki - www.sypitzki.biz
- * Last Modified: 2007-07-02
+ * Last Modified: $Date$
 /***************************************************************************/
 
 $_lang['yes'] = "Ja";

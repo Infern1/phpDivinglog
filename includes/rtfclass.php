@@ -4,8 +4,8 @@
  * Function:  RTF parsing class
  * @author  Markus Fischer
  * @package phpdivinglog
- * @version 2.0
- * Last Modified: 2007-06-16
+ * @version $Rev$
+ * Last Modified: $Date$
  */
 
 

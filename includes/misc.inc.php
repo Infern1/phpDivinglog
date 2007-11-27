@@ -2,11 +2,13 @@
 /**
  * Filename:  includes/misc.inc.php
  * Function:  Miscellaneous functions file for phpDivingLog.
- * Last Modified: 2006-08-21
  * @author  Lloyd Borrett - www.borrett.id.au Rob Lensen <rob@bsdfreaks.nl>
  * @package phpdivinglog
- * @version 2.0
- * 
+ * @version $Rev$
+ * Last Modified: $Date$
+*/
+
+/**
  * 
  * phpDivingLog
  * Copyright (C) 2006 Lloyd Borrett - http://www.borrett.id.au
@@ -27,8 +29,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  * 
- * /**************************************************************************
- */
+*/
 
 global $_config;
 

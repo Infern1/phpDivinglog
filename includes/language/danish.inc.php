@@ -4,9 +4,9 @@
  * Function:  Danish language file for phpDivingLog.
  * @author    Henrik Absalon - www.absalon.org
  * @package phpdivinglog
- * @version 2.0
- * Last Modified: 2006-08-21
-/***************************************************************************/
+ * @version $Rev$
+ * Last Modified: $Date$
+*/
 
 $_lang['yes'] = "Ja";
 $_lang['no'] = "Nej";

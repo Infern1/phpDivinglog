@@ -5,9 +5,11 @@
  * Version:  phpDivingLog v1.9 2007-03-07
  * @author  Lloyd Borrett - www.borrett.id.au Rob Lensen <rob@bsdfreaks.nl>
  * @package phpdivinglog
- * @version 2.0
- * Last Modified: 2007-03-07
- * /***************************************************************************
+ * @version $Rev$
+ * Last Modified: $date$
+*/
+
+/**
  * 
  * phpDivingLog
  * Copyright (C) 2006 Lloyd Borrett - http://www.borrett.id.au
@@ -28,8 +30,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  * 
- * /**************************************************************************
- */
+*/
 
 // include_once misc file
 $misc_filename = "includes/misc.inc.php";
