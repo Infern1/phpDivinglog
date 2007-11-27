@@ -1,5 +1,11 @@
 <?php
 /** 
+ * Filename: index.php
+ * Function: This file is the main root file for phpDivingLog.
+ * @author  Lloyd Borrett - www.borrett.id.au Rob Lensen <rob@bsdfreaks.nl>
+ * @package phpdivinglog
+ * @version $Rev$
+ * Last Modified: $Date$
  * 
  * phpDivingLog
  * Copyright (C) 2006 Lloyd Borrett - http://www.borrett.id.au
@@ -22,15 +28,6 @@
  * 
 */
 
-
-/**
- * Filename: index.php
- * Function: This file is the main root file for phpDivingLog.
- * @author  Lloyd Borrett - www.borrett.id.au Rob Lensen <rob@bsdfreaks.nl>
- * @package phpdivinglog
- * @version $Rev$
- * Last Modified: $Date$
-*/
 
 $config_file = "./config.inc.php";
 require_once ($config_file);

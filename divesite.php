@@ -1,5 +1,12 @@
 <?php
 /**
+ * Filename: divesite.php
+ * Function: This file shows a list of dive sites, or the details for a dive site,
+ * for phpDivingLog.
+ * @author  Lloyd Borrett - www.borrett.id.au Rob Lensen <rob@bsdfreaks.nl>
+ * @package phpdivinglog
+ * @version $Rev$
+ * Last Modified: $Date$
  * 
  * phpDivingLog
  * Copyright (C) 2006 Lloyd Borrett - http://www.borrett.id.au
@@ -23,15 +30,6 @@
  * 
 */
 
-/**
- * Filename: divesite.php
- * Function: This file shows a list of dive sites, or the details for a dive site,
- * for phpDivingLog.
- * @author  Lloyd Borrett - www.borrett.id.au Rob Lensen <rob@bsdfreaks.nl>
- * @package phpdivinglog
- * @version $Rev$
- * Last Modified: $Date$
-*/
 
 $config_file = "./config.inc.php";
 require_once ($config_file);

@@ -7,9 +7,6 @@
  * @package phpdivinglog
  * @version $Rev$
  * Last Modified: $date$
-*/
-
-/**
  * 
  * phpDivingLog
  * Copyright (C) 2006 Lloyd Borrett - http://www.borrett.id.au
@@ -32,9 +29,6 @@
  * 
 */
 
-/**
- *Includes
- */
 $misc_filename = "includes/misc.inc.php";
 if (!file_exists($misc_filename)) {
     print "<p>Misc file '" . $misc_filename . "' not found.</p>";

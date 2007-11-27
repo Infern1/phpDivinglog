@@ -6,9 +6,6 @@
  * @package phpdivinglog
  * @version  $Rev$
  * Last Modified: $Date$
-*/
-
-/**
  * 
  * phpDivingLog
  * Copyright (C) 2006 Lloyd Borrett - http://www.borrett.id.au
