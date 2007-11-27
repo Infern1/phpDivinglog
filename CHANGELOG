@@ -1,0 +1,100 @@
+phpDivingLog 2.0
+
+Changes v2.0a1 - 2007-09-21 - Rob Lensen
+    * Changed phpdivinglog to use smarty templates
+    * Before installing check the file config.inc.php
+        - Set the database settings
+        - Set $_config['web_root']
+        - Set $_config['abs_url_path']
+        - Set $_config['app_root']
+    * Added multiuser option
+    * Make phpDivinglog OO
+    
+2006-08-25 - Lloyd Borrett (http://www.borrett.id.au)
+
+Changes v1.8 - 2006-08-25 - Lloyd Borrett (http://www.borrett.id.au)
+	Changes to the dive profile graph:
+	* Added average depth to the dive profile chart. 
+	* Added descent and work warnings to the dive profile chart. 
+	* Better support for metric and imperial units in the dive profile chart. 
+	* Provided a default dive profile chart option that displays 
+          well when there is no background image. 
+	Improved the readme.txt file to add extra details about 
+	installation and usage.
+
+Changes v1.7 - 2006-08-21 - Lloyd Borrett (http://www.borrett.id.au)
+	Changed to support length, pressure, weight, temperature and weight
+	values being able to be displayed with imperial units of measurement.
+	Added support for the certification scans in divestats.php.
+	Added divesummary.php to allow the display of some summary details
+	on a standard .htm page.
+	Improved the handling of situations where there are no site, equipment etc. details.
+	Improved the display of more null values.
+	Cleaned up the HTML output.
+	Language file compare tool added.
+	Improved the readme.txt file to add extra details about 
+	installation and usage.
+
+Changes v1.6 - 2006-08-04 - Lloyd Borrett (http://www.borrett.id.au)
+	Sven Knoch released a minor update to Diving Log to fix a few bugs
+	in the MySQL Dump export option - (http://www.divinglog.de)
+	phpDivingLog has been updated to make use of these fixes.
+	phpDivingLog 1.6 WILL NOT WORK without the updated version of Diving Log.
+	Dive entry time is now displayed.
+	Dive site latitude and longitude values are now properly formatted.
+	Added link to Google Maps for dive site if we have the latitude and longitude.
+	Fixed bug in phpDivingLog to display correct dive site country.
+	Fixed bug where a dive site might have no matching country or city.
+	Added additional checking of argument values to prevent 
+	potential security problem.
+	Improved the display of some null values.
+	Improved the readme.txt file to add extra details about 
+	installation and usage.
+
+Changes v1.5 - 2006-07-26 - Lloyd Borrett (http://www.borrett.id.au)
+	German language file added by Sven Knoch - (http://www.divinglog.de)
+	Improved support for other languages.
+	JpGraph config file includes/jpgraph/src/jpg-config.inc changed
+	to have the values for a Linux system as the default. The files
+	jpg-config-linux.inc and jpg-config-windows.inc are examples of 
+	this file that worked on those platforms.
+	Improved the readme.txt file to add extra details about 
+	installation and usage.
+	Changed divestats.php to include a link to the phpDivingLog page at
+	http://www.borrett.id.au/interests/phpdivinglog.htm.
+	Cleaned up some code.
+
+Changes v1.4 - 2006-07-13 - Lloyd Borrett (http://www.borrett.id.au)
+	Danish language file added by Henrik Absalon - (http://www.absalon.org)
+	Added support for equipment listing, details and equipment photos.
+	Added support for location map images.
+	Added in a partial workaround for coordinate format problems.
+	Fixed links to dives at a given location.
+	Now showing no dive entry time instead of the bad value
+	that is passed by MySQL Dump.
+	Cleaned up some code.
+
+Changes v1.3 - 2006-07-12 - Lloyd Borrett (http://www.borrett.id.au)
+	Added support for dive pictures.
+	Added links to the other sections on each page.
+	Dive profile now shows depth scales for metres and feet.
+	Added link titles to links that didn't have them.
+	Moved CSS values into a CSS file.
+	Moved configuration values into a config file.
+	Moved language values into a languages file.
+	Cleaned up some code .
+
+Changes v1.2 - 2006-07-09 - Lloyd Borrett (http://www.borrett.id.au)
+	Added Diving Certifications.
+	Separated statistics into divestats.php.
+	Show program revisions on the statistics page.
+	Added Dive Sites as divesite.php.
+
+Changes v1.1 - 2006-07-07 - Lloyd Borrett (http://www.borrett.id.au)
+	Support for Diving Log 4.0.
+	Conversion to English.
+	Added in navigation links and extra details.
+
+Original version 1.0 created by Olaf van Zandwijk (http://enschede.vanzandwijk.net)
+
+
