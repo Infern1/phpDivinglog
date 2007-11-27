@@ -789,7 +789,7 @@ class datagrid{
 	}
 	
 	# setHeader: Defines the CSS and JS files to be used
-	function setHeader($phpScriptFile="", $jsFile = "js/dgscripts.js", $cssFile = "css/dgstyle.css"){
+	function setHeader($phpScriptFile="", $jsFile = "js/dgscripts.js", $cssFile = "includes/dgstyle.css"){
 		if (empty($phpScriptFile)) $phpScriptFile = basename($_SERVER["PHP_SELF"]);
 		$sl = ($this->closeTags)?"/":"";						    # This variable must be inserted on each XHTML field which need to be closed with an / (<img ... />).
 		$br = ($this->friendlyHTML)?"\n":"";						# This variable must be inserted on each HTML output to format the generated code.
