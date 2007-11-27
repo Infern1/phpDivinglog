@@ -1347,7 +1347,7 @@ class Divelog {
             $url =  "/index.php/";
         }
         $objGrid -> keyfield("Number"); 
-        $t->assign('grid_header' , $objGrid -> getHeader(NULL, $_config['abs_url_path']. '/js/dgscripts.js', $_config['abs_url_path']. '/css/dgstyle.css'));
+        $t->assign('grid_header' , $objGrid -> getHeader(NULL, $_config['abs_url_path']. '/js/dgscripts.js', $_config['abs_url_path']. '/includes/dgstyle.css'));
         //        $objGrid -> paginationmode('links');
         $objGrid->message['display'] = $_lang['display_rows_dives'];
         $objGrid -> orderby("Number", "DESC"); 
@@ -1358,15 +1358,15 @@ class Divelog {
             $objGrid -> FormatColumn("Number", $_lang['dlog_title_number'], 5, 5, 5, "20", "center","link:open_url(%s\,'$url'),Number"); 
 
         }
-        $objGrid -> FormatColumn("Divedate", $_lang['dlog_title_divedate'], 2, 4, 0, "80", "center", "date:dmy:-" ); 
+        $objGrid -> FormatColumn("Divedate", $_lang['dlog_title_divedate'], 2, 4, 0, "60", "center", "date:dmy:-" ); 
         if($_config['length']){
-            $objGrid -> FormatColumn("Depth", $_lang['dlog_title_depth'], 12, 12, 0, "80", "left","sign:".$_lang['unit_length_short_imp']  );
+            $objGrid -> FormatColumn("Depth", $_lang['dlog_title_depth'], 12, 12, 0, "60", "center","sign:".$_lang['unit_length_short_imp']  );
         } else {
-            $objGrid -> FormatColumn("Depth", $_lang['dlog_title_depth'], 12, 12, 0, "80", "left","sign:".$_lang['unit_length_short']  );
+            $objGrid -> FormatColumn("Depth", $_lang['dlog_title_depth'], 12, 12, 0, "60", "center","sign:".$_lang['unit_length_short']  );
         }
-        $objGrid -> FormatColumn("Divetime", $_lang['dlog_title_divetime'], 2, 4, 0, "80", "left","sign:".$_lang['unit_time_short'] );
+        $objGrid -> FormatColumn("Divetime", $_lang['dlog_title_divetime'], 2, 4, 0, "60", "center","sign:".$_lang['unit_time_short'] );
         $objGrid -> FormatColumn("Place", $_lang['dlog_title_place'], 180, 100, 0, "300", "left"); 
-        $objGrid -> FormatColumn("City", $_lang['dlog_title_location'], 180, 100, 0, "250", "left"); 
+        $objGrid -> FormatColumn("City", $_lang['dlog_title_location'], 180, 100, 0, "184", "left"); 
         $objGrid->sqlstatement($recentdivelist_query);
         
         $grid = $GridClass->get_grid($objGrid);
@@ -1768,7 +1768,7 @@ class Divesite{
                 $url =  "/divesite.php/";
             }
             $objGrid -> keyfield("ID"); 
-            $t->assign('grid_header' , $objGrid -> getHeader(NULL, $_config['abs_url_path']. '/js/dgscripts.js', $_config['abs_url_path']. '/css/dgstyle.css'));
+            $t->assign('grid_header' , $objGrid -> getHeader(NULL, $_config['abs_url_path']. '/js/dgscripts.js', $_config['abs_url_path']. '/includes/dgstyle.css'));
             $objGrid -> orderby("Place", "ASC"); 
             $objGrid->message['display'] = $_lang['display_rows_divesites'];
             $objGrid->sqlstatement($sql);
@@ -2040,7 +2040,7 @@ class Equipment{
         }
          $objGrid->message['display'] = $_lang['display_rows_equipment'];
          $objGrid -> keyfield("ID");
-       $t->assign('grid_header' , $objGrid -> getHeader(NULL, $_config['abs_url_path']. '/js/dgscripts.js', $_config['abs_url_path']. '/css/dgstyle.css'));
+       $t->assign('grid_header' , $objGrid -> getHeader(NULL, $_config['abs_url_path']. '/js/dgscripts.js', $_config['abs_url_path']. '/includes/dgstyle.css'));
         $objGrid -> orderby("Manufacturer", "ASC"); 
         //        $objGrid -> FormatColumn("ID", $_lang['equip_title_object'], 5, 5, 5, "5", "center","link:open_url(%s\,'$url'),ID"); 
         if($this->multiuser){
