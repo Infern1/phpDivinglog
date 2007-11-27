@@ -3,7 +3,7 @@
  * Filename:  includes/config.inc.php
  * Function:  Configuration file for phpDivingLog.
  * @author  Lloyd Borrett - www.borrett.id.au Rob Lensen <rob@bsdfreaks.nl>
- * @package phpDivinglog
+ * @package phpdivinglog
  * @version $Rev$
  * Last Modified: $Date$
  */
