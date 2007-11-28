@@ -23,6 +23,8 @@ DEPENDENCIES:
       Rich Text Format - Parsing Class - (c) 2000 Markus Fischer
     - Lightbox JS v2.0 (http://www.huddletogether.com/projects/lightbox2/)
       Used to overlay dive pictures on the current page.
+    - PEAR packages: MDB2, Pager
+    - phpMyDatagrid (http://www.gurusistemas.com/indexdatagrid.php)
 
 USAGE:
 	GOOGLE MAPS
