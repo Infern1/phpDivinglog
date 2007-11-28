@@ -15,7 +15,6 @@
  * HandleRequest handles the url and set the settings accordingly
  * 
  * @package phpdivinglog
- * @version //autogen//
  * @copyright Copyright (C) 2007 Rob Lensen. All rights reserved.
  * @author Rob Lensen <rob@bsdfreaks.nl> 
  * @license LGPL v3 http://www.gnu.org/licenses/lgpl-3.0.txt
@@ -233,10 +232,9 @@ class HandleRequest {
 /*}}}*/
 }
 /**
- * User 
+ * User contains functions for setting and getting the user info
  * 
  * @package phpdivinglog
- * @version //autogen//
  * @copyright Copyright (C) 2007 Rob Lensen. All rights reserved.
  * @author Rob Lensen <rob@bsdfreaks.nl> 
  * @license LGPL v3 http://www.gnu.org/licenses/lgpl-3.0.txt
@@ -298,10 +296,9 @@ class User {
 }
 
 /**
- * Grid 
+ * Grid Functions for the phpMyDatagrid grid which are globally used
  * 
  * @package phpdivinglog
- * @version //autogen//
  * @copyright Copyright (C) 2007 Rob Lensen. All rights reserved.
  * @author Rob Lensen <rob@bsdfreaks.nl> 
  * @license LGPL v3 http://www.gnu.org/licenses/lgpl-3.0.txt
@@ -427,10 +424,9 @@ class TableGrid{
     }/*}}}*/
 }
 /**
- * Users get the info for the defined user in the config file 
+ * Users Class needed for multiple user phpDivinglog, gets the info from the config file 
  * 
  * @package phpdivinglog
- * @version //autogen//
  * @copyright Copyright (C) 2007 Rob Lensen. All rights reserved.
  * @author Rob Lensen <rob@bsdfreaks.nl> 
  * @license LGPL v3 http://www.gnu.org/licenses/lgpl-3.0.txt
@@ -536,7 +532,6 @@ class Users{
  * TopLevelMenu class to generate the standard top level menu
  * 
  * @package phpdivinglog
- * @version //autogen//
  * @copyright Copyright (C) 2007 Rob Lensen. All rights reserved.
  * @author Rob Lensen <rob@bsdfreaks.nl> 
  * @license LGPL v3 http://www.gnu.org/licenses/lgpl-3.0.txt
@@ -752,10 +747,9 @@ class TopLevelMenu {
 }
 
 /**
- * Divelog 
+ * Divelog contains all functions for displaying the dive information
  * 
  * @package phpdivinglog
- * @version //autogen//
  * @copyright Copyright (C) 2007 Rob Lensen. All rights reserved.
  * @author Rob Lensen <rob@bsdfreaks.nl> 
  * @license LGPL v3 http://www.gnu.org/licenses/lgpl-3.0.txt
@@ -1406,10 +1400,9 @@ class Divelog {
 }
 
 /**
- * Divesite 
+ * Divesite contains all functions for displaying the divesite information
  * 
  * @package phpdivinglog
- * @version //autogen//
  * @copyright Copyright (C) 2007 Rob Lensen. All rights reserved.
  * @author Rob Lensen <rob@bsdfreaks.nl> 
  * @license LGPL v3 http://www.gnu.org/licenses/lgpl-3.0.txt
@@ -1799,10 +1792,9 @@ class Divesite{
 }
 
 /**
- * Equipment{ 
+ * Equipment contains all functions for displaying the equipment information
  * 
  * @package phpdivinglog
- * @version //autogen//
  * @copyright Copyright (C) 2007 Rob Lensen. All rights reserved.
  * @author Rob Lensen <rob@bsdfreaks.nl> 
  * @license LGPL v3 http://www.gnu.org/licenses/lgpl-3.0.txt
@@ -2068,6 +2060,14 @@ class Equipment{
 /*}}}*/
 }
 
+/**
+ * Divestats contains all functions for displaying all divestatistics
+ * 
+ * @package phpdivinglog
+ * @copyright Copyright (C) 2007 Rob Lensen. All rights reserved.
+ * @author Rob Lensen <rob@bsdfreaks.nl> 
+ * @license LGPL v3 http://www.gnu.org/licenses/lgpl-3.0.txt
+ */
 class Divestats{
     var $multiuser; /*{{{*/
     var $user_id;
@@ -2554,3 +2554,4 @@ class Divestats{
         }/*}}}*/
     }/*}}}*/
 }
+

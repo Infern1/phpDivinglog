@@ -8,26 +8,12 @@
  * @version $Rev$
  * Last Modified: $Date$
  * 
- * phpDivingLog
- * Copyright (C) 2006 Lloyd Borrett - http://www.borrett.id.au
+ * @copyright <p>(C) 2006 Lloyd Borrett - http://www.borrett.id.au
  * 
  * Adapted from code by Olaf van Zandwijk - http://enschede.vanzandwijk.net
  * 
- * For use with Diving Log by Sven Knoch - http://www.divinglog.de
- * 
- * This file and all dependant and otherwise related files are part of phpDivingLog.
- * 
- * phpDivingLog is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- * 
- * phpDivingLog is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- * 
- * 
+ * For use with Diving Log by Sven Knoch - http://www.divinglog.de</p>
+* 
 */
 
 
