@@ -7,11 +7,11 @@
  * @version  $Rev$
  * Last Modified: $Date$
  * 
- * @copyright <p>(C) 2006 Lloyd Borrett - http://www.borrett.id.au
+ * @copyright (C) 2006 Lloyd Borrett - http://www.borrett.id.au
  * 
  * Adapted from code by Olaf van Zandwijk - http://enschede.vanzandwijk.net
  * 
- * For use with Diving Log by Sven Knoch - http://www.divinglog.de</p>
+ * For use with Diving Log by Sven Knoch - http://www.divinglog.de
  * 
 */
 
