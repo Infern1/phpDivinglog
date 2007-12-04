@@ -220,7 +220,7 @@ $delim = ':';
 ini_set('include_path', ".{$delim}". $_config['pear_path'] ."{$delim}".$_config['app_root']."/include{$delim}".$_config['app_root']);
 
 
-require_once (ABSPATH . '/includes/misc.inc.php');
+require_once (ABSPATH_DIVELOG . '/includes/misc.inc.php');
 require_once 'phpmydatagrid.class.php';
 require_once 'smarty/Smarty.class.php';
 require_once 'classes.inc.php';
