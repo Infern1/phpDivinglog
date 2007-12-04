@@ -167,6 +167,8 @@ class HandleRequest {
                         $this->diver_choice = false;
                         break;                   
                     case 'divesummary.php':
+                        $this->request_type = 5;
+                        $this->diver_choice = false;
                         break;
                     default:
                         $this->diver_choice = true;
@@ -220,7 +222,9 @@ class HandleRequest {
                         $this->request_type = 5;
                         break;
                     case 'divesummary.php':
-                        $this->user_id = check_number($split_request[1]);
+                        $this->user_id = $id;
+                        $this->request_type = 4;
+                        break;
                     default:
                         //defaults to main page
                         break;
@@ -562,6 +566,8 @@ class TopLevelMenu {
         }
         else {
             // if prefix is set get it.
+            if(isset($_config['table_prefix']))
+                $this->table_prefix = $_config['table_prefix'];
         }
 
     }
@@ -2106,7 +2112,12 @@ class Divestats{
     var $end;
     var $divecert;
     var $number_cert;
-    /**
+    var $LastEntryTime;
+    var $LastDivePlace;
+    var $LastDiveID;
+    var $LastCity;
+    var $LastCountry;
+   /**
      * Divestats default constructor 
      * 
      * @access public
@@ -2144,6 +2155,12 @@ class Divestats{
         }/*}}}*/
     }
 
+    /**
+     * get_divestats_info 
+     * 
+     * @access public
+     * @return void
+     */
     function get_divestats_info(){
         global $globals, $_config;/*{{{*/
         if(($this->multiuser && !empty($this->user_id)) || !$this->multiuser ){
@@ -2303,11 +2320,42 @@ class Divestats{
         }/*}}}*/
     }
 
+    /**
+     * get_lastdive_info 
+     * 
+     * @access public
+     * @return void
+     */
+    function get_lastdive_info(){
+       global $globals, $_config;/*{{{*/
+        if(($this->multiuser && !empty($this->user_id)) || !$this->multiuser ){
+            set_config_table_prefix($this->table_prefix);
+            $lastdive = parse_mysql_query('lastdive.sql');
+            $this->LastEntryTime = $lastdive[0]['Entrytime'];
+            $this->LastDivePlace = $lastdive[0]['Place'];
+            $this->LastDiveID= $lastdive[0]['PlaceID'];
+            $this->LastCity = $lastdive[0]['City'];
+            $this->LastCountry = $lastdive[0]['Country'];
+            reset_config_table_prefix();
+        }/*}}}*/
+    }
+    /**
+     * set_all_statistics 
+     * 
+     * @access public
+     * @return void
+     */
     function set_all_statistics(){
-        $this->set_dive_statistics();
-        $this->set_dive_certifications();
+        $this->set_dive_statistics();/*{{{*/
+        $this->set_dive_certifications();/*}}}*/
     }
 
+    /**
+     * get_overview_divers 
+     * 
+     * @access public
+     * @return void
+     */
     function get_overview_divers(){
         global $t, $_lang, $globals, $_config;/*{{{*/
         $users = new Users();
@@ -2337,7 +2385,6 @@ class Divestats{
         $t->assign('dive_stats', $_lang['dive_stats']);
         $t->assign('stats_sect_stats', $this->username .' ' .$_lang['stats_sect_stats']);
      
-
         // Show overall details
         $t->assign('stats_totaldives', $_lang['stats_totaldives'] );
         $t->assign('stats_divedatemax',$_lang['stats_divedatemax']);
@@ -2483,6 +2530,20 @@ class Divestats{
     }
 
     /**
+     * set_lastdive_info 
+     * 
+     * @access public
+     * @return void
+     */
+    function set_lastdive_info(){
+        global $globals, $_config, $t , $_lang;/*{{{*/
+        $t->assign('LastEntryTime', $this->LastEntryTime);
+        $t->assign('LastDivePlace',$this->LastDivePlace);
+        $t->assign('LastDiveID',$this->LastDiveID);
+        $t->assign('LastCity',$this->LastCity);
+        $t->assign('LastCountry',$this->LastCountry);/*}}}*/
+    }
+    /**
      * set_dive_certifications 
      * 
      * @access public
@@ -2555,3 +2616,64 @@ class Divestats{
     }/*}}}*/
 }
 
+/**
+ * AppInfo 
+ * 
+ * @package phpdivinglog
+ * @copyright Copyright (C) 2007 Rob Lensen. All rights reserved.
+ * @author Rob Lensen <rob@bsdfreaks.nl> 
+ * @license LGPL v3 http://www.gnu.org/licenses/lgpl-3.0.txt
+ */
+class AppInfo{
+
+    var $table_prefix;
+    var $user_id;
+    var $DivelogVersion;
+    var $Divelogname;
+    var $Appname;
+    var $phpDivelogVersion;
+    var $Authors;
+
+    /**
+     * AppInfo 
+     * 
+     * @access public
+     * @return void
+     */
+    function AppInfo($request){
+        global $_config;
+        if($_config['multiuser']){
+            $this->user_id = $request->get_user_id();
+            $user = new User();
+            $user->set_user_id($this->user_id);
+            $this->table_prefix = $user->get_table_prefix();
+        }
+        else {
+            // if prefix is set get it.
+            if(isset($_config['table_prefix']))
+                $this->table_prefix = $_config['table_prefix'];
+        }
+        $this->phpDivelogVersion = $_config['app_version'];
+        $this->Appname = $_config['app_name'];
+        set_config_table_prefix($this->table_prefix);
+        $dbinfo = parse_mysql_query('dbinfo.sql');
+        reset_config_table_prefix();
+        $this->Divelogname = $dbinfo[0]['PrgName'];
+        $this->DivelogVersion = $dbinfo[0]['DBVersion'];
+    }
+
+    /**
+     * SetAppInfo 
+     * 
+     * @access public
+     * @return void
+     */
+    function SetAppInfo(){
+        global $_config, $t, $_lang;
+        $t->assign('poweredby', $_lang['poweredby']);
+        $t->assign('Divelogname', $this->Divelogname);
+        $t->assign('DivelogVersion', $this->DivelogVersion);
+        $t->assign('Appname', $this->Appname);
+        $t->assign('phpDivelogVersion', $this->phpDivelogVersion);
+    }
+}

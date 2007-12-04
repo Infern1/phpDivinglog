@@ -3,7 +3,7 @@
 {*	First, Previous *}
 {if isset($divenr)}
     <div class="divelogcrumbs">
-    {if isset($multiuser_id)}
+   {if isset($multiuser_id)}
     <a href="{$app_path}/index.php/{$multiuser_id}/{$first_dive}" class="divelogcrumbs" title="{$first_dive_linktitle}">{$first}</a>
     &nbsp;|&nbsp;
     <a href="{$app_path}/index.php/{$multiuser_id}/{$next_dive}" class="divelogcrumbs" title="{$previous_dive_linktitle}">{$previous}</a>

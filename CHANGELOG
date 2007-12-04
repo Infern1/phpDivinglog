@@ -1,15 +1,26 @@
-phpDivingLog 2.0
-
-Changes v2.0a1 - 2007-09-21 - Rob Lensen
+phpDivingLog v2.0 - 2007-12-03 - Rob Lensen
     * Changed phpdivinglog to use smarty templates
-    * Before installing check the file config.inc.php
-        - Set the database settings
-        - Set $_config['web_root']
-        - Set $_config['abs_url_path']
-        - Set $_config['app_root']
-    * Added multiuser option
-    * Make phpDivinglog OO
-    
+    * Added multiuser option, so one install can handle more divers
+    * Make phpDivinglog object oriented
+    * All code can viewed via PHPdoc
+    * New pie chart on dive depths overview
+    * Option to choose between a grid view or old fashioned table layout
+    * New pager for table layout
+    * Upgrade of jpgraph and lightbox
+    * Language fixes for different languages
+    * New url layout more easy for page indexing and linking
+    * Lots of other things, see http://rob.lensen.nu/WebSVN/ for all changes
+
+phpDivingLog v1.9 - 2007-06-25  - Lloyd Borrett (http://www.borrett.id.au)
+    * Added in support for a configurable table prefix.
+    * Added dive max depth table in Dive Statistics.
+    * Added drift, deep, cave, wreck and photo dive details in Dive Statistics.
+    * Added saltwater, freshwater and brackish dive details in Dive Statistics.
+    * Added repetitive and deco dive details in Dive Statistics.
+    * Added percentage values to shore, boat and night dives in Dive Statistics.
+    * Fixed display of Total Bottom Time in Dive Statistics.
+    * Fixed display of Rep Dive and Deco in Dive Log.
+
 2006-08-25 - Lloyd Borrett (http://www.borrett.id.au)
 
 Changes v1.8 - 2006-08-25 - Lloyd Borrett (http://www.borrett.id.au)

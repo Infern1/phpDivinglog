@@ -86,16 +86,19 @@ $_config['show_profile'] = true;
  */
 $_config['dlog_comments_rtf'] = true;
 
+/**
+ * specify what to show in user information
+ * @todo make these option work 
+ */
 /*
-// specify what to show in user information
 $_config['user_show'] = true;
 $_config['user_show_general'] = true;
 $_config['user_show_comments'] = true;
 $_config['user_show_photo'] = true;
 $_config['user_show_certs'] = true;
 $_config['user_show_medical'] = true;
-
 */
+
 /**
  * DIVE PROFILE SETTINGS
  * name of the graphic image to use as the dive profile background
@@ -165,8 +168,8 @@ $_config['app_version'] = "2.0rc2";
 /**
  * ABS path to your website (no need to change normaly)
  */
-define('ABSPATH', dirname(__FILE__).'/');
-$_config['app_root']        = ABSPATH;  
+define('ABSPATH_DIVELOG', dirname(__FILE__).'/');
+$_config['app_root']        = ABSPATH_DIVELOG;  
 /**
  * ABS path to your pear installation
  */
