@@ -1377,6 +1377,8 @@ class Divelog {
         $objGrid -> FormatColumn("Divetime", $_lang['dlog_title_divetime'], 2, 4, 0, "60", "center","sign:".$_lang['unit_time_short'] );
         $objGrid -> FormatColumn("Place", $_lang['dlog_title_place'], 180, 100, 0, "300", "left"); 
         $objGrid -> FormatColumn("City", $_lang['dlog_title_location'], 180, 100, 0, "184", "left"); 
+        //$objGrid -> FormatColumn("image_1","Img", "25", "0", "3","20","center","image:images/photo_icon.gif");    
+  
         $objGrid->sqlstatement($recentdivelist_query);
         
         $grid = $GridClass->get_grid($objGrid);

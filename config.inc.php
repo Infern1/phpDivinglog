@@ -216,8 +216,12 @@ $_config['sqlpath'] = $_config['app_root']."/sql/";
  * Path to .ihtml (template) files
  */
 define('TEMPLATE_DIR', $_config['app_root']. '/tpl/');
-$delim = ':';
-ini_set('include_path', ".{$delim}". $_config['pear_path'] ."{$delim}".$_config['app_root']."/include{$delim}".$_config['app_root']);
+if ( ! defined( "PATH_SEPARATOR" ) ) {
+  if ( strpos( $_ENV[ "OS" ], "Win" ) !== false )
+      define( "PATH_SEPARATOR", ";" );
+  else define( "PATH_SEPARATOR", ":" );
+}
+ini_set('include_path', get_include_path() . PATH_SEPARATOR . $_config['pear_path'] . PATH_SEPARATOR . $_config['app_root']."/include". PATH_SEPARATOR . $_config['app_root']);
 
 
 require_once (ABSPATH_DIVELOG . '/includes/misc.inc.php');
