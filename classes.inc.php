@@ -247,6 +247,25 @@ class User {
     var $user_id;/*{{{*/
     var $table_prefix;
     var $username;
+    var $multiuser;
+    
+    
+    /**
+     * User 
+     * 
+     * @access public
+     * @return void
+     */
+    function User(){
+        global $_config;
+        $this->multiuser = $_config['multiuser'];
+        if(!$this->multiuser){
+            if(isset($_config['table_prefix'])){
+                $this->table_prefix = $_config['table_prefix'];
+            }
+        }
+    }
+
     /**
      * set_user_id 
      * 
@@ -809,7 +828,10 @@ class Divelog {
                 $user = new User();
                 $user->set_user_id($this->user_id);
                 $this->table_prefix = $user->get_table_prefix();
-            } 
+            } else {
+                $user = new User();
+                $this->table_prefix = $user->get_table_prefix();
+            }
         } else {
             $this->request_type = 3;
         }
@@ -1459,6 +1481,8 @@ class Divesite{
                 $user->set_user_id($this->user_id);
                 $this->table_prefix = $user->get_table_prefix();
             } else {
+                $user = new User();
+                $this->table_prefix = $user->get_table_prefix();
                 $this->divesite_nr = $request->get_site_nr();
             }
         } else {
@@ -1852,7 +1876,10 @@ class Equipment{
                 $user = new User();
                 $user->set_user_id($this->user_id);
                 $this->table_prefix = $user->get_table_prefix();
-            } 
+            } else {
+                $user = new User();
+                $this->table_prefix = $user->get_table_prefix();
+            }
         } else {
             $this->request_type = 3;
         }
@@ -2150,6 +2177,7 @@ class Divestats{
                 $this->user_id = $request->get_user_id();
                 $user = new User();
                 //$user->set_user_id($this->user_id);
+                $this->table_prefix = $user->get_table_prefix();
                 $this->username = $user->get_username();
             }
         } else {

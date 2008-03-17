@@ -157,7 +157,7 @@ $_config['volume'] = false;
  * application name and revision number
  */
 $_config['app_name'] = "phpDivingLog";
-$_config['app_version'] = "2.0rc2";
+$_config['app_version'] = "2.0";
 
 
 /**
@@ -173,7 +173,7 @@ $_config['app_root']        = ABSPATH_DIVELOG;
 /**
  * ABS path to your pear installation
  */
-$_config['pear_path']       = $_config['app_root'] . '/pear/';  
+$_config['pear_path']       = $_config['app_root'] . DIRECTORY_SEPARATOR . 'pear'. DIRECTORY_SEPARATOR ;  
 /**
  * logbook pics
  */
@@ -221,7 +221,7 @@ if ( ! defined( "PATH_SEPARATOR" ) ) {
       define( "PATH_SEPARATOR", ";" );
   else define( "PATH_SEPARATOR", ":" );
 }
-ini_set('include_path', get_include_path() . PATH_SEPARATOR . $_config['pear_path'] . PATH_SEPARATOR . $_config['app_root']."/include". PATH_SEPARATOR . $_config['app_root']);
+ini_set('include_path', get_include_path() . PATH_SEPARATOR . $_config['pear_path'] . PATH_SEPARATOR . $_config['app_root'].DIRECTORY_SEPARATOR."include". PATH_SEPARATOR . $_config['app_root']);
 
 
 require_once (ABSPATH_DIVELOG . '/includes/misc.inc.php');
@@ -243,7 +243,7 @@ require_once 'includes/jpgraph/src/jpgraph_line.php';
 $t = new smarty;
 $t->template_dir = TEMPLATE_DIR;
 
-$t->compile_dir = $_config['app_root'] . '/compile';
+$t->compile_dir = $_config['app_root'] .DIRECTORY_SEPARATOR . 'compile';
 /**
  * Before smarty we gonna check the rights in the compile dir 
  */
@@ -252,7 +252,7 @@ echo "Change the right on ".  $t->compile_dir ." so the webuser can write<br>
 chmod -R 777 " .$t->compile_dir ;
 }
 
-$t->cache_dir = $_config['app_root'] . '/cache';
+$t->cache_dir = $_config['app_root'] . DIRECTORY_SEPARATOR . 'cache';
 $t->plugins_dir = array($_config['app_root'] . '/include', $_config['app_root'] . '/smarty/plugins');
 
 /**
