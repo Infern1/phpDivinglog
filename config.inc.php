@@ -31,6 +31,13 @@ $_config['table_prefix'] = "";
 $_config['language'] = "english";
 
 /**
+ * Some hosts don't support mod_rewrite, so we must have option to use old
+ * query strings  like ?id=&user=
+ * If query_string = false normal rewrite is used, if set to true query string is used
+ */
+$_config['query_string'] = true;
+
+/**
  * change this to your website url
  */
 $_config['web_root']        = 'http://www.mydivesite.com/divelog'; 

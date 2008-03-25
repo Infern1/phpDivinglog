@@ -30,7 +30,7 @@ function htmlentities_array($arr = array())
 		if (is_array($val)) {
 			$rs[$key] = htmlentities_array($val);
 		} else {
-            $rs[$key] = htmlentities($val, ENT_QUOTES, "UTF-8");
+            $rs[$key] = htmlentities($val, ENT_QUOTES, "UTF-8",0);
 		}
 	}
 	return $rs;
@@ -63,7 +63,7 @@ $_lang = array();
 include_once ($language_filename);
 
 // Convert applicable characters in the language file to entities
-$_lang = htmlentities_array($_lang);	
+//$_lang = htmlentities_array($_lang);	
 
 
 /**
@@ -183,24 +183,44 @@ function check_number($number)
  */
 function GetRequestVar($url, $request_file_depth=0){ 
 
-    $number_folders =  $request_file_depth ; //number of folders from the root of the script
-    $adres = $url;
-    $possessid = strpos($adres,"?PHPSESSID");
-    if ($possessid !== false) {
-        $adres = substr($adres,0,$possessid);
-    }
-    //$adres = $_SERVER['REQUEST_URI'];
-    $adres = substr($adres,1);
-    $adres = $adres."/";
-    $array = explode("/",$adres);
-    $paginas = array();
-    for($i = $number_folders; $i< count($array) ; $i++)
+    global $_config, $t,$_POST;
+    if($_config['query_string'])
     {
-        if(!empty($array[$i])){ 
-            $paginas[] = $array[$i]; 
-        }  
+        $url_array = parse_url($url);
+        parse_str($url_array['query'],$output);
+        $paginas = array();
+        $file = basename($url_array['path']);
+        $paginas[0] = $file;
+        if(!isset($output['DG_ajaxid'])){
+            foreach($output as $el){
+                    $paginas[] .= $el;
+            }
+        } else {
+            $paginas[] .= $output['user_id'];
+            $paginas[] .= $output['id'];
+        }
+    } else {
+        $number_folders =  $request_file_depth ; //number of folders from the root of the script
+        $adres = $url;
+        $possessid = strpos($adres,"?PHPSESSID");
+        if ($possessid !== false) {
+            $adres = substr($adres,0,$possessid);
+        }
+        //$adres = $_SERVER['REQUEST_URI'];
+        $adres = substr($adres,1);
+        $adres = $adres."/";
+        $array = explode("/",$adres);
+        $paginas = array();
+        for($i = $number_folders; $i< count($array) ; $i++)
+        {
+            if(!empty($array[$i])){ 
+                $paginas[] = $array[$i]; 
+            }  
+        }
+
     }
-    return $paginas;
+    //print_r($paginas);
+   return $paginas;
 }
 
 /**

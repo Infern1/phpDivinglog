@@ -49,9 +49,9 @@
 		    <td colspan="4">
 		{foreach from=$dives  item=dive}
            {if isset($multiuser_id)}
-           <a href="{$app_path}/index.php/{$multiuser_id}/{$dive}" title="{$dlog_number_title}{$dive}">{$dive}</a>
+           <a href="{$app_path}/index.php{$sep1}{$multiuser_id}{$sep2}{$dive}" title="{$dlog_number_title}{$dive}">{$dive}</a>
            {else}
-           <a href="{$app_path}/index.php/{$dive}" title="{$dlog_number_title}{$dive}">{$dive}</a>
+           <a href="{$app_path}/index.php{$sep2}{$dive}" title="{$dlog_number_title}{$dive}">{$dive}</a>
            {/if}
 		{/foreach}
 		</td>

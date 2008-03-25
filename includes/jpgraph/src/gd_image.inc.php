@@ -3,7 +3,7 @@
 // File:	GD_IMAGE.INC.PHP
 // Description:	GD Instance of Image class
 // Created: 	2006-05-06
-// Ver:		$Id: gd_image.inc.php 928 2007-10-17 21:32:59Z ljp $
+// Ver:		$Id: gd_image.inc.php 976 2008-03-09 18:42:44Z ljp $
 //
 // Copyright (c) Aditus Consulting. All rights reserved.
 //========================================================================
@@ -896,6 +896,8 @@ class Image {
 	if( $this->text_valign=="bottom" ) $y -= $height;
 	elseif( $this->text_valign=="center" ) $y -= $height/2;
 	
+	$olda = $this->SetAngle(0);
+
 	if( $shadowcolor ) {
 	    $this->PushColor($shadowcolor);
 	    $this->FilledRoundedRectangle($x-$xmarg+$dropwidth,$y-$ymarg+$dropwidth,
@@ -934,6 +936,9 @@ class Image {
 	$bb = array($x-$xmarg,$y+$height-$ymarg,$x+$width,$y+$height-$ymarg,
 		    $x+$width,$y-$ymarg,$x-$xmarg,$y-$ymarg);
 	$this->SetTextAlign($h,$v);
+
+	$this->SetAngle($olda);
+
 	return $bb;
     }
 
@@ -1368,8 +1373,10 @@ class Image {
 	    $s = 0;
 	    $e = 360;
 	}
-	imagefilledarc($this->img,round($xc),round($yc),round($w),round($h),
-		       round($s),round($e),$this->current_color,$style);
+	if( abs($s-$e) > 0.001 ) {
+	    imagefilledarc($this->img,round($xc),round($yc),round($w),round($h),
+			   round($s),round($e),$this->current_color,$style);
+	}
     }
 
     function FilledCakeSlice($cx,$cy,$w,$h,$s,$e) {
@@ -1381,23 +1388,34 @@ class Image {
 	$w = round($w); $h = round($h);
 	$xc = round($xc); $yc = round($yc);
 
-	$this->PushColor($fillcolor);
-	$this->FilledArc($xc,$yc,2*$w,2*$h,$s,$e);
-	$this->PopColor();
-	if( $arccolor != "" ) {
-	    $this->PushColor($arccolor);
-	    // We add 2 pixels to make the Arc() better aligned with the filled arc. 
-	    imagefilledarc($this->img,$xc,$yc,2*$w,2*$h,$s,$e,$this->current_color,IMG_ARC_NOFILL | IMG_ARC_EDGED ) ;
-
-	    // Workaround for bug in 4.4.7 which will not draw a correct 360
-	    // degree slice with any other angles than 0,360. Unfortunately we cannot just
-	    // adjust the angles since the interior ar edge is drawn correct but not the surrounding
-	    // circle. This workaround can only be used with perfect circle shaped arcs
-	    if( 360-abs($s-$e) < 0.01 && $w==$h ) {
-		$this->Circle($xc,$yc,$w);
-	    }
-
+	if( $s==$e ) { 
+	    // A full circle. We draw this a plain circle
+	    $this->PushColor($fillcolor);
+	    imagefilledellipse($this->img,$xc,$yc,2*$w,2*$h,$this->current_color);
 	    $this->PopColor();
+	    $this->PushColor($arccolor);
+	    imageellipse($this->img,$xc,$yc,2*$w,2*$h,$this->current_color);
+	    $this->Line($xc,$yc,cos($s*M_PI/180)*$w+$xc,$yc+sin($s*M_PI/180)*$h);
+	    $this->PopColor();
+	}
+	else {
+	    $this->PushColor($fillcolor);
+	    $this->FilledArc($xc,$yc,2*$w,2*$h,$s,$e);
+	    $this->PopColor();
+	    if( $arccolor != "" ) {
+		$this->PushColor($arccolor);
+		// We add 2 pixels to make the Arc() better aligned with the filled arc. 
+		imagefilledarc($this->img,$xc,$yc,2*$w,2*$h,$s,$e,$this->current_color,IMG_ARC_NOFILL | IMG_ARC_EDGED ) ;
+
+		// Workaround for bug in 4.4.7 which will not draw a correct 360
+		// degree slice with any other angles than 0,360. Unfortunately we cannot just
+		// adjust the angles since the interior ar edge is drawn correct but not the surrounding
+		// circle. This workaround can only be used with perfect circle shaped arcs
+		if( PHP_VERSION==='4.4.7' && (360-abs($s-$e) < 0.01 && $w==$h) ) {
+		    $this->Circle($xc,$yc,$w);
+		}
+		$this->PopColor();
+	    }
 	}
     }
 
@@ -1493,6 +1511,7 @@ class Image {
 	    }
 	    $x=$x1<<16; $y=$y1<<16;
 	    $yinc = ($dy*65535)/$dx;
+	    $first=true;
 	    while( ($x >> 16) < $x2 ) {
 				
 		$bc = @imagecolorsforindex($this->img,imagecolorat($this->img,$x>>16,$y>>16));
@@ -1504,8 +1523,10 @@ class Image {
 		$this->SetColor($this->lip($lc,$bc,($y & 0xFFFF)/65535));
 		imagesetpixel($this->img,$x>>16,$y>>16,$this->current_color);
 		$this->SetColor($this->lip($lc,$bc,(~$y & 0xFFFF)/65535));
-		imagesetpixel($this->img,$x>>16,($y>>16)+1,$this->current_color);
+		if( !$first ) 
+		    imagesetpixel($this->img,$x>>16,($y>>16)+1,$this->current_color);
 		$x += 65536; $y += $yinc;
+		$first=false;
 	    }
 	}
 	else {
@@ -1516,6 +1537,7 @@ class Image {
 	    }
 	    $x=$x1<<16; $y=$y1<<16;
 	    $xinc = ($dx*65535)/$dy;	
+	    $first = true;
 	    while( ($y >> 16) < $y2 ) {
 				
 		$bc = @imagecolorsforindex($this->img,imagecolorat($this->img,$x>>16,$y>>16));
@@ -1529,13 +1551,15 @@ class Image {
 		$this->SetColor($this->lip($lc,$bc,($x & 0xFFFF)/65535));
 		imagesetpixel($this->img,$x>>16,$y>>16,$this->current_color);
 		$this->SetColor($this->lip($lc,$bc,(~$x & 0xFFFF)/65535));
-		imagesetpixel($this->img,($x>>16)+1,$y>>16,$this->current_color);
+		if( !$first ) 
+		    imagesetpixel($this->img,($x>>16)+1,$y>>16,$this->current_color);
 		$y += 65536; $x += $xinc;
+		$first = false;
 	    }
 	}
 	$this->SetColor($lc);
-	imagesetpixel($this->img,$x2,$y2,$this->current_color);		
-	imagesetpixel($this->img,$x1,$y1,$this->current_color);			
+	//imagesetpixel($this->img,$x2,$y2,$this->current_color);		
+	//imagesetpixel($this->img,$x1,$y1,$this->current_color);			
     }
 
     // Set line style dashed, dotted etc
@@ -1874,7 +1898,11 @@ class Image {
 	$sapi = php_sapi_name();
 	if( $sapi == 'cli' )
 	    return;
-	
+
+	// These parameters are set by headers_sent() but they might cause
+	// an undefined variable error unless they are initilized
+	$file='';
+	$lineno='';
 	if( headers_sent($file,$lineno) ) {
 	    $file=basename($file);
 	    $t = new ErrMsgText();

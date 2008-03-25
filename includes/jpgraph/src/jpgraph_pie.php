@@ -3,7 +3,7 @@
 // File:	JPGRAPH_PIE.PHP
 // Description:	Pie plot extension for JpGraph
 // Created: 	2001-02-14
-// Ver:		$Id: jpgraph_pie.php 846 2007-03-10 10:36:47Z ljp $
+// Ver:		$Id: jpgraph_pie.php 976 2008-03-09 18:42:44Z ljp $
 //
 // Copyright (c) Aditus Consulting. All rights reserved.
 //========================================================================
@@ -27,6 +27,7 @@ class PiePlot {
     var $explode_radius=array(),$explode_all=false,$explode_r=20;
     var $labels=null, $legends=null;
     var $csimtargets=null;  // Array of targets for CSIM
+    var $csimwintargets=null;  // Array of window targets for CSIM
     var $csimareas='';		// Generated CSIM text	
     var $csimalts=null;		// ALT tags for corresponding target
     var $data=null;
@@ -47,11 +48,13 @@ class PiePlot {
     var $ishadowcolor='',$ishadowdrop=4;
     var $ilabelposadj=1;
     var $legendcsimtargets = array();
+    var $legendcsimwintargets = array();
     var $legendcsimalts = array();
     var $adjusted_data = array();
     var $guideline = null,$guidelinemargin=10;
     var $iShowGuideLineForSingle = false;
     var $iGuideLineCurve = false,$iGuideVFactor=1.4,$iGuideLineRFactor=0.8;
+    var $la = array(); // Holds the angle for each label
 //---------------
 // CONSTRUCTOR
     function PiePlot($data) {
@@ -97,10 +100,12 @@ class PiePlot {
 	$this->ishadowdrop = $aDropWidth;
     }
 
-    function SetCSIMTargets($targets,$alts=null) {
-	$this->csimtargets=array_reverse($targets);
-	if( is_array($alts) )
-	    $this->csimalts=array_reverse($alts);
+    function SetCSIMTargets($aTargets,$aAlts='',$aWinTargets='') {
+	$this->csimtargets=array_reverse($aTargets);
+	if( is_array($aWinTargets) )
+	    $this->csimwintargets=array_reverse($aWinTargets);
+	if( is_array($aAlts) )
+	    $this->csimalts=array_reverse($aAlts);
     }
 	
     function GetCSIMareas() {
@@ -159,11 +164,14 @@ class PiePlot {
 	if( !empty($this->csimtargets[$i]) ) {
 	    $this->csimareas .= "<area shape=\"poly\" coords=\"$coords\" href=\"".$this->csimtargets[$i]."\"";
 	    $tmp="";
+	    if( !empty($this->csimwintargets[$i]) ) {
+		$this->csimareas .= " target=\"".$this->csimwintargets[$i]."\" "; 
+	    }
 	    if( !empty($this->csimalts[$i]) ) {
 		$tmp=sprintf($this->csimalts[$i],$this->data[$i]);
-		$this->csimareas .= " title=\"$tmp\"";
+		$this->csimareas .= " title=\"$tmp\" alt=\"$tmp\" ";
 	    }
-	    $this->csimareas .= " alt=\"$tmp\" />\n";
+	    $this->csimareas .= " />\n";
 	}
     }
 
@@ -313,11 +321,18 @@ class PiePlot {
 		$alt = sprintf($fmt,$this->adjusted_data[$i]);
 	    }
 
-	    if( $this->setslicecolors==null ) {
-		$graph->legend->Add($l,$colors[$ta[$i%$numcolors]],"",0,$this->csimtargets[$i],$alt);
+	    if( empty($this->csimwintargets[$i]) ) {
+		$wintarg = '';
 	    }
 	    else {
-		$graph->legend->Add($l,$this->setslicecolors[$i%$numcolors],"",0,$this->csimtargets[$i],$alt);
+		$wintarg = $this->csimwintargets[$i];
+	    }
+
+	    if( $this->setslicecolors==null ) {
+		$graph->legend->Add($l,$colors[$ta[$i%$numcolors]],"",0,$this->csimtargets[$i],$alt,$wintarg);
+	    }
+	    else {
+		$graph->legend->Add($l,$this->setslicecolors[$i%$numcolors],"",0,$this->csimtargets[$i],$alt,$wintarg);
 	    }
 	}
     }
@@ -474,7 +489,7 @@ class PiePlot {
 	    $d = $this->data[$i];
 	    $angle1 = $angle2;
 	    $accsum += $d;
-	    $angle2 = $this->startangle+2*M_PI*$accsum/$sum;
+	    $angle2 = $this->NormAngle($this->startangle+2*M_PI*$accsum/$sum);
 	    $this->la[$i] = 2*M_PI - (abs($angle2-$angle1)/2.0+$angle1);
 
 	    if( $d < 0.00001 ) continue;
@@ -567,7 +582,7 @@ class PiePlot {
 	//-----------------------------------------------------------------------
 	// Step 1 of the algorithm is to construct a number of clusters
 	// a cluster is defined as all slices within the same quadrant (almost)
-	// that has an angualr distance less than the treshold
+	// that has an angular distance less than the treshold
 	//-----------------------------------------------------------------------
 	$tresh_hold=25 * M_PI/180; // 25 degrees difference to be in a cluster
 	$incluster=false;	// flag if we are currently in a cluster or not
@@ -929,7 +944,7 @@ class PiePlotC extends PiePlot {
     var $imidsize=0.5;		// Fraction of total width
     var $imidcolor='white';
     var $midtitle='';
-    var $middlecsimtarget="",$middlecsimalt="";
+    var $middlecsimtarget='',$middlecsimwintarget='',$middlecsimalt='';
 
     function PiePlotC($data,$aCenterTitle='') {
 	parent::PiePlot($data);
@@ -956,8 +971,9 @@ class PiePlotC extends PiePlot {
 	$this->imidcolor = $aColor ; 
     }
 
-    function SetMidCSIM($aTarget,$aAlt) {
+    function SetMidCSIM($aTarget,$aAlt='',$aWinTarget='') {
 	$this->middlecsimtarget = $aTarget;
+	$this->middlecsimwintarget = $aWinTarget;
 	$this->middlecsimalt = $aAlt;
     }
 
@@ -1035,11 +1051,14 @@ class PiePlotC extends PiePlot {
 	if( !empty($this->csimtargets[$i]) ) {
 	    $this->csimareas .= "<area shape=\"poly\" coords=\"$coords\" href=\"".
 		$this->csimtargets[$i]."\"";
+	    if( !empty($this->csimwintargets[$i]) ) {
+		$this->csimareas .= " target=\"".$this->csimwintargets[$i]."\" ";
+	    }
 	    if( !empty($this->csimalts[$i]) ) {
 		$tmp=sprintf($this->csimalts[$i],$this->data[$i]);
-		$this->csimareas .= " title=\"$tmp\"";
+		$this->csimareas .= " title=\"$tmp\"  alt=\"$tmp\" ";
 	    }
-	    $this->csimareas .= " alt=\"$tmp\" />\n";
+	    $this->csimareas .= " />\n";
 	}
     }
 
@@ -1091,11 +1110,14 @@ class PiePlotC extends PiePlot {
 	$xc=round($xc);$yc=round($yc);$r=round($r);
 	$this->csimareas .= "<area shape=\"circle\" coords=\"$xc,$yc,$r\" href=\"".
 	    $this->middlecsimtarget."\"";
+	if( !empty($this->middlecsimwintarget) ) {
+	    $this->csimareas .= " target=\"".$this->middlecsimwintarget."\"";
+	}
 	if( !empty($this->middlecsimalt) ) {
 	    $tmp = $this->middlecsimalt;
-	    $this->csimareas .= " title=\"$tmp\"";
+	    $this->csimareas .= " title=\"$tmp\" alt=\"$tmp\" ";
 	}
-	$this->csimareas .= " alt=\"$tmp\" />\n";
+	$this->csimareas .= " />\n";
     }
 
     function StrokeLabel($label,$img,$xc,$yc,$a,$r) {

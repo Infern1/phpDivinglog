@@ -3,7 +3,7 @@
 // File: 	JPGRAPH_LINE.PHP
 // Description:	Line plot extension for JpGraph
 // Created: 	2001-01-08
-// Ver:		$Id: jpgraph_line.php 857 2007-03-23 19:03:13Z ljp $
+// Ver:		$Id: jpgraph_line.php 960 2007-12-08 11:42:41Z ljp $
 //
 // Copyright (c) Aditus Consulting. All rights reserved.
 //========================================================================
@@ -85,18 +85,18 @@ class LinePlot extends Plot{
 	    if( $this->filled && !$this->fillgrad ) {
 		$graph->legend->Add($this->legend,
 				    $this->fill_color,$this->mark,0,
-				    $this->legendcsimtarget,$this->legendcsimalt);
+				    $this->legendcsimtarget,$this->legendcsimalt,$this->legendcsimwintarget);
 	    } 
 	    elseif( $this->fillgrad ) {
 		$color=array($this->fillgrad_fromcolor,$this->fillgrad_tocolor);
 		// In order to differentiate between gradients and cooors specified as an RGB triple
 		$graph->legend->Add($this->legend,$color,"",-2 /* -GRAD_HOR */,
-				    $this->legendcsimtarget,$this->legendcsimalt);
+				    $this->legendcsimtarget,$this->legendcsimalt,$this->legendcsimwintarget);
 	    }	
 	    else {
 		$graph->legend->Add($this->legend,
 				    $this->color,$this->mark,$this->line_style,
-				    $this->legendcsimtarget,$this->legendcsimalt);
+				    $this->legendcsimtarget,$this->legendcsimalt,$this->legendcsimwintarget);
 	    }
 	}	
     }
@@ -395,7 +395,12 @@ class LinePlot extends Plot{
 
 	    if( is_numeric($this->coords[0][$pnts]) ) {
 		if( !empty($this->csimtargets[$pnts]) ) {
-		    $this->mark->SetCSIMTarget($this->csimtargets[$pnts]);
+		    if( !empty($this->csimwintargets[$pnts]) ) {
+			$this->mark->SetCSIMTarget($this->csimtargets[$pnts],$this->csimwintargets[$pnts]);
+		    }
+		    else {
+			$this->mark->SetCSIMTarget($this->csimtargets[$pnts]);
+		    }
 		    $this->mark->SetCSIMAlt($this->csimalts[$pnts]);
 		}
 		if( $exist_x )
@@ -405,7 +410,6 @@ class LinePlot extends Plot{
 		$this->mark->SetCSIMAltVal($this->coords[0][$pnts],$x);
 		$this->mark->Stroke($img,$xt,$yt);	
 		$this->csimareas .= $this->mark->GetCSIMAreas();
-		$this->StrokeDataValue($img,$this->coords[0][$pnts],$xt,$yt);
 	    }
 	}
 

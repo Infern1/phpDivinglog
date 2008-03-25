@@ -19,10 +19,10 @@
 {section name=cell_data loop=$cells }
 <tr class="divecontent">
 {if isset($multiuser_id)}
-<td><a href="{$app_path}/{$base_page}/{$multiuser_id}/{$cells[cell_data].id}" 
+<td><a href="{$app_path}/{$base_page}{$sep1}{$multiuser_id}{$sep2}{$cells[cell_data].id}" 
         title="{$cells[cell_data].place} {$logbook_place_linktitle}">{$cells[cell_data].place}</a></td>
 {else}
-<td><a href="{$app_path}/{$base_page}/{$cells[cell_data].id}" 
+<td><a href="{$app_path}/{$base_page}{$sep2}{$cells[cell_data].id}" 
         title="{$cells[cell_data].place} {$logbook_place_linktitle}">{$cells[cell_data].place}</a></td>
 {/if}
            <td>{$cells[cell_data].city}</td>

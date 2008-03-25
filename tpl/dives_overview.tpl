@@ -21,10 +21,10 @@
 <tr class="divecontent">
 <td>
 {if isset($multiuser_id)}
-<a href="{$app_path}/index.php/{$multiuser_id}/{$cells[cell_data].number}" 
+<a href="{$app_path}/index.php{$sep1}{$multiuser_id}{$sep2}{$cells[cell_data].number}" 
 title="{$dlog_number_title}{$cells[cell_data].number}" >{$cells[cell_data].number}</a></td>
 {else}
-<a href="{$app_path}/index.php/{$cells[cell_data].number}" 
+<a href="{$app_path}/index.php{$sep1}{$cells[cell_data].number}" 
 title="{$dlog_number_title}{$cells[cell_data].number}" >{$cells[cell_data].number}</a></td>
 {/if}
 <td>{$cells[cell_data].divedate}</td>

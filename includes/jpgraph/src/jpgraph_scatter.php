@@ -3,7 +3,7 @@
 // File:	JPGRAPH_SCATTER.PHP
 // Description: Scatter (and impuls) plot extension for JpGraph
 // Created: 	2001-02-11
-// Ver:		$Id: jpgraph_scatter.php 858 2007-03-23 19:03:33Z ljp $
+// Ver:		$Id: jpgraph_scatter.php 955 2007-11-17 11:41:42Z ljp $
 //
 // Copyright (c) Aditus Consulting. All rights reserved.
 //========================================================================
@@ -101,7 +101,6 @@ class FieldPlot extends Plot {
 		if( $cc  == "" ) $cc = $bc;
 		if( $cs  == "" ) $cs = $bs;
 		if( $cas == "" ) $cas = $bas;
-		//echo "f=$f, cc=$cc, cs=$cs, cas=$cas<br>";
 		$this->arrow->SetColor($cc);	    
 		$this->arrow->SetSize($cs,$cas);
 	    }
@@ -118,7 +117,7 @@ class FieldPlot extends Plot {
     function Legend(&$aGraph) {
 	if( $this->legend != "" ) {
 	    $aGraph->legend->Add($this->legend,$this->mark->fill_color,$this->mark,0,
-				 $this->legendcsimtarget,$this->legendcsimalt);
+				 $this->legendcsimtarget,$this->legendcsimalt,$this->legendcsimwintarget);
 	}
     }	
 }
@@ -191,7 +190,12 @@ class ScatterPlot extends Plot {
 	    }
 	
 	    if( !empty($this->csimtargets[$i]) ) {
-	        $this->mark->SetCSIMTarget($this->csimtargets[$i]);
+		if( !empty($this->csimwintargets[$i]) ) {
+		    $this->mark->SetCSIMTarget($this->csimtargets[$i],$this->csimwintargets[$i]);
+		}
+		else {
+		    $this->mark->SetCSIMTarget($this->csimtargets[$i]);
+		}
 	        $this->mark->SetCSIMAlt($this->csimalts[$i]);
 	    }
 	    
@@ -216,7 +220,7 @@ class ScatterPlot extends Plot {
     function Legend(&$aGraph) {
 	if( $this->legend != "" ) {
 	    $aGraph->legend->Add($this->legend,$this->mark->fill_color,$this->mark,0,
-				 $this->legendcsimtarget,$this->legendcsimalt);
+				 $this->legendcsimtarget,$this->legendcsimalt,$this->legendcsimwintarget);
 	}
     }	
 } // Class

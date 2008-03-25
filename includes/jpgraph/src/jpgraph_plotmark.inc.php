@@ -3,7 +3,7 @@
 // File:	JPGRAPH_PLOTMARK.PHP
 // Description:	Class file. Handles plotmarks
 // Created: 	2003-03-21
-// Ver:		$Id: jpgraph_plotmark.inc.php 861 2007-03-23 19:18:17Z ljp $
+// Ver:		$Id: jpgraph_plotmark.inc.php 955 2007-11-17 11:41:42Z ljp $
 //
 // Copyright (c) Aditus Consulting. All rights reserved.
 //========================================================================
@@ -74,7 +74,7 @@ class PlotMark {
     var $title, $show=true;
     var $type,$weight=1;
     var $color="black", $width=4, $fill_color="blue";
-    var $yvalue,$xvalue='',$csimtarget,$csimalt,$csimareas;
+    var $yvalue,$xvalue='',$csimtarget='',$csimwintarget='',$csimalt='',$csimareas;
     var $iFormatCallback="";
     var $iFormatCallback2="";
     var $markimg='',$iScale=1.0;
@@ -92,7 +92,6 @@ class PlotMark {
 	$this->title = new Text();
 	$this->title->Hide();
 	$this->csimareas = '';
-	$this->csimalt = '';
 	$this->type=-1;
     }
 //---------------
@@ -167,8 +166,9 @@ class PlotMark {
         $this->xvalue=$aX; 
     }
     
-    function SetCSIMTarget($aTarget) {
+    function SetCSIMTarget($aTarget,$aWinTarget='') {
         $this->csimtarget=$aTarget;
+        $this->csimwintarget=$aWinTarget;
     }
     
     function SetCSIMAlt($aAlt) {
@@ -188,6 +188,11 @@ class PlotMark {
         $this->csimareas="";    
         if( !empty($this->csimtarget) ) {
 	    $this->csimareas .= "<area shape=\"poly\" coords=\"$coords\" href=\"".htmlentities($this->csimtarget)."\"";
+
+	    if( !empty($this->csimwintarget) ) {
+		$this->csimareas .= " target=\"".$this->csimwintarget."\" ";
+	    }
+
 	    if( !empty($this->csimalt) ) {										
 		$tmp=sprintf($this->csimalt,$this->yvalue,$this->xvalue);
 		$this->csimareas .= " title=\"$tmp\" alt=\"$tmp\" ";
@@ -201,6 +206,11 @@ class PlotMark {
         $this->csimareas="";    
         if( !empty($this->csimtarget) ) {
 	    $this->csimareas .= "<area shape=\"circle\" coords=\"$x,$y,$r\" href=\"".htmlentities($this->csimtarget)."\"";
+
+	    if( !empty($this->csimwintarget) ) {
+		$this->csimareas .= " target=\"".$this->csimwintarget."\" ";
+	    }
+
     	    if( !empty($this->csimalt) ) {										
 		$tmp=sprintf($this->csimalt,$this->yvalue,$this->xvalue);
 		$this->csimareas .= " title=\"$tmp\" alt=\"$tmp\" ";
@@ -345,6 +355,11 @@ class PlotMark {
 		$this->csimareas = "<area shape=\"rect\" coords=\"".
 		    $dx.','.$dy.','.round($dx+$dw).','.round($dy+$dh).'" '.
 		    "href=\"".htmlentities($this->csimtarget)."\"";
+		
+		if( !empty($this->csimwintarget) ) {
+		    $this->csimareas .= " target=\"".$this->csimwintarget."\" ";
+		}
+
 		if( !empty($this->csimalt) ) {
 		    $tmp=sprintf($this->csimalt,$this->yvalue,$this->xvalue);
 		    $this->csimareas .= " title=\"$tmp\"  alt=\"$tmp\" ";

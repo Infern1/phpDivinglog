@@ -33,9 +33,9 @@
 	<tr class="divecontent">
         {if isset($dive_site_nr)} 
             {if isset($multiuser_id)}
-            <td><a href="{$app_path}/divesite.php/{$multiuser_id}/{$dive_site_nr}" title="{$dive_place} {$logbook_place_linktitle}">{$dive_place}</a></td>
+            <td><a href="{$app_path}/divesite.php{$sep1}{$multiuser_id}{$sep2}{$dive_site_nr}" title="{$dive_place} {$logbook_place_linktitle}">{$dive_place}</a></td>
             {else}
-            <td><a href="{$app_path}/divesite.php/{$dive_site_nr}" title="{$dive_place} {$logbook_place_linktitle}">{$dive_place}</a></td>
+            <td><a href="{$app_path}/divesite.php{$sep2}{$dive_site_nr}" title="{$dive_place} {$logbook_place_linktitle}">{$dive_place}</a></td>
             {/if}
         {else}
             <td>-</td>
@@ -82,9 +82,9 @@
         <tr><td colspan="4">
 		    <center>
             {if isset($multiuser_id)}
-		        <img src="{$app_path}/drawprofile.php/{$multiuser_id}/{$get_nr}"  alt="{$dive_profile_title}" title="{$dive_profile_title}">
+		        <img src="{$app_path}/drawprofile.php{$sep1}{$multiuser_id}{$sep2}{$get_nr}"  alt="{$dive_profile_title}" title="{$dive_profile_title}">
             {else}
-                <img src="{$app_path}/drawprofile.php/{$get_nr}"  alt="{$dive_profile_title}" title="{$dive_profile_title}">
+                <img src="{$app_path}/drawprofile.php{$sep2}{$get_nr}"  alt="{$dive_profile_title}" title="{$dive_profile_title}">
             {/if}
 		    </center>
 		    </td>

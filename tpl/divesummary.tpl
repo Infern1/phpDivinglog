@@ -23,7 +23,7 @@ ERROR no user id set!
  <b>{$LastEntryTime}</b><br>
  <b>{$DivedateMax}</b><br>
 {if isset($LastDiveID)}
-    <b><a href="{$app_path}/divesite.php/{$LastDiveID}" title="{$LastDivePlace}  {$logbook_place_linktitle}">{$LastDivePlace}</a></b>
+    <b><a href="{$app_path}/divesite.php{$sep1}{$LastDiveID}" title="{$LastDivePlace}  {$logbook_place_linktitle}">{$LastDivePlace}</a></b>
     <br>
 {/if} 
 {if $LastCity != ''}
@@ -35,10 +35,10 @@ ERROR no user id set!
 {/if} 
 [
 {if isset($multiuser_id)}
-<a href="{$app_path}/index.php/{$multiuser_id}/{$DivedateMaxNr}"
+<a href="{$app_path}/index.php{$sep1}{$multiuser_id}{$sep2}{$DivedateMaxNr}"
 title="{$dlog_number_title}{$DivedateMaxNr}">{$DivedateMaxNr}</a>
 {else}
-<a href="{$app_path}/index.php/{$DivedateMaxNr}" 
+<a href="{$app_path}/index.php{$sep2}{$DivedateMaxNr}" 
  title="{$dlog_number_title}{$DivedateMaxNr}">{$DivedateMaxNr}</a>
 {/if}
 ]

@@ -3,7 +3,7 @@
 // File:	JPGRAPH_BAR.PHP
 // Description:	Bar plot extension for JpGraph
 // Created: 	2001-01-08
-// Ver:		$Id: jpgraph_bar.php 866 2007-03-24 11:17:27Z ljp $
+// Ver:		$Id: jpgraph_bar.php 955 2007-11-17 11:41:42Z ljp $
 //
 // Copyright (c) Aditus Consulting. All rights reserved.
 //========================================================================
@@ -78,7 +78,7 @@ class BarPlot extends Plot {
 	    $color=array($this->grad_fromcolor,$this->grad_tocolor);
 	    // In order to differentiate between gradients and cooors specified as an RGB triple
 	    $graph->legend->Add($this->legend,$color,"",-$this->grad_style,
-				$this->legendcsimtarget,$this->legendcsimalt);
+				$this->legendcsimtarget,$this->legendcsimalt,$this->legendcsimwintarget);
 	}
 	elseif( $this->legend!="" && ($this->iPattern > -1 || is_array($this->iPattern)) ) {
 	    if( is_array($this->iPattern) ) {
@@ -94,16 +94,16 @@ class BarPlot extends Plot {
 	    $color = array($p1,$p2,$p3,$this->fill_color);
 	    // A kludge: Too mark that we add a pattern we use a type value of < 100
 	    $graph->legend->Add($this->legend,$color,"",-101,
-				$this->legendcsimtarget,$this->legendcsimalt);
+				$this->legendcsimtarget,$this->legendcsimalt,$this->legendcsimwintarget);
 	}
 	elseif( $this->fill_color && $this->legend!="" ) {
 	    if( is_array($this->fill_color) ) {
 		$graph->legend->Add($this->legend,$this->fill_color[0],"",0,
-				    $this->legendcsimtarget,$this->legendcsimalt);
+				    $this->legendcsimtarget,$this->legendcsimalt,$this->legendcsimwintarget);
 	    }
 	    else {
 		$graph->legend->Add($this->legend,$this->fill_color,"",0,
-				    $this->legendcsimtarget,$this->legendcsimalt);	
+				    $this->legendcsimtarget,$this->legendcsimalt,$this->legendcsimwintarget);	
 	    }
 	}
     }
@@ -547,12 +547,17 @@ class BarPlot extends Plot {
 		}	    	    
 		$this->csimareas .= '<area shape="poly" coords="'.$csimcoord.'" ';    	    
 		$this->csimareas .= " href=\"".htmlentities($this->csimtargets[$i])."\"";
+
+		if( !empty($this->csimwintargets[$i]) ) {
+		    $this->csimareas .= " target=\"".$this->csimwintargets[$i]."\" ";
+		}
+
 		$sval='';
 		if( !empty($this->csimalts[$i]) ) {
 		    $sval=sprintf($this->csimalts[$i],$this->coords[0][$i]);
-		    $this->csimareas .= " title=\"$sval\" ";
+		    $this->csimareas .= " title=\"$sval\" alt=\"$sval\" ";
 		}
-		$this->csimareas .= " alt=\"$sval\" />\n";
+		$this->csimareas .= " />\n";
 	    }
 	}
 	return true;
@@ -903,7 +908,12 @@ class AccBarPlot extends BarPlot {
 		    }	    	    
 		    if( ! empty($this->plots[$j]->csimtargets[$i]) ) {
 			$this->csimareas.= '<area shape="poly" coords="'.$csimcoord.'" '; 
-			$this->csimareas.= " href=\"".$this->plots[$j]->csimtargets[$i]."\"";
+			$this->csimareas.= " href=\"".$this->plots[$j]->csimtargets[$i]."\" ";
+
+			if( ! empty($this->plots[$j]->csimwintargets[$i]) ) {
+			    $this->csimareas.= " target=\"".$this->plots[$j]->csimwintargets[$i]."\" ";
+			}
+
 			$sval='';
 			if( !empty($this->plots[$j]->csimalts[$i]) ) {
 			    $sval=sprintf($this->plots[$j]->csimalts[$i],$this->plots[$j]->coords[0][$i]);

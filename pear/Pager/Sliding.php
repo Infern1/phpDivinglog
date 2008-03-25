@@ -27,13 +27,13 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * @category   HTML
- * @package    Pager
- * @author     Lorenzo Alberton <l dot alberton at quipo dot it>
- * @copyright  2003-2006 Lorenzo Alberton
- * @license    http://www.debian.org/misc/bsd.license  BSD License (3 Clause)
- * @version    CVS: $Id: Sliding.php,v 1.12 2007/07/29 08:10:34 quipo Exp $
- * @link       http://pear.php.net/package/Pager
+ * @category  HTML
+ * @package   Pager
+ * @author    Lorenzo Alberton <l.alberton@quipo.it>
+ * @copyright 2003-2008 Lorenzo Alberton
+ * @license   http://www.debian.org/misc/bsd.license  BSD License (3 Clause)
+ * @version   CVS: $Id: Sliding.php,v 1.18 2008/01/06 13:36:22 quipo Exp $
+ * @link      http://pear.php.net/package/Pager
  */
 
 /**
@@ -45,12 +45,12 @@ require_once 'Pager/Common.php';
  * Pager_Sliding - Generic data paging class  ("sliding window" style)
  * Usage examples can be found in the PEAR manual
  *
- * @category   HTML
- * @package    Pager
- * @author     Lorenzo Alberton <l dot alberton at quipo dot it>
- * @copyright  2003-2005 Lorenzo Alberton
- * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
- * @link       http://pear.php.net/package/Pager
+ * @category  HTML
+ * @package   Pager
+ * @author    Lorenzo Alberton <l.alberton@quipo.it>
+ * @copyright 2003-2008 Lorenzo Alberton
+ * @license   http://www.debian.org/misc/bsd.license  BSD License (3 Clause)
+ * @link      http://pear.php.net/package/Pager
  */
 class Pager_Sliding extends Pager_Common
 {
@@ -59,8 +59,8 @@ class Pager_Sliding extends Pager_Common
     /**
      * Constructor
      *
-     * @param array $options    An associative array of option names
-     *                          and their values
+     * @param array $options Associative array of option names and their values
+     *
      * @access public
      */
     function Pager_Sliding($options = array())
@@ -88,11 +88,16 @@ class Pager_Sliding extends Pager_Common
 
     /**
      * "Overload" PEAR::Pager method. VOID. Not needed here...
+     *
      * @param integer $index Offset to get pageID for
+     *
+     * @return void
      * @deprecated
      * @access public
      */
-    function getPageIdByOffset($index=null) { }
+    function getPageIdByOffset($index)
+    {
+    }
 
     // }}}
     // {{{ getPageRangeByPageId()
@@ -105,7 +110,8 @@ class Pager_Sliding extends Pager_Common
      * PageID of 9 would give you (4, 8).
      * If the method is called without parameter, pageID is set to currentPage#.
      *
-     * @param integer PageID to get offsets for
+     * @param integer $pageid PageID to get offsets for
+     *
      * @return array  First and last offsets
      * @access public
      */
@@ -138,14 +144,16 @@ class Pager_Sliding extends Pager_Common
      * Returns back/next/first/last and page links,
      * both as ordered and associative array.
      *
-     * @param integer $pageID Optional pageID. If specified, links
-     *                for that page are provided instead of current one.
+     * @param integer $pageID Optional pageID. If specified, links for that page
+     *                        are provided instead of current one.
+     * @param string  $dummy  used to comply with parent signature (leave empty)
+     *
      * @return array back/pages/next/first/last/all links
      * @access public
      */
-    function getLinks($pageID = null)
+    function getLinks($pageID = null, $dummy='')
     {
-        if ($pageID != null) {
+        if (!is_null($pageID)) {
             $_sav = $this->_currentPage;
             $this->_currentPage = $pageID;
 
@@ -161,15 +169,16 @@ class Pager_Sliding extends Pager_Common
             }
         }
 
-        $back  = str_replace('&nbsp;', '', $this->_getBackLink());
-        $next  = str_replace('&nbsp;', '', $this->_getNextLink());
-        $pages = $this->_getPageLinks();
-        $first = $this->_printFirstPage();
-        $last  = $this->_printLastPage();
-        $all   = $this->links;
-        $linkTags = $this->linkTags;
+        $back        = str_replace('&nbsp;', '', $this->_getBackLink());
+        $next        = str_replace('&nbsp;', '', $this->_getNextLink());
+        $pages       = $this->_getPageLinks();
+        $first       = $this->_printFirstPage();
+        $last        = $this->_printLastPage();
+        $all         = $this->links;
+        $linkTags    = $this->linkTags;
+        $linkTagsRaw = $this->linkTagsRaw;
 
-        if ($pageID != null) {
+        if (!is_null($pageID)) {
             $this->_currentPage = $_sav;
         }
 
@@ -181,13 +190,14 @@ class Pager_Sliding extends Pager_Common
             $last,
             $all,
             $linkTags,
-            'back'  => $back,
-            'pages' => $pages,
-            'next'  => $next,
-            'first' => $first,
-            'last'  => $last,
-            'all'   => $all,
-            'linktags' => $linkTags
+            'back'        => $back,
+            'pages'       => $pages,
+            'next'        => $next,
+            'first'       => $first,
+            'last'        => $last,
+            'all'         => $all,
+            'linktags'    => $linkTags,
+            'linkTagsRaw' => $linkTagsRaw,
         );
     }
 
@@ -196,6 +206,8 @@ class Pager_Sliding extends Pager_Common
 
     /**
      * Returns pages link
+     *
+     * @param string $url URL string [deprecated]
      *
      * @return string Links
      * @access private
@@ -226,7 +238,7 @@ class Pager_Sliding extends Pager_Common
                     
                     $this->range[$i] = false;
                     $this->_linkData[$this->_urlVar] = $i;
-                    $links .= $this->_renderLink($this->_altPage.' '.$i, $i)
+                    $links .= $this->_renderLink(str_replace('%d', $i, $this->_altPage), $i)
                            . $this->_spacesBefore
                            . ($print_separator_flag ? $this->_separator.$this->_spacesAfter : '');
                 }
@@ -248,7 +260,7 @@ class Pager_Sliding extends Pager_Common
                 } else {
                     $this->range[$i] = false;
                     $this->_linkData[$this->_urlVar] = $i;
-                    $links .= $this->_renderLink($this->_altPage.' '.$i, $i);
+                    $links .= $this->_renderLink(str_replace('%d', $i, $this->_altPage), $i);
                 }
                 $links .= $this->_spacesBefore
                         . ($print_separator_flag ? $this->_separator.$this->_spacesAfter : '');
@@ -260,7 +272,7 @@ class Pager_Sliding extends Pager_Common
                     $print_separator_flag = ($expansion_after != 1);
                     $this->range[$i] = false;
                     $this->_linkData[$this->_urlVar] = $i;
-                    $links .= $this->_renderLink($this->_altPage.' '.$i, $i)
+                    $links .= $this->_renderLink(str_replace('%d', $i, $this->_altPage), $i)
                       . $this->_spacesBefore
                       . ($print_separator_flag ? $this->_separator.$this->_spacesAfter : '');
                 }
@@ -272,7 +284,7 @@ class Pager_Sliding extends Pager_Common
                 if ($i != $this->_currentPage) {
                     $this->range[$i] = false;
                     $this->_linkData[$this->_urlVar] = $i;
-                    $links .= $this->_renderLink($this->_altPage.' '.$i, $i);
+                    $links .= $this->_renderLink(str_replace('%d', $i, $this->_altPage), $i);
                 } else {
                     $this->range[$i] = true;
                     $links .= $this->_curPageSpanPre . $i . $this->_curPageSpanPost;

@@ -3,7 +3,7 @@
 // File:	JPGRAPH_GANTT.PHP
 // Description:	JpGraph Gantt plot extension
 // Created: 	2001-11-12
-// Ver:		$Id: jpgraph_gantt.php 880 2007-03-28 15:41:56Z ljp $
+// Ver:		$Id: jpgraph_gantt.php 955 2007-11-17 11:41:42Z ljp $
 //
 // Copyright (c) Aditus Consulting. All rights reserved.
 //========================================================================
@@ -1504,7 +1504,7 @@ class TextProperty {
     var $iShow=true;
     var $iText="";
     var $iHAlign="left",$iVAlign="bottom";
-    var $csimtarget='',$csimalt='';
+    var $csimtarget='',$csimwintarget='',$csimalt='';
 	
 //---------------
 // CONSTRUCTOR	
@@ -1518,13 +1518,19 @@ class TextProperty {
 	$this->iText = $aTxt;
     }
 
-    function SetCSIMTarget($aTarget,$aAltText='') {
+    function SetCSIMTarget($aTarget,$aAltText='',$aWinTarget='') {
 	if( is_string($aTarget) )
 	    $aTarget = array($aTarget);
 	$this->csimtarget=$aTarget;
+
+	if( is_string($aWinTarget) )
+	    $aWinTarget = array($aWinTarget);
+	$this->csimwintarget=$aWinTarget;
+
 	if( is_string($aAltText) )
 	    $aAltText = array($aAltText);
         $this->csimalt=$aAltText;
+	
     }
     
     function SetCSIMAlt($aAltText) {
@@ -2933,7 +2939,7 @@ class GanttPlotObject {
     var $iStart="";				// Start date
     var $title,$caption;
     var $iCaptionMargin=5;
-    var $csimarea='',$csimtarget='',$csimalt='';
+    var $csimarea='',$csimtarget='',$csimwintarget='',$csimalt='';
 
     var $constraints = array();    
     var $iConstrainPos=array();
@@ -2948,7 +2954,7 @@ class GanttPlotObject {
 	return $this->csimarea;
     }
 
-    function SetCSIMTarget($aTarget,$aAlt='') {
+    function SetCSIMTarget($aTarget,$aAlt='',$aWinTarget='') {
 	if( !is_string($aTarget) ) {
 	    $tv = substr(var_export($aTarget,true),0,40);
 	    JpGraphError::RaiseL(6024,$tv);
@@ -2961,6 +2967,7 @@ class GanttPlotObject {
 	}
 
         $this->csimtarget=$aTarget;
+        $this->csimwintarget=$aWinTarget;
         $this->csimalt=$aAlt;
     }
     
@@ -3257,12 +3264,20 @@ class GanttBar extends GanttPlotObject {
 		$title_xt = $colstarts[$i];
 		$title_xb = $title_xt + $colwidth[$i];
 		$coords = "$title_xt,$yt,$title_xb,$yt,$title_xb,$yb,$title_xt,$yb";
-		$this->csimarea .= "<area shape=\"poly\" coords=\"$coords\" href=\"".$this->title->csimtarget[$i]."\"";
-		if( ! empty($this->title->csimalt[$i]) ) {
-		    $tmp = $this->title->csimalt[$i];
-		    $this->csimarea .= " title=\"$tmp\"";
+
+		if( ! empty($this->title->csimtarget[$i]) ) {
+		    $this->csimarea .= "<area shape=\"poly\" coords=\"$coords\" href=\"".$this->title->csimtarget[$i]."\"";
+
+		    if( ! empty($this->title->csimwintarget[$i]) ) {
+			$this->csimarea .= "target=\"".$this->title->csimwintarget[$i]."\" ";
+		    }
+		    
+		    if( ! empty($this->title->csimalt[$i]) ) {
+			$tmp = $this->title->csimalt[$i];
+			$this->csimarea .= " title=\"$tmp\" alt=\"$tmp\" ";
+		    }
+		    $this->csimarea .= " />\n";
 		}
-		$this->csimarea .= " alt=\"$tmp\" />\n";
 	    }
 	}
 
@@ -3290,16 +3305,20 @@ class GanttBar extends GanttPlotObject {
 	}
 
 	// CSIM for bar
-	if( $this->csimtarget != '' ) {
+	if( ! empty($this->csimtarget) ) {
 
 	    $coords = "$xt,$yt,$xb,$yt,$xb,$yb,$xt,$yb";
-	    $this->csimarea .= "<area shape=\"poly\" coords=\"$coords\" href=\"".
-		              $this->csimtarget."\"";
+	    $this->csimarea .= "<area shape=\"poly\" coords=\"$coords\" href=\"".$this->csimtarget."\"";
+	    
+	    if( !empty($this->csimwintarget) ) {
+		$this->csimarea .= " target=\"".$this->csimwintarget."\" ";
+	    }
+
 	    if( $this->csimalt != '' ) {
 		$tmp = $this->csimalt;
-		$this->csimarea .= " title=\"$tmp\"";
+		$this->csimarea .= " title=\"$tmp\" alt=\"$tmp\" ";
 	    }
-	    $this->csimarea .= " alt=\"$tmp\" />\n";
+	    $this->csimarea .= "  />\n";
 	}
 
 	// Draw progress bar inside activity bar
@@ -3422,12 +3441,22 @@ class MileStone extends GanttPlotObject {
 		$title_xt = $colstarts[$i];
 		$title_xb = $title_xt + $colwidth[$i];
 		$coords = "$title_xt,$yt,$title_xb,$yt,$title_xb,$yb,$title_xt,$yb";
-		$this->csimarea .= "<area shape=\"poly\" coords=\"$coords\" href=\"".$this->title->csimtarget[$i]."\"";
-		if( ! empty($this->title->csimalt[$i]) ) {
-		    $tmp = $this->title->csimalt[$i];
-		    $this->csimarea .= " title=\"$tmp\"";
+		
+		if( !empty($this->title->csimtarget[$i]) ) {
+
+		    $this->csimarea .= "<area shape=\"poly\" coords=\"$coords\" href=\"".$this->title->csimtarget[$i]."\"";
+
+		    if( !empty($this->title->csimwintarget[$i]) ) {
+			$this->csimarea .= "target=\"".$this->title->csimwintarget[$i]."\"";
+		    }
+
+		    if( ! empty($this->title->csimalt[$i]) ) {
+			$tmp = $this->title->csimalt[$i];
+			$this->csimarea .= " title=\"$tmp\" alt=\"$tmp\" ";
+		    }
+		    $this->csimarea .= " />\n";
+
 		}
-		$this->csimarea .= " alt=\"$tmp\" />\n";
 	    }
 	}
 

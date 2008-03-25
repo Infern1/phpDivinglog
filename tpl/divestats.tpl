@@ -25,15 +25,15 @@
 <tr class="divecontent">
  <td>{$end}</td>
  {if isset($multiuser_id)}
-<td>{$DivedateMax}&nbsp;&nbsp;<a href="{$app_path}/index.php/{$multiuser_id}/{$DivedateMaxNr}"
+<td>{$DivedateMax}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep1}{$multiuser_id}{$sep2}{$DivedateMaxNr}"
 title="{$dlog_number_title}{$DivedateMaxNr}">{$DivedateMaxNr}</a></td>
-<td>{$DivedateMin}&nbsp;&nbsp;<a href="{$app_path}/index.php/{$multiuser_id}/{$DivedateMinNr}"
+<td>{$DivedateMin}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep1}{$multiuser_id}{$sep2}{$DivedateMinNr}"
 title="{$dlog_number_title}{$DivedateMinNr}">{$DivedateMinNr}</a></td>
 
 {else}
- <td>{$DivedateMax}&nbsp;&nbsp;<a href="{$app_path}/index.php/{$DivedateMaxNr}" 
+ <td>{$DivedateMax}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep2}{$DivedateMaxNr}" 
  title="{$dlog_number_title}{$DivedateMaxNr}">{$DivedateMaxNr}</a></td>
- <td>{$DivedateMin}&nbsp;&nbsp;<a href="{$app_path}/index.php/{$DivedateMinNr}" 
+ <td>{$DivedateMin}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep2}{$DivedateMinNr}" 
  title="{$dlog_number_title}{$DivedateMinNr}">{$DivedateMinNr}</a></td>
 
 {/if}
@@ -51,11 +51,11 @@ title="{$dlog_number_title}{$DivedateMinNr}">{$DivedateMinNr}</a></td>
 <tr class="divecontent">
  <td>{$total_abt}</td>
  {if isset($multiuser_id)}
-<td>{$DivetimeMax}&nbsp;{$unit_time}&nbsp;&nbsp;<a href="{$app_path}/index.php/{$multiuser_id}/{$DivetimeMaxNr}"  title="{$dlog_number_title}{$DivetimeMaxNr}">{$DivetimeMaxNr}</a></td>
-<td>{$DivetimeMin}&nbsp;{$unit_time}&nbsp;&nbsp;<a href="{$app_path}/index.php/{$multiuser_id}/{$DivetimeMinNr}"  title="{$dlog_number_title}{$DivetimeMinNr}">{$DivetimeMinNr}</a></td>
+<td>{$DivetimeMax}&nbsp;{$unit_time}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep1}{$multiuser_id}{$sep2}{$DivetimeMaxNr}"  title="{$dlog_number_title}{$DivetimeMaxNr}">{$DivetimeMaxNr}</a></td>
+<td>{$DivetimeMin}&nbsp;{$unit_time}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep1}{$multiuser_id}{$sep2}{$DivetimeMinNr}"  title="{$dlog_number_title}{$DivetimeMinNr}">{$DivetimeMinNr}</a></td>
 {else}
-<td>{$DivetimeMax}&nbsp;{$unit_time}&nbsp;&nbsp;<a href="{$app_path}/index.php/{$DivetimeMaxNr}"  title="{$dlog_number_title} {$DivetimeMaxNr}">{$DivetimeMaxNr}</a></td>
-<td>{$DivetimeMin}&nbsp;{$unit_time}&nbsp;&nbsp;<a href="{$app_path}/index.php/{$DivetimeMinNr}"  title="{$dlog_number_title} {$DivetimeMinNr}">{$DivetimeMinNr}</a></td>
+<td>{$DivetimeMax}&nbsp;{$unit_time}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep2}{$DivetimeMaxNr}"  title="{$dlog_number_title} {$DivetimeMaxNr}">{$DivetimeMaxNr}</a></td>
+<td>{$DivetimeMin}&nbsp;{$unit_time}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep2}{$DivetimeMinNr}"  title="{$dlog_number_title} {$DivetimeMinNr}">{$DivetimeMinNr}</a></td>
 {/if}
 <td>{$DivetimeAvg}&nbsp;{$unit_time}</td>
 </tr>
@@ -71,13 +71,13 @@ title="{$dlog_number_title}{$DivedateMinNr}">{$DivedateMinNr}</a></td>
 <tr class="divecontent">
  <td>&nbsp;</td>
  {if isset($multiuser_id)}
-<td>{$DepthMax}&nbsp;&nbsp;<a href="{$app_path}/index.php/{$multiuser_id}/{$DepthMaxNr}"  
+<td>{$DepthMax}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep1}{$multiuser_id}{$sep2}{$DepthMaxNr}"  
 title="{$dlog_number_title}{$DepthMaxNr}">{$DepthMaxNr}</a></td>
-<td>{$DepthMin}&nbsp;&nbsp;<a href="{$app_path}/index.php/{$multiuser_id}/{$DepthMinNr}"  
+<td>{$DepthMin}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep1}{$multiuser_id}{$sep2}{$DepthMinNr}"  
 title="{$dlog_number_title}{$DepthMinNr}">{$DepthMinNr}</a></td>
  {else}
-<td>{$DepthMax}&nbsp;&nbsp;<a href="{$app_path}/index.php/{$DepthMaxNr}"  title="{$dlog_number_title}{$DepthMaxNr}">{$DepthMaxNr}</a></td>
- <td>{$DepthMin}&nbsp;&nbsp;<a href="{$app_path}/index.php/{$DepthMinNr}"  title="{$dlog_number_title}{$DepthMinNr}">{$DepthMinNr}</a></td>
+<td>{$DepthMax}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep2}{$DepthMaxNr}"  title="{$dlog_number_title}{$DepthMaxNr}">{$DepthMaxNr}</a></td>
+ <td>{$DepthMin}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep2}{$DepthMinNr}"  title="{$dlog_number_title}{$DepthMinNr}">{$DepthMinNr}</a></td>
 
  {/if}
  <td>{$DepthAvg}</td>
@@ -87,7 +87,7 @@ title="{$dlog_number_title}{$DepthMinNr}">{$DepthMinNr}</a></td>
 <tr class="divecontent">
 <td colspan="4">
             {if isset($multiuser_id)}
-		        <img src="{$app_path}/drawpiechart.php/{$multiuser_id}/{$get_nr}"  alt="" title="">
+		        <img src="{$app_path}/drawpiechart.php{$sep1}{$multiuser_id}{$sep2}{$get_nr}"  alt="" title="">
             {else}
                 <img src="{$app_path}/drawpiechart.php"  alt="" title="">
             {/if}
@@ -104,11 +104,11 @@ title="{$dlog_number_title}{$DepthMinNr}">{$DepthMinNr}</a></td>
 
 <tr class="divecontent">
  {if isset($multiuser_id)}
-<td>{$WatertempMin}&nbsp;&nbsp;<a href="{$app_path}/index.php/{$multiuser_id}/{$WatertempMinNr}" title="{$dlog_number_title} {$WatertempMinNr}">{$WatertempMinNr}</a></td>
-<td>{$WatertempMax}&nbsp;&nbsp;<a href="{$app_path}/index.php/{$multiuser_id}/{$WatertempMaxNr}" title="{$dlog_number_title} {$WatertempMaxNr}">{$WatertempMaxNr}</a></td>
+<td>{$WatertempMin}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep1}{$multiuser_id}{$sep2}{$WatertempMinNr}" title="{$dlog_number_title} {$WatertempMinNr}">{$WatertempMinNr}</a></td>
+<td>{$WatertempMax}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep1}{$multiuser_id}{$sep2}{$WatertempMaxNr}" title="{$dlog_number_title} {$WatertempMaxNr}">{$WatertempMaxNr}</a></td>
  {else}
-<td>{$WatertempMin}&nbsp;&nbsp;<a href="{$app_path}/index.php/{$WatertempMinNr}" title="{$dlog_number_title} {$WatertempMinNr}">{$WatertempMinNr}</a></td>
-<td>{$WatertempMax}&nbsp;&nbsp;<a href="{$app_path}/index.php/{$WatertempMaxNr}" title="{$dlog_number_title} {$WatertempMaxNr}">{$WatertempMaxNr}</a></td>
+<td>{$WatertempMin}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep1}{$WatertempMinNr}" title="{$dlog_number_title} {$WatertempMinNr}">{$WatertempMinNr}</a></td>
+<td>{$WatertempMax}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep1}{$WatertempMaxNr}" title="{$dlog_number_title} {$WatertempMaxNr}">{$WatertempMaxNr}</a></td>
  {/if}
  <td>{$decodives} ({$decodives_per}%)</td>
  <td>{$repdives} ({$repdives_per}%)</td>

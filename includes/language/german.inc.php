@@ -14,7 +14,7 @@ $_lang['no'] = "Nein";
 
 // Character used for the price currency
 $_lang['currency_prefix'] = "";
-$_lang['currency_suffix'] = "€";
+$_lang['currency_suffix'] = "?";
 
 // Link Bar related values
 
@@ -115,7 +115,7 @@ $_lang['divepic_pt2s'] = " Bild ";
 $_lang['divepic_pt2p'] = " Bilder ";
 $_lang['divepic_pt3'] = " von diesem TG";
 
-$_lang['dive_profile_title'] = "Tauchprofil für TG Nr ";
+$_lang['dive_profile_title'] = "Tauchprofil f&uuml;r TG Nr ";
 $_lang['dive_profile_xaxis_title'] = "Zeit (Minuten)";
 $_lang['dive_profile_ymetric_title'] = "Tiefe (Metern)";
 $_lang['dive_profile_yimperial_title'] = "Tiefe (Fuss)";
@@ -135,7 +135,7 @@ $_lang['dive_sect_comments'] = "Kommentare:";
 
 // Dive Log List related values
 
-$_lang['dlog_none'] = "Keine Tauchgänge vorhanden.";
+$_lang['dlog_none'] = "Keine Tauchg?nge vorhanden.";
 
 $_lang['dlog_title_number'] = "TG Nr";
 $_lang['dlog_title_divedate'] = "Datum";
@@ -202,13 +202,13 @@ $_lang['stats_watertempmax'] = "W&auml;rmster Tauchgang:";
 $_lang['stats_shoredives'] = "Vom Ufer:";
 $_lang['stats_boatdives'] = "Vom Boot:";
 $_lang['stats_nightdives'] = "Nachttauchg&auml;nge:";
-$_lang['stats_driftdives'] = "Strömungstauchg&auml;nge:";
+$_lang['stats_driftdives'] = "Str?mungstauchg&auml;nge:";
 $_lang['stats_deepdives'] = "Tieftauchg&auml;nge:";
 $_lang['stats_cavedives'] = "H&ouml;hlentauchg&auml;nge:";
 $_lang['stats_wreckdives'] = "Wracktauchg&auml;nge:";
 $_lang['stats_photodives'] = "Fototauchg&auml;nge:";
 $_lang['stats_saltwaterdives'] = "Salzwassertauchg&auml;nge:";
-$_lang['stats_freshwaterdives'] = "Süsswassertauchg&auml;nge:";
+$_lang['stats_freshwaterdives'] = "S&uuml;sswassertauchg&auml;nge:";
 $_lang['stats_brackishdives'] = "Brackwassertauchg&auml;nge:";
 $_lang['stats_decodives'] = "Dekotauchg&auml;nge:";
 $_lang['stats_repdives'] = "Wiederholungstauchg&auml;nge:";

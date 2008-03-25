@@ -28,6 +28,7 @@ class HandleRequest {
     var $dive_nr;
     var $site_nr;
     var $diver_choice;
+
     /**
      * requested_page contains the requested page of the paginate
      * 
@@ -61,12 +62,37 @@ class HandleRequest {
      * @return void
      */
     function HandleRequest(){
-        global $_config;
+        global $_config, $t;
         $this->multiuser = $_config['multiuser'];
+
+        if($_config['query_string']){
+            if($this->multiuser){
+                $t->assign('sep1','?user_id=');
+                $t->assign('sep2','&id=');
+                $t->assign('list','&view=list');
+            } else {
+                //$t->assign('sep1','?user_id=');
+                $t->assign('sep2','?id=');
+                $t->assign('list','?view=list');
+            }
+        } else {
+            $t->assign('sep1',"/");
+            $t->assign('sep2',"/");
+            $t->assign('list','/list');
+        }            
     }
+
+    /**
+     * set_request_uri 
+     * 
+     * @param mixed $uri 
+     * @access public
+     * @return void
+     */
     function set_request_uri($uri){
         $this->request_uri = $uri;
     }
+
     /**
      * set_file_depth according the location of the file
      *
@@ -125,8 +151,7 @@ class HandleRequest {
             if(isset($split_request[1]) && Users::is_valid_user($split_request[1]) ){
                 $file_req = $split_request[0];
                 $this->user_id = check_number($split_request[1]);
-                
-                if(isset($split_request[2]) && $split_request[2] == 'list' ){
+                if(isset($split_request[2]) && $split_request[2] == 'list'  ){
                     $this->view_request = 0;
                     if(isset($split_request[3])){
                         $this->requested_page = $split_request[3];
@@ -137,7 +162,6 @@ class HandleRequest {
                 } else {
                     $this->diver_choice = true;
                 }
-
                 switch($file_req) {
                     case "index.php":
                         if($this->view_request == 1)
@@ -178,6 +202,7 @@ class HandleRequest {
             }else {
                 $this->diver_choice = true;
             }
+            //print_r($this);
 
         }
         else {
@@ -337,7 +362,7 @@ class TableGrid{
      * @access public
      * @return void
      */
-    function TableGrid(){
+    function TableGrid($user_id = 0){
         global $_config;
         $this->language = $_config['language'];
         $objGrid = new datagrid;
@@ -345,6 +370,10 @@ class TableGrid{
         $objGrid->conectadb($_config['database_server']  , $_config['database_username'], $_config['database_password'], $_config['database_db']); 
         $objGrid -> pathtoimages($_config['abs_url_path']. "/images/");
         $objGrid->datarows($_config['max_list']);
+        if($_config['query_string']){
+            $objGrid->methodForm('GET');
+            $objGrid->linkparam("user_id=".$user_id."&id=list");
+        }
         $this->gridtable  =& $objGrid;
         $this->SetGridLanguage();
     }
@@ -445,6 +474,50 @@ class TableGrid{
         /*}}}*/
    
     }/*}}}*/
+}
+
+/**
+ * TablePager class that sets the application wide defaults for the PEAR Pager module 
+ * 
+ * @package phpdivinglog
+ * @version $Rev$
+ * @copyright Copyright (C) 2007 Rob Lensen. All rights reserved.
+ * @author Rob Lensen <rob@bsdfreaks.nl> 
+ * @license LGPL v3 http://www.gnu.org/licenses/lgpl-3.0.txt
+ */
+class TablePager{
+/*{{{*/
+    var $options;
+    /**
+     * TablePager default constructor which creates the defaults 
+     * 
+     * @access public
+     * @return void
+     */
+    function TablePager($cpage, $path){
+        global $_config;
+        if($_config['query_string']){
+            $pager_options = array( 
+                    'mode' => 'Sliding', 
+                    'perPage' => $_config['max_list'], 
+                    'append' => true,
+                    'currentPage' => $cpage,
+                    'path' => '' ,
+                    'fileName' => '%d',
+                    'delta' => 2, ); 
+        } else {
+            $pager_options = array( 
+                    'mode' => 'Sliding', 
+                    'perPage' => $_config['max_list'], 
+                    'append' => false,
+                    'currentPage' => $cpage,
+                    'path' => $path ,
+                    'fileName' => '%d',
+                    'delta' => 2, ); 
+        }
+        $this->options = $pager_options;
+    }
+/*}}}*/
 }
 /**
  * Users Class needed for multiple user phpDivinglog, gets the info from the config file 
@@ -875,8 +948,7 @@ class Divelog {
                 $this->request_type = 0;
             }
         }
-        return $this->result;
-        /*}}}*/
+        return $this->result;/*}}}*/
     }
 
     /**
@@ -1334,15 +1406,8 @@ class Divelog {
         } else {
             $cpage = $this->requested_page;
         }
-          $pager_options = array( 
-                    'mode' => 'Sliding', 
-                    'perPage' => $_config['max_list'], 
-                    'append' => false,
-                    'currentPage' => $cpage,
-                    'path' => $path ,
-                    'fileName' => '%d',
-                    'delta' => 2, );    
-        $paged_data = Pager_Wrapper_MDB2($db, $recentdivelist_query, $pager_options);
+        $pager_options = new TablePager($cpage,$path);
+        $paged_data = Pager_Wrapper_MDB2($db, $recentdivelist_query, $pager_options->options);
         $t->assign('dlog_number_title', $_lang['dlog_number_title']);
         if($_config['length']){
             $t->assign('unit_length_short' , $_lang['unit_length_short_imp']);
@@ -1363,7 +1428,7 @@ class Divelog {
      */
     function get_dive_overview_grid(){
         global $t, $_lang, $globals, $_config;/*{{{*/
-        $GridClass = new TableGrid;
+        $GridClass = new TableGrid($this->user_id);
         $objGrid = $GridClass->get_grid_class();
         $objGrid -> tabla ($this->table_prefix."Logbook");
         set_config_table_prefix($this->table_prefix);
@@ -1374,9 +1439,9 @@ class Divelog {
         }
         reset_config_table_prefix();
         if($this->multiuser){
-            $url =  "/index.php/".$this->user_id."/";
+            $url =  "/index.php".$t->get_template_vars('sep1').$this->user_id.$t->get_template_vars('sep2');
         } else {
-            $url =  "/index.php/";
+            $url =  "/index.php".$t->get_template_vars('sep2');
         }
         $objGrid -> keyfield("Number"); 
         $t->assign('grid_header' , $objGrid -> getHeader(NULL, $_config['abs_url_path']. '/js/dgscripts.js', $_config['abs_url_path']. '/includes/dgstyle.css'));
@@ -1487,7 +1552,8 @@ class Divesite{
             }
         } else {
             $this->request_type = 3;
-        }/*}}}*/
+        }
+/*}}}*/
     }
     function get_divesite_info(){
         global $globals, $_config;/*{{{*/
@@ -1765,15 +1831,8 @@ class Divesite{
         } else {
             $cpage = $this->requested_page;
         }
-        $pager_options1 = array( 
-                'mode' => 'Sliding', 
-                'perPage' => $_config['max_list'], 
-                'append' => false,
-                'currentPage' => $cpage,
-                'path' => $path ,
-                'fileName' => '%d',
-                'delta' => 2, );    
-        $paged_data = Pager_Wrapper_MDB2($db, $locationlist_query, $pager_options1);
+        $pager_options = new TablePager($cpage,$path);
+        $paged_data = Pager_Wrapper_MDB2($db, $locationlist_query, $pager_options->options);
         $t->assign('dsite_title_place',   $_lang['dsite_title_place']);
             $t->assign('dsite_title_city',    $_lang['dsite_title_city']);
             $t->assign('dsite_title_country', $_lang['dsite_title_country']);
@@ -1790,7 +1849,7 @@ class Divesite{
          */
         function get_divesite_overview_grid($sql){
             global $t, $_lang, $globals, $_config;/*{{{*/
-            $GridClass = new TableGrid;
+            $GridClass = new TableGrid($this->user_id);
             $objGrid = $GridClass->get_grid_class();
 
             /**
@@ -1798,9 +1857,9 @@ class Divesite{
              */
             $objGrid -> tabla ($this->table_prefix."Place");
             if($this->multiuser){
-                $url =  "/divesite.php/".$this->user_id."/";
+                $url =  "/divesite.php".$t->get_template_vars('sep1').$this->user_id.$t->get_template_vars('sep2');
             } else {
-                $url =  "/divesite.php/";
+                $url =  "/divesite.php".$t->get_template_vars('sep2');
             }
             $objGrid -> keyfield("ID"); 
             $t->assign('grid_header' , $objGrid -> getHeader(NULL, $_config['abs_url_path']. '/js/dgscripts.js', $_config['abs_url_path']. '/includes/dgstyle.css'));
@@ -2026,7 +2085,7 @@ class Equipment{
      * @return void
      */
     function get_equipment_overview_table(){
-        global $db, $t, $_lang, $globals, $_config;
+        global $db, $t, $_lang, $globals, $_config;/*{{{*/
         set_config_table_prefix($this->table_prefix);
         $equiplist_query = sql_file('equiplist.sql');
         reset_config_table_prefix();
@@ -2044,20 +2103,12 @@ class Equipment{
         } else {
             $cpage = $this->requested_page;
         }
-
-        $pager_options = array( 
-                    'mode' => 'Sliding', 
-                    'perPage' => $_config['max_list'], 
-                    'append' => false,
-                    'currentPage' => $cpage,
-                    'path' => $path,
-                    'fileName' => '%d',
-                    'delta' => 2, );    
-        $paged_data = Pager_Wrapper_MDB2($db, $equiplist_query, $pager_options);
+        $pager_options = new TablePager($cpage,$path);
+        $paged_data = Pager_Wrapper_MDB2($db, $equiplist_query, $pager_options->options);
         
         $t->assign('pages', $paged_data['links']);
         $t->assign('cells', $paged_data['data']);
-
+/*}}}*/
     }
     /**
      * get_equipment_overview_grid 
@@ -2067,13 +2118,13 @@ class Equipment{
      */
     function get_equipment_overview_grid(){
         global $t, $_lang, $globals, $_config;/*{{{*/
-        $GridClass = new TableGrid;
+        $GridClass = new TableGrid($this->used_id);
         $objGrid = $GridClass->get_grid_class();
         $objGrid -> tabla ($this->table_prefix."Equipment");
          if($this->multiuser){
-            $url =  "/equipment.php/".$this->user_id."/";
+            $url =  "/equipment.php".$t->get_template_vars('sep1'). $this->user_id.$t->get_template_vars('sep2');
         } else {
-            $url =  "/equipment.php/";
+            $url =  "/equipment.php".$t->get_template_vars('sep2');
         }
          $objGrid->message['display'] = $_lang['display_rows_equipment'];
          $objGrid -> keyfield("ID");
@@ -2655,7 +2706,7 @@ class Divestats{
  * @license LGPL v3 http://www.gnu.org/licenses/lgpl-3.0.txt
  */
 class AppInfo{
-
+/*{{{*/
     var $table_prefix;
     var $user_id;
     var $DivelogVersion;
@@ -2705,5 +2756,5 @@ class AppInfo{
         $t->assign('DivelogVersion', $this->DivelogVersion);
         $t->assign('Appname', $this->Appname);
         $t->assign('phpDivelogVersion', $this->phpDivelogVersion);
-    }
+    }/*}}}*/
 }

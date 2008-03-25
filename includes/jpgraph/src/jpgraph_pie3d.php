@@ -3,7 +3,7 @@
 // File:	JPGRAPH_PIE3D.PHP
 // Description: 3D Pie plot extension for JpGraph
 // Created: 	2001-03-24
-// Ver:		$Id: jpgraph_pie3d.php 782 2006-10-08 08:09:02Z ljp $
+// Ver:		$Id: jpgraph_pie3d.php 955 2007-11-17 11:41:42Z ljp $
 //
 // Copyright (c) Aditus Consulting. All rights reserved.
 //========================================================================
@@ -49,9 +49,10 @@ class PiePlot3D extends PiePlot {
 	$aGraph->legend->txtcol = array_reverse($aGraph->legend->txtcol);
     }
 
-    function SetCSIMTargets($targets,$alts=null) {
-	$this->csimtargets = $targets;
-	$this->csimalts = $alts;
+    function SetCSIMTargets($aTargets,$aAlts='',$aWinTargets='') {
+	$this->csimtargets = $aTargets;
+	$this->csimwintargets = $aWinTargets;
+	$this->csimalts = $aAlts;
     }
 
     // Should the slices be separated by a line? If color is specified as "" no line
@@ -119,12 +120,21 @@ class PiePlot3D extends PiePlot {
 	}
 	$coords.= ", $xp, $yp";
 	$alt='';
-	if( !empty($this->csimalts[$i]) ) {										
-	    $tmp=sprintf($this->csimalts[$i],$this->data[$i]);
-	    $alt="alt=\"$tmp\" title=\"$tmp\"";
+
+	if( !empty($this->csimtargets[$i]) ) {
+	    $this->csimareas .= "<area shape=\"poly\" coords=\"$coords\" href=\"".$this->csimtargets[$i]."\"";
+	
+	    if( !empty($this->csimwintargets[$i]) ) {
+		$this->csimareas .= " target=\"".$this->csimwintargets[$i]."\" "; 
+	    }
+	    
+	    if( !empty($this->csimalts[$i]) ) {										
+		$tmp=sprintf($this->csimalts[$i],$this->data[$i]);
+		$this->csimareas .= "alt=\"$tmp\" title=\"$tmp\" ";
+	    }
+	    $this->csimareas .=  " />\n";
 	}
-	if( !empty($this->csimtargets[$i]) )
-	    $this->csimareas .= "<area shape=\"poly\" coords=\"$coords\" href=\"".$this->csimtargets[$i]."\" $alt />\n";
+
     }
 
     function SetLabels($aLabels,$aLblPosAdj="auto") {

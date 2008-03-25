@@ -20,11 +20,12 @@
 $config_file = "./config.inc.php";
 require_once ($config_file);
 
+
 $request = new HandleRequest();
 $request->set_request_uri($_SERVER['REQUEST_URI']);
 $request->set_file_depth(0);
 $request->handle_url();
-//print_r($request);
+
 
 $links = new TopLevelMenu($request);
 
@@ -32,11 +33,10 @@ $links = new TopLevelMenu($request);
  * Create a new class Divelog with info from the HandleRequest class 
  */
 $divelog = new Divelog();
+
 $divelog->set_divelog_info($request);
 $result = $divelog->get_divelog_info();
 global $_config;
-//print_r($divelog);
-//print_r($request);
 if ($divelog->get_request_type() == 1) {
     //	We have a dive number, so display the dive details
     $links->get_std_links();/*{{{*/
@@ -75,6 +75,7 @@ if ($divelog->get_request_type() == 1) {
     echo "shouldn't come here!";
     exit;
 }
+
 // Get the page footer
 //include ($_config['footer_index']);
 $t->assign('colspanlinks','5');
@@ -85,5 +86,5 @@ if($_config['embed_mode'] == TRUE){
 } else {
     $t->display('index.tpl');
 }
-
+ 
 ?>

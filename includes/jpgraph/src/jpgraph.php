@@ -3,7 +3,7 @@
 // File:	JPGRAPH.PHP
 // Description:	PHP Graph Plotting library. Base module.
 // Created: 	2001-01-08
-// Ver:		$Id: jpgraph.php 915 2007-09-26 21:05:16Z ljp $
+// Ver:		$Id: jpgraph.php 964 2008-01-19 10:04:57Z ljp $
 //
 // Copyright 2006 (c) Aditus Consulting. All rights reserved.
 //========================================================================
@@ -15,7 +15,7 @@ require_once('jpgraph_ttf.inc.php');
 require_once 'jpgraph_gradient.php';
 
 // Version info
-DEFINE('JPG_VERSION','1.22');
+DEFINE('JPG_VERSION','1.22.1');
 
 // Minimum required PHP version
 DEFINE('MIN_PHPVERSION','4.3.1');
@@ -58,6 +58,10 @@ if (!defined('TTF_DIR')) {
     } else {
 	DEFINE('TTF_DIR','/usr/X11R6/lib/X11/fonts/truetype/');
     }
+}
+
+if (!defined('MBTTF_DIR')) {
+    DEFINE('MBTTF_DIR','/usr/share/fonts/ja/TrueType/');
 }
 
 //------------------------------------------------------------------
@@ -239,7 +243,7 @@ if( INSTALL_PHP_ERR_HANDLER ) {
 //Check if there were any warnings, perhaps some wrong includes by the user
 //
 if( isset($GLOBALS['php_errormsg']) && CATCH_PHPERRMSG && 
-    !preg_match('|Deprecated|', $GLOBALS['php_errormsg'])) {
+    !preg_match('/|Deprecated|/i', $GLOBALS['php_errormsg'])) {
     JpGraphError::RaiseL(25004,$GLOBALS['php_errormsg']);
 }
 
@@ -477,7 +481,7 @@ class Graph {
     var $plotarea_color=array(255,255,255);	// Plot area color
     var $title,$subtitle,$subsubtitle; 	// Title and subtitle(s) text object
     var $axtype="linlin";		// Type of axis
-    var $xtick_factor;			// Factot to determine the maximum number of ticks depending on the plot with
+    var $xtick_factor,$ytick_factor;			// Factot to determine the maximum number of ticks depending on the plot with
     var $texts=null, $y2texts=null; 	// Text object to ge shown in the graph
     var $lines=null, $y2lines=null;
     var $bands=null, $y2bands=null;
@@ -522,6 +526,7 @@ class Graph {
 	$iXAxisLblBgFillColor = 'lightgray', $iXAxisLblBgColor = 'black',
 	$iYAxisLblBgFillColor = 'lightgray', $iYAxisLblBgColor = 'black';
     var $iTables=NULL;
+    var $legend;
 
 //---------------
 // CONSTRUCTOR
@@ -2789,7 +2794,7 @@ class Text {
     var $iScalePosY=null,$iScalePosX=null;
     var $iWordwrap=0;
     var $fcolor='white',$bcolor='black',$shadow=false;
-    var $iCSIMarea='',$iCSIMalt='',$iCSIMtarget='';
+    var $iCSIMarea='',$iCSIMalt='',$iCSIMtarget='',$iCSIMWinTarget='';
 
 //---------------
 // CONSTRUCTOR
@@ -2973,9 +2978,10 @@ class Text {
 	}
     }
 
-    function SetCSIMTarget($aTarget,$aAlt=null) {
-	$this->iCSIMtarget = $aTarget;
+    function SetCSIMTarget($aURITarget,$aAlt='',$aWinTarget='') {
+	$this->iCSIMtarget = $aURITarget;
 	$this->iCSIMalt = $aAlt;
+	$this->iCSIMWinTarget = $aWinTarget;
     }
 
     function GetCSIMareas() {
@@ -3019,8 +3025,15 @@ class Text {
 
 	// Create CSIM targets
 	$coords = $bbox[0].','.$bbox[1].','.$bbox[2].','.$bbox[3].','.$bbox[4].','.$bbox[5].','.$bbox[6].','.$bbox[7];
-	$this->iCSIMarea = "<area shape=\"poly\" coords=\"$coords\" href=\"".htmlentities($this->iCSIMtarget)."\"";
-	$this->iCSIMarea .= " alt=\"".$this->iCSIMalt."\" title=\"".$this->iCSIMalt."\" />\n";
+	$this->iCSIMarea = "<area shape=\"poly\" coords=\"$coords\" href=\"".htmlentities($this->iCSIMtarget)."\" ";
+	if( trim($this->iCSIMalt) != '' ) {
+	    $this->iCSIMarea .= " alt=\"".$this->iCSIMalt."\" "; 
+	    $this->iCSIMarea .= " title=\"".$this->iCSIMalt."\" ";
+	}
+	if( trim($this->iCSIMWinTarget) != '' ) {
+	    $this->iCSIMarea .= " target=\"".$this->iCSIMWinTarget."\" "; 
+	}
+	$this->iCSIMarea .= " />\n";
 
 	$aImg->PopColor($this->color);	
 
@@ -4145,7 +4158,6 @@ class LinearTicks extends Ticks {
 	$n=count($this->iManualTickPos);
 	$m=count($this->iManualMinTickPos);
 	$doLbl=count($this->iManualTickLabels) > 0;
-	$this->use_manualtickpos=true;
 
 	$this->maj_ticks_pos = array();
 	$this->maj_ticklabels_pos = array();
@@ -5272,8 +5284,8 @@ class Legend {
 	$this->fill_color=$aColor;
     }
 	
-    function Add($aTxt,$aColor,$aPlotmark="",$aLinestyle=0,$csimtarget="",$csimalt="") {
-	$this->txtcol[]=array($aTxt,$aColor,$aPlotmark,$aLinestyle,$csimtarget,$csimalt);
+    function Add($aTxt,$aColor,$aPlotmark="",$aLinestyle=0,$csimtarget='',$csimalt='',$csimwintarget='') {
+	$this->txtcol[]=array($aTxt,$aColor,$aPlotmark,$aLinestyle,$csimtarget,$csimalt,$csimwintarget);
     }
 
     function GetCSIMAreas() {
@@ -5492,11 +5504,16 @@ class Legend {
 		$coords = "$x1,$y1,$xe,$y1,$xe,$ye,$x1,$ye";
 		if( ! empty($p[4]) ) {
 		    $this->csimareas .= "<area shape=\"poly\" coords=\"$coords\" href=\"".htmlentities($p[4])."\"";
+
+		    if( !empty($p[6]) ) {
+			$this->csimareas .= " target=\"".$p[6]."\"";
+		    }
+
 		    if( !empty($p[5]) ) {
 			$tmp=sprintf($p[5],$p[0]);
-			$this->csimareas .= " title=\"$tmp\"";
+			$this->csimareas .= " title=\"$tmp\" alt=\"$tmp\" ";
 		    }
-		    $this->csimareas .= " alt=\"\" />\n";
+		    $this->csimareas .= " />\n";
 		}
 	    }
 	    if( $i >= $this->layout_n ) {
@@ -5631,6 +5648,7 @@ class Plot {
     var $coords=array();
     var $legend='',$hidelegend=false;
     var $csimtargets=array();	// Array of targets for CSIM
+    var $csimwintargets=array();	// Array of window targets for CSIM
     var $csimareas="";			// Resultant CSIM area tags	
     var $csimalts=null;			// ALT:s for corresponding target
     var $color="black";
@@ -5638,7 +5656,7 @@ class Plot {
     var $weight=1;	
     var $value;
     var $center=false;
-    var $legendcsimtarget='';
+    var $legendcsimtarget='',$legendcsimwintarget='';
     var $legendcsimalt='';
 //---------------
 // CONSTRUCTOR
@@ -5683,8 +5701,9 @@ class Plot {
     }
 	
     // Set href targets for CSIM	
-    function SetCSIMTargets($aTargets,$aAlts=null) {
+    function SetCSIMTargets($aTargets,$aAlts='',$aWinTargets='') {
 	$this->csimtargets=$aTargets;
+	$this->csimwintargets=$aWinTargets;
 	$this->csimalts=$aAlts;		
     }
  	
@@ -5777,9 +5796,10 @@ class Plot {
 	$this->color=$aColor;
     }
 	
-    function SetLegend($aLegend,$aCSIM="",$aCSIMAlt="") {
+    function SetLegend($aLegend,$aCSIM='',$aCSIMAlt='',$aCSIMWinTarget='') {
 	$this->legend = $aLegend;
 	$this->legendcsimtarget = $aCSIM;
+	$this->legendcsimwintarget = $aCSIMWinTarget;
 	$this->legendcsimalt = $aCSIMAlt;
     }
 
@@ -5804,7 +5824,8 @@ class Plot {
     // Framework function the chance for each plot class to set a legend
     function Legend(&$aGraph) {
 	if( $this->legend != "" )
-	    $aGraph->legend->Add($this->legend,$this->color,"",0,$this->legendcsimtarget,$this->legendcsimalt);    
+	    $aGraph->legend->Add($this->legend,$this->color,"",0,$this->legendcsimtarget,
+				 $this->legendcsimalt,$this->legendcsimwintarget);    
     }
 	
 } // Class
@@ -5823,7 +5844,8 @@ class PlotLine {
     var $color="black";
     var $direction=-1; 
     var $scaleposition;
-    var $legend='',$hidelegend=false, $legendcsimtarget='', $legendcsimalt='';
+    var $legend='',$hidelegend=false, $legendcsimtarget='', $legendcsimalt='', $legendcsimwintarget='';
+    var $iLineStyle='solid';
 
 
 //---------------
@@ -5838,9 +5860,10 @@ class PlotLine {
 //---------------
 // PUBLIC METHODS
 
-    function SetLegend($aLegend,$aCSIM="",$aCSIMAlt="") {
+    function SetLegend($aLegend,$aCSIM='',$aCSIMAlt='',$aCSIMWinTarget='') {
 	$this->legend = $aLegend;
 	$this->legendcsimtarget = $aCSIM;
+	$this->legendcsimwintarget = $aCSIMWinTarget;
 	$this->legendcsimalt = $aCSIMAlt;
     }
 
@@ -5864,6 +5887,10 @@ class PlotLine {
 	$this->weight=$aWeight;
     }
 
+    function SetLineStyle($aStyle) {
+	$this->iLineStyle = $aStyle;
+    }
+
 //---------------
 // PRIVATE METHODS
 
@@ -5878,7 +5905,7 @@ class PlotLine {
 	    $dummyPlotMark = new PlotMark();
 	    $lineStyle = 1;
 	    $aGraph->legend->Add($this->legend,$this->color,$dummyPlotMark,$lineStyle,
-				 $this->legendcsimtarget,$this->legendcsimalt);    
+				 $this->legendcsimtarget,$this->legendcsimalt,$this->legendcsimwintarget);    
 	}
     }
 
@@ -5889,20 +5916,23 @@ class PlotLine {
     function Stroke(&$aImg,&$aXScale,&$aYScale) {
 	$aImg->SetColor($this->color);
 	$aImg->SetLineWeight($this->weight);		
+	$oldStyle = $aImg->SetLineStyle($this->iLineStyle);
 	if( $this->direction == VERTICAL ) {
 	    $ymin_abs=$aYScale->Translate($aYScale->GetMinVal());
 	    $ymax_abs=$aYScale->Translate($aYScale->GetMaxVal());
 	    $xpos_abs=$aXScale->Translate($this->scaleposition);
-	    $aImg->Line($xpos_abs, $ymin_abs, $xpos_abs, $ymax_abs);
+	    $aImg->StyleLine($xpos_abs, $ymin_abs, $xpos_abs, $ymax_abs);
 	}
 	elseif( $this->direction == HORIZONTAL ) {
 	    $xmin_abs=$aXScale->Translate($aXScale->GetMinVal());
 	    $xmax_abs=$aXScale->Translate($aXScale->GetMaxVal());
 	    $ypos_abs=$aYScale->Translate($this->scaleposition);
-	    $aImg->Line($xmin_abs, $ypos_abs, $xmax_abs, $ypos_abs);
+	    $aImg->StyleLine($xmin_abs, $ypos_abs, $xmax_abs, $ypos_abs);
 	}
-	else
+	else {
 	    JpGraphError::RaiseL(25125);//(" Illegal direction for static line");
+	}
+	$aImg->SetLineStyle($oldStyle);
     }
 }
 
