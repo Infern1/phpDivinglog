@@ -35,7 +35,7 @@ $_config['language'] = "english";
  * query strings  like ?id=&user=
  * If query_string = false normal rewrite is used, if set to true query string is used
  */
-$_config['query_string'] = true;
+$_config['query_string'] = false;
 
 /**
  * change this to your website url
