@@ -46,8 +46,8 @@ $_lang['dive_log'] = "Logbuch";
 $_lang['dive_sites'] = "Tauchpl&auml;tze";
 $_lang['dive_stats'] = "Statistiken";
 $_lang['dive_equip'] = "Ausr&uuml;stung";
-$_lang['diver_choice_linktitle'] = "Show diveroverview";
-$_lang['diver_choice'] = "Diver overview";
+$_lang['diver_choice_linktitle'] = "Zeige Taucher &Uuml;bersicht";
+$_lang['diver_choice'] = "Taucher &Uuml;bersicht";
 
 $_lang['dive_log_linktitle'] = "Logbuch anzeigen";
 $_lang['dive_sites_linktitle'] = "Tauchpl&auml;tze anzeigen";
@@ -125,7 +125,7 @@ $_lang['dive_profile_avgdepth_title'] = "Durchschn. Tiefe";
 $_lang['dive_profile_ascent_legend'] = "Aufstiegs/Descent";
 $_lang['dive_profile_deco_legend'] = "Deco";
 $_lang['dive_profile_rbt_legend'] = "RBT";
-$_lang['dive_profile_work_legend'] = "Work";
+$_lang['dive_profile_work_legend'] = "Arbeit";
 
 $_lang['dive_sect_conditions'] = "Bedingungen:";
 $_lang['dive_sect_breathing'] = "Atmung:";
@@ -136,14 +136,14 @@ $_lang['dive_sect_comments'] = "Kommentare:";
 
 // Dive Log List related values
 
-$_lang['dlog_none'] = "Keine Tauchg?nge vorhanden.";
+$_lang['dlog_none'] = "Keine Tauchg&auml;nge vorhanden.";
 
 $_lang['dlog_title_number'] = "TG Nr";
 $_lang['dlog_title_divedate'] = "Datum";
 $_lang['dlog_title_depth'] = "Tiefe";
 $_lang['dlog_title_divetime'] = "Zeit";
 $_lang['dlog_title_location'] = "Ort";
-$_lang['dlog_title_place'] = "Dive site";
+$_lang['dlog_title_place'] = "Tauchplatz";
 
 $_lang['dlog_number_title'] = "Details f&uuml;r TG Nr ";
 
@@ -172,13 +172,13 @@ $_lang['site_dive_plural'] = " Tauchg&auml;nge an diesem Platz:";
 $_lang['site_sect_comments'] = "Kommentare:";
 $_lang['site_google_link'] = "Google Map anzeigen von ";
 
-$_lang['display_rows_dives'] = 'Displaying dives';
-$_lang['display_rows_divesites'] = 'Displaying divesites';
-$_lang['display_rows_equipment'] = 'Displaying equipment';
+$_lang['display_rows_dives'] = 'Zeige Tauchg&auml;nge an';
+$_lang['display_rows_divesites'] = 'Zeige Tauchpl&auml;tze an';
+$_lang['display_rows_equipment'] = 'Zeige Ausr&uuml;stung an';
 
 // Dive Site List related values
 
-$_lang['dsite_none'] = "No dive sites are currently available.";
+$_lang['dsite_none'] = "Keine Tauchpl&auml;tze vorhanden";
 
 $_lang['dsite_title_place'] = "Tauchplatz";
 $_lang['dsite_title_city'] = "Ort / Insel";
@@ -237,8 +237,8 @@ $_lang['cert_certdate'] = "Datum:";
 $_lang['cert_number'] = "Cert. #:";
 $_lang['cert_instructor'] = "Instructor:";
 $_lang['cert_inst_number'] = "Instructor #:";
-$_lang['cert_scan_front'] = "scan front";
-$_lang['cert_scan_back'] = "scan back";
+$_lang['cert_scan_front'] = "Scan Vorderseite";
+$_lang['cert_scan_back'] = "Scan R&uuml;ckseite";
 
 
 // Dive Equipment related values

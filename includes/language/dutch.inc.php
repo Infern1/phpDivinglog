@@ -189,12 +189,12 @@ $_lang['stats_depth1m']                 = "0 - 18 meter:";
 $_lang['stats_depth2m']                 = "19 - 30 meter:";
 $_lang['stats_depth3m']                 = "31 - 40 meter:";
 $_lang['stats_depth4m']                 = "41 - 55 meter:";
-$_lang['stats_depth5m']                 = "> 55 meter:";
+$_lang['stats_depth5m']                 = "&gt; 55 meter:";
 $_lang['stats_depth1i']                 = "0 - 60 voet:";
 $_lang['stats_depth2i']                 = "61 - 100 voet:";
 $_lang['stats_depth3i']                 = "101 - 130 voet:";
 $_lang['stats_depth4i']                 = "131 - 180 voet:";
-$_lang['stats_depth5i']                 = "> 180 voet:";
+$_lang['stats_depth5i']                 = "&gt; 180 voet:";
 
 // Dive Certification related value
 $_lang['cert_brevet']                   = "Certificaten:";
