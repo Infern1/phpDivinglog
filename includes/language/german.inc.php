@@ -7,8 +7,7 @@
  * @version $Rev$
  * Add. Changes:  Stefan Sypitzki - www.sypitzki.biz
  * Last Modified: $Date$
-/***************************************************************************/
-
+*/
 $_lang['yes'] = "Ja";
 $_lang['no'] = "Nein";
 
@@ -47,6 +46,8 @@ $_lang['dive_log'] = "Logbuch";
 $_lang['dive_sites'] = "Tauchpl&auml;tze";
 $_lang['dive_stats'] = "Statistiken";
 $_lang['dive_equip'] = "Ausr&uuml;stung";
+$_lang['diver_choice_linktitle'] = "Show diveroverview";
+$_lang['diver_choice'] = "Diver overview";
 
 $_lang['dive_log_linktitle'] = "Logbuch anzeigen";
 $_lang['dive_sites_linktitle'] = "Tauchpl&auml;tze anzeigen";
@@ -142,6 +143,7 @@ $_lang['dlog_title_divedate'] = "Datum";
 $_lang['dlog_title_depth'] = "Tiefe";
 $_lang['dlog_title_divetime'] = "Zeit";
 $_lang['dlog_title_location'] = "Ort";
+$_lang['dlog_title_place'] = "Dive site";
 
 $_lang['dlog_number_title'] = "Details f&uuml;r TG Nr ";
 
@@ -170,6 +172,9 @@ $_lang['site_dive_plural'] = " Tauchg&auml;nge an diesem Platz:";
 $_lang['site_sect_comments'] = "Kommentare:";
 $_lang['site_google_link'] = "Google Map anzeigen von ";
 
+$_lang['display_rows_dives'] = 'Displaying dives';
+$_lang['display_rows_divesites'] = 'Displaying divesites';
+$_lang['display_rows_equipment'] = 'Displaying equipment';
 
 // Dive Site List related values
 
