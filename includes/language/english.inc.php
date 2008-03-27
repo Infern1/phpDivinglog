@@ -221,12 +221,12 @@ $_lang['stats_depth1m'] = "0 - 18 msw:";
 $_lang['stats_depth2m'] = "19 - 30 msw:";
 $_lang['stats_depth3m'] = "31 - 40 msw:";
 $_lang['stats_depth4m'] = "41 - 55 msw:";
-$_lang['stats_depth5m'] = "> 55 msw:";
+$_lang['stats_depth5m'] = "&gt; 55 msw:";
 $_lang['stats_depth1i'] = "0 - 60 fsw:";
 $_lang['stats_depth2i'] = "61 - 100 fsw:";
 $_lang['stats_depth3i'] = "101 - 130 fsw:";
 $_lang['stats_depth4i'] = "131 - 180 fsw:";
-$_lang['stats_depth5i'] = "> 180 fsw:";
+$_lang['stats_depth5i'] = "&gt; 180 fsw:";
 
 
 // Dive Certification related value
@@ -282,8 +282,8 @@ $_lang['unit_pressure'] = "bar";
 $_lang['unit_pressure_imp'] = "psi";
 $_lang['unit_rate'] = "litres/min";
 $_lang['unit_rate_imp'] = "cu ft/min";
-$_lang['unit_temp'] = "°C";
-$_lang['unit_temp_imp'] = "°F";
+$_lang['unit_temp'] = "&deg;C";
+$_lang['unit_temp_imp'] = "&deg;F";
 $_lang['unit_volume'] = "litres";
 $_lang['unit_volume_imp'] = "cu ft";
 $_lang['unit_weight'] = "kg";

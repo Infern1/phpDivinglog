@@ -265,7 +265,16 @@ function GetProfileData($result){
         $profile = $result[0]['Profile'];
         $length = ( strlen($profile) / 12 );
 		$profileint = ($result[0]['ProfileInt'] / 60);
-		$divetime = $profileint * $length;
+        /**
+         * Divetime calculation changed to Divetime from Divelog table see:
+         * http://www.divinglog.de/phpbb/viewtopic.php?p=3094#3094
+         */
+        $divetime = $profileint * $length;
+        if(isset($result[0]['Divetime'])){
+            $divetime = $result[0]['Divetime'];
+        } else {
+            $divetime = $profileint * $length;
+        }
 		$start = 0;
 		$ydata = 0;
 		for ($i=0; $i < $length; $i++) {

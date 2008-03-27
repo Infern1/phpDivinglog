@@ -164,7 +164,7 @@ $_config['volume'] = false;
  * application name and revision number
  */
 $_config['app_name'] = "phpDivingLog";
-$_config['app_version'] = "2.0";
+$_config['app_version'] = "2.1rc2";
 
 
 /**

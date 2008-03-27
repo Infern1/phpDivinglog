@@ -1,8 +1,10 @@
 phpDivingLog v2.1 - 2008-03-28 - Rob Lensen
     * Added the option the use query strings for hosts that don't support mod_rewrite
+    * Changed SAC calculation to read the divetime from the Divelog table
     * Several UTF-8 fixes
     * Jpgraph upgrade to 1.22
     * Pear pager upgrade
+
 phpDivingLog v2.0 - 2007-12-03 - Rob Lensen
     * Changed phpdivinglog to use smarty templates
     * Added multiuser option, so one install can handle more divers
