@@ -191,10 +191,15 @@ function GetRequestVar($url, $request_file_depth=0){
         $paginas = array();
         $file = basename($url_array['path']);
         $paginas[0] = $file;
-        if(!isset($output['DG_ajaxid'])){
+        if(!isset($output['DG_ajaxid']) && !isset($output['pageID']) ){
             foreach($output as $el){
-                    $paginas[] .= $el;
+                $paginas[] .= $el;
             }
+        } elseif(isset($output['pageID'])){
+            if($_config['multiuser']){
+                $paginas[] .= $output['user_id']; 
+            }
+            $paginas[] .= "list";
         } else {
             $paginas[] .= $output['user_id'];
             $paginas[] .= $output['id'];
