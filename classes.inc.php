@@ -1303,14 +1303,13 @@ class Divelog {
             $divegear = parse_mysql_query('divegearlist.sql');
             reset_config_table_prefix();
             $num_equip = count($divegear);
-            
             for($i=0; $i<$num_equip; $i++) {
                 if($this->multiuser){
-                    $equip_link[$i] = '<a href="'.$_config['web_root'].'/equipment.php/'.$this->user_id.'/'. $divegear[$i]['ID'] .'" title="'. $divegear[$i]['Object'] .'" ';
+                    $equip_link[$i] = '<a href="'.$_config['web_root'].'/equipment.php/'.$this->user_id.'/'. $divegear[$i]['ID'] .'" title="'. $divegear[$i]['Object'] .' ';
                 } else {
-                    $equip_link[$i] = '<a href="'.$_config['web_root'].'/equipment.php/'. $divegear[$i]['ID'] .'" title="'. $divegear[$i]['Object'] .'" ';
+                    $equip_link[$i] = '<a href="'.$_config['web_root'].'/equipment.php/'. $divegear[$i]['ID'] .'" title="'. $divegear[$i]['Object'] .' ';
                 }
-                $equip_link[$i] .=  " ". $_lang['logbook_place_linktitle'] ."\">";
+                $equip_link[$i] .=   $_lang['logbook_place_linktitle'] .'">';
                 $equip_link[$i] .= $divegear[$i]['Object'] ."</a>";
             }
             $t->assign('equip_link', $equip_link);
@@ -1709,7 +1708,7 @@ class Divesite{
         } else {
             $maplink_url = "<a href=\"".$_config['web_root']."/". $_config['mappath_web'] . $result[0]['MapPath']."\"  rel=\"lightbox[others]\"\n";
             $maplink_url .=  "   title=\"". $_lang['mappic_linktitle']. $result[0]['Place'];
-            $maplink_url .=  "\">". $_lang['mappic'] ."</a></td>\n";
+            $maplink_url .=  "\">". $_lang['mappic'] ."</a>\n";
             $t->assign('maplink_url',$maplink_url);
         }/*}}}*/
     }

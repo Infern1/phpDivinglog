@@ -87,8 +87,8 @@
 	   <tr class="divesection">
 	    <td colspan="4">&nbsp;</td>
 	</tr>
-    <!-- Include links_details -->
+     </table>
+   <!-- Include links_details -->
 	{include file='links_details.tpl'}
     <!-- End include links_details -->
-    </table>
 

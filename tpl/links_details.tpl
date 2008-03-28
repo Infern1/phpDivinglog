@@ -1,5 +1,11 @@
-<table cellspacing="0" cellpadding="0" width="100%"><tr>
-        <td width="25%" align="left">
+<table cellspacing="0" cellpadding="0" width="100%">
+       <colgroup>
+   <col width="25%">
+   <col width="50%">
+   <col width="25%">
+   </colgroup>
+   <tr>
+    <td align="left">
 {*	First, Previous *}
 {if isset($divenr)}
     <div class="divelogcrumbs">
@@ -44,12 +50,12 @@
 </td>
 
 {*	Dive Log, Dive Sites, Dive Statistics *}
-<td width="50%" align="center">
+<td  align="center">
    {include file='link_base.tpl'}
 </td>
 
 {*	Next, Last *}
-<td width="25%" align="right">
+<td  align="right">
 {if isset($divenr_not_null)}
     <div class="divelogcrumbs">
     {if isset($multiuser_id)}

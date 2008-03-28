@@ -2,6 +2,12 @@
 {include file='links_details.tpl'}
 <!-- End include links_details -->
    <table class="divetable" cellspacing="0" cellpadding="0" width="100%">
+   <colgroup>
+   <col width="25%">
+   <col width="25%">
+   <col width="25%">
+   <col width="25%">
+   </colgroup>
     <tr class="divesection">
 	    <td colspan="4">&nbsp;</td>
 	</tr>
@@ -10,10 +16,10 @@
 
     {* Show main dive details *}
 	<tr class="divetitle">
-	    <td width="25%">{$logbook_divedate}</td>
-	    <td width="25%">{$logbook_entrytime}</td>
-	    <td width="25%">{$logbook_divetime}</td>
-	    <td width="25%">{$logbook_depth}</td>
+	    <td >{$logbook_divedate}</td>
+	    <td >{$logbook_entrytime}</td>
+	    <td >{$logbook_divetime}</td>
+	    <td >{$logbook_depth}</td>
 	</tr>
 
     <tr class="divecontent">
@@ -66,12 +72,11 @@
     {if isset($pics)}
 		<tr><td colspan="4" class="spacing">&nbsp;</td></tr>
         <tr><td colspan="4">
-            <center>
-		        <a href="{$picpath_web}"  rel="lightbox[others]"  title="{$divepic_linktit}">{$divepic_pt}</a>
+		        <p class="centeredImage"><a href="{$picpath_web}"  rel="lightbox[others]"  title="{$divepic_linktit}">{$divepic_pt}</a>
             {foreach from=$image_link item=foo}
                 {$foo}
             {/foreach}
-		</center>
+		</p>
 		</td></tr>
 
     {/if}
@@ -80,13 +85,13 @@
     {if isset($profile)}
 		<tr><td colspan="4" class="spacing">&nbsp;</td></tr>
         <tr><td colspan="4">
-		    <center>
+            <p class="centeredImage">
             {if isset($multiuser_id)}
 		        <img src="{$app_path}/drawprofile.php{$sep1}{$multiuser_id}{$sep2}{$get_nr}"  alt="{$dive_profile_title}" title="{$dive_profile_title}">
             {else}
                 <img src="{$app_path}/drawprofile.php{$sep2}{$get_nr}"  alt="{$dive_profile_title}" title="{$dive_profile_title}">
             {/if}
-		    </center>
+		    </p>
 		    </td>
         </tr>
     {/if}
@@ -326,7 +331,6 @@
 	<tr>
         <td colspan="4" class="spacing">&nbsp;</td>
     </tr>
-<br />
     {if isset($Comments)}
 		<tr class="divesection">
 		    <td colspan="4">{$dive_sect_comments}</td>
@@ -337,10 +341,9 @@
         <tr class="divesection">
 	    <td colspan="4">&nbsp;</td>
 	</tr>
-
    {/if}
+   </table>
    {* Show the links again *}
 	<!-- Include links_details -->
 {include file='links_details.tpl'}
 <!-- End include links_details -->
-    </table>
