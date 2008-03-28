@@ -33,7 +33,7 @@
  * @author    Richard Heyes <richard@phpguru.org>
  * @copyright 2003-2007 Lorenzo Alberton, Richard Heyes
  * @license   http://www.debian.org/misc/bsd.license  BSD License (3 Clause)
- * @version   CVS: $Id: Common.php,v 1.73 2008/01/06 14:10:38 quipo Exp $
+ * @version   CVS: $Id: Common.php,v 1.78 2008/03/26 22:23:49 quipo Exp $
  * @link      http://pear.php.net/package/Pager
  */
 
@@ -244,10 +244,29 @@ class Pager_Common
     var $_prevImg     = '&lt;&lt; Back';
 
     /**
+     * image/text to use as "prev" link when no prev link is needed  (e.g. on the first page)
+     * NULL deactivates it
+     *
+     * @var string
+     * @access private
+     */
+    var $_prevImgEmpty = null;
+
+    /**
      * @var string image/text to use as "next" link
      * @access private
      */
     var $_nextImg     = 'Next &gt;&gt;';
+
+    /**
+     * image/text to use as "next" link when
+     * no next link is needed (e.g. on the last page)
+     * NULL deactivates it
+     *
+     * @var string
+     * @access private
+     */
+    var $_nextImgEmpty = null;
 
     /**
      * @var string link separator
@@ -454,7 +473,9 @@ class Pager_Common
         'altLast',
         'altPage',
         'prevImg',
+        'prevImgEmpty',
         'nextImg',
+        'nextImgEmpty',
         'expanded',
         'accesskey',
         'attributes',
@@ -818,7 +839,7 @@ class Pager_Common
                 $onclick = str_replace('%d', $this->_linkData[$this->_urlVar], $this->_onclick);
             }
             return sprintf('<a href="%s"%s%s%s%s title="%s">%s</a>',
-                           htmlentities($this->_url . $href),
+                           htmlentities($this->_url . $href, ENT_COMPAT, 'UTF-8'),
                            empty($this->_classString) ? '' : ' '.$this->_classString,
                            empty($this->_attributes)  ? '' : ' '.$this->_attributes,
                            empty($this->_accesskey)   ? '' : ' accesskey="'.$this->_linkData[$this->_urlVar].'"',
@@ -827,8 +848,12 @@ class Pager_Common
                            $linkText
             );
         } elseif ($this->_httpMethod == 'POST') {
+            $href = $this->_url;
+            if (!empty($_GET)) {
+                $href .= '?' . $this->_http_build_query_wrapper($_GET);
+            }
             return sprintf("<a href='javascript:void(0)' onclick='%s'%s%s%s title='%s'>%s</a>",
-                           $this->_generateFormOnClick($this->_url, $this->_linkData),
+                           $this->_generateFormOnClick($href, $this->_linkData),
                            empty($this->_classString) ? '' : ' '.$this->_classString,
                            empty($this->_attributes)  ? '' : ' '.$this->_attributes,
                            empty($this->_accesskey)   ? '' : ' accesskey=\''.$this->_linkData[$this->_urlVar].'\'',
@@ -883,7 +908,7 @@ class Pager_Common
         }
 
         // We /shouldn't/ need to escape the URL ...
-        $str .= sprintf('form.action = "%s"; ', htmlentities($formAction));
+        $str .= sprintf('form.action = "%s"; ', htmlentities($formAction, ENT_COMPAT, 'UTF-8'));
         $str .= sprintf('form.method = "%s"; ', $this->_httpMethod);
         foreach ($data as $key => $val) {
             $str .= $this->_generateFormOnClickHelper($val, $key);
@@ -971,7 +996,7 @@ class Pager_Common
             $this->_recursive_urldecode($this->_extraVars);
             $qs = array_merge($qs, $this->_extraVars);
         }
-        if (count($qs) && get_magic_quotes_gpc()) {
+        if (count($qs) && function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) {
             $this->_recursive_stripslashes($qs);
         }
         return $qs;
@@ -1049,6 +1074,9 @@ class Pager_Common
             $this->_linkData[$this->_urlVar] = $this->getPreviousPageID();
             $back = $this->_renderLink($this->_altPrev, $this->_prevImg)
                   . $this->_spacesBefore . $this->_spacesAfter;
+        } else if ($this->_prevImgEmpty !== null) {
+            $back = $this->_prevImgEmpty
+                  . $this->_spacesBefore . $this->_spacesAfter;
         }
         return $back;
     }
@@ -1097,6 +1125,10 @@ class Pager_Common
             $this->_linkData[$this->_urlVar] = $this->getNextPageID();
             $next = $this->_spacesAfter
                   . $this->_renderLink($this->_altNext, $this->_nextImg)
+                  . $this->_spacesBefore . $this->_spacesAfter;
+        } else if ($this->_nextImgEmpty !== null) {
+            $next = $this->_spacesAfter
+                  . $this->_nextImgEmpty
                   . $this->_spacesBefore . $this->_spacesAfter;
         }
         return $next;
@@ -1233,7 +1265,7 @@ class Pager_Common
         } else {
             $href = str_replace('%d', $this->_linkData[$this->_urlVar], $this->_fileName);
         }
-        return htmlentities($this->_url . $href);
+        return htmlentities($this->_url . $href, ENT_COMPAT, 'UTF-8');
     }
 
     // }}}
@@ -1391,7 +1423,7 @@ class Pager_Common
             }
             // If the value is an array, recursively parse it
             if (is_array($val)) {
-                array_push($tmp, $this->__http_build_query($val, htmlentities($key)));
+                array_push($tmp, $this->__http_build_query($val, urlencode($key)));
                 continue;
             }
         }
@@ -1423,7 +1455,7 @@ class Pager_Common
                 array_push($tmp, $this->__http_build_query($value, $name.'%5B'.$key.'%5D'));
             } elseif (is_scalar($value)) {
                 //array_push($tmp, sprintf('%s[%s]=%s', $name, htmlentities($key), htmlentities($value)));
-                array_push($tmp, $name.'%5B'.htmlentities($key).'%5D='.htmlentities($value));
+                array_push($tmp, $name.'%5B'.urlencode($key).'%5D='.urlencode($value));
             } elseif (is_object($value)) {
                 //array_push($tmp, $this->__http_build_query(get_object_vars($value), sprintf('%s[%s]', $name, $key)));
                 array_push($tmp, $this->__http_build_query(get_object_vars($value), $name.'%5B'.$key.'%5D'));

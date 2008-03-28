@@ -15,7 +15,11 @@
 */
 
 require_once './config.inc.php';
-require_once 'includes/jpgraph/src/jpgraph_pie.php';
+if(version_compare("5.1", PHP_VERSION, "<")){
+    require_once 'includes/jpgraph2/src/jpgraph_pie.php';
+} else {
+    require_once 'includes/jpgraph/src/jpgraph_pie.php';
+}
 
 global $_config, $_lang;
 $request = new HandleRequest();
