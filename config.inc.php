@@ -238,14 +238,20 @@ ini_set('include_path', get_include_path() . PATH_SEPARATOR . $_config['pear_pat
 
 require_once (ABSPATH_DIVELOG . '/includes/misc.inc.php');
 require_once 'phpmydatagrid.class.php';
-require_once 'imageTransform.php';
 require_once 'smarty/Smarty.class.php';
 require_once 'classes.inc.php';
 require_once 'PEAR.php';
 require_once 'Pager_Wrapper.php';
+if(version_compare("5.1", PHP_VERSION, "<")){
+    require_once 'includes/jpgraph2/src/jpgraph.php';
+    require_once 'includes/jpgraph2/src/jpgraph_line.php';
+} else {
+   require_once 'includes/jpgraph/src/jpgraph.php';
+   require_once 'includes/jpgraph/src/jpgraph_line.php';
+}
+
+require_once 'Pager_Wrapper.php';
 require_once 'MDB2.php';
-require_once 'includes/jpgraph/src/jpgraph.php';
-require_once 'includes/jpgraph/src/jpgraph_line.php';
 
 
 
