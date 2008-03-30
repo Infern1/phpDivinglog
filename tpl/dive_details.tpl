@@ -80,6 +80,26 @@
 		</td></tr>
 
     {/if}
+    {if isset($pics2)}
+	<div>
+    	<tr><td colspan="4" class="spacing">&nbsp;</td></tr>
+        <tr><td colspan="4">
+		        <p class="centeredImage">
+             {foreach from=$image_link key=id item=i name=images}
+             <a id="thumb{$id}" href="{$web_root}/{$i.img_url}" class="highslide" onclick="return hs.expand(this)">
+                    <img src="{$web_root}/imagesize.php?w=100&img={$i.img_url}" alt="Highslide JS" title="{$i.img_title}" height="80" width="120" /></a>
+            {/foreach}
+		</p>
+		</td></tr>
+<div id="controlbar" class="highslide-overlay controlbar">
+    <a href="#" class="previous" onclick="return hs.previous(this)" title="Previous (left arrow key)"></a>
+    <a href="#" class="next" onclick="return hs.next(this)" title="Next (right arrow key)"></a>
+    <a href="#" class="highslide-move" onclick="return false" title="Click and drag to move"></a>
+    <a href="#" class="close" onclick="return hs.close(this)" title="Close"></a>
+
+</div>
+</div>
+    {/if}
 
     {* Dive profile *}
     {if isset($profile)}

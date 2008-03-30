@@ -42,7 +42,7 @@
 // | Author: Lukas Smith <smith@pooteeweet.org>                           |
 // +----------------------------------------------------------------------+
 //
-// $Id: Common.php,v 1.126 2007/03/28 16:49:43 quipo Exp $
+// $Id: Common.php,v 1.137 2008/02/17 18:53:40 afz Exp $
 
 require_once 'MDB2/LOB.php';
 
@@ -54,6 +54,9 @@ require_once 'MDB2/LOB.php';
 
 /**
  * MDB2_Driver_Common: Base class that is extended by each MDB2 driver
+ *
+ * To load this module in the MDB2 object:
+ * $mdb->loadModule('Datatype');
  *
  * @package MDB2
  * @category Database
@@ -494,6 +497,7 @@ class MDB2_Driver_Datatype_Common extends MDB2_Module_Common
         $charset = empty($field['charset']) ? '' :
             ' '.$this->_getCharsetFieldDeclaration($field['charset']);
 
+        $notnull = empty($field['notnull']) ? '' : ' NOT NULL';
         $default = '';
         if (array_key_exists('default', $field)) {
             if ($field['default'] === '') {
@@ -501,27 +505,20 @@ class MDB2_Driver_Datatype_Common extends MDB2_Module_Common
                 if (PEAR::isError($db)) {
                     return $db;
                 }
-                if (empty($field['notnull'])) {
-                    $field['default'] = null;
-                } else {
-                    $valid_default_values = $this->getValidTypes();
-                    $field['default'] = $valid_default_values[$field['type']];
-                }
-                if ($field['default'] === ''
-                    && ($db->options['portability'] & MDB2_PORTABILITY_EMPTY_TO_NULL)
-                ) {
+                $valid_default_values = $this->getValidTypes();
+                $field['default'] = $valid_default_values[$field['type']];
+                if ($field['default'] === ''&& ($db->options['portability'] & MDB2_PORTABILITY_EMPTY_TO_NULL)) {
                     $field['default'] = ' ';
                 }
             }
-            $default = ' DEFAULT '.$this->quote($field['default'], $field['type']);
-        } elseif (empty($field['notnull'])) {
-            $default = ' DEFAULT NULL';
+            if (!is_null($field['default'])) {
+                $default = ' DEFAULT ' . $this->quote($field['default'], $field['type']);
+            }
         }
 
-        $notnull = empty($field['notnull']) ? '' : ' NOT NULL';
-        
         $collation = empty($field['collation']) ? '' :
             ' '.$this->_getCollationFieldDeclaration($field['collation']);
+
         return $charset.$default.$notnull.$collation;
     }
 
@@ -1487,7 +1484,7 @@ class MDB2_Driver_Datatype_Common extends MDB2_Module_Common
     {
         $value = (string)$value;
         $value = preg_replace('/[^\d\.,\-+eE]/', '', $value);
-        if (preg_match('/[^.0-9]/', $value)) {
+        if (preg_match('/[^\.\d]/', $value)) {
             if (strpos($value, ',')) {
                 // 1000,00
                 if (!strpos($value, '.')) {
@@ -1673,11 +1670,6 @@ class MDB2_Driver_Datatype_Common extends MDB2_Module_Common
     /**
      * build a pattern matching string
      *
-     * EXPERIMENTAL
-     *
-     * WARNING: this function is experimental and may change signature at
-     * any time until labelled as non-experimental
-     *
      * @access public
      *
      * @param array $pattern even keys are strings, odd are patterns (% and _)
@@ -1741,11 +1733,6 @@ class MDB2_Driver_Datatype_Common extends MDB2_Module_Common
 
     /**
      * build string to define pattern escape character
-     *
-     * EXPERIMENTAL
-     *
-     * WARNING: this function is experimental and may change signature at
-     * any time until labelled as non-experimental
      *
      * @access public
      *

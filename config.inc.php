@@ -107,6 +107,11 @@ $_config['user_show_medical'] = true;
 */
 
 /**
+ * Enable thumbs  
+ */
+$_config['divepics_preview'] = true;
+
+/**
  * DIVE PROFILE SETTINGS
  * name of the graphic image to use as the dive profile background
  * image size is expected to be 550 x 400
@@ -233,6 +238,7 @@ ini_set('include_path', get_include_path() . PATH_SEPARATOR . $_config['pear_pat
 
 require_once (ABSPATH_DIVELOG . '/includes/misc.inc.php');
 require_once 'phpmydatagrid.class.php';
+require_once 'imageTransform.php';
 require_once 'smarty/Smarty.class.php';
 require_once 'classes.inc.php';
 require_once 'PEAR.php';

@@ -42,11 +42,14 @@
 // | Author: Lukas Smith <smith@pooteeweet.org>                           |
 // +----------------------------------------------------------------------+
 //
-// $Id: Common.php,v 1.1 2006/06/18 21:59:05 lsmith Exp $
+// $Id: Common.php,v 1.2 2007/09/09 13:47:36 quipo Exp $
 //
 
 /**
  * Base class for the natuve modules that is extended by each MDB2 driver
+ *
+ * To load this module in the MDB2 object:
+ * $mdb->loadModule('Native');
  *
  * @package MDB2
  * @category Database

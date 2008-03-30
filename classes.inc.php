@@ -1040,25 +1040,38 @@ class Divelog {
         $pics = count($divepics);
 
         if ($pics != 0) {
-            $t->assign('pics' , '1');
-            $t->assign('picpath_web', $_config['web_root']."/".$_config['picpath_web'] . $divepics[0]['Path']);
-            $t->assign('divepic_linktit', $_lang['divepic_linktitle_pt1']. "1". $_lang['divepic_linktitle_pt2']. $pics. $_lang['divepic_linktitle_pt3']. $result[0]['Number']);
-            $divepic_pt =  $_lang['divepic_pt1']. $pics;
-            if ($pics == 1) {
-                $divepic_pt .= $_lang['divepic_pt2s'];
+            if(isset($_config['divepics_preview'])){
+                $t->assign('pics2' , '1');
+                $image_link = array();
+//                print_r($divepics);
+                for($i=0; $i<$pics; $i++) {
+                    $img_url =  $_config['picpath_web'] . $divepics[$i]['Path'];
+                    $img_title = $_lang['divepic_linktitle_pt1']. ($i + 1). $_lang['divepic_linktitle_pt2']. $pics;
+                    $img_title .= $_lang['divepic_linktitle_pt3']. $result[0]['Number'] ;
+                    $image_link[$i] =  array('img_url' => $img_url, 'img_title' => $img_title);
+                }
+                $t->assign('image_link', $image_link);
             } else {
-                $divepic_pt .= $_lang['divepic_pt2p'];
+                $t->assign('pics' , '1');
+                $t->assign('picpath_web', $_config['web_root']."/".$_config['picpath_web'] . $divepics[0]['Path']);
+                $t->assign('divepic_linktit', $_lang['divepic_linktitle_pt1']. "1". $_lang['divepic_linktitle_pt2']. $pics. $_lang['divepic_linktitle_pt3']. $result[0]['Number']);
+                $divepic_pt =  $_lang['divepic_pt1']. $pics;
+                if ($pics == 1) {
+                    $divepic_pt .= $_lang['divepic_pt2s'];
+                } else {
+                    $divepic_pt .= $_lang['divepic_pt2p'];
+                }
+                $divepic_pt .= $_lang['divepic_pt3'];
+                $t->assign('divepic_pt', $divepic_pt);
+                $image_link = array();
+                for($i=1; $i<$pics; $i++) {
+                    $image_link[$i-1] =  "<a href=\"". $_config['web_root']."/". $_config['picpath_web'] . $divepics[$i]['Path'];
+                    $image_link[$i-1] .= "\" rel=\"lightbox[others]\"\n";
+                    $image_link[$i-1] .= "   title=\"". $_lang['divepic_linktitle_pt1']. ($i + 1). $_lang['divepic_linktitle_pt2']. $pics;
+                    $image_link[$i-1] .= $_lang['divepic_linktitle_pt3']. $result[0]['Number'] ."\"></a>\n";
+                }
+                $t->assign('image_link', $image_link);
             }
-            $divepic_pt .= $_lang['divepic_pt3'];
-            $t->assign('divepic_pt', $divepic_pt);
-            $image_link = array();
-            for($i=1; $i<$pics; $i++) {
-                $image_link[$i-1] =  "<a href=\"". $_config['web_root']."/". $_config['picpath_web'] . $divepics[$i]['Path'];
-                $image_link[$i-1] .= "\" rel=\"lightbox[others]\"\n";
-                $image_link[$i-1] .= "   title=\"". $_lang['divepic_linktitle_pt1']. ($i + 1). $_lang['divepic_linktitle_pt2']. $pics;
-                $image_link[$i-1] .= $_lang['divepic_linktitle_pt3']. $result[0]['Number'] ."\"></a>\n";
-            }
-            $t->assign('image_link', $image_link);
         }
 /*}}}*/
     }
