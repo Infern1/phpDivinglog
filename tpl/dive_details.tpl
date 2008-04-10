@@ -86,8 +86,13 @@
         <tr><td colspan="4">
 		        <p class="centeredImage">
              {foreach from=$image_link key=id item=i name=images}
+                {if isset($pics_resized)}
+             <a id="thumb{$id}" href="{$web_root}/{$i.img_url}" class="highslide" onclick="return hs.expand(this)">
+                    <img src="{$web_root}/{$i.img_thumb_url}" alt="Highslide JS" title="{$i.img_title}" height="80" width="120" /></a>
+                {else}
              <a id="thumb{$id}" href="{$web_root}/{$i.img_url}" class="highslide" onclick="return hs.expand(this)">
                     <img src="{$web_root}/imagesize.php?w=100&img={$i.img_url}" alt="Highslide JS" title="{$i.img_title}" height="80" width="120" /></a>
+                {/if}
             {/foreach}
 		</p>
 		</td></tr>

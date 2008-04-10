@@ -50,6 +50,9 @@ class HandleRequest {
      * 1 = dives ; 
      * 2 = divesite 
      * 3 = dive equipment
+     * 4 = dive statistics
+     * 5 = dive profile or dive piechart
+     * 6 = dive gallery
      *
      * @var mixed
      * @access public
@@ -181,7 +184,10 @@ class HandleRequest {
                     case 'divestats.php':
                         $this->request_type = 4;
                         break;
-                    case 'drawprofile.php':
+                    case 'divegallery.php':
+                        $this->request_type = 6;
+                        break;
+                     case 'drawprofile.php':
                         $this->request_type = 5;
                         if($this->view_request == 1)
                             $this->dive_nr = check_number($split_request[2]);
@@ -241,6 +247,10 @@ class HandleRequest {
                     case 'divestats.php':
                         $this->user_id = $id;
                         $this->request_type = 4;
+                        break;
+                    case 'divegallery.php':
+                        $this->user_id = $id;
+                        $this->request_type = 6;
                         break;
                     case 'drawprofile.php':
                         $this->dive_nr = $id;
@@ -1033,26 +1043,23 @@ class Divelog {
     function set_dive_pictures(){
         global $_config,$t, $_lang, $globals;/*{{{*/
         $result =  $this->result; 
-        $globals['logid'] = $result[0]['ID'];
-        set_config_table_prefix($this->table_prefix);
-        $divepics = parse_mysql_query('divepics.sql');
-        reset_config_table_prefix();
+        $pic_class = new DivePictures;
+        $pic_class->set_divegallery_info_direct($this->user_id);
+        $pic_class->get_divegallery_info($result[0]['ID']);
+        $divepics = $pic_class->get_image_link();
         $pics = count($divepics);
 
         if ($pics != 0) {
             if(isset($_config['divepics_preview'])){
                 $t->assign('pics2' , '1');
-                $image_link = array();
-//                print_r($divepics);
-                for($i=0; $i<$pics; $i++) {
-                    $img_url =  $_config['picpath_web'] . $divepics[$i]['Path'];
-                    $img_title = $_lang['divepic_linktitle_pt1']. ($i + 1). $_lang['divepic_linktitle_pt2']. $pics;
-                    $img_title .= $_lang['divepic_linktitle_pt3']. $result[0]['Number'] ;
-                    $image_link[$i] =  array('img_url' => $img_url, 'img_title' => $img_title);
-                }
-                $t->assign('image_link', $image_link);
+                $t->assign('image_link', $divepics);
             } else {
                 $t->assign('pics' , '1');
+                set_config_table_prefix($this->table_prefix);
+                $globals['logid'] = $result[0]['ID'];
+                $divepics = parse_mysql_query('divepics.sql');
+                reset_config_table_prefix();
+                
                 $t->assign('picpath_web', $_config['web_root']."/".$_config['picpath_web'] . $divepics[0]['Path']);
                 $t->assign('divepic_linktit', $_lang['divepic_linktitle_pt1']. "1". $_lang['divepic_linktitle_pt2']. $pics. $_lang['divepic_linktitle_pt3']. $result[0]['Number']);
                 $divepic_pt =  $_lang['divepic_pt1']. $pics;
@@ -2707,6 +2714,188 @@ class Divestats{
             $t->assign('cells',$rowdata);
         }/*}}}*/
     }/*}}}*/
+}
+
+/**
+ * DivePictures 
+ * 
+ * @package phpdivinglog
+ * @version $Rev$
+ * @copyright Copyright (C) 2008 Rob Lensen. All rights reserved.
+ * @author Rob Lensen <rob@bsdfreaks.nl> 
+ * @license LGPL v3 http://www.gnu.org/licenses/lgpl-3.0.txt
+ */
+class DivePictures{
+
+    var $multiuser;
+    var $user_id;
+    var $table_prefix;
+    var $username;
+    var $request_type;
+    var $image_link;
+
+    /**
+     * DivePictures 
+     * 
+     * @access public
+     * @return void
+     */
+    function DivePictures(){
+        global $_config;
+        $this->multiuser = $_config['multiuser'];
+
+    }
+    
+    /**
+     * set_divegallery_info 
+     * 
+     * @param mixed $request 
+     * @access public
+     * @return void
+     */
+    function set_divegallery_info($request){
+        //We need to extract the info from the request/*{{{*/
+        if(!$request->diver_choice){
+            if($this->multiuser){
+                $this->user_id = $request->get_user_id();
+                $user = new User();
+                $user->set_user_id($this->user_id);
+                $this->table_prefix = $user->get_table_prefix();
+                $this->username = $user->get_username();
+            } else {
+                $this->user_id = $request->get_user_id();
+                $user = new User();
+                //$user->set_user_id($this->user_id);
+                $this->table_prefix = $user->get_table_prefix();
+                $this->username = $user->get_username();
+            }
+        } else {
+            $this->request_type = 3;
+        }/*}}}*/
+    }
+    
+    /**
+     * set_divegallery_info_direct 
+     * 
+     * @param mixed $user_id 
+     * @param mixed $table_prefix 
+     * @access public
+     * @return void
+     */
+    function set_divegallery_info_direct($user_id){
+        if($this->multiuser){
+            $this->user_id = $user_id;
+            $user = new User();
+            $user->set_user_id($this->user_id);
+            $this->table_prefix = $user->get_table_prefix();
+            $this->username = $user->get_username();
+        } else {
+            $this->user_id = $user_id;
+            $user = new User();
+            $this->table_prefix = $user->get_table_prefix();
+            $this->username = $user->get_username();
+        }
+    }
+    
+    /**
+     * get_divegallery_info 
+     * 
+     * @param int $dive_id 
+     * @access public
+     * @return void
+     */
+    function get_divegallery_info($dive_id = 0){
+        global $globals, $_config,$_lang,$t;
+        if(($this->multiuser && !empty($this->user_id)) || !$this->multiuser ){
+            set_config_table_prefix($this->table_prefix);
+            if($dive_id == 0){
+                $divepics = parse_mysql_query('divepicsall.sql');
+            } else {
+                $globals['logid'] = $dive_id;
+                $divepics = parse_mysql_query('divepics.sql');
+            }
+            $pics = count($divepics);
+
+            if ($pics != 0) {
+                $this->image_link = array();
+                for($i=0; $i<$pics; $i++) {
+                    $img_url =  $_config['picpath_web'] . $divepics[$i]['Path'];
+                    if(file_exists($img_url)){
+                        $img_thumb_url = $_config['picpath_web'] .'thumb_' . $divepics[$i]['Path'];
+                        $img_title = $_lang['divepic_linktitle_pt1']. ($i + 1). $_lang['divepic_linktitle_pt2']. $pics;
+                        $img_title .= $_lang['divepic_linktitle_pt3']. $result[0]['Number'] ;
+                        $this->image_link[] =  array(
+                                'img_url' => $img_url, 
+                                'img_thumb_url' => $img_thumb_url , 
+                                'img_title' => $img_title
+                                );
+                    }
+                }
+
+                if(isset($_config['enable_resize'])){
+                    $t->assign('pics_resized','1');
+                    /**
+                     * Check if the images are correctly sized 
+                     */
+                   for($i=0 ; $i < count($this->image_link) ; $i++){
+                        /**
+                         *  Check normal image
+                         */
+                        if(filesize($this->image_link[$i][img_url]) < 512000  ){
+                            $size =getimagesize($this->image_link[$i][img_url]);
+                            if($size[0] != $_config['pic-width']){
+                                resize_image($this->image_link[$i][img_url]);
+                            }
+                            /**
+                             * Check thumbs 
+                             */
+                            if(!file_exists($this->image_link[$i][img_thumb_url])){
+                                make_thumb($this->image_link[$i][img_url],$this->image_link[$i][img_thumb_url]);
+
+                            } else {
+                                $size_thumb = getimagesize($this->image_link[$i][img_thumb_url]);
+                                if($size_thumb[0] != $_config['thumb-width'] && $size_thumb[1] != $_config['thumb-width']){
+                                    //resize it
+                                    make_thumb($this->image_link[$i][img_url],$this->image_link[$i][img_thumb_url]);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            reset_config_table_prefix();
+        } else {
+            /**
+             * if the request type is not already set(by divers choice), set it to overview  
+             */
+            if($this->request_type != 3){
+                $this->request_type = 0;
+            }
+        }
+
+    }
+
+    /**
+     * get_image_link 
+     * 
+     * @access public
+     * @return void
+     */
+    function get_image_link(){
+        return $this->image_link;
+    }
+
+    /**
+     * set_all_dive_pictures 
+     * 
+     * @access public
+     * @return void
+     */
+    function set_all_dive_pictures(){
+        global $_config,$t, $_lang, $globals;
+        $t->assign('pics2' , '1');
+        $t->assign('image_link', $this->image_link);
+    }
 }
 
 /**

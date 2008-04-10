@@ -1,9 +1,9 @@
 * {
     font-family: Verdana, Helvetica;
-    font-size: 10pt;
+/*    font-size: 10pt;*/
 }
 .highslide {
-    cursor: url(highslide/graphics/zoomin.cur), pointer;
+/*    cursor: url(/divelog_dev/highslide/graphics/zoomin.cur), pointer;*/
     outline: none;
 }
 .highslide-active-anchor img {
@@ -46,7 +46,7 @@
     background-color: white;
     
     padding-left: 22px;
-    background-image: url(highslide/graphics/loader.white.gif);
+ /*   background-image: url(/divelog_dev/highslide/graphics/loader.white.gif);*/
     background-repeat: no-repeat;
     background-position: 3px 1px;
 }
@@ -72,7 +72,7 @@ a.highslide-credits:hover i {
 }
 
 a.highslide-full-expand {
-    background: url(highslide/graphics/fullexpand.gif) no-repeat;
+  /*  background: url(/divelog_dev/highslide/graphics/fullexpand.gif) no-repeat;*/
     display: block;
     margin: 0 10px 10px 0;
     width: 34px;
@@ -82,7 +82,7 @@ a.highslide-full-expand {
 
 /* Controlbar example */
 .controlbar {   
-    background: url(highslide/graphics/controlbar4.gif);
+/*    background: url(/divelog_dev/highslide/graphics/controlbar4.gif);*/
     width: 167px;
     height: 34px;
 }
@@ -93,7 +93,7 @@ a.highslide-full-expand {
     height: 27px;
 }
 .controlbar a:hover {
-    background-image: url(highslide/graphics/controlbar4-hover.gif);
+/*    background-image: url(/divelog_dev/highslide/graphics/controlbar4-hover.gif);*/
 }
 .controlbar .previous {
     width: 50px;

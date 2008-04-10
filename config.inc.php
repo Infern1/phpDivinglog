@@ -112,6 +112,25 @@ $_config['user_show_medical'] = true;
 $_config['divepics_preview'] = true;
 
 /**
+ * Enable resizing of the uploaded pictures by GD
+ * If set to no, full size images will be shown and the
+ * thumbnails will be generated each time (cpu usage)
+ */
+$_config['enable_resize'] = true;
+
+/**
+ * Set the width of the thumbnails, which are created automaticly 
+ * Width is set in px
+ */
+$_config['thumb-width'] = 100; 
+
+/**
+ * Set the width of the pictures in the gallery 
+ * Width is set in px
+ */
+$_config['pic-width'] = 800;
+
+/**
  * DIVE PROFILE SETTINGS
  * name of the graphic image to use as the dive profile background
  * image size is expected to be 550 x 400
@@ -169,7 +188,7 @@ $_config['volume'] = false;
  * application name and revision number
  */
 $_config['app_name'] = "phpDivingLog";
-$_config['app_version'] = "2.1rc2";
+$_config['app_version'] = "2.2";
 
 
 /**
@@ -185,7 +204,7 @@ $_config['app_root']        = ABSPATH_DIVELOG;
 /**
  * ABS path to your pear installation
  */
-$_config['pear_path']       = $_config['app_root'] . DIRECTORY_SEPARATOR . 'pear'. DIRECTORY_SEPARATOR ;  
+$_config['pear_path']       = $_config['app_root'] .  'pear';  
 /**
  * logbook pics
  */
@@ -233,15 +252,16 @@ if ( ! defined( "PATH_SEPARATOR" ) ) {
       define( "PATH_SEPARATOR", ";" );
   else define( "PATH_SEPARATOR", ":" );
 }
-ini_set('include_path', get_include_path() . PATH_SEPARATOR . $_config['pear_path'] . PATH_SEPARATOR . $_config['app_root'].DIRECTORY_SEPARATOR."include". PATH_SEPARATOR . $_config['app_root']);
+ini_set('include_path', get_include_path() . PATH_SEPARATOR . $_config['pear_path'] . PATH_SEPARATOR . $_config['app_root']."include". PATH_SEPARATOR . $_config['app_root']);
 
 
-require_once (ABSPATH_DIVELOG . '/includes/misc.inc.php');
+require_once (ABSPATH_DIVELOG . 'includes/misc.inc.php');
+require_once (ABSPATH_DIVELOG . 'includes/image-resize.php');
 require_once 'phpmydatagrid.class.php';
 require_once 'smarty/Smarty.class.php';
 require_once 'classes.inc.php';
 require_once 'PEAR.php';
-require_once 'Pager_Wrapper.php';
+
 if(version_compare("5.1", PHP_VERSION, "<")){
     require_once 'includes/jpgraph2/src/jpgraph.php';
     require_once 'includes/jpgraph2/src/jpgraph_line.php';
@@ -252,8 +272,6 @@ if(version_compare("5.1", PHP_VERSION, "<")){
 
 require_once 'Pager_Wrapper.php';
 require_once 'MDB2.php';
-
-
 
 
 /**

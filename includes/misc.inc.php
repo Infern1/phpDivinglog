@@ -42,19 +42,18 @@ function htmlentities_array($arr = array())
 if(!isset($_config['language'])) {
 	$_config['language'] = "english"; // if not set, get the english language file.
 }
-
 // first get the default english values
 // so that we'll have values for anything not in the specified language file
 if ($_config['language'] != "english") {
-	if (!file_exists($_config['app_root'] .'/includes/language/english.inc.php')) {
+	if (!file_exists($_config['app_root'] .'includes/language/english.inc.php')) {
 		print "<p>Language file includes/language/english.inc.php not found.</p>";
 		exit;
 	}
-	include_once ($_config['app_root'] .  '/includes/language/english.inc.php');
+	include_once ($_config['app_root'] .  'includes/language/english.inc.php');
 }
 
 // include the specified language file
-$language_filename =  $_config['app_root'] . "/includes/language/". $_config['language'] .".inc.php";
+$language_filename =  $_config['app_root'] . "includes/language/". $_config['language'] .".inc.php";
 if (!file_exists($language_filename)) {
    print "<p>Language file '". $language_filename ."' not found.</p>";
    exit;
@@ -461,6 +460,38 @@ function set_config_table_prefix($prefix){
 function reset_config_table_prefix(){
     global $_config;
     unset($_config['table_prefix']);
+}
+
+/**
+ * resize_image 
+ * 
+ * @param mixed $img 
+ * @access public
+ * @return void
+ */
+function resize_image($img){
+    global $_config;
+    $obj = new Thumbnail($img); 
+    $obj->size_width($_config['pic-width']);
+    $obj->process();
+    $obj->save($img);
+}
+
+/**
+ * make_thumb 
+ * 
+ * @param mixed $img 
+ * @param mixed $thumb 
+ * @access public
+ * @return void
+ */
+function make_thumb($img,$thumb){
+    global $_config;
+    $obj = new Thumbnail($img);
+    $obj->size_auto($_config['thumb-width']); 
+    $obj->process();
+    $obj->save($thumb);
+//    echo "Error". $obj->error_msg ;
 }
 
 /**
