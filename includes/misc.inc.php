@@ -485,12 +485,16 @@ function resize_image($img){
  * @access public
  * @return void
  */
-function make_thumb($img,$thumb){
-    global $_config;
-    $obj = new Thumbnail($img);
-    $obj->size_auto($_config['thumb-width']); 
-    $obj->process();
-    $obj->save($thumb);
+function make_thumb($img,$thumb, $i = 0 ){
+    global $_config,$t;
+        $obj = new Thumbnail($img);
+        $obj->size_auto($_config['thumb-width']); 
+        $obj->process();
+       $t->assign('resize',1);
+       $t->assign('img',$img);
+         set_time_limit(30);
+        $obj->save($thumb);
+    flush();
 //    echo "Error". $obj->error_msg ;
 }
 

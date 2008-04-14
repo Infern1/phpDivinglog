@@ -61,8 +61,9 @@ hs.captionEval = 'this.thumb.title';
 {/literal}
 {$grid_header}
 
+
+
 </head>
 
   <body> 
-
 

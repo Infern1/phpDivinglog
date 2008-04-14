@@ -53,6 +53,7 @@ class HandleRequest {
      * 4 = dive statistics
      * 5 = dive profile or dive piechart
      * 6 = dive gallery
+     * 7 = resizer
      *
      * @var mixed
      * @access public
@@ -187,6 +188,9 @@ class HandleRequest {
                     case 'divegallery.php':
                         $this->request_type = 6;
                         break;
+                     case 'resize.php':
+                        $this->request_type = 7;
+                        break;
                      case 'drawprofile.php':
                         $this->request_type = 5;
                         if($this->view_request == 1)
@@ -251,6 +255,10 @@ class HandleRequest {
                     case 'divegallery.php':
                         $this->user_id = $id;
                         $this->request_type = 6;
+                        break;
+                    case 'resize.php':
+                        $this->user_id = $id;
+                        $this->request_type = 7;
                         break;
                     case 'drawprofile.php':
                         $this->dive_nr = $id;
@@ -2733,6 +2741,8 @@ class DivePictures{
     var $username;
     var $request_type;
     var $image_link;
+    var $images_for_resize;
+    var $number_images_resize;
 
     /**
      * DivePictures 
@@ -2827,7 +2837,9 @@ class DivePictures{
                         $this->image_link[] =  array(
                                 'img_url' => $img_url, 
                                 'img_thumb_url' => $img_thumb_url , 
-                                'img_title' => $img_title
+                                'img_title' => $img_title,
+                                'resize' => false,
+                                'thumb' => false
                                 );
                     }
                 }
@@ -2837,30 +2849,44 @@ class DivePictures{
                     /**
                      * Check if the images are correctly sized 
                      */
-                   for($i=0 ; $i < count($this->image_link) ; $i++){
+                    $toberesized = array();
+                    $tobethumbed = array();
+                    $this->number_images_resize = 0;
+                    for($i=0 ; $i < count($this->image_link) ; $i++){
                         /**
                          *  Check normal image
                          */
                         if(filesize($this->image_link[$i][img_url]) < 512000  ){
+                            $size = array();
                             $size =getimagesize($this->image_link[$i][img_url]);
-                            if($size[0] != $_config['pic-width']){
-                                resize_image($this->image_link[$i][img_url]);
+                            /**
+                             * Make an array of the resized images 
+                             */
+                            if($size[0] <= $_config['pic-width']){
+                                //echo "No resize <br>";
+                            } else {
+                                $this->image_link[$i][resize] = true;
+                                $this->number_images_resize++;
                             }
                             /**
-                             * Check thumbs 
+                             * Make array of the beresized thumbs
                              */
                             if(!file_exists($this->image_link[$i][img_thumb_url])){
-                                make_thumb($this->image_link[$i][img_url],$this->image_link[$i][img_thumb_url]);
-
+                                $this->image_link[$i][thumb] = true;
+                                $this->number_images_resize++;
                             } else {
                                 $size_thumb = getimagesize($this->image_link[$i][img_thumb_url]);
-                                if($size_thumb[0] != $_config['thumb-width'] && $size_thumb[1] != $_config['thumb-width']){
-                                    //resize it
-                                    make_thumb($this->image_link[$i][img_url],$this->image_link[$i][img_thumb_url]);
+                                if($size_thumb[0]<=$_config['thumb-width'] && $size_thumb[1]<=$_config['thumb-width']){
+                                    //echo "No thumb <br>";
+                                } else {
+                                    $this->image_link[$i][thumb] = true;
+                                    $this->number_images_resize++;
                                 }
+
                             }
                         }
                     }
+
                 }
             }
             reset_config_table_prefix();
@@ -2873,6 +2899,67 @@ class DivePictures{
             }
         }
 
+    }
+
+    /**
+     * resizer 
+     * 
+     * @access public
+     * @return void
+     */
+    function resizer($ref = 0){
+        $host  = $_SERVER['HTTP_HOST'];
+        $uri   = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
+        $extra = 'resize.php?ref='.$ref;
+        header("Location: http://$host$uri/$extra");
+        exit;
+    }
+
+    /**
+     * resize_needed 
+     * 
+     * @access public
+     * @return void
+     */
+    function resize_needed(){
+        if($this->number_images_resize > 0){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * return_total_images_for_resizing 
+     * 
+     * @access public
+     * @return void
+     */
+    function return_total_images_for_resizing(){
+        return $this->number_images_resize;
+    }
+
+    //function check_thumb($var){
+
+    /**
+     * return_array_images_for_resize 
+     * 
+     * @access public
+     * @return void
+     */
+    function return_array_images_for_resize(){
+        $temp = array();
+        for($i=0 ; $i < count($this->image_link) ; $i++){
+     
+            $temp[] = array_filter($this->image_link[$i]);
+        }   
+        for($a = 0 ; $a < count($temp) ; $a++){
+            if(array_key_exists('thumb',$temp[$a]) || array_key_exists('resize',$temp[$a])){
+                $this->images_for_resize[] = $temp[$a];
+            }
+        }
+        //print_r($this->images_for_resize);
+        return $this->images_for_resize;
     }
 
     /**

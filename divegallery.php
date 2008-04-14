@@ -26,6 +26,12 @@ $links = new TopLevelMenu($request);
 $divegallery = new DivePictures();
 $divegallery->set_divegallery_info($request);
 $result = $divegallery->get_divegallery_info();
+
+if($divegallery->resize_needed()){
+//echo "resizing....";
+$divegallery->resizer(1);
+}
+
 global $_config;
 
 if($request->get_multiuser()){
