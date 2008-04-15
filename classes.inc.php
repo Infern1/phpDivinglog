@@ -2828,12 +2828,13 @@ class DivePictures{
 
             if ($pics != 0) {
                 $this->image_link = array();
+                //print_r($divepics);
                 for($i=0; $i<$pics; $i++) {
                     $img_url =  $_config['picpath_web'] . $divepics[$i]['Path'];
                     if(file_exists($img_url)){
                         $img_thumb_url = $_config['picpath_web'] .'thumb_' . $divepics[$i]['Path'];
                         $img_title = $_lang['divepic_linktitle_pt1']. ($i + 1). $_lang['divepic_linktitle_pt2']. $pics;
-                        $img_title .= $_lang['divepic_linktitle_pt3']. $result[0]['Number'] ;
+                        $img_title .= $_lang['divepic_linktitle_pt3']. $divepics[$i]['LogID'] ;
                         $this->image_link[] =  array(
                                 'img_url' => $img_url, 
                                 'img_thumb_url' => $img_thumb_url , 
@@ -2908,11 +2909,11 @@ class DivePictures{
      * @return void
      */
     function resizer($ref = 0){
-        $host  = $_SERVER['HTTP_HOST'];
+        $host  = $_SERVER['HTTP_HOST'];/*{{{*/
         $uri   = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
         $extra = 'resize.php?ref='.$ref;
         header("Location: http://$host$uri/$extra");
-        exit;
+        exit;/*}}}*/
     }
 
     /**
@@ -2922,11 +2923,11 @@ class DivePictures{
      * @return void
      */
     function resize_needed(){
-        if($this->number_images_resize > 0){
+        if($this->number_images_resize > 0){/*{{{*/
             return true;
         } else {
             return false;
-        }
+        }/*}}}*/
     }
 
     /**
@@ -2939,7 +2940,6 @@ class DivePictures{
         return $this->number_images_resize;
     }
 
-    //function check_thumb($var){
 
     /**
      * return_array_images_for_resize 
@@ -2958,7 +2958,6 @@ class DivePictures{
                 $this->images_for_resize[] = $temp[$a];
             }
         }
-        //print_r($this->images_for_resize);
         return $this->images_for_resize;
     }
 
