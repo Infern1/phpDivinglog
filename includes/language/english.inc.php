@@ -59,7 +59,7 @@ $_lang['dive_gallery_linktitle'] = "Show the Dive Gallery";
 
 // Dive Entry / Logbook related values
 
-$_lang['dive_details_pagetitle'] = "Logbook Entry for Dive # ";
+$_lang['dive_details_pagetitle'] = "Dive # ";
 
 $_lang['logbook_divedate'] = "Date:";
 $_lang['logbook_entrytime'] = "Entry Time:";
