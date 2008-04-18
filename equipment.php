@@ -60,5 +60,12 @@ echo "strange...";
 
 
 $t->assign('base_page','equipment.php');
-$t->display('equipment.tpl');
+if($_config['embed_mode'] == TRUE){
+    // Get the HTML output and send it to the requesting
+    include('header.php');
+    $t->display('equipment.tpl');
+    include('footer.php');
+} else {
+    $t->display('equipment.tpl');
+}
 ?>

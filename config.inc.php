@@ -326,6 +326,9 @@ if (PEAR::isError($db)) {
 $t->assign('title', 'My divelog online');
 $t->assign('web_root', $_config['web_root']);
 $t->assign('app_path',$_config['abs_url_path']);
+if(($_config['embed_mode'])){
+    $t->assign('embed',true);
+}
 
 /**
  * Set to true for debug mode 

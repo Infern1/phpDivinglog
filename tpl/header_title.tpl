@@ -1,0 +1,2 @@
+  <title>phpDivingLog - {$pagetitle} </title>
+

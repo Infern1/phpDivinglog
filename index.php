@@ -20,11 +20,11 @@
 $config_file = "./config.inc.php";
 require_once ($config_file);
 
-
 $request = new HandleRequest();
 $request->set_request_uri($_SERVER['REQUEST_URI']);
 $request->set_file_depth(0);
 $request->handle_url();
+
 
 
 $links = new TopLevelMenu($request);
@@ -79,12 +79,16 @@ if ($divelog->get_request_type() == 1) {
 // Get the page footer
 //include ($_config['footer_index']);
 $t->assign('colspanlinks','5');
+
+
 if($_config['embed_mode'] == TRUE){
     // Get the HTML output and send it to the requesting
-    $output =  $t->fetch('index.tpl');
+    include('header.php');
+   $output =  $t->fetch('index.tpl');
     echo $output;
+    include('footer.php');
 } else {
     $t->display('index.tpl');
 }
- 
+
 ?>

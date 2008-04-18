@@ -65,7 +65,13 @@ if($request->get_multiuser()){
     
     //$dbinfo = parse_mysql_query('dbinfo.sql');
 }
-
-$t->display('divegallery.tpl');
+if($_config['embed_mode'] == TRUE){
+    // Get the HTML output and send it to the requesting
+    include('header.php');
+    $t->display('divegallery.tpl');
+    include('footer.php');
+} else {
+    $t->display('divegallery.tpl');
+}
 
 ?>

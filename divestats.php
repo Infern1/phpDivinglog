@@ -80,7 +80,12 @@ echo $_config['app_version'] ."</td>\n";
 echo " </tr>\n";
 
 echo "</table>\n";*/
-
-$t->display('divestats.tpl');
-
+if($_config['embed_mode'] == TRUE){
+    // Get the HTML output and send it to the requesting
+    include('header.php');
+    $t->display('divestats.tpl');
+    include('footer.php');
+} else {
+    $t->display('divestats.tpl');
+}
 ?>

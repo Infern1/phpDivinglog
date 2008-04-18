@@ -700,6 +700,9 @@ class TopLevelMenu {
         $t->assign('dive_equip',$_lang['dive_equip']);
         $t->assign('dive_stats_linktitle', $_lang['dive_stats_linktitle']);
         $t->assign('dive_stats', $_lang['dive_stats']);
+        $t->assign('dive_gallery_linktitle', $_lang['dive_gallery_linktitle']);
+        $t->assign('dive_gallery', $_lang['dive_gallery']);
+
         if($this->multiuser){
             $t->assign('multiuser_id', $this->user_id);
         }/*}}}*/
@@ -726,6 +729,8 @@ class TopLevelMenu {
         $t->assign('dive_equip', $_lang['dive_equip'] );
         $t->assign('dive_stats_linktitle', $_lang['dive_stats_linktitle']);
         $t->assign('dive_stats', $_lang['dive_stats'] );
+        $t->assign('dive_gallery_linktitle', $_lang['dive_gallery_linktitle']);
+        $t->assign('dive_gallery', $_lang['dive_gallery']);
 
         if($this->multiuser){
             $t->assign('multiuser_id', $this->user_id);
@@ -843,6 +848,8 @@ class TopLevelMenu {
             $t->assign('dive_equip',$_lang['dive_equip']);
             $t->assign('dive_stats_linktitle', $_lang['dive_stats_linktitle']);
             $t->assign('dive_stats', $_lang['dive_stats']);
+            $t->assign('dive_gallery_linktitle', $_lang['dive_gallery_linktitle']);
+            $t->assign('dive_gallery', $_lang['dive_gallery']);
 
             //	Next, Last
             if ($position != $last) {

@@ -73,5 +73,13 @@ if($divesite->get_request_type() == 1){
 
 $t->assign('base_page','divesite.php');
 $t->assign('colspanlinks','4');
-$t->display('divesite.tpl');
+if($_config['embed_mode'] == TRUE){
+    // Get the HTML output and send it to the requesting
+    include('header.php');
+    $t->display('divesite.tpl');
+    include('footer.php');
+} else {
+    $t->display('divesite.tpl');
+}
+
 ?>

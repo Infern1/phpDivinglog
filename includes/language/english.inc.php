@@ -48,11 +48,13 @@ $_lang['dive_stats'] = "Dive Statistics";
 $_lang['dive_equip'] = "Dive Equipment";
 $_lang['diver_choice_linktitle'] = "Show diveroverview";
 $_lang['diver_choice'] = "Diver overview";
+$_lang['dive_gallery'] = "Dive Gallery";
 
 $_lang['dive_log_linktitle'] = "Show the Dive Log";
 $_lang['dive_sites_linktitle'] = "List the Dive Sites";
 $_lang['dive_stats_linktitle'] = "Show the Dive Statistics";
 $_lang['dive_equip_linktitle'] = "List the Dive Equipment";
+$_lang['dive_gallery_linktitle'] = "Show the Dive Gallery";
 
 
 // Dive Entry / Logbook related values

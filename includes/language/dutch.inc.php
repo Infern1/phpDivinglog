@@ -39,6 +39,7 @@ $_lang['next_equip_linktitle']          = "Volgende item";
 $_lang['dive_log']                      = "Logboek";
 $_lang['dive_sites']                    = "Duiklocatie's";
 $_lang['dive_stats']                    = "Duikstatistieken";
+$_lang['dive_gallery']                    = "Duik fotogallerij";
 $_lang['dive_equip']                    = "Duikuitrusting";
 $_lang['dive_log_linktitle']            = "Toon logboek";
 $_lang['dive_sites_linktitle']          = "Toon duiklocatie's";
@@ -46,6 +47,7 @@ $_lang['dive_stats_linktitle']          = "Toon duikstatistieken";
 $_lang['dive_equip_linktitle']          = "Toon duikuitrusting";
 $_lang['diver_choice_linktitle'] = "Toon duikeroverzicht";
 $_lang['diver_choice'] = "Duiker overzicht";
+$_lang['dive_gallery_linktitle'] = "Toon duik fotogallerij";
 
 // Dive Entry / Logbook related values
 $_lang['dive_details_pagetitle']        = "Duiknummer ";
