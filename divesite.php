@@ -47,6 +47,7 @@ if($divesite->get_request_type() == 1){
     //print_r($divesite);
 
     $divesite->set_main_divesite_details();
+    $divesite->set_divesite_pictures();
     $divesite->set_dives_at_location();
     $divesite->set_divesite_comments();
 

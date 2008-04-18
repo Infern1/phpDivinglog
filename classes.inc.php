@@ -1745,7 +1745,34 @@ class Divesite{
             $maplink_url .=  "   title=\"". $_lang['mappic_linktitle']. $result[0]['Place'];
             $maplink_url .=  "\">". $_lang['mappic'] ."</a>\n";
             $t->assign('maplink_url',$maplink_url);
+
         }/*}}}*/
+    }
+    /**
+     * set_divesite_pictures 
+     * 
+     * @access public
+     * @return void
+     */
+    function set_divesite_pictures(){
+        global $_config,$t, $_lang, $globals;/*{{{*/
+        $pic_class = new DivePictures;
+        $pic_class->set_divegallery_info_direct($this->user_id);
+        $pic_class->get_divegallery_info(0,$this->divesite_nr);
+        $divepics = $pic_class->get_image_link();
+        $pics = count($divepics);
+        if ($pics != 0) {
+            if(isset($_config['divepics_preview'])){
+                $t->assign('pics2' , '1');
+                $t->assign('image_link', $divepics);
+            } else {
+                /**
+                 *  
+                 */
+                
+            }
+        }
+/*}}}*/
     }
 
     /**
@@ -2061,9 +2088,37 @@ class Equipment{
             $t->assign('DateR', date($_lang['equip_date_format'], strtotime($result[0]['DateR'])) );
         }
         if ($result[0]['PhotoPath'] != "") {
-            $t->assign('PhotoPathurl',  $_config['equippath_web'] . $result[0]['PhotoPath']);
+          $this->set_equipment_pictures();
+          $t->assign('PhotoPathurl',  $_config['equippath_web'] . $result[0]['PhotoPath']);
             $t->assign('equip_photo_linktitle', $_lang['equip_photo_linktitle']. $result[0]['Object']);
             $t->assign('equip_photo_link', $_lang['equip_photo_link'] );
+        }
+/*}}}*/
+    }
+
+    /**
+     * set_equipment_pictures 
+     * 
+     * @access public
+     * @return void
+     */
+    function set_equipment_pictures(){
+        global $_config,$t, $_lang, $globals;/*{{{*/
+        $pic_class = new DivePictures;
+        $pic_class->set_divegallery_info_direct($this->user_id);
+        $pic_class->get_divegallery_info(0,0,$this->equipment_nr);
+        $divepics = $pic_class->get_image_link();
+        $pics = count($divepics);
+        if ($pics != 0) {
+            if(isset($_config['divepics_preview'])){
+                $t->assign('pics2' , '1');
+                $t->assign('image_link', $divepics);
+            } else {
+                /**
+                 *  
+                 */
+                
+            }
         }
 /*}}}*/
     }
@@ -2750,6 +2805,7 @@ class DivePictures{
     var $image_link;
     var $images_for_resize;
     var $number_images_resize;
+    var $num_images_from_dive;
 
     /**
      * DivePictures 
@@ -2821,37 +2877,59 @@ class DivePictures{
      * @access public
      * @return void
      */
-    function get_divegallery_info($dive_id = 0){
+    function get_divegallery_info($dive_id = 0, $site_id = 0, $equipment_nr = 0){
         global $globals, $_config,$_lang,$t;
         if(($this->multiuser && !empty($this->user_id)) || !$this->multiuser ){
             set_config_table_prefix($this->table_prefix);
-            if($dive_id == 0){
+            if($dive_id == 0 && $site_id == 0 && $equipment_nr == 0 ){
                 $divepics = parse_mysql_query('divepicsall.sql');
-            } else {
+                $base_path = $_config['picpath_web'];
+            } elseif($dive_id != 0) {
                 $globals['logid'] = $dive_id;
                 $divepics = parse_mysql_query('divepics.sql');
+                $base_path = $_config['picpath_web'];
+           } elseif($site_id !=0){
+                $globals['id'] = $site_id;
+                $base_path = $_config['mappath_web'];
+                $divepics = parse_mysql_query('divepics_map.sql');
+            } elseif($equipment_nr !=0){
+                $globals['id'] = $equipment_nr;
+                $base_path = $_config['equippath_web'];
+                $divepics = parse_mysql_query('divepics_equip.sql');
             }
-            $pics = count($divepics);
 
-            if ($pics != 0) {
+            
+            $pics = count($divepics);
+            if ($pics != 0 && !empty($divepics[0]['Path'])) {
                 $this->image_link = array();
-                //print_r($divepics);
+                $this->num_images_from_dive = array();
+                $a =1;
                 for($i=0; $i<$pics; $i++) {
-                    $img_url =  $_config['picpath_web'] . $divepics[$i]['Path'];
+                    $img_url =  $base_path . $divepics[$i]['Path'];
                     if(file_exists($img_url)){
-                        $img_thumb_url = $_config['picpath_web'] .'thumb_' . $divepics[$i]['Path'];
-                        $img_title = $_lang['divepic_linktitle_pt1']. ($i + 1). $_lang['divepic_linktitle_pt2']. $pics;
-                        $img_title .= $_lang['divepic_linktitle_pt3']. $divepics[$i]['LogID'] ;
+                       $img_thumb_url = $base_path .'thumb_' . $divepics[$i]['Path'];
+                       //$img_title = $_lang['divepic_linktitle_pt1']. ($a). $_lang['divepic_linktitle_pt2']. $pics;
+                        //$img_title .= $_lang['divepic_linktitle_pt3']  ;
+                        $img_title = $divepics[$i]['Description'];
+                        $dive_nr = $divepics[$i]['Number'];
+                        $site_nr = $divepics[$i]['PlaceID']; 
                         $this->image_link[] =  array(
                                 'img_url' => $img_url, 
                                 'img_thumb_url' => $img_thumb_url , 
                                 'img_title' => $img_title,
+                                'dive_nr' => $dive_nr,
+                                'site_nr' => $site_nr,
                                 'resize' => false,
                                 'thumb' => false
                                 );
+                        if(array_key_exists($dive_nr,$this->num_images_from_dive)){
+                            $this->num_images_from_dive[$dive_nr]++;
+                        } else {
+                            $this->num_images_from_dive[$dive_nr] = 1;
+                        }
+                        $a++;
                     }
                 }
-
                 if(isset($_config['enable_resize'])){
                     $t->assign('pics_resized','1');
                     /**
@@ -2864,6 +2942,7 @@ class DivePictures{
                         /**
                          *  Check normal image
                          */
+
                         if(filesize($this->image_link[$i][img_url]) < 512000  ){
                             $size = array();
                             $size =getimagesize($this->image_link[$i][img_url]);
@@ -2916,10 +2995,13 @@ class DivePictures{
      * @return void
      */
     function resizer($ref = 0){
-        $host  = $_SERVER['HTTP_HOST'];/*{{{*/
-        $uri   = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
+        global $_config;/*{{{*/
+        //$host  = $_SERVER['HTTP_HOST'];
+        //$uri   = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
         $extra = 'resize.php?ref='.$ref;
-        header("Location: http://$host$uri/$extra");
+        //header("Location: http://$host$uri/$extra");
+        $url = $_config['web_root'];
+        header("Location: $url/$extra");
         exit;/*}}}*/
     }
 
@@ -2988,6 +3070,9 @@ class DivePictures{
         global $_config,$t, $_lang, $globals;
         $t->assign('pics2' , '1');
         $t->assign('image_link', $this->image_link);
+        $t->assign('num_images_from_dive', $this->num_images_from_dive);
+        $t->assign('logbook_place', $_lang['logbook_place'] );
+        $t->assign('dive_details_pagetitle', $_lang['dive_details_pagetitle'] );
     }
 }
 

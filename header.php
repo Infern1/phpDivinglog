@@ -44,4 +44,9 @@ get_header();
 <div id="content"> <!--div content starts-->
 <div class="post">
 
+<?php
+/**
+ * End emmbedding for wordpress 
+ */
+?>
 

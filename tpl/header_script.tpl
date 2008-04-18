@@ -17,17 +17,6 @@ a.highslide-full-expand {
 }
 </style>
 {/literal}
-<!--
-<script type="text/javascript" src="{$app_path}/includes/lightbox/prototype.js"></script>
- <script type="text/javascript" src="{$app_path}/includes/lightbox/scriptaculous.js?load=effects"></script>
-{if isset($multiuser_id)}
-<script type="text/javascript" src="{$app_path}/includes/lightbox/lightbox_mu.js"></script>
-<link rel="stylesheet" type="text/css" media="screen" href="{$app_path}/includes/lightbox/lightbox_mu.css">
-{else}
-<script type="text/javascript" src="{$app_path}/includes/lightbox/lightbox.js"></script>
-<link rel="stylesheet" type="text/css" media="screen" href="{$app_path}/includes/lightbox/lightbox.css">
-{/if}
--->
 <script type="text/javascript" src="{$app_path}/includes/misc.js"></script>
 <script type="text/javascript" src="{$app_path}/highslide/highslide.js"></script>
 {literal}
@@ -47,7 +36,7 @@ hideOnMouseOut: true
 hs.graphicsDir = '{/literal}{$web_root}/{literal}highslide/graphics/';
 hs.outlineType = 'rounded-white';
 // Tell Highslide to use the thumbnail's title for captions
-hs.captionEval = 'this.thumb.title';
+//hs.captionEval = 'this.thumb.title';
 </script>
 {/literal}
 {$grid_header}

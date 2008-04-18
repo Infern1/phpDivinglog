@@ -66,7 +66,17 @@
 	{else } <td>-</td>
 	{/if}
 	{if isset($PhotoPath)}
-	  <td><a href="{$app_path}/{$PhotoPathurl}" rel="lightbox[others]" title="{$equip_photo_linktitle}">{$equip_photo_link}</a></td>
+		<div>
+        <td>
+    {foreach from=$image_link key=id item=i name=images}
+             <a id="thumb" href="{$web_root}/{$i.img_url}" class="highslide" onclick="return hs.expand(this)">
+                    <img src="{$web_root}/{$i.img_url}" alt="Highslide JS" title="{$i.img_title}" height="80" width="120" /></a>
+       <div class='highslide-caption'>
+        {$i.img_title}
+        </div>
+    {/foreach}
+		</td>
+</div>
     {else}
 	    <td>&nbsp;</td>
 	{/if}

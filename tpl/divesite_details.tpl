@@ -36,8 +36,24 @@
         {else}
         <td>&nbsp;</td>
         {/if}
-	    <td>{$maplink_url}</td>
-	</tr>
+
+ 	    {if isset($pics2)}
+	<div>
+        <td>
+    {foreach from=$image_link key=id item=i name=images}
+             <a id="thumb" href="{$web_root}/{$i.img_url}" class="highslide" onclick="return hs.expand(this)">
+                    <img src="{$web_root}/{$i.img_url}" alt="Highslide JS" title="{$i.img_title}" height="80" width="120" /></a>
+        <div class='highslide-caption'>
+        {$i.img_title}
+        </div>
+   {/foreach}
+		</td>
+</div>
+{else}
+   <td>&nbsp;</td>
+{/if}
+
+</tr>
 
     {* Show site dives if we have them *}
 	{if $dive_count != 0}
