@@ -52,7 +52,17 @@
  </p>
         </div>
     {/foreach}
-<table>
+
+{if $page_numbers.total > 1}
+<table width="100%" cellspacing="0" cellpadding="0">
+    <tr>
+	    <td colspan="5" align="center">{$pager_links}</td>
+    </tr>
+</table>
+<br>
+{/if}
+
+<table width="100%" cellspacing="0" cellpadding="0">
     <tr class="divesection">
 	    <td colspan="5">&nbsp;</td>
     </tr>

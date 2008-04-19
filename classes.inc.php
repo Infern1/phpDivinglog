@@ -506,6 +506,7 @@ class TableGrid{
 class TablePager{
 /*{{{*/
     var $options;
+    var $pager;
     /**
      * TablePager default constructor which creates the defaults 
      * 
@@ -534,6 +535,69 @@ class TablePager{
                     'delta' => 2, ); 
         }
         $this->options = $pager_options;
+    }
+
+    /**
+     * return_tablepager_options 
+     * 
+     * @access public
+     * @return void
+     */
+    function return_tablepager_options(){
+        return $this->options;
+    }
+
+    /**
+     * set_tablepager_itemdata 
+     * 
+     * @param mixed $itemdata 
+     * @access public
+     * @return void
+     */
+    function set_tablepager_itemdata($itemdata){
+        $this->options['itemData'] = $itemdata;
+    }
+
+    /**
+     * create_pager 
+     * 
+     * @access public
+     * @return void
+     */
+    function create_pager(){
+        $this->pager = & Pager::factory($this->options);
+    }
+
+    /**
+     * return_pager_links 
+     * 
+     * @access public
+     * @return void
+     */
+    function return_pager_links(){
+        $links = $this->pager->links;
+        return $links;
+    }
+
+    function return_getCurrentPageID(){
+        return $this->pager->getCurrentPageID();
+    }
+
+    function return_numPages(){
+        return $this->pager->numPages();
+    }
+    /**
+     * return_pager_data 
+     * 
+     * @access public
+     * @return void
+     */
+    function return_pager_data(){
+        $data = $this->pager->getPageData();
+        if (!is_array($data)) {
+            $data = array();
+        }
+        return $data;
     }
 /*}}}*/
 }
@@ -1900,46 +1964,46 @@ class Divesite{
             $t->assign('dsite_title_maxdepth', $_lang['dsite_title_maxdepth']);
             $t->assign('pages', $paged_data['links']);
             $t->assign('cells', $paged_data['data']);/*}}}*/
-        }
-        /**
-         * get_divesite_overview_grid 
-         * 
-         * @param mixed $sql 
-         * @access public
-         * @return void
-         */
-        function get_divesite_overview_grid($sql){
-            global $t, $_lang, $globals, $_config;/*{{{*/
-            $GridClass = new TableGrid($this->user_id);
-            $objGrid = $GridClass->get_grid_class();
+    }
+    /**
+     * get_divesite_overview_grid 
+     * 
+     * @param mixed $sql 
+     * @access public
+     * @return void
+     */
+    function get_divesite_overview_grid($sql){
+        global $t, $_lang, $globals, $_config;/*{{{*/
+        $GridClass = new TableGrid($this->user_id);
+        $objGrid = $GridClass->get_grid_class();
 
-            /**
-             * Define the table according some info 
-             */
-            $objGrid -> tabla ($this->table_prefix."Place");
-            if($this->multiuser){
-                $url =  "/divesite.php".$t->get_template_vars('sep1').$this->user_id.$t->get_template_vars('sep2');
-            } else {
-                $url =  "/divesite.php".$t->get_template_vars('sep2');
-            }
-            $objGrid -> keyfield("ID"); 
-            $t->assign('grid_header' , $objGrid -> getHeader(NULL, $_config['abs_url_path']. '/js/dgscripts.js', $_config['abs_url_path']. '/includes/dgstyle.css'));
-            $objGrid -> orderby("Place", "ASC"); 
-            $objGrid->message['display'] = $_lang['display_rows_divesites'];
-            $objGrid->sqlstatement($sql);
-            if($this->multiuser){
-                $objGrid -> FormatColumn("Place", $_lang['dsite_title_place'], 0, 0, 1,"250" , "left","link:open_url(%s\,'$url'),ID");  
-            } else{
-                $objGrid -> FormatColumn("Place", $_lang['dsite_title_place'], 0, 0, 1,"250" , "left","link:open_url(%s\,'$url'),ID"); 
-            }
-            $objGrid -> FormatColumn("Country", $_lang['dsite_title_country'], 180, 100, 4, "100", "left" ); 
-            $objGrid -> FormatColumn("City", $_lang['dsite_title_city'], 180, 100, 4, "200", "left" ); 
-            $objGrid -> FormatColumn("MaxDepth", $_lang['dsite_title_maxdepth'], 12, 12, 0, "80", "left","sign:".$_lang['unit_length_short']  );
-            $grid = $GridClass->get_grid($objGrid);
-            $t->assign('grid_display' ,1);
-            $t->assign('grid',$grid );
-            /*}}}*/
+        /**
+         * Define the table according some info 
+         */
+        $objGrid -> tabla ($this->table_prefix."Place");
+        if($this->multiuser){
+            $url =  "/divesite.php".$t->get_template_vars('sep1').$this->user_id.$t->get_template_vars('sep2');
+        } else {
+            $url =  "/divesite.php".$t->get_template_vars('sep2');
         }
+        $objGrid -> keyfield("ID"); 
+        $t->assign('grid_header' , $objGrid -> getHeader(NULL, $_config['abs_url_path']. '/js/dgscripts.js', $_config['abs_url_path']. '/includes/dgstyle.css'));
+        $objGrid -> orderby("Place", "ASC"); 
+        $objGrid->message['display'] = $_lang['display_rows_divesites'];
+        $objGrid->sqlstatement($sql);
+        if($this->multiuser){
+            $objGrid -> FormatColumn("Place", $_lang['dsite_title_place'], 0, 0, 1,"250" , "left","link:open_url(%s\,'$url'),ID");  
+        } else{
+            $objGrid -> FormatColumn("Place", $_lang['dsite_title_place'], 0, 0, 1,"250" , "left","link:open_url(%s\,'$url'),ID"); 
+        }
+        $objGrid -> FormatColumn("Country", $_lang['dsite_title_country'], 180, 100, 4, "100", "left" ); 
+        $objGrid -> FormatColumn("City", $_lang['dsite_title_city'], 180, 100, 4, "200", "left" ); 
+        $objGrid -> FormatColumn("MaxDepth", $_lang['dsite_title_maxdepth'], 12, 12, 0, "80", "left","sign:".$_lang['unit_length_short']  );
+        $grid = $GridClass->get_grid($objGrid);
+        $t->assign('grid_display' ,1);
+        $t->assign('grid',$grid );
+        /*}}}*/
+    }
         /*}}}*/
 }
 
@@ -2806,6 +2870,7 @@ class DivePictures{
     var $images_for_resize;
     var $number_images_resize;
     var $num_images_from_dive;
+    var $requested_page;
 
     /**
      * DivePictures 
@@ -2816,7 +2881,6 @@ class DivePictures{
     function DivePictures(){
         global $_config;
         $this->multiuser = $_config['multiuser'];
-
     }
     
     /**
@@ -2842,6 +2906,7 @@ class DivePictures{
                 $this->table_prefix = $user->get_table_prefix();
                 $this->username = $user->get_username();
             }
+            $this->requested_page = $request->get_requested_page();
         } else {
             $this->request_type = 3;
         }/*}}}*/
@@ -3037,7 +3102,7 @@ class DivePictures{
      * @return void
      */
     function return_array_images_for_resize(){
-        $temp = array();
+        $temp = array();/*{{{*/
         for($i=0 ; $i < count($this->image_link) ; $i++){
      
             $temp[] = array_filter($this->image_link[$i]);
@@ -3047,7 +3112,7 @@ class DivePictures{
                 $this->images_for_resize[] = $temp[$a];
             }
         }
-        return $this->images_for_resize;
+        return $this->images_for_resize;/*}}}*/
     }
 
     /**
@@ -3068,8 +3133,31 @@ class DivePictures{
      */
     function set_all_dive_pictures(){
         global $_config,$t, $_lang, $globals;
+        
+        if(!empty($this->multiuser)){
+            $path = $_config['web_root'].'/divegallery.php/'.$this->user_id.'/list';
+        } else {
+            $path = $_config['web_root'].'/divegallery.php/list';
+        }
+        if(empty($this->requested_page)){
+            $cpage = 0;
+        } else {
+            $cpage = $this->requested_page;
+        }
+
+        $pager = new TablePager($cpage,$path);
+        $pager->set_tablepager_itemdata($this->image_link);
+        $pager->create_pager();
+
         $t->assign('pics2' , '1');
-        $t->assign('image_link', $this->image_link);
+        $t->assign('image_link', $pager->return_pager_data());
+        $t->assign('pager_links',$pager->return_pager_links());
+        $t->assign(
+                    'page_numbers', array(
+                    'current' => $pager->return_getCurrentPageID(),
+                    'total'   => $pager->return_numPages()
+                        )
+                   );
         $t->assign('num_images_from_dive', $this->num_images_from_dive);
         $t->assign('logbook_place', $_lang['logbook_place'] );
         $t->assign('dive_details_pagetitle', $_lang['dive_details_pagetitle'] );

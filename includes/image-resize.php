@@ -1,4 +1,4 @@
-<?
+<?php
 /**
 *This is a class that can process an image on the fly by either generate a thumbnail, apply an watermark to the image, or resize it.
 *

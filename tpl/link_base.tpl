@@ -13,7 +13,7 @@
     <a href="{$app_path}/divesite.php{$list}" class="divelogcrumbs" title="{$dive_sites_linktitle}">{$dive_sites}</a> | 
     <a href="{$app_path}/equipment.php{$list}" class="divelogcrumbs" title="{$dive_equip_linktitle}">{$dive_equip}</a> | 
     <a href="{$app_path}/divestats.php{$list}" class="divelogcrumbs" title="{$dive_stats_linktitle}">{$dive_stats}</a>
-|    <a href="{$app_path}/divegallery.php" class="divelogcrumbs" title="{$dive_gallery_linktitle}">{$dive_gallery}</a>
+|    <a href="{$app_path}/divegallery.php{$list}" class="divelogcrumbs" title="{$dive_gallery_linktitle}">{$dive_gallery}</a>
 {/if}
 </div>
 
