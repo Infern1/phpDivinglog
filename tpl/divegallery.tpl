@@ -54,7 +54,7 @@
     {/foreach}
 
 {if $page_numbers.total > 1}
-<table width="100%" cellspacing="0" cellpadding="0">
+<table style="clear: both;" width="100%" cellspacing="0" cellpadding="0">
     <tr>
 	    <td colspan="5" align="center">{$pager_links}</td>
     </tr>

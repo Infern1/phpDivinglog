@@ -3,7 +3,7 @@
 // File: 	JPGRAPH_LINE.PHP
 // Description:	Line plot extension for JpGraph
 // Created: 	2001-01-08
-// Ver:		$Id: jpgraph_line.php 960 2007-12-08 11:42:41Z ljp $
+// Ver:		$Id: jpgraph_line.php 982 2008-03-24 11:51:47Z ljp $
 //
 // Copyright (c) Aditus Consulting. All rights reserved.
 //========================================================================
@@ -431,6 +431,13 @@ class AccLinePlot extends Plot {
         $this->plots = $plots;
 	$this->nbrplots = count($plots);
 	$this->numpoints = $plots[0]->numpoints;
+
+	// Verify that all plots have the same number of data points
+	for( $i=1; $i < $this->nbrplots; ++$i ) {
+	    if( $plots[$i]->numpoints != $this->numpoints ) {
+		JpGraphError::RaiseL(10003);//('Each plot in an accumulated lineplot must have the same number of data points',0)
+	    }
+	} 
 
 	for($i=0; $i < $this->nbrplots; ++$i ) {
 	    $this->LineInterpolate($this->plots[$i]->coords[0]);

@@ -992,62 +992,6 @@ class datagrid{
 					die("<div class='dgError'>".$this->message['cannotsearch']."</div>");
 				}
 			break;
-			case 3:
-				if ($this->delBtn){
-					$rtd = $_REQUEST["dgrtd"];
-					$vcode = $_REQUEST["dgvcode"];
-					$md = md5($this->salt."Delete".$rtd);
-					if ($vcode == $md){
-						if (empty($where))
-							$delWhere = " WHERE $this->keyfield=".magic_quote($rtd)." ";
-						else
-							$delWhere = str_replace("WHERE", "WHERE ($this->keyfield=".magic_quote($rtd).") and ",$where);
-						$strDelete = "DELETE FROM $this->tablename $delWhere Limit 1";
-						if ($this->isADO){
-							if (($objRes = $this->connectionHandler->Execute($strDelete)) === false)
-								$this->SQLerror($strDelete,$this->connectionHandler->ErrorMsg());
-						}else{
-							$objRes = mysql_query($strDelete, $this->connectionHandler) or $this->SQLerror($strDelete,mysql_error());
-						}
-					}else{
-						die("<span class='dgError'>".$this->message["errcode"]."</span>");
-					}
-				}else{
-					die("<div class='dgError'>".$this->message['cannotdel']."</div>");
-				}
-			break;
-			case 4:
-				if (!empty($this->ajaxEditable)){
-					$dgrtd = $_REQUEST["dgrtd"];
-					$vcode = $_REQUEST["dgvcode"];
-					$nt = $_REQUEST["nt"];
-					$arrDummy_a = explode("_AjaxDhtml", $dgrtd );
-					$arrDummy_b = explode(".-.", $arrDummy_a[0]);
-					$value = $arrDummy_b[0];
-					$keyValue = trim($arrDummy_b[1]);
-					$md = md5($this->salt.$value.":toEdit:".$keyValue);
-					if ($vcode == $md){
-						if (empty($where))
-							$updWhere = " WHERE $this->keyfield='$keyValue' ";
-						else
-							$updWhere = str_replace("WHERE", "WHERE ($this->keyfield='$keyValue') and ",$where);
-						$nt = $this->GetSQLValueString($nt, $this->fieldsArray[$value]["mask"]);
-						$strUpdate = "UPDATE $this->tablename set $value=".magic_quote($nt)." $updWhere Limit 1";
-						if ($this->isADO){
-							if (($objRes = $this->connectionHandler->Execute($strUpdate)) === false)
-								$this->SQLerror($strUpdate,$this->connectionHandler->ErrorMsg());
-						}else{
-							echo $strUpdate;
-							$objRes = mysql_query($strUpdate, $this->connectionHandler) or $this->SQLerror($strUpdate,mysql_error());
-						}
-					}else{
-						die("<span class='dgError'>".$this->message["errcode"]."</span>");
-					}
-					die();
-				}else{
-					die("<div class='dgError'>".$this->message['cannotedit']."</div>");
-				}
-			break;
 			case 5;
 				if ($this->addBtn or $this->updBtn or $this->chkBtn){
 					$x=$_REQUEST["x"];
@@ -1118,128 +1062,85 @@ class datagrid{
 					$hiddenFl = "";
 					$campos = array();
 					
-					foreach ($this->getFields("0,1,2") as $value){
-						$clAlt = ($alt)?"alt":"norm";
-						
-						$dataType   = $this->fieldsArray[$value]['datatype'];
-						$isreadonly =($this->fieldsArray[$value]['inputtype']==1)?true:false;
-						$mask       = $this->fieldsArray[$value]['mask'];
-						$ishidden   =($this->fieldsArray[$value]['inputtype']==2)?true:false;
-	
-						$fldLengt   = $this->fieldsArray[$value]['maxlength'];
-						$fldname    = $this->fieldsArray[$value]['strfieldName'];
-						$selData    = $this->fieldsArray[$value]['select'];
-						$strHeader  = $this->fieldsArray[$value]['strHeader'];
-						if ($isadding)
-							$default= $this->fieldsArray[$value]['default'];
-						else
-							$default= $this->mask($rowRes[$value],$mask,$dataType,$selData,$rowRes);
-						$class = "dgRows".$clAlt."TR";
-						$strInput = "<tr align='left' class='$class'>$br";
-						$strInput.= "<td class='dgAddNames' >$strHeader</td>$br";
-						$strInput.= "<td class='dgAddInputs'>";
-						if ($isreadonly or $ishidden or $isviewing){
-							$fldData = "<input id='$fldname' type='hidden' value='$default' $sl>$br";
-							$hiddenFl.=$fldData;
-							if ($isreadonly or $isviewing) $strInput.=$default;
-							if ($ishidden) $strInput = "";
-							$campos[] = $fldname;
-						}else{
-							switch ($dataType){
-								case 'image': case 'imagelink': case 'link': case 'calc': case 'chart':
-									$strInput="";
-								break;
-								case 'select':
-									$strInput.= "<select id='$fldname' class='dgSelectpage' >$br";
-									foreach ($selData as $key=>$value){
-										$selected=($value==$default)?"selected":"";
-										$strInput.= "<option value='$key' $selected. >$value</option>$br";
-									}
-									$strInput.= "</select>";	
-									$campos[] = $fldname;
-								break;									
-								case "check":
-									$checked=($default==$this->fieldsArray[$value]["select"][1])?"checked":"";
-									$strInput.= $this->fieldsArray[$value]["select"][0]."/".$this->fieldsArray[$value]["select"][1]."$br";
-									$strInput.= "<input id='$fldname' type='checkbox' $checked class='dgCheck'>$br";
-									$campos[] = $fldname.":check";
-								break;
-								case "textarea":
-									$strInput.= "<textarea id='$fldname' class'input' maxlength='$fldLengt' rows='".$this->fieldsArray[$value]["fieldWidth"]."' >$default</textarea>$br";
-									$campos[] = $fldname;
-								break;
-								default:
-									$strInput.= "<input id='$fldname' type='text' class='input' value='$default' maxlength='$fldLengt' $sl>";
-									$campos[] = $fldname;
-								break;
-							}
-						}
-						if ($strInput!="") $strInput.= "</td>$br</tr>$br";
-						echo $strInput;
-						$alt = !$alt;
-					}
-					echo "<tr class='dgAddButons'>$br";
-					echo "<td colspan='2' align='center'>$br";
-					echo "$hiddenFl$br";
-					$strArrFields = "arrFields = new Array(\"".implode("\",\"",$campos)."\")";
-					if ($isediting or $isadding){
-						echo "<input type='button' value='".$this->message["save"]."' class='dgInput' onclick='$strArrFields;DG_doSave(arrFields,\"$dtrtd\")' $sl>$br";
-						echo "<input type='button' value='".$this->message["cancel"]."' class='dgInput' onclick='DG_sii(\"addDiv\",\"\");' $sl>$br";
-					}else{
-						echo "<input type='button' value='".$this->message["close"]."' class='dgInput' onclick='{$this->actionCloseDiv}' $sl>$br";
-					}
-					echo "</td>$br</tr>$br";
-					echo "</table></div>";
-					die();
-				}else{
-					die("<div class='dgError'>".$this->message['cannotadd']."</div>");
-				}
-			break;
-			case "6":
-				if ($this->addBtn or $this->updBtn){
-					$dtrtd = $_REQUEST["dgrtd"];
-					$isadding = (empty($dtrtd))?true:false;
-					if ($isadding){
-						if (!$this->addBtn){
-							die("<div class='dgError'>".$this->message['cannotadd']."</div>");
-						}
-					}else{
-						if (!$this->updBtn){
-							die("<div class='dgError'>".$this->message['cannotedit']."</div>");
-						}
-						if (empty($where))
-							$updWhere = " WHERE $this->keyfield='$dtrtd' ";
-						else
-							$updWhere = str_replace("WHERE", "WHERE ($this->keyfield='$dtrtd') and ",$where);
-					}
-					$sqlFields = "";$comma=""; $sqlValues="";
-					foreach ($this->getFields("0,1,2") as $fldName){
-						$vrField = $this->GetSQLValueString($_REQUEST[$fldName],$this->fieldsArray[$fldName]['mask']);
-						if ($dtrtd==-1){
-							$sqlFields = $sqlFields.$comma.$fldName;
-							$sqlValues = $sqlValues.$comma.magic_quote($vrField);
-						}else{
-							$sqlFields = $sqlFields.$comma.$fldName."=".magic_quote($vrField);
-						}
-						$comma = ",";
-					}//end foreach
-					if ($dtrtd==-1)
-						$strSQL = "INSERT INTO $this->tablename ($sqlFields) VALUES ($sqlValues)";
-					else
-						$strSQL = "UPDATE $this->tablename SET $sqlFields $updWhere LIMIT 1";
-					
-					if ($this->isADO){
-						if (($objRes = $this->connectionHandler->Execute($strSQL)) === false)
-							$this->SQLerror($strSQL,$this->connectionHandler->ErrorMsg());
-					}else{
-						$objRes = mysql_query($strSQL, $this->connectionHandler) or $this->SQLerror($strSQL,mysql_error());
-					}
-				}else{
-					die("<div class='dgError'>".$this->message['cannotadd']."</div>");
-				}
-			break;
-		}
-		
+                    foreach ($this->getFields("0,1,2") as $value){
+                        $clAlt = ($alt)?"alt":"norm";
+
+                        $dataType   = $this->fieldsArray[$value]['datatype'];
+                        $isreadonly =($this->fieldsArray[$value]['inputtype']==1)?true:false;
+                        $mask       = $this->fieldsArray[$value]['mask'];
+                        $ishidden   =($this->fieldsArray[$value]['inputtype']==2)?true:false;
+
+                        $fldLengt   = $this->fieldsArray[$value]['maxlength'];
+                        $fldname    = $this->fieldsArray[$value]['strfieldName'];
+                        $selData    = $this->fieldsArray[$value]['select'];
+                        $strHeader  = $this->fieldsArray[$value]['strHeader'];
+                        if ($isadding)
+                            $default= $this->fieldsArray[$value]['default'];
+                        else
+                            $default= $this->mask($rowRes[$value],$mask,$dataType,$selData,$rowRes);
+                        $class = "dgRows".$clAlt."TR";
+                        $strInput = "<tr align='left' class='$class'>$br";
+                        $strInput.= "<td class='dgAddNames' >$strHeader</td>$br";
+                        $strInput.= "<td class='dgAddInputs'>";
+                        if ($isreadonly or $ishidden or $isviewing){
+                            $fldData = "<input id='$fldname' type='hidden' value='$default' $sl>$br";
+                            $hiddenFl.=$fldData;
+                            if ($isreadonly or $isviewing) $strInput.=$default;
+                            if ($ishidden) $strInput = "";
+                            $campos[] = $fldname;
+                        }else{
+                            switch ($dataType){
+                                case 'image': case 'imagelink': case 'link': case 'calc': case 'chart':
+                                    $strInput="";
+                                    break;
+                                case 'select':
+                                    $strInput.= "<select id='$fldname' class='dgSelectpage' >$br";
+                                    foreach ($selData as $key=>$value){
+                                        $selected=($value==$default)?"selected":"";
+                                        $strInput.= "<option value='$key' $selected. >$value</option>$br";
+                                    }
+                                    $strInput.= "</select>";	
+                                    $campos[] = $fldname;
+                                    break;									
+                                    case "check":
+                                        $checked=($default==$this->fieldsArray[$value]["select"][1])?"checked":"";
+                                    $strInput.= $this->fieldsArray[$value]["select"][0]."/".$this->fieldsArray[$value]["select"][1]."$br";
+                                    $strInput.= "<input id='$fldname' type='checkbox' $checked class='dgCheck'>$br";
+                                    $campos[] = $fldname.":check";
+                                    break;
+                                    case "textarea":
+                                        $strInput.= "<textarea id='$fldname' class'input' maxlength='$fldLengt' rows='".$this->fieldsArray[$value]["fieldWidth"]."' >$default</textarea>$br";
+                                    $campos[] = $fldname;
+                                    break;
+                                default:
+                                    $strInput.= "<input id='$fldname' type='text' class='input' value='$default' maxlength='$fldLengt' $sl>";
+                                    $campos[] = $fldname;
+                                    break;
+                            }
+                        }
+                        if ($strInput!="") $strInput.= "</td>$br</tr>$br";
+                        echo $strInput;
+                        $alt = !$alt;
+                    }
+                    echo "<tr class='dgAddButons'>$br";
+                    echo "<td colspan='2' align='center'>$br";
+                    echo "$hiddenFl$br";
+                    $strArrFields = "arrFields = new Array(\"".implode("\",\"",$campos)."\")";
+                    if ($isediting or $isadding){
+                        echo "<input type='button' value='".$this->message["save"]."' class='dgInput' onclick='$strArrFields;DG_doSave(arrFields,\"$dtrtd\")' $sl>$br";
+                        echo "<input type='button' value='".$this->message["cancel"]."' class='dgInput' onclick='DG_sii(\"addDiv\",\"\");' $sl>$br";
+                    }else{
+                        echo "<input type='button' value='".$this->message["close"]."' class='dgInput' onclick='{$this->actionCloseDiv}' $sl>$br";
+                    }
+                    echo "</td>$br</tr>$br";
+                    echo "</table></div>";
+                    die();
+                }else{
+                    die("<div class='dgError'>".$this->message['cannotadd']."</div>");
+                }
+                break;
+        }
+
 		# Create the orderby string
 		$order = $this->orderColName;
 		if (isset($_REQUEST["dg_order"])) if ( $this->validField( $_REQUEST["dg_order"]) and !empty($_REQUEST["dg_order"])) $order = $_REQUEST["dg_order"];

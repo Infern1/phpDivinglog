@@ -3,7 +3,7 @@
 // File:	JPGRAPH.PHP
 // Description:	PHP Graph Plotting library. Base module.
 // Created: 	2001-01-08
-// Ver:		$Id: jpgraph.php 964 2008-01-19 10:04:57Z ljp $
+// Ver:		$Id: jpgraph.php 979 2008-03-21 13:26:51Z ljp $
 //
 // Copyright 2006 (c) Aditus Consulting. All rights reserved.
 //========================================================================
@@ -15,7 +15,7 @@ require_once('jpgraph_ttf.inc.php');
 require_once 'jpgraph_gradient.php';
 
 // Version info
-DEFINE('JPG_VERSION','1.22.1');
+DEFINE('JPG_VERSION','1.26');
 
 // Minimum required PHP version
 DEFINE('MIN_PHPVERSION','4.3.1');
@@ -1173,9 +1173,8 @@ class Graph {
 	reset($_GET);
 	while( list($key,$value) = each($_GET) ) {
 	    if( is_array($value) ) {
-		$n = count($value);
-		for( $i=0; $i < $n; ++$i ) {
-		    $urlarg .= '&amp;'.$key.'%5B%5D='.urlencode($value[$i]);
+		foreach ( $value as $k => $v ) {
+		    $urlarg .= '&amp;'.$key.'%5B'.$k.'%5D='.urlencode($v);
 		}
 	    }
 	    else {
@@ -1189,9 +1188,8 @@ class Graph {
 	reset($_POST);
 	while( list($key,$value) = each($_POST) ) {
 	    if( is_array($value) ) {
-		$n = count($value);
-		for( $i=0; $i < $n; ++$i ) {
-		    $urlarg .= '&amp;'.$key.'%5B%5D='.urlencode($value[$i]);
+		foreach ( $value as $k => $v ) {
+		    $urlarg .= '&amp;'.$key.'%5B'.$k.'%5D='.urlencode($v);
 		}
 	    }
 	    else {

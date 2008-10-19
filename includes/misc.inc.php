@@ -35,6 +35,12 @@ function htmlentities_array($arr = array())
 	}
 	return $rs;
 }
+   function action($value_of_clicked_field, $array_values)
+    {
+
+//        return "javascript:alert('the row is ".$array_values["Number"]."' )";
+        return "javascript:open_url(".$array_values["Number"].",'/index.php/' )";
+    }
 
 // Get the language values
 
@@ -115,7 +121,7 @@ function sql_file($filename)
  * @access public
  * @return void
  */
-function parse_mysql_query($filename) 
+function parse_mysql_query($filename, $sql_query = 0, $debug = false) 
 {
     global $_config;
     $username = $_config['database_username'];
@@ -123,13 +129,17 @@ function parse_mysql_query($filename)
 	$server = $_config['database_server'];
 	$db = $_config['database_db'];
     $result = array();
-	$query = sql_file($filename);
+    if(($sql_query)){
+        $query = $sql_query;
+    } else {
+        $query = sql_file($filename);
+    }
     if ($query) {
 		$connection = mysql_connect($server, $username, $password);
 		mysql_select_db($db, $connection);
         mysql_query("SET CHARACTER SET 'utf8'", $connection);
 		$server_query = mysql_query($query, $connection);
-		if (mysql_errno() ) {
+		if (mysql_errno()  ) {
 			echo "<hr>\n<b>MySQL error " . mysql_errno(). ": " . mysql_error() . "\n:</b><br>\n";
 		    echo "Query: $query <br><hr>";
             exit;

@@ -3,7 +3,7 @@
 // File:	GD_IMAGE.INC.PHP
 // Description:	GD Instance of Image class
 // Created: 	2006-05-06
-// Ver:		$Id: gd_image.inc.php 976 2008-03-09 18:42:44Z ljp $
+// Ver:		$Id: gd_image.inc.php 1008 2008-06-13 23:20:44Z ljp $
 //
 // Copyright (c) Aditus Consulting. All rights reserved.
 //========================================================================
@@ -477,7 +477,7 @@ class RGB {
 		if( $pos2===false ) 
 		    $pos2 = $pos-1; // Sentinel
 		if( $pos > $pos2 ) {
-		    $alpha = substr($aColor,$pos+1);
+		    $alpha = str_replace(',','.',substr($aColor,$pos+1));
 		    $aColor = substr($aColor,0,$pos);
 		}
 		else {
@@ -493,7 +493,7 @@ class RGB {
 		$adj = 1.0;
 	    }
 	    else {
-		$adj = 0.0 + substr($aColor,$pos+1);
+		$adj = 0.0 + str_replace(',','.',substr($aColor,$pos+1));
 		$aColor = substr($aColor,0,$pos);
 	    }
 	    if( $adj < 0 )
@@ -1575,8 +1575,12 @@ class Image {
 	    elseif( $s == "longdashed" ) $s=4;
 	    else JpGraphError::RaiseL(25102,$s);//(" Illegal string argument to SetLineStyle(): $s");
 	}
-	else JpGraphError::RaiseL(25103,$s);//(" Illegal argument to SetLineStyle $s");
+	else {
+	    JpGraphError::RaiseL(25103,$s);//(" Illegal argument to SetLineStyle $s");
+	}
+	$old = $this->line_style;
 	$this->line_style=$s;
+	return $old;
     }
 	
     // Same as Line but take the line_style into account

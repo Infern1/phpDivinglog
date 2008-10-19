@@ -334,7 +334,7 @@ class User {
     function get_username(){
         global $_config, $globals;
         set_config_table_prefix($this->table_prefix);
-        $user_data = parse_mysql_query('personal.sql');
+        $user_data = parse_mysql_query('personal.sql',0,TRUE);
         reset_config_table_prefix();
         $this->username = $user_data[0]['Firstname'] .' '.$user_data[0]['Lastname'];
         return $this->username;
@@ -380,18 +380,23 @@ class TableGrid{
      * @access public
      * @return void
      */
-    function TableGrid($user_id = 0){
+    function TableGrid($user_id = 0,$data){
         global $_config;
         $this->language = $_config['language'];
-        $objGrid = new datagrid;
-        $objGrid->friendlyHTML(); 
-        $objGrid->conectadb($_config['database_server']  , $_config['database_username'], $_config['database_password'], $_config['database_db']); 
-        $objGrid -> pathtoimages($_config['abs_url_path']. "/images/");
-        $objGrid->datarows($_config['max_list']);
+        $objGrid = new dataGrid($data,$void);
+        //$objGrid->friendlyHTML(); 
+        //$objGrid->conectadb($_config['database_server']  , $_config['database_username'], $_config['database_password'], $_config['database_db']); 
+        //$objGrid -> pathtoimages($_config['abs_url_path']. "/images/");
+        //$objGrid->rowsOnPage($_config['max_list']);
         if($_config['query_string']){
-            $objGrid->methodForm('GET');
-            $objGrid->linkparam("user_id=".$user_id."&id=list");
+            //$objGrid->methodForm('GET');
+            //$objGrid->linkparam("user_id=".$user_id."&id=list");
+            $objGrid->URLa = "user_id=".$user_id."&id=list";
+        } else {
+            //$objGrid->useSEO = true;
+            //$objGrid->URLa = "index.php";
         }
+        $objGrid->setRowActionFunction("action");
         $this->gridtable  =& $objGrid;
         $this->SetGridLanguage();
     }
@@ -427,26 +432,26 @@ class TableGrid{
             case 'english' :
                 // Do nothing since default is english for phpmydatgrid
                 break;
-            case 'nederlands': case 'dutch' :
-                $this->gridtable->language("ne");
-                break;
+          /*  case 'nederlands': case 'dutch' :
+                $this->gridtable->setLanguage("ne");
+                break;*/
             case 'deutch': case 'german' :
-                $this->gridtable->language("de");
+                $this->gridtable->setLanguage("de");
                 break;
            case 'espa.ol': case 'es' :
-                $this->gridtable->language("es");
+                $this->gridtable->Language("es");
                 break;
             case 'francais': case 'fr' :
-                $this->gridtable->language("fr");
+                $this->gridtable->setLanguage("fr");
                 break;
             case 'italian' : case 'it' :
-                $this->gridtable->language("it");
+                $this->gridtable->setLanguage("it");
                 break;
             case '.e.tina': case 'cs' :
-                $this->gridtable->language("cs");
+                $this->gridtable->setLanguage("cs");
                 break;
             case 'portuguese' : case 'portugese' :
-                $this->gridtable->language("pt");
+                $this->gridtable->setLanguage("pt");
                 break;
             default:
                 if(!isset($_lang['grid_cancel'])){
@@ -1514,7 +1519,8 @@ class Divelog {
         }
         $t->assign('unit_time_short', $_lang['unit_time_short']);
         $t->assign('pages', $paged_data['links']);
-        $t->assign('cells', $paged_data['data']); 
+        $t->assign('cells', $paged_data['data']);
+        //print_r($paged_data['data']);
         /*}}}*/
     }
 
@@ -1524,8 +1530,8 @@ class Divelog {
      * @access public
      * @return void
      */
-    function get_dive_overview_grid(){
-        global $t, $_lang, $globals, $_config;/*{{{*/
+/*    function get_dive_overview_grid(){
+        global $t, $_lang, $globals, $_config;
         $GridClass = new TableGrid($this->user_id);
         $objGrid = $GridClass->get_grid_class();
         $objGrid -> tabla ($this->table_prefix."Logbook");
@@ -1565,14 +1571,62 @@ class Divelog {
         //$objGrid -> FormatColumn("image_1","Img", "25", "0", "3","20","center","image:images/photo_icon.gif");    
   
         $objGrid->sqlstatement($recentdivelist_query);
-        
         $grid = $GridClass->get_grid($objGrid);
         $t->assign('grid_display' ,1);
         $t->assign('grid',$grid );
-/*}}}*/
-    }
 
-    /**
+    }
+*/
+   function get_dive_overview_grid(){
+        global $db, $t, $_lang, $globals, $_config;
+        set_config_table_prefix($this->table_prefix);
+        //    Get the details of the dives to be listed
+        //$recentdivelist = parse_mysql_query('recentdivelist.sql');
+        if ($_config['length']){
+            $recentdivelist_query = sql_file('recentdivelist-imp.sql');
+        } else {
+            $recentdivelist_query = sql_file('recentdivelist.sql');
+        }
+            $recentdivelist_query .=  " ORDER BY Number DESC";
+        reset_config_table_prefix();
+		$t->assign('dlog_title_number', $_lang['dlog_title_number'] );
+		$t->assign('dlog_title_divedate', $_lang['dlog_title_divedate']);
+		$t->assign('dlog_title_depth', $_lang['dlog_title_depth'] );
+		$t->assign('dlog_title_divetime', $_lang['dlog_title_divetime'] );
+		$t->assign('dlog_title_location', $_lang['dlog_title_location'] );
+
+        if(!empty($this->multiuser)){
+            $path = $_config['web_root'].'/index.php/'.$this->user_id.'/list';
+        } else {
+            $path = $_config['web_root'].'/index.php/list';
+        }
+        if(empty($this->requested_page)){
+            $cpage = 0;
+        } else {
+            $cpage = $this->requested_page;
+        
+        }
+        $data = parse_mysql_query(0,$recentdivelist_query);
+        $GridClass = new TableGrid($this->user_id,$data);
+        $grid = $GridClass->get_grid_class();
+
+        //$grid = new dataGrid($data,$void); 
+        $grid->showColumn('Number');
+        $grid->showColumn('Divedate');
+        $grid->showColumn('Depth');
+        $grid->showColumn('Divetime');
+        $grid->showColumn('Place');
+        $grid->showColumn('City');
+        $grid->setRowActionFunction("action");
+    //    $grid->columnsToShow['Number']["action"] = "action";
+        $grid_ret = $grid->render(TRUE);
+
+        $t->assign('grid_display' ,1);
+        $t->assign('grid',$grid_ret );
+
+
+    }
+      /**
      * get_overview_divers 
      * 
      * @access public
@@ -1601,7 +1655,7 @@ class Divelog {
  * @license LGPL v3 http://www.gnu.org/licenses/lgpl-3.0.txt
  */
 class Divesite{
-    var $multiuser;/*{{{*/
+    var $multiuser;
     var $table_prefix;
     var $user_id;
     var $divesite_nr;
@@ -1972,41 +2026,68 @@ class Divesite{
      * @access public
      * @return void
      */
+//    function get_divesite_overview_grid($sql){
+//        global $t, $_lang, $globals, $_config;/*{{{*/
+//        $GridClass = new TableGrid($this->user_id);
+//        $objGrid = $GridClass->get_grid_class();
+
+//        /**
+//         * Define the table according some info 
+//         */
+//        $objGrid -> tabla ($this->table_prefix."Place");
+//        if($this->multiuser){
+//            $url =  "/divesite.php".$t->get_template_vars('sep1').$this->user_id.$t->get_template_vars('sep2');
+//        } else {
+//            $url =  "/divesite.php".$t->get_template_vars('sep2');
+//        }
+//        $objGrid -> keyfield("ID"); 
+//        $t->assign('grid_header' , $objGrid -> getHeader(NULL, $_config['abs_url_path']. '/js/dgscripts.js', $_config['abs_url_path']. '/includes/dgstyle.css'));
+//        $objGrid -> orderby("Place", "ASC"); 
+//        $objGrid->message['display'] = $_lang['display_rows_divesites'];
+//        $objGrid->sqlstatement($sql);
+//        if($this->multiuser){
+//            $objGrid -> FormatColumn("Place", $_lang['dsite_title_place'], 0, 0, 1,"250" , "left","link:open_url(%s\,'$url'),ID");  
+//        } else{
+//            $objGrid -> FormatColumn("Place", $_lang['dsite_title_place'], 0, 0, 1,"250" , "left","link:open_url(%s\,'$url'),ID"); 
+//        }
+//        $objGrid -> FormatColumn("Country", $_lang['dsite_title_country'], 180, 100, 4, "100", "left" ); 
+//        $objGrid -> FormatColumn("City", $_lang['dsite_title_city'], 180, 100, 4, "200", "left" ); 
+//        $objGrid -> FormatColumn("MaxDepth", $_lang['dsite_title_maxdepth'], 12, 12, 0, "80", "left","sign:".$_lang['unit_length_short']  );
+//        $grid = $GridClass->get_grid($objGrid);
+//        $t->assign('grid_display' ,1);
+//        $t->assign('grid',$grid );
+
+//        /*}}}*/
+//    }
+
     function get_divesite_overview_grid($sql){
         global $t, $_lang, $globals, $_config;/*{{{*/
-        $GridClass = new TableGrid($this->user_id);
-        $objGrid = $GridClass->get_grid_class();
+        $sql .=  " ORDER BY Place ASC";
+        $data = parse_mysql_query(0,$sql);;
+        $GridClass = new TableGrid($this->user_id,$data);
+        $grid = $GridClass->get_grid_class();
 
         /**
          * Define the table according some info 
          */
-        $objGrid -> tabla ($this->table_prefix."Place");
         if($this->multiuser){
             $url =  "/divesite.php".$t->get_template_vars('sep1').$this->user_id.$t->get_template_vars('sep2');
         } else {
             $url =  "/divesite.php".$t->get_template_vars('sep2');
         }
-        $objGrid -> keyfield("ID"); 
-        $t->assign('grid_header' , $objGrid -> getHeader(NULL, $_config['abs_url_path']. '/js/dgscripts.js', $_config['abs_url_path']. '/includes/dgstyle.css'));
-        $objGrid -> orderby("Place", "ASC"); 
-        $objGrid->message['display'] = $_lang['display_rows_divesites'];
-        $objGrid->sqlstatement($sql);
-        if($this->multiuser){
-            $objGrid -> FormatColumn("Place", $_lang['dsite_title_place'], 0, 0, 1,"250" , "left","link:open_url(%s\,'$url'),ID");  
-        } else{
-            $objGrid -> FormatColumn("Place", $_lang['dsite_title_place'], 0, 0, 1,"250" , "left","link:open_url(%s\,'$url'),ID"); 
-        }
-        $objGrid -> FormatColumn("Country", $_lang['dsite_title_country'], 180, 100, 4, "100", "left" ); 
-        $objGrid -> FormatColumn("City", $_lang['dsite_title_city'], 180, 100, 4, "200", "left" ); 
-        $objGrid -> FormatColumn("MaxDepth", $_lang['dsite_title_maxdepth'], 12, 12, 0, "80", "left","sign:".$_lang['unit_length_short']  );
-        $grid = $GridClass->get_grid($objGrid);
+        //print_r($data);
+        $grid->showColumn('Place');
+        $grid->showColumn('Country');
+        $grid->showColumn('City');
+        $grid->showColumn('MaxDepth');
+        $grid_ret = $grid->render(TRUE); 
         $t->assign('grid_display' ,1);
-        $t->assign('grid',$grid );
+        $t->assign('grid',$grid_ret );
+
         /*}}}*/
     }
-        /*}}}*/
-}
 
+}
 /**
  * Equipment contains all functions for displaying the equipment information
  * 
