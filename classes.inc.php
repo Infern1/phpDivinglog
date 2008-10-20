@@ -1635,15 +1635,18 @@ function get_dive_overview_grid(){
         $grid = $GridClass->get_grid_class();
 
         //$grid = new dataGrid($data,$void); 
-        $grid->showColumn('Number');
-        $grid->showColumn('Divedate');
-        $grid->showColumn('Depth');
-        $grid->showColumn('Divetime');
-        $grid->showColumn('Place');
-        $grid->showColumn('City');
+        $grid->showColumn('Number', $_lang['dlog_title_number']);
+        $grid->showColumn('Divedate', $_lang['dlog_title_divedate']);
+        $grid->showColumn('Depth', $_lang['dlog_title_depth']);
+        $grid->showColumn('Divetime', $_lang['dlog_title_divetime']);
+        $grid->showColumn('Place', $_lang['dlog_title_place']);
+        $grid->showColumn('City',  $_lang['dlog_title_location']);
         $grid->showCustomColumn("photo");
         $methodVariable = array($this, 'dive_has_photo'); 
         $grid->setCallbackFunction("photo", $methodVariable);
+        $grid->setCallbackFunction("Divedate","convert_date"); 
+        $grid->setCallbackFunction("Depth","add_unit_depth");
+        $grid->setCallbackFunction("Divetime","add_unit_time");
         $grid->setRowActionFunction("action");
         //$grid->unsetActionFunction("photo");
     //    $grid->columnsToShow['Number']["action"] = "action";
@@ -2109,6 +2112,8 @@ class Divesite{
         $grid->showColumn('City');
         $grid->showColumn('MaxDepth');
         $grid->setRowActionFunction("action");
+        $grid->setCallbackFunction("MaxDepth","add_unit_depth");
+
         $grid_ret = $grid->render(TRUE); 
         $t->assign('grid_display' ,1);
         $t->assign('grid',$grid_ret );

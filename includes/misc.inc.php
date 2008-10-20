@@ -36,9 +36,8 @@ function htmlentities_array($arr = array())
 	return $rs;
 }
 
-function action($value_of_clicked_field, $array_values)
-{
-    if(isset($_SESSION['request_type'])){
+function action($value_of_clicked_field, $array_values) {
+    if(isset($_SESSION['request_type'])){/*{{{*/
         $request_type = $_SESSION['request_type'];
         if($request_type == 1){ 
             return "javascript:open_url(".$array_values["Number"].",'/index.php/' )";
@@ -63,7 +62,7 @@ function action($value_of_clicked_field, $array_values)
     }
 
 
-}
+}/*}}}*/
 
 
 // Get the language values
@@ -108,7 +107,7 @@ include_once ($language_filename);
  */
 function sql_file($filename) 
 {
-	global $_config;
+	global $_config;/*{{{*/
 	$sqlpath = $_config['sqlpath'];
 	global $globals;
 
@@ -134,7 +133,7 @@ function sql_file($filename)
 		return $contents;
 	} else {
 		return false;
-	}
+	}/*}}}*/
 }
 
 
@@ -147,7 +146,7 @@ function sql_file($filename)
  */
 function parse_mysql_query($filename, $sql_query = 0, $debug = false) 
 {
-    global $_config;
+    global $_config;/*{{{*/
     $username = $_config['database_username'];
 	$password = $_config['database_password'];
 	$server = $_config['database_server'];
@@ -179,6 +178,7 @@ function parse_mysql_query($filename, $sql_query = 0, $debug = false)
 		}
 	}
 	return $result;
+/*}}}*/
 }
 
 /**
@@ -190,7 +190,7 @@ function parse_mysql_query($filename, $sql_query = 0, $debug = false)
  */
 function check_number($number) 
 {
-	if (!$number) {
+	if (!$number) {/*{{{*/
 		$get = "";
 	} else {
 		if (ereg('[^0-9]', $number)) {
@@ -203,7 +203,7 @@ function check_number($number)
 			}
 		}
 	}
-	return $get;
+	return $get;/*}}}*/
 }
 
 /**
@@ -215,7 +215,7 @@ function check_number($number)
  * return void
  */
 function GetRequestVar($url, $request_file_depth=0){ 
-
+/*{{{*/
     global $_config, $t,$_POST;
     if($_config['query_string'])
     {
@@ -258,7 +258,7 @@ function GetRequestVar($url, $request_file_depth=0){
 
     }
     //print_r($paginas);
-   return $paginas;
+   return $paginas;/*}}}*/
 }
 
 /**
@@ -270,7 +270,7 @@ function GetRequestVar($url, $request_file_depth=0){
  * @return void
  */
 function is__writable($path) {
-//will work in despite of Windows ACLs bug
+//will work in despite of Windows ACLs bug/*{{{*/
 //NOTE: use a trailing slash for folders!!!
 //see http://bugs.php.net/bug.php?id=27609
 //see http://bugs.php.net/bug.php?id=30931
@@ -287,7 +287,7 @@ function is__writable($path) {
     fclose($f);
     if (!$rm)
         unlink($path);
-    return true;
+    return true;/*}}}*/
 }
 
 /**
@@ -298,7 +298,7 @@ function is__writable($path) {
  * @return void
  */
 function GetProfileData($result){
-    	global $_config;
+    	global $_config;/*{{{*/
         global $_lang;
         $profile = $result[0]['Profile'];
         $length = ( strlen($profile) / 12 );
@@ -332,8 +332,9 @@ function GetProfileData($result){
 		} else {
 			$sac = number_format($sac, 2) ."&nbsp;". $_lang['unit_rate'];
 		}
-        return array('averagedepth' => $averagedepth , 'sac' => $sac);
+        return array('averagedepth' => $averagedepth , 'sac' => $sac);/*}}}*/
 }
+
 
 define('MetreToFeet', "calc:(Depth*3.2808399)");
 function MetreToFeet($value, $precision = 2) 
@@ -389,7 +390,7 @@ function backhtmlentities($str_h){
  */
 function DECtoDMS($dec)
 {
-	if ($dec == "") {
+	if ($dec == "") {/*{{{*/
 		$dms = "";
 	} else {
 		$vars = explode(".",$dec);
@@ -414,8 +415,95 @@ function DECtoDMS($dec)
 			}
 		}
 	}
-	return $dms;
+	return $dms;/*}}}*/
 }    
+
+/**
+ * convert_date converts the date to format the use whishes
+ * 
+ * @param mixed $date 
+ * @access public
+ * @return void
+ */
+function convert_date($value){
+    global $_config;
+    $mask = $_config['date_format'];
+    if($value != "") {
+        $format='';
+        $separator='';
+        if (strpos($mask,':')>0){
+            $arrMask=explode(':',$mask);
+            $theType=$arrMask[0]; 
+            $format=(empty($arrMask[1])) ? $format : $arrMask[1];
+            $separator=(empty($arrMask[2])) ? $separator: $arrMask[2];
+        }
+        $arrDdate = datecheck($value,'ymd','-', $format, $separator);
+        if ($arrDdate != false)    $value =$arrDdate['todate'] ;
+    } 
+    return  $value;
+
+}
+
+/**
+ * datecheck 
+ * 
+ * @param mixed $date 
+ * @param string $format 
+ * @param string $separator 
+ * @param string $toformat 
+ * @param string $toseparator 
+ * @access public
+ * @return void
+ */
+function datecheck($date,$format='ymd',$separator='-',$toformat='mdy',$toseparator='-') {
+        $format = ($format=='')?'ymd':strtolower($format);/*{{{*/
+        if (count($datebits=explode($separator,$date))!=3) return false;
+        $year = intval($datebits[strpos($format, 'y')]);
+        $month = intval($datebits[strpos($format, 'm')]);
+        $day = intval($datebits[strpos($format, 'd')]);
+        $year=($year <10 )? '200'.$year:$year;
+        $year=($year <50 )? '20' .$year:$year;
+        $year=($year <100)? '19' .$year:$year;
+        $month=($month <10)? '0' .$month:$month;
+        $day=($day <10)? '0' .$day:$day;
+        if (($month<1) || ($month>12) || ($day<1) || (($month==2) && ($day>28+(!($year%4))-(!($year%100))+(!($year%400)))) || ($day>30+(($month>7)^($month&1)))) return false; // date out of range 
+        $arrDate= array('y' => $year, 'm' => $month, 'd' => $day, 'iso' => $year.'-'.$month.'-'.$day, 'fromdate'=> $date, 'todate' => '' );
+        $arrDate['todate'] = $arrDate[$toformat[0]].$toseparator.$arrDate[$toformat[1]].$toseparator.$arrDate[$toformat[2]];
+        return $arrDate;/*}}}*/
+}
+
+/**
+ * add_unit_depth 
+ * 
+ * @param mixed $value 
+ * @access public
+ * @return void
+ */
+function add_unit_depth($value){
+    global $_config, $_lang;
+    if(!empty($value)){
+        if($_config['length']){
+            $value .=  " ".$_lang['unit_length_short_imp']  ;
+        } else {
+            $value .= " ".$_lang['unit_length_short']  ;
+        }
+    }
+    return $value;
+}
+
+/**
+ * add_unit_time 
+ * 
+ * @param mixed $value 
+ * @access public
+ * @return void
+ */
+function add_unit_time($value){
+    global $_config, $_lang;
+    $value .=  " ".$_lang['unit_time_short'];
+    return $value;
+}
+
 
 
 /**

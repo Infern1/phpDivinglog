@@ -156,6 +156,11 @@ $_config['graph_show_both_units'] = true;
  * set values to true if you want to convert from metric units to imperial units,
  * or to false if values should be left as metric units. 
  */
+ 
+/**
+ * Define date format dmy- result in day-month-year 
+ */
+$_config['date_format'] = 'date:dmy:-';
 
 /**
  * metres to feet
@@ -257,7 +262,8 @@ ini_set('include_path', get_include_path() . PATH_SEPARATOR . $_config['pear_pat
 
 require_once (ABSPATH_DIVELOG . 'includes/misc.inc.php');
 require_once (ABSPATH_DIVELOG . 'includes/image-resize.php');
-require_once 'phpmydatagrid.class.php';
+//require_once 'phpmydatagrid.class.php';
+require_once (ABSPATH_DIVELOG . 'includes/class.datagrid.php');
 require_once 'smarty/Smarty.class.php';
 require_once 'classes.inc.php';
 require_once 'PEAR.php';
@@ -270,6 +276,7 @@ if(version_compare("5.1", PHP_VERSION, "<")){
    require_once 'includes/jpgraph/src/jpgraph_line.php';
 }
 
+require_once 'Pager/Pager.php';
 require_once 'Pager_Wrapper.php';
 require_once 'MDB2.php';
 
