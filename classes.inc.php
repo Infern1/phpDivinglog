@@ -68,6 +68,7 @@ class HandleRequest {
     function HandleRequest(){
         global $_config, $t;
         $this->multiuser = $_config['multiuser'];
+        $_SESSION['request_type'] = 1;
 
         if($_config['query_string']){
             if($this->multiuser){
@@ -1123,6 +1124,62 @@ class Divelog {
         }/*}}}*/
     }
 
+    function get_log_id_for_dive_nr($dive_nr){
+        global $_config,$t, $_lang, $globals;
+
+
+    }
+
+    /**
+     * dive_has_pictures checks if there are any pictures for an specific dive 
+     * 
+     * This function should be called stand alone!
+     * @param mixed $dive_nr 
+     * @access public
+     * @return void
+     */
+    function dive_has_pictures($dive_nr){
+        global $_config,$t, $_lang, $globals;/*{{{*/
+        $pic_class = new DivePictures;
+        //$pic_class->set_divegallery_info_direct($this->user_id);
+        /**
+         * We need to get the LogID for this dive 
+         */
+        $request = new HandleRequest();
+        $request->set_request_uri($_SERVER['REQUEST_URI']);
+        $request->set_file_depth(0);
+        $request->handle_url();
+
+        $multiuser = 0;
+        $table_prefix = NULL;
+        if($_config['multiuser']){
+            $multiuser = true;
+        }
+        if($multiuser){
+            $user_id = $request->get_user_id();
+            $user = new User();
+            $user->set_user_id($user_id);
+            $table_prefix = $user->get_table_prefix();
+        }
+        else {
+            // if prefix is set get it.
+            if(isset($_config['table_prefix']))
+                $table_prefix = $_config['table_prefix'];
+        }
+        set_config_table_prefix($table_prefix);
+        $globals['divenr']  = $dive_nr; 
+        $id = parse_mysql_query('divelogid.sql'); 
+        reset_config_table_prefix();
+        $pic_class->get_divegallery_info($id[0]['ID']);
+        $divepics = $pic_class->get_image_link();
+        $pics = count($divepics);
+        if($pics > 0){
+            return true;
+        } else {
+            return false;
+        }/*}}}*/
+    }
+
     /**
      * set_dive_pictures formats the links to the pictures if available
      * 
@@ -1529,60 +1586,21 @@ class Divelog {
         /*}}}*/
     }
 
-    /**
+    function dive_has_photo($value, $row){
+        global $_config;
+        if(Divelog::dive_has_pictures($row['Number'])){
+            return '<img src="'.$_config['web_root'].'/images/photo_icon.gif">';
+        }
+    }
+
+   /**
      * get_dive_overview_grid 
      * 
      * @access public
      * @return void
      */
-/*    function get_dive_overview_grid(){
-        global $t, $_lang, $globals, $_config;
-        $GridClass = new TableGrid($this->user_id);
-        $objGrid = $GridClass->get_grid_class();
-        $objGrid -> tabla ($this->table_prefix."Logbook");
-        set_config_table_prefix($this->table_prefix);
-        if ($_config['length']){
-            $recentdivelist_query = sql_file('recentdivelist-imp.sql');
-        } else {
-            $recentdivelist_query = sql_file('recentdivelist.sql');
-        }
-        reset_config_table_prefix();
-        if($this->multiuser){
-            $url =  "/index.php".$t->get_template_vars('sep1').$this->user_id.$t->get_template_vars('sep2');
-        } else {
-            $url =  "/index.php".$t->get_template_vars('sep2');
-        }
-        $objGrid -> keyfield("Number"); 
-        $t->assign('grid_header' , $objGrid -> getHeader(NULL, $_config['abs_url_path']. '/js/dgscripts.js', $_config['abs_url_path']. '/includes/dgstyle.css'));
-        //        $objGrid -> paginationmode('links');
-        $objGrid->message['display'] = $_lang['display_rows_dives'];
-        $objGrid -> orderby("Number", "DESC"); 
-        //Total width should be 700px 5+100+80+250+400
-        if($this->multiuser){
-            $objGrid -> FormatColumn("Number", $_lang['dlog_title_number'], 5, 5, 5, "20", "center","link:open_url(%s\,'$url'),Number"); 
-        } else{
-            $objGrid -> FormatColumn("Number", $_lang['dlog_title_number'], 5, 5, 5, "20", "center","link:open_url(%s\,'$url'),Number"); 
 
-        }
-        $objGrid -> FormatColumn("Divedate", $_lang['dlog_title_divedate'], 2, 4, 0, "60", "center", "date:dmy:-" ); 
-        if($_config['length']){
-            $objGrid -> FormatColumn("Depth", $_lang['dlog_title_depth'], 12, 12, 0, "60", "center","sign:".$_lang['unit_length_short_imp']  );
-        } else {
-            $objGrid -> FormatColumn("Depth", $_lang['dlog_title_depth'], 12, 12, 0, "60", "center","sign:".$_lang['unit_length_short']  );
-        }
-        $objGrid -> FormatColumn("Divetime", $_lang['dlog_title_divetime'], 2, 4, 0, "60", "center","sign:".$_lang['unit_time_short'] );
-        $objGrid -> FormatColumn("Place", $_lang['dlog_title_place'], 180, 100, 0, "300", "left"); 
-        $objGrid -> FormatColumn("City", $_lang['dlog_title_location'], 180, 100, 0, "184", "left"); 
-        //$objGrid -> FormatColumn("image_1","Img", "25", "0", "3","20","center","image:images/photo_icon.gif");    
-  
-        $objGrid->sqlstatement($recentdivelist_query);
-        $grid = $GridClass->get_grid($objGrid);
-        $t->assign('grid_display' ,1);
-        $t->assign('grid',$grid );
-
-    }
-*/
-   function get_dive_overview_grid(){
+function get_dive_overview_grid(){
         global $db, $t, $_lang, $globals, $_config;
         set_config_table_prefix($this->table_prefix);
         //    Get the details of the dives to be listed
@@ -1612,6 +1630,7 @@ class Divelog {
         
         }
         $data = parse_mysql_query(0,$recentdivelist_query);
+
         $GridClass = new TableGrid($this->user_id,$data);
         $grid = $GridClass->get_grid_class();
 
@@ -1622,7 +1641,11 @@ class Divelog {
         $grid->showColumn('Divetime');
         $grid->showColumn('Place');
         $grid->showColumn('City');
+        $grid->showCustomColumn("photo");
+        $methodVariable = array($this, 'dive_has_photo'); 
+        $grid->setCallbackFunction("photo", $methodVariable);
         $grid->setRowActionFunction("action");
+        //$grid->unsetActionFunction("photo");
     //    $grid->columnsToShow['Number']["action"] = "action";
         $grid_ret = $grid->render(TRUE);
 
@@ -3060,7 +3083,7 @@ class DivePictures{
     function get_divegallery_info($dive_id = 0, $site_id = 0, $equipment_nr = 0){
         global $globals, $_config,$_lang,$t;
         if(($this->multiuser && !empty($this->user_id)) || !$this->multiuser ){
-            set_config_table_prefix($this->table_prefix);
+           set_config_table_prefix($this->table_prefix);
             if($dive_id == 0 && $site_id == 0 && $equipment_nr == 0 ){
                 $divepics = parse_mysql_query('divepicsall.sql');
                 $base_path = $_config['picpath_web'];

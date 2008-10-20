@@ -1064,12 +1064,13 @@ class dataGrid
 
                             $this->columnsToShow[$field]["callback"] != "" &&
 
-                            function_exists($this->columnsToShow[$field]["callback"])
+                            is_callable($this->columnsToShow[$field]["callback"], false, $callable_name)
 
                         ) {
 
                             // run the callback function on the current value
-                            eval("\$value = " . $this->columnsToShow[$field]["callback"] . "('" . preg_replace("/\'/", "\\'", $row[$field]) . "', \$row);");
+                            //eval("\$value = " . $this->columnsToShow[$field]["callback"] . "('" . preg_replace("/\'/", "\\'", $row[$field]) . "', \$row);");
+                            eval("\$value = " . $callable_name . "('" . preg_replace("/\'/", "\\'", $row[$field]) . "', \$row);");
 
                         } else {
 

@@ -47,7 +47,22 @@ function action($value_of_clicked_field, $array_values)
         } elseif($request_type == 3){
             return "javascript:open_url(".$array_values["ID"].",'/equipment.php/' )";
         }
+    }else {
+        $request = new HandleRequest();
+        $request->set_request_uri($_SERVER['REQUEST_URI']);
+        $request->set_file_depth(0);
+        $foo = $request->handle_url();
+        $request_type = $_SESSION['request_type'];
+        if($request_type == 1){ 
+            return "javascript:open_url(".$array_values["Number"].",'/index.php/' )";
+        } elseif($request_type == 2){
+            return "javascript:open_url(".$array_values["ID"].",'/divesite.php/' )";
+        } elseif($request_type == 3){
+            return "javascript:open_url(".$array_values["ID"].",'/equipment.php/' )";
+        }
     }
+
+
 }
 
 
@@ -144,11 +159,11 @@ function parse_mysql_query($filename, $sql_query = 0, $debug = false)
         $query = sql_file($filename);
     }
     if ($query) {
-		$connection = mysql_connect($server, $username, $password);
+        $connection = mysql_connect($server, $username, $password);
 		mysql_select_db($db, $connection);
         mysql_query("SET CHARACTER SET 'utf8'", $connection);
 		$server_query = mysql_query($query, $connection);
-		if (mysql_errno()  ) {
+        if (mysql_errno()  ) {
 			echo "<hr>\n<b>MySQL error " . mysql_errno(). ": " . mysql_error() . "\n:</b><br>\n";
 		    echo "Query: $query <br><hr>";
             exit;
