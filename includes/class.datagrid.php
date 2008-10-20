@@ -28,9 +28,9 @@
  *
  *  @name       dataGrid
  *  @package    dataGrid
- *  @version    1.0 BETA 3 (last revision: May 15, 2007)
+ *  @version    1.1 (last revision: October 12, 2008)
  *  @author     Stefan Gabos <ix@nivelzero.ro>
- *  @copyright  (c) 2006 - 2007 Stefan Gabos
+ *  @copyright  (c) 2006 - 2008 Stefan Gabos
  */
  
 error_reporting(E_ALL);
@@ -229,7 +229,7 @@ class dataGrid
      *                                  <i>If you are passing a MySQL SELECT query, you must not use ORDER BY and LIMIT
      *                                  statements in it as they are appended automatically!</i>
      *
-     *  @param  string  $db             a reference to an instantiated "Zebra PHP Framework MySQL Database Wrapper" object.
+     *  @param  string  &$db            a reference to an instantiated "Zebra PHP Framework MySQL Database Wrapper" object.
      *                                  you should use this approach for logging and debugging purposes but the class will work
      *                                  even if you don't specify this reference. in this case the class <b>will assume that there
      *                                  is already a connection to a MySQL database</b>
@@ -279,6 +279,10 @@ class dataGrid
         $this->URLa = "?page=";
 
         $this->noDataMsg = "";
+        
+        $this->forceHeaderHTML = false;
+        
+        $this->forceFooterHTML = false;
 
         $this->formName = "";
 
@@ -292,10 +296,18 @@ class dataGrid
         // and (on a windows machine) replace \ with /
         $this->absolutePath = preg_replace("/\\\/", "/", dirname(__FILE__));
         
-        // get the relative path of the class. ( by removing $_SERVER["DOCUMENT_ROOT"] from the it)
-        // any HTML references (to scripts, to stylesheets) in the template file should rely on this
-        $this->relativePath = preg_replace("/" . preg_replace("/\//", "\/", $_SERVER["DOCUMENT_ROOT"]) . "/i", "", $this->absolutePath);
-        
+        // get the URL to the class
+        // server protocol (http, https)
+        preg_match('/(.*?)\//', $_SERVER['SERVER_PROTOCOL'], $matches);
+
+        $protocol = strtolower($matches[1]);
+
+        // create URL
+        $url = rtrim(preg_replace('/\\\/', '/', strtolower($_SERVER['SERVER_NAME'])), '/') . '/' . ltrim(preg_replace('/' . preg_replace('/\//', '\/', quotemeta(preg_replace('/\\\/', '/', strtolower($_SERVER['DOCUMENT_ROOT'])))) . '/', '', preg_replace('/\\\/', '/', strtolower(dirname(__FILE__)))));
+
+        // if newly composed URL is missing server protocol, append it
+        $this->relativePath = (preg_match('/^' . quotemeta($protocol) . '/i', $url) == 0 ? $protocol . '://' : '') . $url;
+
         // if $db is specified and is an object and is a "database" object
         if (@is_object($db) && @get_class($db) == "database") {
         
@@ -524,14 +536,10 @@ class dataGrid
         if ($this->useSEO) {
 
             // check if form action URL contains information about the current page
-            $a = "/" . quotemeta($this->URLa) . "([0-9]*)?" . "/";
-            echo "a: ".$a;
-            //print_r($this->formAction);
-            if (preg_match_all($a, $this->formAction, $matches) > 0) {
+            if (preg_match_all("/" . quotemeta($this->URLa) . "([0-9]*)?" . "/", $this->formAction, $matches) > 0) {
 
                 // if does, use that as current page
-                //$this->currentPage = $matches[1];
-                $this->currentPage = $matches[0][0];
+                $this->currentPage = $matches[1];
 
             // if no information about the current page could be found in form action URL
             } else {
@@ -1041,7 +1049,7 @@ class dataGrid
 
                     // iterates through the fields in the row
                     foreach ($this->columnsToShow as $field=>$properties) {
-
+                    
                         // if it's a custom field we're talking about
                         if (isset($properties["custom"])) {
 
@@ -1207,6 +1215,24 @@ class dataGrid
                 }
 
                 $this->xtpl->parse("main.no_data");
+
+                // if we have custom HTML at header and needs to be displayed even if there are no records
+                if (isset($this->headerHTML) && $this->forceHeaderHTML) {
+
+                    $this->xtpl->assign("HTML", $this->headerHTML);
+
+                    $this->xtpl->parse("main.headerHTML");
+
+                }
+
+                // if we have custom HTML at footer and needs to be displayed even if there are no records
+                if (isset($this->footerHTML) && $this->forceFooterHTML) {
+
+                    $this->xtpl->assign("HTML", $this->footerHTML);
+
+                    $this->xtpl->parse("main.footerHTML");
+
+                }
 
             }
 
@@ -1387,14 +1413,20 @@ class dataGrid
     /**
      *  Sets the HTML code to be displayed after the rendering of the table but INSIDE the form
      *
-     *  @param  string  $HTML   HTML code to be displayed
+     *  @param  string  $HTML           HTML code to be displayed
+     *
+     *  @param  boolean $showIfNoData   Instructs the class whether to show the footer HTML code if there's no data to display
+     *
+     *                                  Default is false
      *
      *  @return void
      */
-    function setFooterHTML($HTML)
+    function setFooterHTML($HTML, $showIfNoData = false)
     {
 
         $this->footerHTML = $HTML;
+        
+        $this->forceFooterHTML = $showIfNoData;
 
     }
 
@@ -1403,12 +1435,18 @@ class dataGrid
      *
      *  @param  string  $HTML   HTML code to be displayed
      *
+     *  @param  boolean $showIfNoData   Instructs the class whether to show the header HTML code if there's no data to display
+     *
+     *                                  Default is false
+     *
      *  @return void
      */
-    function setHeaderHTML($HTML)
+    function setHeaderHTML($HTML, $showIfNoData = false)
     {
 
         $this->headerHTML = $HTML;
+
+        $this->forceHeaderHTML = $showIfNoData;
 
     }
 

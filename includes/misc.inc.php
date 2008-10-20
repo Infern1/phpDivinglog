@@ -35,12 +35,21 @@ function htmlentities_array($arr = array())
 	}
 	return $rs;
 }
-   function action($value_of_clicked_field, $array_values)
-    {
 
-//        return "javascript:alert('the row is ".$array_values["Number"]."' )";
-        return "javascript:open_url(".$array_values["Number"].",'/index.php/' )";
+function action($value_of_clicked_field, $array_values)
+{
+    if(isset($_SESSION['request_type'])){
+        $request_type = $_SESSION['request_type'];
+        if($request_type == 1){ 
+            return "javascript:open_url(".$array_values["Number"].",'/index.php/' )";
+        } elseif($request_type == 2){
+            return "javascript:open_url(".$array_values["ID"].",'/divesite.php/' )";
+        } elseif($request_type == 3){
+            return "javascript:open_url(".$array_values["ID"].",'/equipment.php/' )";
+        }
     }
+}
+
 
 // Get the language values
 

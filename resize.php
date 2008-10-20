@@ -101,13 +101,13 @@ if ($total_subscribers >= $start_with)
 {
     // retrieve all necessary data in the database
     $pb->sleep(1000);          // process simulation
-    if(isset($images_for_resize[$start_with][thumb])){
+    if(isset($images_for_resize[$start_with]['thumb'])){
         //echo "thumb";
-        make_thumb($images_for_resize[$start_with][img_url],$images_for_resize[$start_with][img_thumb_url]);
+        make_thumb($images_for_resize[$start_with]['img_url'],$images_for_resize[$start_with]['img_thumb_url']);
     }
-    if(isset($images_for_resize[$start_with][resize])){
+    if(isset($images_for_resize[$start_with]['resize'])){
         //echo "resize";
-        resize_image($images_for_resize[$start_with][img_url]);
+        resize_image($images_for_resize[$start_with]['img_url']);
     }
     // if new data are available, then ...
     $sent = $maximum_send;

@@ -208,7 +208,10 @@ class HandleRequest {
                         $this->diver_choice = true;
                         $this->request_type = 1;
                     break;
+
                 }
+                $_SESSION['request_type'] = $this->request_type;
+
             }else {
                 $this->diver_choice = true;
             }
@@ -272,6 +275,8 @@ class HandleRequest {
                         //defaults to main page
                         break;
                 }
+                $_SESSION['request_type'] = $this->request_type;
+
             }
         }
     }
@@ -523,7 +528,7 @@ class TablePager{
         if($_config['query_string']){
             $pager_options = array( 
                     'mode' => 'Sliding', 
-                    'perPage' => $_config['max_list'], 
+                    'perPage' => 16, 
                     'append' => true,
                     'currentPage' => $cpage,
                     'path' => '' ,
@@ -532,7 +537,7 @@ class TablePager{
         } else {
             $pager_options = array( 
                     'mode' => 'Sliding', 
-                    'perPage' => $_config['max_list'], 
+                    'perPage' => 16, 
                     'append' => false,
                     'currentPage' => $cpage,
                     'path' => $path ,
@@ -1626,7 +1631,7 @@ class Divelog {
 
 
     }
-      /**
+   /**
      * get_overview_divers 
      * 
      * @access public
@@ -2080,6 +2085,7 @@ class Divesite{
         $grid->showColumn('Country');
         $grid->showColumn('City');
         $grid->showColumn('MaxDepth');
+        $grid->setRowActionFunction("action");
         $grid_ret = $grid->render(TRUE); 
         $t->assign('grid_display' ,1);
         $t->assign('grid',$grid_ret );
@@ -2350,33 +2356,61 @@ class Equipment{
      * @access public
      * @return void
      */
+//    function get_equipment_overview_grid(){
+//        global $t, $_lang, $globals, $_config;/*{{{*/
+//        $GridClass = new TableGrid($this->used_id);
+//        $objGrid = $GridClass->get_grid_class();
+//        $objGrid -> tabla ($this->table_prefix."Equipment");
+//         if($this->multiuser){
+//            $url =  "/equipment.php".$t->get_template_vars('sep1'). $this->user_id.$t->get_template_vars('sep2');
+//        } else {
+//            $url =  "/equipment.php".$t->get_template_vars('sep2');
+//        }
+//         $objGrid->message['display'] = $_lang['display_rows_equipment'];
+//         $objGrid -> keyfield("ID");
+//       $t->assign('grid_header' , $objGrid -> getHeader(NULL, $_config['abs_url_path']. '/js/dgscripts.js', $_config['abs_url_path']. '/includes/dgstyle.css'));
+//        $objGrid -> orderby("Manufacturer", "ASC"); 
+//                $objGrid -> FormatColumn("ID", $_lang['equip_title_object'], 5, 5, 5, "5", "center","link:open_url(%s\,'$url'),ID"); 
+//        if($this->multiuser){
+//            $objGrid -> FormatColumn("Object", $_lang['equip_title_object'], 180, 100, 0, "300", "left" ,"link:open_url(%s\,'$url'),ID"); 
+//        }else{
+//            $objGrid -> FormatColumn("Object", $_lang['equip_title_object'], 180, 100, 0, "300", "left" ,"link:open_url(%s\,'$url'),ID"); 
+
+//        }
+//        $objGrid -> FormatColumn("Manufacturer", $_lang['equip_title_manufacturer'], 180, 100, 0, "150", "left"); 
+//        $grid = $GridClass->get_grid($objGrid);
+//        $t->assign('grid_display' ,1);
+//        $t->assign('grid',$grid );
+///*}}}*/
+//    }
     function get_equipment_overview_grid(){
         global $t, $_lang, $globals, $_config;/*{{{*/
-        $GridClass = new TableGrid($this->used_id);
-        $objGrid = $GridClass->get_grid_class();
-        $objGrid -> tabla ($this->table_prefix."Equipment");
-         if($this->multiuser){
-            $url =  "/equipment.php".$t->get_template_vars('sep1'). $this->user_id.$t->get_template_vars('sep2');
-        } else {
-            $url =  "/equipment.php".$t->get_template_vars('sep2');
-        }
-         $objGrid->message['display'] = $_lang['display_rows_equipment'];
-         $objGrid -> keyfield("ID");
-       $t->assign('grid_header' , $objGrid -> getHeader(NULL, $_config['abs_url_path']. '/js/dgscripts.js', $_config['abs_url_path']. '/includes/dgstyle.css'));
-        $objGrid -> orderby("Manufacturer", "ASC"); 
-        //        $objGrid -> FormatColumn("ID", $_lang['equip_title_object'], 5, 5, 5, "5", "center","link:open_url(%s\,'$url'),ID"); 
-        if($this->multiuser){
-            $objGrid -> FormatColumn("Object", $_lang['equip_title_object'], 180, 100, 0, "300", "left" ,"link:open_url(%s\,'$url'),ID"); 
-        }else{
-            $objGrid -> FormatColumn("Object", $_lang['equip_title_object'], 180, 100, 0, "300", "left" ,"link:open_url(%s\,'$url'),ID"); 
+          $sql = sql_file('equiplist.sql');
+         // $sql .=  " ORDER BY Place ASC";
+        $data = parse_mysql_query(0,$sql);;
+        $GridClass = new TableGrid($this->user_id,$data);
+        $grid = $GridClass->get_grid_class();
 
+        /**
+         * Define the table according some info 
+         */
+        if($this->multiuser){
+            $url =  "/divesite.php".$t->get_template_vars('sep1').$this->user_id.$t->get_template_vars('sep2');
+        } else {
+            $url =  "/divesite.php".$t->get_template_vars('sep2');
         }
-        $objGrid -> FormatColumn("Manufacturer", $_lang['equip_title_manufacturer'], 180, 100, 0, "150", "left"); 
-        $grid = $GridClass->get_grid($objGrid);
+        //print_r($data);
+        $grid->showColumn('Object');
+        $grid->showColumn('Manufacturer');
+        $grid->setRowActionFunction("action");
+        $grid_ret = $grid->render(TRUE); 
         $t->assign('grid_display' ,1);
-        $t->assign('grid',$grid );
-/*}}}*/
+        $t->assign('grid',$grid_ret );
+
+        /*}}}*/
     }
+
+
 /*}}}*/
 }
 
@@ -3057,8 +3091,14 @@ class DivePictures{
                        //$img_title = $_lang['divepic_linktitle_pt1']. ($a). $_lang['divepic_linktitle_pt2']. $pics;
                         //$img_title .= $_lang['divepic_linktitle_pt3']  ;
                         $img_title = $divepics[$i]['Description'];
-                        $dive_nr = $divepics[$i]['Number'];
-                        $site_nr = $divepics[$i]['PlaceID']; 
+                        $dive_nr =0;
+                        $site_nr =0;
+                        if(isset($divepics[$i]['Number'])){
+                            $dive_nr = $divepics[$i]['Number'];
+                        }
+                        if(isset($divepics[$i]['PlaceID'])){
+                            $site_nr = $divepics[$i]['PlaceID'];
+                        }
                         $this->image_link[] =  array(
                                 'img_url' => $img_url, 
                                 'img_thumb_url' => $img_thumb_url , 
@@ -3089,30 +3129,30 @@ class DivePictures{
                          *  Check normal image
                          */
 
-                        if(filesize($this->image_link[$i][img_url]) < 512000  ){
+                        if(filesize($this->image_link[$i]['img_url']) < 1812000  ){
                             $size = array();
-                            $size =getimagesize($this->image_link[$i][img_url]);
+                            $size =getimagesize($this->image_link[$i]['img_url']);
                             /**
                              * Make an array of the resized images 
                              */
                             if($size[0] <= $_config['pic-width']){
                                 //echo "No resize <br>";
                             } else {
-                                $this->image_link[$i][resize] = true;
+                                $this->image_link[$i]['resize'] = true;
                                 $this->number_images_resize++;
                             }
                             /**
                              * Make array of the beresized thumbs
                              */
-                            if(!file_exists($this->image_link[$i][img_thumb_url])){
-                                $this->image_link[$i][thumb] = true;
+                            if(!file_exists($this->image_link[$i]['img_thumb_url'])){
+                                $this->image_link[$i]['thumb'] = true;
                                 $this->number_images_resize++;
                             } else {
-                                $size_thumb = getimagesize($this->image_link[$i][img_thumb_url]);
+                                $size_thumb = getimagesize($this->image_link[$i]['img_thumb_url']);
                                 if($size_thumb[0]<=$_config['thumb-width'] && $size_thumb[1]<=$_config['thumb-width']){
                                     //echo "No thumb <br>";
                                 } else {
-                                    $this->image_link[$i][thumb] = true;
+                                    $this->image_link[$i]['thumb'] = true;
                                     $this->number_images_resize++;
                                 }
 
@@ -3225,7 +3265,6 @@ class DivePictures{
         } else {
             $cpage = $this->requested_page;
         }
-
         $pager = new TablePager($cpage,$path);
         $pager->set_tablepager_itemdata($this->image_link);
         $pager->create_pager();
