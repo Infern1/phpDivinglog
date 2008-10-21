@@ -970,10 +970,15 @@ class dataGrid
                     $this->xtpl->assign("originalName", $originalName);
 
                     $this->xtpl->assign("column", $column["name"]);
+                    
+                    if(isset($column["col_width"])){
+                        $this->xtpl->assign("col_width", $column["col_width"]);
+                    }else{
+                        $this->xtpl->assign("col_width", "");
+                    }
 
                     // if there are special properties for this column's title
-                    if (isset($column["titleHTMLProperties"])) {
-
+                    if (isset($column["titleHTMLProperties"]) ) {
                         $this->xtpl->assign("titleHTMLProperties", $column["titleHTMLProperties"]);
 
                     } else {
@@ -1028,9 +1033,11 @@ class dataGrid
 
                     // wraps up column title display
                     $this->xtpl->parse("main.column.title");
+                    $this->xtpl->parse("main.colgroup");
 
                 }
 
+                
                 // wraps up column header display
                 $this->xtpl->parse("main.column");
 
@@ -1598,6 +1605,39 @@ class dataGrid
 
             // sets HTML properties
             $this->columnsToShow[$columnName]["titleHTMLProperties"] = $HTMLProperties;
+
+        }
+
+
+    }
+
+    /**
+     * setColwidth set the width of the column via a colgroup structure 
+     * 
+     * @param mixed $columnName 
+     * @param mixed $col_width 
+     * @access public
+     * @return void
+     */
+    function setColwidth($columnName, $col_width)
+    {
+
+        // if $columnName is an array
+        if (is_array($columnName)) {
+
+            // iterate through all the given columns
+            foreach ($columnName as $column) {
+
+                // sets col width via colgroup to each one of the columns
+                $this->columnsToShow[$column]["col_width"] = $col_width;
+
+            }
+
+        // if $columnName is not an array
+        } else {
+
+            // sets col widt
+            $this->columnsToShow[$columnName]["col_width"] = $col_width;
 
         }
 

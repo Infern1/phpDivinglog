@@ -190,14 +190,16 @@ if ($_config['graph_show_two_scales'] || $_config['graph_show_both_units']) {
     $graph->SetBox(true, '#000000', 1);
 } 
 $graph->img->SetMargin(50, 50, 30, 70);
-$graph->SetFrame(false);
+$graph->SetFrame(true,$_config['background_color'],1);
 // $graph->SetAxisStyle(AXSTYLE_BOXOUT);
 if ($_config['graph_background_image'] != "") {
     $graph->SetMarginColor('#ffffff');
     $graph->SetColor('#f3f3f3');
     $graph->SetBackgroundImage($_config['graph_background_image'], BGIMG_FILLFRAME);
 } else {
-    $graph->SetMarginColor('#ffffff');
+    //$graph->SetMarginColor('#ffffff');
+    $graph->SetMarginColor($_config['background_color']);
+
     $graph->SetColor('#f3f3f3');
 } 
 

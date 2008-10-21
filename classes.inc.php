@@ -1589,7 +1589,7 @@ class Divelog {
     function dive_has_photo($value, $row){
         global $_config;
         if(Divelog::dive_has_pictures($row['Number'])){
-            return '<img src="'.$_config['web_root'].'/images/photo_icon.gif">';
+            return '<img src="'.$_config['web_root'].'/images/photo_icon.gif" alt="">';
         }
     }
 
@@ -1636,12 +1636,19 @@ function get_dive_overview_grid(){
 
         //$grid = new dataGrid($data,$void); 
         $grid->showColumn('Number', $_lang['dlog_title_number']);
+        $grid->setColwidth('Number',"2");
         $grid->showColumn('Divedate', $_lang['dlog_title_divedate']);
+        $grid->setColwidth('Divedate',"5");
         $grid->showColumn('Depth', $_lang['dlog_title_depth']);
+        $grid->setColwidth('Depth',"10");
         $grid->showColumn('Divetime', $_lang['dlog_title_divetime']);
+        $grid->setColwidth('Divetime',"10");
         $grid->showColumn('Place', $_lang['dlog_title_place']);
+        $grid->setColwidth('Place',"150");
         $grid->showColumn('City',  $_lang['dlog_title_location']);
+        $grid->setColwidth('City',"50");
         $grid->showCustomColumn("photo");
+        $grid->setColwidth('photo',"5");
         $methodVariable = array($this, 'dive_has_photo'); 
         $grid->setCallbackFunction("photo", $methodVariable);
         $grid->setCallbackFunction("Divedate","convert_date"); 

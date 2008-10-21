@@ -45,10 +45,10 @@ $data =
 array($divestats->depthrange1_per,$divestats->depthrange2_per,$divestats->depthrange3_per,$divestats->depthrange4_per,$divestats->depthrange5_per);
 
 $graph = new PieGraph(650,200,"auto");
-$graph->SetShadow();
+//$graph->SetShadow();
 ;
 //$graph->title->Set("A simple Pie plot");
-$graph->SetFrame(false);
+$graph->SetFrame(true,$_config['background_color'],1);
 $p1 = new PiePlot($data);
 //$legends = array('April (%d)','May (%d)','June (%d)');
 $legends = array(   
@@ -61,6 +61,7 @@ $_config['length'] ? backhtmlentities($_lang['stats_depth5i']) : backhtmlentitie
 $p1->SetLegends($legends);
 //$p1->SetSliceColors(array('cadetblue1', 'lightskyblue3','skyblue3','dodgerblue','dodgerblue4'));
 $p1->SetTheme('water');
+$graph->SetMarginColor($_config['background_color']);
 $graph->legend->SetFont(FF_VERDANA, FS_NORMAL, 8);
 $graph->legend->SetShadow(false);
 $graph->Add($p1);

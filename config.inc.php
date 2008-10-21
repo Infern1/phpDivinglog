@@ -140,6 +140,11 @@ $_config['pic-width'] = 800;
 $_config['graph_background_image'] = "";
 
 /**
+ *  Set the background color for the diveprofile and pie chart  
+ */
+$_config['background_color'] = '#ffedd6';
+
+/**
  * set to 'true' to show Y scales on two sides
  * set to 'false' to show Y scale only on left side
  */
@@ -156,7 +161,7 @@ $_config['graph_show_both_units'] = true;
  * set values to true if you want to convert from metric units to imperial units,
  * or to false if values should be left as metric units. 
  */
- 
+
 /**
  * Define date format dmy- result in day-month-year 
  */
