@@ -1,0 +1,135 @@
+.grid
+{
+/*    font-family: tahoma, verdana, arial, sans;*/
+    font-size: 12px;
+    width: 700px;
+    border: 1px solid #000000;
+}
+.grid-column-sorted-asc
+{
+    width: 8px;
+    height: 10px;
+    background-image: url(img/down.gif);
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+.grid-column-sorted-desc
+{
+    width: 8px;
+    height: 10px;
+    background-image: url(img/up.gif);
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+.grid-column-title
+{
+    background-color: #dedede;
+}
+.grid-column-title-cell
+{
+}
+.grid-column-title-caption-sortable
+{
+    font-size: 11px;
+    font-weight: bold;
+    text-decoration: none;
+color:#323232;
+/*color: #e9e9e9;*/
+    border-bottom: 1px dotted #e9e9e9;
+}
+.grid-column-title-caption-not-sortable
+{
+    font-size: 11px;
+    font-weight: bold;
+    color:#323232;
+    /*color: #e9e9e9;*/
+}
+.grid-navigation
+{
+    /*background-color: #bcbcbc;*/
+    padding: 2px;
+    width: 100%;
+    font-size: 11px;
+}
+.grid-navigation-item
+{
+    color: #000000;
+    text-decoration: none;
+    font-weight: bold;
+}
+.grid-navigation-item-disabled
+{
+    color: #dedede;
+    text-decoration: none;
+    font-weight: bold;
+}
+.grid-navigation-item-selected
+{
+    color: black;
+    background-color: #99cc99;
+    border: 1px solid #000000;
+    padding: 1px;
+    text-decoration: none;
+    font-weight: bold;
+}
+.grid-row-odd
+{
+    cursor: pointer;
+    background-color: #E9EFF2;
+}
+.grid-row-odd-cell
+{
+    padding: 3px;
+}
+.grid-row-even
+{
+    cursor: pointer;
+    background-color: #FFFFFF;
+}
+.grid-row-even-cell
+{
+    padding: 3px;
+}
+.grid-row-mouseover
+{
+    cursor: pointer;
+    background-color: #CCFF99;
+    color: #000000;
+}
+.grid-row-selected
+{
+    cursor: pointer;
+    color: #000000;
+    background-color: #ccff99;
+}
+.grid-custom-tab
+{
+    /*background-color: #ececec;*/
+    padding: 3px;
+    border-top: none;
+}
+.grid-no-javascript
+{
+    font-family: tahoma, verdana, arial, sans;
+    font-size: 13px;
+    font-weight: bold;
+    color: #c40000;
+}
+.grid-link
+{
+    font-size: 11px;
+    font-weight: bold;
+    text-decoration: none;
+    color: #666666;
+}
+.grid-select-show-records-on-page
+{
+    font-size: 11px;
+}
+.grid-select
+{
+    border: 1px solid #ffffff;
+    background-color: #ff6600;
+    font-weight: bold;
+    color: #ffffff;
+}
