@@ -1469,15 +1469,15 @@ class Divelog {
             $divegear = parse_mysql_query('divegearlist.sql');
             reset_config_table_prefix();
             $num_equip = count($divegear);
+            $equip_link[] =  array();
+
             for($i=0; $i<$num_equip; $i++) {
-                if($this->multiuser){
-                    $equip_link[$i] = '<a href="'.$_config['web_root'].'/equipment.php/'.$this->user_id.'/'. $divegear[$i]['ID'] .'" title="'. $divegear[$i]['Object'] .' ';
-                } else {
-                    $equip_link[$i] = '<a href="'.$_config['web_root'].'/equipment.php/'. $divegear[$i]['ID'] .'" title="'. $divegear[$i]['Object'] .' ';
-                }
-                $equip_link[$i] .=   $_lang['logbook_place_linktitle'] .'">';
-                $equip_link[$i] .= $divegear[$i]['Object'] ."</a>";
+                $equip_link[$i] = array (
+                        'equipmentnr' => $divegear[$i]['ID'],
+                        'divegear' => $divegear[$i]['Object']
+                        );
             }
+            $t->assign('logbook_place_linktitle', $_lang['logbook_place_linktitle']);  
             $t->assign('equip_link', $equip_link);
         }/*}}}*/
     }
@@ -1693,7 +1693,7 @@ function get_dive_overview_grid(){
  * @license LGPL v3 http://www.gnu.org/licenses/lgpl-3.0.txt
  */
 class Divesite{
-    var $multiuser;
+    var $multiuser;/*{{{*/
     var $table_prefix;
     var $user_id;
     var $divesite_nr;
@@ -2127,7 +2127,7 @@ class Divesite{
 
         /*}}}*/
     }
-
+/*}}}*/
 }
 /**
  * Equipment contains all functions for displaying the equipment information

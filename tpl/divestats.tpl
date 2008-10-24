@@ -107,8 +107,8 @@ title="{$dlog_number_title}{$DepthMinNr}">{$DepthMinNr}</a></td>
 <td>{$WatertempMin}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep1}{$multiuser_id}{$sep2}{$WatertempMinNr}" title="{$dlog_number_title} {$WatertempMinNr}">{$WatertempMinNr}</a></td>
 <td>{$WatertempMax}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep1}{$multiuser_id}{$sep2}{$WatertempMaxNr}" title="{$dlog_number_title} {$WatertempMaxNr}">{$WatertempMaxNr}</a></td>
  {else}
-<td>{$WatertempMin}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep1}{$WatertempMinNr}" title="{$dlog_number_title} {$WatertempMinNr}">{$WatertempMinNr}</a></td>
-<td>{$WatertempMax}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep1}{$WatertempMaxNr}" title="{$dlog_number_title} {$WatertempMaxNr}">{$WatertempMaxNr}</a></td>
+<td>{$WatertempMin}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep2}{$WatertempMinNr}" title="{$dlog_number_title} {$WatertempMinNr}">{$WatertempMinNr}</a></td>
+<td>{$WatertempMax}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep2}{$WatertempMaxNr}" title="{$dlog_number_title} {$WatertempMaxNr}">{$WatertempMaxNr}</a></td>
  {/if}
  <td>{$decodives} ({$decodives_per}%)</td>
  <td>{$repdives} ({$repdives_per}%)</td>

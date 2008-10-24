@@ -24,7 +24,7 @@ global $_config;
  * @return void
  */
 function htmlentities_array($arr = array()) 
-{
+{/*{{{*/
 	$rs =  array();
 	while(list($key,$val) = each($arr)) {
 		if (is_array($val)) {
@@ -33,18 +33,28 @@ function htmlentities_array($arr = array())
             $rs[$key] = htmlentities($val, ENT_QUOTES, "UTF-8",0);
 		}
 	}
-	return $rs;
+	return $rs;/*}}}*/
 }
 
 function action($value_of_clicked_field, $array_values) {
-    if(isset($_SESSION['request_type'])){/*{{{*/
+/*{{{*/
+
+    global $_config;
+    if(isset($_SESSION['request_type'])){        
+        if($_config['query_string'])
+        {
+            $ext = "?id=";
+        } else {
+            $ext = "/";
+        }
+
         $request_type = $_SESSION['request_type'];
         if($request_type == 1){ 
-            return "javascript:open_url(".$array_values["Number"].",'/index.php/' )";
+            return "javascript:open_url(".$array_values["Number"].",'/index.php".$ext."' )";
         } elseif($request_type == 2){
-            return "javascript:open_url(".$array_values["ID"].",'/divesite.php/' )";
+            return "javascript:open_url(".$array_values["ID"].",'/divesite.php".$ext."' )";
         } elseif($request_type == 3){
-            return "javascript:open_url(".$array_values["ID"].",'/equipment.php/' )";
+            return "javascript:open_url(".$array_values["ID"].",'/equipment.php".$ext."' )";
         }
     }else {
         $request = new HandleRequest();
@@ -53,17 +63,16 @@ function action($value_of_clicked_field, $array_values) {
         $foo = $request->handle_url();
         $request_type = $_SESSION['request_type'];
         if($request_type == 1){ 
-            return "javascript:open_url(".$array_values["Number"].",'/index.php/' )";
+            return "javascript:open_url(".$array_values["Number"].",'/index.php".$ext."' )";
         } elseif($request_type == 2){
-            return "javascript:open_url(".$array_values["ID"].",'/divesite.php/' )";
+            return "javascript:open_url(".$array_values["ID"].",'/divesite.php".$ext."' )";
         } elseif($request_type == 3){
-            return "javascript:open_url(".$array_values["ID"].",'/equipment.php/' )";
+            return "javascript:open_url(".$array_values["ID"].",'/equipment.php".$ext."' )";
         }
     }
 
-
-}/*}}}*/
-
+/*}}}*/
+}
 
 // Get the language values
 

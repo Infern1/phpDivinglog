@@ -142,7 +142,7 @@ $_config['graph_background_image'] = "";
 /**
  *  Set the background color for the diveprofile and pie chart  
  */
-$_config['background_color'] = '#ffedd6';
+$_config['background_color'] = '#ffffff';
 
 /**
  * set to 'true' to show Y scales on two sides

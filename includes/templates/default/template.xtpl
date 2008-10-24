@@ -1,5 +1,4 @@
 <!-- BEGIN: main -->
-<link rel="stylesheet" href="{templatePath}style.css" type="text/css">
 
 <noscript>
     <div class="grid-no-javascript">
@@ -54,7 +53,7 @@
         <td colspan="{totalColspan}" class="grid-navigation">
             <table cellspacing="0" cellpadding="0" style="width:100%" class="grid-navigation">
                 <tr>
-                    <td nowrap="nowrap">
+                    <td style="white-space: nowrap;">
                         {languageStrings.strLang_showingRecords} <b>{showingRecordsFrom}</b> {languageStrings.strLang_to} <b>{showingRecordsTo}</b> {languageStrings.strLang_of} <b>{totalRecords}</b>
                     </td>
                     <td style="width:100%;" align="center">
@@ -88,7 +87,7 @@
                         <!-- END: next_page_link_disabled -->
                         
                     </td>
-                    <td nowrap="nowrap">
+                    <td style="white-space: nowrap;">
                         {languageStrings.strLang_recordsOnPage}:
                         <select name="dataGrid_recordsOnPage" class="grid-select-show-records-on-page" onchange="setRecordsOnPage(this.value)">
                             {options}
@@ -141,7 +140,7 @@
     
         <!-- BEGIN: even_row -->
         
-        <tr id="grid-row-even" class="grid-row-even" onmouseover="tmpClassName = this.className; this.className = 'grid-row-mouseover'" onmouseout="((tmpClassName != 'grid-row-selected' && this.className == 'grid-row-selected') || (tmpClassName == 'grid-row-selected' && this.className == 'grid-row-mouseover')) ? this.className = 'grid-row-selected' : this.className = 'grid-row-even'">
+        <tr class="grid-row-even" onmouseover="tmpClassName = this.className; this.className = 'grid-row-mouseover'" onmouseout="((tmpClassName != 'grid-row-selected' && this.className == 'grid-row-selected') || (tmpClassName == 'grid-row-selected' && this.className == 'grid-row-mouseover')) ? this.className = 'grid-row-selected' : this.className = 'grid-row-even'">
         
             <!-- BEGIN: field -->
             <td class="grid-row-even-cell" onclick="{action}" {fieldHTMLProperties}>{value}</td>
@@ -152,7 +151,7 @@
         
         <!-- BEGIN: odd_row -->
         
-        <tr id="grid-row-odd" class="grid-row-odd" onmouseover="tmpClassName = this.className; this.className = 'grid-row-mouseover'" onmouseout="((tmpClassName != 'grid-row-selected' && this.className == 'grid-row-selected') || (tmpClassName == 'grid-row-selected' && this.className == 'grid-row-mouseover')) ? this.className = 'grid-row-selected' : this.className = 'grid-row-odd'">
+        <tr  class="grid-row-odd" onmouseover="tmpClassName = this.className; this.className = 'grid-row-mouseover'" onmouseout="((tmpClassName != 'grid-row-selected' && this.className == 'grid-row-selected') || (tmpClassName == 'grid-row-selected' && this.className == 'grid-row-mouseover')) ? this.className = 'grid-row-selected' : this.className = 'grid-row-odd'">
         
             <!-- BEGIN: field -->
             <td class="grid-row-odd-cell" onclick="{action}" {fieldHTMLProperties}>{value}</td>
@@ -168,7 +167,7 @@
         <td colspan="{totalColspan}" class="grid-navigation" style="position:relative">
             <table cellspacing="0" cellpadding="0" style="width:100%" class="grid-navigation">
                 <tr>
-                    <td nowrap="nowrap">
+                    <td style="white-space: nowrap;">
                         {languageStrings.strLang_showingRecords} <b>{showingRecordsFrom}</b> {languageStrings.strLang_to} <b>{showingRecordsTo}</b> {languageStrings.strLang_of} <b>{totalRecords}</b>
                     </td>
                     <td style="width:100%;" align="center">
@@ -202,7 +201,7 @@
                         <!-- END: next_page_link_disabled -->
                         
                     </td>
-                    <td nowrap="nowrap">
+                    <td style="white-space: nowrap;">
                         {languageStrings.strLang_recordsOnPage}:
                         <select class="grid-select-show-records-on-page" onchange="setRecordsOnPage(this.value)">
                             {options}

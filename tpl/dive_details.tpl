@@ -81,28 +81,22 @@
 
     {/if}
     {if isset($pics2)}
-	<div>
+<!--	<div>-->
     	<tr><td colspan="4" class="spacing">&nbsp;</td></tr>
         <tr><td colspan="4">
 		        <p class="centeredImage">
              {foreach from=$image_link key=id item=i name=images}
                 {if isset($pics_resized)}
              <a id="thumb{$id}" href="{$web_root}/{$i.img_url}" class="highslide" onclick="return hs.expand(this)">
-                    <img src="{$web_root}/{$i.img_thumb_url}" alt="Highslide JS" title="{$i.img_title}" height="80" width="120" /></a>
+                    <img src="{$web_root}/{$i.img_thumb_url}" alt="Highslide JS" title="{$i.img_title}" height="80" width="120" ></a>
                 {else}
              <a id="thumb{$id}" href="{$web_root}/{$i.img_url}" class="highslide" onclick="return hs.expand(this)">
-                    <img src="{$web_root}/imagesize.php?w=100&img={$i.img_url}" alt="Highslide JS" title="{$i.img_title}" height="80" width="120" /></a>
+                    <img src="{$web_root}/imagesize.php?w=100&img={$i.img_url}" alt="Highslide JS" title="{$i.img_title}" height="80" width="120" ></a>
                 {/if}
             {/foreach}
 		</p>
 		</td></tr>
-<div id="controlbar" class="highslide-overlay controlbar">
-    <a href="#" class="previous" onclick="return hs.previous(this)" title="Previous (left arrow key)"></a>
-    <a href="#" class="next" onclick="return hs.next(this)" title="Next (right arrow key)"></a>
-    <a href="#" class="highslide-move" onclick="return false" title="Click and drag to move"></a>
-    <a href="#" class="close" onclick="return hs.close(this)" title="Close"></a>
-</div>
-</div>
+<!--</div> -->
     {/if}
 
     {* Dive profile *}
@@ -343,10 +337,14 @@
 		    <td colspan="4">{$logbook_usedequip}</td>
 		</tr>
         <tr class="divecontent">
-		    <td colspan="4">
-	     {foreach from=$equip_link item=foo}
-                {$foo}
-            {/foreach}
+		  <td colspan="4">
+       {foreach from=$equip_link key=id item=i name=equipment}
+           {if isset($multiuser_id)}
+                <a href="{$app_path}/equipment.php{$sep1}{$multiuser_id}{$sep2}{$i.equipmentnr}" title="{$i.divegear} {$logbook_place_linktitle}">{$i.divegear}</a>&nbsp;
+           {else}
+                <a href="{$app_path}/equipment.php{$sep2}{$i.equipmentnr}" title="{$i.divegear} {$logbook_place_linktitle}">{$i.divegear}</a>&nbsp;
+           {/if}
+        {/foreach}
 		
 		</td>
 		</tr>
@@ -367,7 +365,16 @@
 	</tr>
    {/if}
    </table>
-   {* Show the links again *}
+
+{if isset($pics2)}
+<div id="controlbar" class="highslide-overlay controlbar">
+    <a href="#" class="previous" onclick="return hs.previous(this)" title="Previous (left arrow key)"></a>
+    <a href="#" class="next" onclick="return hs.next(this)" title="Next (right arrow key)"></a>
+    <a href="#" class="highslide-move" onclick="return false" title="Click and drag to move"></a>
+    <a href="#" class="close" onclick="return hs.close(this)" title="Close"></a>
+</div>
+{/if}
+{* Show the links again *}
 	<!-- Include links_details -->
 {include file='links_details.tpl'}
 <!-- End include links_details -->
