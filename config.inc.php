@@ -206,11 +206,13 @@ $_config['app_version'] = "2.2";
  * set the file locations of the various graphic images you
  * want to be able to display
  */
+
 /**
  * ABS path to your website (no need to change normaly)
  */
-define('ABSPATH_DIVELOG', dirname(__FILE__).'/');
+define('ABSPATH_DIVELOG', dirname(__FILE__).DIRECTORY_SEPARATOR);
 $_config['app_root']        = ABSPATH_DIVELOG;  
+
 /**
  * ABS path to your pear installation
  */
@@ -264,6 +266,19 @@ if ( ! defined( "PATH_SEPARATOR" ) ) {
 }
 ini_set('include_path', get_include_path() . PATH_SEPARATOR . $_config['pear_path'] . PATH_SEPARATOR . $_config['app_root']."include". PATH_SEPARATOR . $_config['app_root']);
 
+
+/**
+ * Fix $_SERVER['REQUEST_URI'] which is not set on Windows hosts 
+ */
+if(!isset($_SERVER['REQUEST_URI'])) {
+    if(isset($_SERVER['SCRIPT_NAME']))
+        $_SERVER['REQUEST_URI'] = $_SERVER['SCRIPT_NAME'];
+    else
+        $_SERVER['REQUEST_URI'] = $_SERVER['PHP_SELF'];
+    if($_SERVER['QUERY_STRING']){
+        $_SERVER['REQUEST_URI'] .= '?'.$_SERVER['QUERY_STRING'];
+    }
+}
 
 require_once (ABSPATH_DIVELOG . 'includes/misc.inc.php');
 require_once (ABSPATH_DIVELOG . 'includes/image-resize.php');

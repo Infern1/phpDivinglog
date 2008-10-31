@@ -40,13 +40,24 @@ function action($value_of_clicked_field, $array_values) {
 /*{{{*/
 
     global $_config;
-    if(isset($_SESSION['request_type'])){        
+    if($_config['multiuser'] && isset($_SESSION['user_id'])){
+        $user_id = $_SESSION['user_id'];
+        if($_config['query_string'])
+        {
+            $ext = "?user_id=$user_id&id=";
+        } else {
+            $ext = "/$user_id/";
+        }
+    } else {
         if($_config['query_string'])
         {
             $ext = "?id=";
         } else {
             $ext = "/";
         }
+    }
+
+    if(isset($_SESSION['request_type'])){        
 
         $request_type = $_SESSION['request_type'];
         if($request_type == 1){ 
@@ -114,11 +125,16 @@ include_once ($language_filename);
  * @access public
  * @return void
  */
-function sql_file($filename) 
-{
+function sql_file($filename){
 	global $_config;/*{{{*/
 	$sqlpath = $_config['sqlpath'];
 	global $globals;
+
+    if($_config['multiuser'] && isset($_SESSION['user_id'])){
+        $user_id = $_SESSION['user_id'];
+        $_config['table_prefix'] = $_config['user_prefix'][$user_id];
+    } else {
+    }
 
 	$location = $sqlpath.$filename;
 	if (!file_exists($location)) {
@@ -153,13 +169,13 @@ function sql_file($filename)
  * @access public
  * @return void
  */
-function parse_mysql_query($filename, $sql_query = 0, $debug = false) 
-{
+function parse_mysql_query($filename, $sql_query = 0, $debug = false){
     global $_config;/*{{{*/
     $username = $_config['database_username'];
 	$password = $_config['database_password'];
 	$server = $_config['database_server'];
 	$db = $_config['database_db'];
+
     $result = array();
     if(($sql_query)){
         $query = $sql_query;
@@ -226,25 +242,27 @@ function check_number($number)
 function GetRequestVar($url, $request_file_depth=0){ 
 /*{{{*/
     global $_config, $t,$_POST;
-    if($_config['query_string'])
-    {
+    $paginas = NULL;
+    if($_config['query_string']){
         $url_array = parse_url($url);
-        parse_str($url_array['query'],$output);
-        $paginas = array();
-        $file = basename($url_array['path']);
-        $paginas[0] = $file;
-        if(!isset($output['DG_ajaxid']) && !isset($output['pageID']) ){
-            foreach($output as $el){
-                $paginas[] .= $el;
+        if(isset($url_array['query'])){
+            parse_str($url_array['query'],$output);
+            $paginas = array();
+            $file = basename($url_array['path']);
+            $paginas[0] = $file;
+            if(!isset($output['DG_ajaxid']) && !isset($output['pageID']) ){
+                foreach($output as $el){
+                    $paginas[] .= $el;
+                }
+            } elseif(isset($output['pageID'])){
+                if($_config['multiuser']){
+                    $paginas[] .= $output['user_id']; 
+                }
+                $paginas[] .= "list";
+            } else {
+                $paginas[] .= $output['user_id'];
+                $paginas[] .= $output['id'];
             }
-        } elseif(isset($output['pageID'])){
-            if($_config['multiuser']){
-                $paginas[] .= $output['user_id']; 
-            }
-            $paginas[] .= "list";
-        } else {
-            $paginas[] .= $output['user_id'];
-            $paginas[] .= $output['id'];
         }
     } else {
         $number_folders =  $request_file_depth ; //number of folders from the root of the script
@@ -267,7 +285,7 @@ function GetRequestVar($url, $request_file_depth=0){
 
     }
     //print_r($paginas);
-   return $paginas;/*}}}*/
+    return $paginas;/*}}}*/
 }
 
 /**
@@ -380,10 +398,10 @@ function LitreToCuft($value, $precision = 2)
  * @return void
  */
 function backhtmlentities($str_h){
-   $trans = get_html_translation_table(HTML_ENTITIES);
+   $trans = get_html_translation_table(HTML_ENTITIES);/*{{{*/
    $trans = array_flip($trans);
    $str_h = strtr($str_h, $trans);
-   return $str_h;
+   return $str_h;/*}}}*/
 }
 
 /**
@@ -435,7 +453,7 @@ function DECtoDMS($dec)
  * @return void
  */
 function convert_date($value){
-    global $_config;
+    global $_config;/*{{{*/
     $mask = $_config['date_format'];
     if($value != "") {
         $format='';
@@ -450,7 +468,7 @@ function convert_date($value){
         if ($arrDdate != false)    $value =$arrDdate['todate'] ;
     } 
     return  $value;
-
+/*}}}*/
 }
 
 /**
@@ -489,7 +507,7 @@ function datecheck($date,$format='ymd',$separator='-',$toformat='mdy',$toseparat
  * @return void
  */
 function add_unit_depth($value){
-    global $_config, $_lang;
+    global $_config, $_lang;/*{{{*/
     if(!empty($value)){
         if($_config['length']){
             $value .=  " ".$_lang['unit_length_short_imp']  ;
@@ -497,7 +515,7 @@ function add_unit_depth($value){
             $value .= " ".$_lang['unit_length_short']  ;
         }
     }
-    return $value;
+    return $value;/*}}}*/
 }
 
 /**
@@ -508,9 +526,9 @@ function add_unit_depth($value){
  * @return void
  */
 function add_unit_time($value){
-    global $_config, $_lang;
+    global $_config, $_lang;/*{{{*/
     $value .=  " ".$_lang['unit_time_short'];
-    return $value;
+    return $value;/*}}}*/
 }
 
 
@@ -522,9 +540,8 @@ function add_unit_time($value){
  * @access public
  * @return void
  */
-function latitude_format($coord) 
-{
-//	Change coordinates into a displayable format
+function latitude_format($coord){
+//	Change coordinates into a displayable format/*{{{*/
 
 	if ($coord == "") {
 		$dms = "";
@@ -539,7 +556,7 @@ function latitude_format($coord)
 			$dms .= " N";
 		}
 	}
-	return $dms;
+	return $dms;/*}}}*/
 }
 
 
@@ -550,9 +567,8 @@ function latitude_format($coord)
  * @access public
  * @return void
  */
-function longitude_format($coord) 
-{
-//	Change coordinates into a displayable format
+function longitude_format($coord){
+//	Change coordinates into a displayable format/*{{{*/
 
 	if ($coord == "") {
 		$dms = "";
@@ -567,7 +583,7 @@ function longitude_format($coord)
 			$dms .= " E";
 		}
 	}
-	return $dms;
+	return $dms;/*}}}*/
 }
 
 /**
@@ -579,7 +595,7 @@ function longitude_format($coord)
  */
 function set_config_table_prefix($prefix){
     global $_config;
-    $_config['table_prefix'] = $prefix;
+//    $_config['table_prefix'] = $prefix;
 }
 
 /**
@@ -590,7 +606,7 @@ function set_config_table_prefix($prefix){
  */
 function reset_config_table_prefix(){
     global $_config;
-    unset($_config['table_prefix']);
+//    unset($_config['table_prefix']);
 }
 
 /**
@@ -601,11 +617,11 @@ function reset_config_table_prefix(){
  * @return void
  */
 function resize_image($img){
-    global $_config;
+    global $_config;/*{{{*/
     $obj = new Thumbnail($img); 
     $obj->size_width($_config['pic-width']);
     $obj->process();
-    $obj->save($img);
+    $obj->save($img);/*}}}*/
 }
 
 /**
@@ -617,16 +633,16 @@ function resize_image($img){
  * @return void
  */
 function make_thumb($img,$thumb, $i = 0 ){
-    global $_config,$t;
-        $obj = new Thumbnail($img);
-        $obj->size_auto($_config['thumb-width']); 
-        $obj->process();
-       $t->assign('resize',1);
-       $t->assign('img',$img);
-         set_time_limit(30);
-        $obj->save($thumb);
+    global $_config,$t;/*{{{*/
+    $obj = new Thumbnail($img);
+    $obj->size_auto($_config['thumb-width']); 
+    $obj->process();
+    $t->assign('resize',1);
+    $t->assign('img',$img);
+    set_time_limit(30);
+    $obj->save($thumb);
     flush();
-//    echo "Error". $obj->error_msg ;
+    //    echo "Error". $obj->error_msg ;/*}}}*/
 }
 
 /**
@@ -636,9 +652,8 @@ function make_thumb($img,$thumb, $i = 0 ){
  * @access public
  * @return void
  */
-function count_all($arg)
-{
-    // skip if argument is empty 
+function count_all($arg){
+    // skip if argument is empty /*{{{*/
     if ($arg){ 
         // not an array, return 1 (base case) 
         if(!is_array($arg)) 
@@ -648,6 +663,6 @@ function count_all($arg)
     foreach($arg as $key => $val) 
         $count += count_all($val); 
         return $count;       
-    } 
+    } /*}}}*/
 } 
 ?>

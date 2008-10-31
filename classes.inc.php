@@ -69,6 +69,7 @@ class HandleRequest {
         global $_config, $t;
         $this->multiuser = $_config['multiuser'];
         $_SESSION['request_type'] = 1;
+        $_SESSION['user_id'] = NULL;
 
         if($_config['query_string']){
             if($this->multiuser){
@@ -156,6 +157,7 @@ class HandleRequest {
             if(isset($split_request[1]) && Users::is_valid_user($split_request[1]) ){
                 $file_req = $split_request[0];
                 $this->user_id = check_number($split_request[1]);
+                $_SESSION['user_id'] = $this->user_id;
                 if(isset($split_request[2]) && $split_request[2] == 'list'  ){
                     $this->view_request = 0;
                     if(isset($split_request[3])){
@@ -339,9 +341,7 @@ class User {
      */
     function get_username(){
         global $_config, $globals;
-        set_config_table_prefix($this->table_prefix);
         $user_data = parse_mysql_query('personal.sql',0,TRUE);
-        reset_config_table_prefix();
         $this->username = $user_data[0]['Firstname'] .' '.$user_data[0]['Lastname'];
         return $this->username;
     }
@@ -705,8 +705,7 @@ class Users{
             $this->user_array[] = array_merge($user_data[$i], array( "ID" => $id));
             $i++;
         }
-        //Reset the prefix
-        unset($_config['table_prefix']);
+        //unset($_config['table_prefix']);
 
     }
     function get_user_data(){
@@ -827,9 +826,7 @@ class TopLevelMenu {
 
         global $t, $globals,  $_lang, $_config;
         if($request->request_type == 1){
-            set_config_table_prefix($this->table_prefix);
             $divelist = parse_mysql_query('divelist.sql');
-            reset_config_table_prefix();
             for($i=0; $i<count($divelist); $i++) {
                 $divelist[$i] = $divelist[$i]['Number'];
             }
@@ -858,9 +855,7 @@ class TopLevelMenu {
         }
         elseif($request->request_type == 2){
             //	First, Previous, Next, Last links and Dive #
-            set_config_table_prefix($this->table_prefix);
             $sitelist = parse_mysql_query('sitelist.sql');
-            reset_config_table_prefix();
             $last = count($sitelist) - 1;
             $position = -1;
             for ($i=0; $i<count($sitelist); $i++) {
@@ -891,9 +886,7 @@ class TopLevelMenu {
                 $t->assign('last', $_lang['last'] );
             } 
         } elseif($request->request_type == 3){
-            set_config_table_prefix($this->table_prefix);
             $gearlist = parse_mysql_query('gearlist.sql');
-            reset_config_table_prefix();
             $last = count($gearlist) - 1;
             $position = -1;
             for ($i=0; $i<count($gearlist); $i++) {
@@ -1024,9 +1017,7 @@ class Divelog {
             $this->request_type = 1;
             //	Get the dive details from database
             $globals['divenr'] = $this->dive_nr;
-            set_config_table_prefix($this->table_prefix);
             $this->result = parse_mysql_query('onedive.sql');
-            reset_config_table_prefix();
             //Set profile data
             //	Calculate average depth and SAC for this dive
             $result = $this->result;
@@ -1149,7 +1140,6 @@ class Divelog {
         $request->set_request_uri($_SERVER['REQUEST_URI']);
         $request->set_file_depth(0);
         $request->handle_url();
-
         $multiuser = 0;
         $table_prefix = NULL;
         if($_config['multiuser']){
@@ -1159,17 +1149,16 @@ class Divelog {
             $user_id = $request->get_user_id();
             $user = new User();
             $user->set_user_id($user_id);
-            $table_prefix = $user->get_table_prefix();
+            //$table_prefix = $user->get_table_prefix();
         }
         else {
             // if prefix is set get it.
-            if(isset($_config['table_prefix']))
-                $table_prefix = $_config['table_prefix'];
+            if(!empty($_config['table_prefix'])){
+              // $table_prefix = $_config['table_prefix'];
+            }
         }
-        set_config_table_prefix($table_prefix);
         $globals['divenr']  = $dive_nr; 
         $id = parse_mysql_query('divelogid.sql'); 
-        reset_config_table_prefix();
         $pic_class->get_divegallery_info($id[0]['ID']);
         $divepics = $pic_class->get_image_link();
         $pics = count($divepics);
@@ -1201,10 +1190,8 @@ class Divelog {
                 $t->assign('image_link', $divepics);
             } else {
                 $t->assign('pics' , '1');
-                set_config_table_prefix($this->table_prefix);
                 $globals['logid'] = $result[0]['ID'];
                 $divepics = parse_mysql_query('divepics.sql');
-                reset_config_table_prefix();
                 
                 $t->assign('picpath_web', $_config['web_root']."/".$_config['picpath_web'] . $divepics[0]['Path']);
                 $t->assign('divepic_linktit', $_lang['divepic_linktitle_pt1']. "1". $_lang['divepic_linktitle_pt2']. $pics. $_lang['divepic_linktitle_pt3']. $result[0]['Number']);
@@ -1413,8 +1400,7 @@ class Divelog {
         $t->assign('logbook_deco', $_lang['logbook_deco'] );
         $t->assign('logbook_rep', $_lang['logbook_rep'] );
         $t->assign('logbook_surfint', $_lang['logbook_surfint'] );
-
-        if ($_lang['entry'][($result[0]['Entry'] - 1)]) {
+        if (isset($_lang['entry'][($result[0]['Entry'] - 1)])) {
             $t->assign('Entry', $_lang['entry'][($result[0]['Entry'] - 1)]);
         }
 
@@ -1465,9 +1451,7 @@ class Divelog {
             $t->assign('UsedEquip',1);
             $t->assign('logbook_usedequip', $_lang['logbook_usedequip'] );
             $globals['gearlist'] = $result[0]['UsedEquip'];
-            set_config_table_prefix($this->table_prefix);
             $divegear = parse_mysql_query('divegearlist.sql');
-            reset_config_table_prefix();
             $num_equip = count($divegear);
             $equip_link[] =  array();
 
@@ -1545,7 +1529,6 @@ class Divelog {
      */
     function get_dive_overview_table(){
         global $db, $t, $_lang, $globals, $_config;/*{{{*/
-        set_config_table_prefix($this->table_prefix);
         //    Get the details of the dives to be listed
         //$recentdivelist = parse_mysql_query('recentdivelist.sql');
         if ($_config['length']){
@@ -1554,7 +1537,6 @@ class Divelog {
             $recentdivelist_query = sql_file('recentdivelist.sql');
         }
             $recentdivelist_query .=  " ORDER BY Number DESC";
-        reset_config_table_prefix();
 		$t->assign('dlog_title_number', $_lang['dlog_title_number'] );
 		$t->assign('dlog_title_divedate', $_lang['dlog_title_divedate']);
 		$t->assign('dlog_title_depth', $_lang['dlog_title_depth'] );
@@ -1586,6 +1568,14 @@ class Divelog {
         /*}}}*/
     }
 
+    /**
+     * dive_has_photo 
+     * 
+     * @param mixed $value 
+     * @param mixed $row 
+     * @access public
+     * @return void
+     */
     function dive_has_photo($value, $row){
         global $_config;
         if(Divelog::dive_has_pictures($row['Number'])){
@@ -1599,10 +1589,8 @@ class Divelog {
      * @access public
      * @return void
      */
-
-function get_dive_overview_grid(){
+    function get_dive_overview_grid(){
         global $db, $t, $_lang, $globals, $_config;
-        set_config_table_prefix($this->table_prefix);
         //    Get the details of the dives to be listed
         //$recentdivelist = parse_mysql_query('recentdivelist.sql');
         if ($_config['length']){
@@ -1611,7 +1599,6 @@ function get_dive_overview_grid(){
             $recentdivelist_query = sql_file('recentdivelist.sql');
         }
             $recentdivelist_query .=  " ORDER BY Number DESC";
-        reset_config_table_prefix();
 		$t->assign('dlog_title_number', $_lang['dlog_title_number'] );
 		$t->assign('dlog_title_divedate', $_lang['dlog_title_divedate']);
 		$t->assign('dlog_title_depth', $_lang['dlog_title_depth'] );
@@ -1630,7 +1617,6 @@ function get_dive_overview_grid(){
         
         }
         $data = parse_mysql_query(0,$recentdivelist_query);
-
         $GridClass = new TableGrid($this->user_id,$data);
         $grid = $GridClass->get_grid_class();
 
@@ -1750,10 +1736,8 @@ class Divesite{
         if(!empty($this->divesite_nr)){
             $this->request_type = 1;
             $globals['placeid'] = $this->divesite_nr;
-            set_config_table_prefix($this->table_prefix);
             $this->result = parse_mysql_query('oneplace.sql');
             $this->result_countrycity = parse_mysql_query('countrycity.sql');
-            reset_config_table_prefix();
         } else {
             /**
              * If the request type is not already set(by divers choice), set it to overview  
@@ -1782,7 +1766,6 @@ class Divesite{
     function get_divesite_location_details(){
         global $globals, $_config;/*{{{*/
         $countrycity = $this->result_countrycity;
-        set_config_table_prefix($this->table_prefix);
         if (count($countrycity) != 0) {
             if ($countrycity[0]['Country'] != "") {
                 //			Get the country details from database
@@ -1805,7 +1788,6 @@ class Divesite{
                     $this->city = $citydetails[0]['City'];
                 }
             }
-            reset_config_table_prefix();
 
         }/*}}}*/
     }
@@ -1820,12 +1802,10 @@ class Divesite{
         global $globals, $_config;/*{{{*/
         //	Get the dives at this site from database
         $globals['placeid'] = $this->divesite_nr;
-        set_config_table_prefix($this->table_prefix);
         $this->dives = parse_mysql_query('divelocations.sql');
         $this->dive_count = count($this->dives);
         //	Get the site list from database
         $this->sitelist = parse_mysql_query('sitelist.sql');
-        reset_config_table_prefix();
         /*}}}*/
     }
 
@@ -1993,21 +1973,13 @@ class Divesite{
         $logbooktable = $this->table_prefix."Logbook";
         
         if($_config["length"]){
-            $maxdep = "ROUND($placetable.MaxDepth*3.2808,1) as MaxDepth";
+           $sql = sql_file("divesite_overview-imp.sql");
         } else {
-             $maxdep = "$placetable.MaxDepth as MaxDepth";
+            $sql = sql_file("divesite_overview.sql");
         }
-       
-        $sql = "SELECT  $placetable.ID AS ID, 
-                    $logbooktable.Country AS Country, 
-                    $placetable.Place AS Place, 
-                    $logbooktable.City AS City,
-                    $maxdep
-                    FROM $placetable INNER JOIN $logbooktable ON $placetable.ID = $logbooktable.PlaceID
-                    GROUP BY ID";
 
         /**
-         * When view_type = 1 display the ajax grid if type = 2 display old fashioned table 
+         * when view_type = 1 display the ajax grid if type = 2 display old fashioned table 
          */
         if($_config['view_type'] == 1){
             $this->get_divesite_overview_grid($sql);
@@ -2030,7 +2002,6 @@ class Divesite{
      */
     function get_divesite_overview_table($sql){
         global $db, $t, $_lang, $globals, $_config;/*{{{*/
-        set_config_table_prefix($this->table_prefix);
         //    Get the page header
         //    Get the details of the locations to be listed
         $locationlist_query = $sql." ORDER BY Place";
@@ -2064,40 +2035,6 @@ class Divesite{
      * @access public
      * @return void
      */
-//    function get_divesite_overview_grid($sql){
-//        global $t, $_lang, $globals, $_config;/*{{{*/
-//        $GridClass = new TableGrid($this->user_id);
-//        $objGrid = $GridClass->get_grid_class();
-
-//        /**
-//         * Define the table according some info 
-//         */
-//        $objGrid -> tabla ($this->table_prefix."Place");
-//        if($this->multiuser){
-//            $url =  "/divesite.php".$t->get_template_vars('sep1').$this->user_id.$t->get_template_vars('sep2');
-//        } else {
-//            $url =  "/divesite.php".$t->get_template_vars('sep2');
-//        }
-//        $objGrid -> keyfield("ID"); 
-//        $t->assign('grid_header' , $objGrid -> getHeader(NULL, $_config['abs_url_path']. '/js/dgscripts.js', $_config['abs_url_path']. '/includes/dgstyle.css'));
-//        $objGrid -> orderby("Place", "ASC"); 
-//        $objGrid->message['display'] = $_lang['display_rows_divesites'];
-//        $objGrid->sqlstatement($sql);
-//        if($this->multiuser){
-//            $objGrid -> FormatColumn("Place", $_lang['dsite_title_place'], 0, 0, 1,"250" , "left","link:open_url(%s\,'$url'),ID");  
-//        } else{
-//            $objGrid -> FormatColumn("Place", $_lang['dsite_title_place'], 0, 0, 1,"250" , "left","link:open_url(%s\,'$url'),ID"); 
-//        }
-//        $objGrid -> FormatColumn("Country", $_lang['dsite_title_country'], 180, 100, 4, "100", "left" ); 
-//        $objGrid -> FormatColumn("City", $_lang['dsite_title_city'], 180, 100, 4, "200", "left" ); 
-//        $objGrid -> FormatColumn("MaxDepth", $_lang['dsite_title_maxdepth'], 12, 12, 0, "80", "left","sign:".$_lang['unit_length_short']  );
-//        $grid = $GridClass->get_grid($objGrid);
-//        $t->assign('grid_display' ,1);
-//        $t->assign('grid',$grid );
-
-//        /*}}}*/
-//    }
-
     function get_divesite_overview_grid($sql){
         global $t, $_lang, $globals, $_config;/*{{{*/
         $sql .=  " ORDER BY Place ASC";
@@ -2203,10 +2140,8 @@ class Equipment{
         if(!empty($this->equipment_nr)){
             $this->request_type = 1;
             $globals['gear'] = $this->equipment_nr;
-            set_config_table_prefix($this->table_prefix);
             $this->result = parse_mysql_query('oneequipment.sql');
             $this->result_gearlist = parse_mysql_query('gearlist.sql');
-            reset_config_table_prefix();
         } else {
            /**
              * If the request type is not already set(by divers choice), set it to overview  
@@ -2361,9 +2296,7 @@ class Equipment{
      */
     function get_equipment_overview_table(){
         global $db, $t, $_lang, $globals, $_config;/*{{{*/
-        set_config_table_prefix($this->table_prefix);
         $equiplist_query = sql_file('equiplist.sql');
-        reset_config_table_prefix();
         //    $t->assign('equip_none', $_lang['equip_none'] );
         $t->assign('equip_title_object', $_lang['equip_title_object'] );
         $t->assign('equip_title_manufacturer', $_lang['equip_title_manufacturer'] );
@@ -2391,37 +2324,10 @@ class Equipment{
      * @access public
      * @return void
      */
-//    function get_equipment_overview_grid(){
-//        global $t, $_lang, $globals, $_config;/*{{{*/
-//        $GridClass = new TableGrid($this->used_id);
-//        $objGrid = $GridClass->get_grid_class();
-//        $objGrid -> tabla ($this->table_prefix."Equipment");
-//         if($this->multiuser){
-//            $url =  "/equipment.php".$t->get_template_vars('sep1'). $this->user_id.$t->get_template_vars('sep2');
-//        } else {
-//            $url =  "/equipment.php".$t->get_template_vars('sep2');
-//        }
-//         $objGrid->message['display'] = $_lang['display_rows_equipment'];
-//         $objGrid -> keyfield("ID");
-//       $t->assign('grid_header' , $objGrid -> getHeader(NULL, $_config['abs_url_path']. '/js/dgscripts.js', $_config['abs_url_path']. '/includes/dgstyle.css'));
-//        $objGrid -> orderby("Manufacturer", "ASC"); 
-//                $objGrid -> FormatColumn("ID", $_lang['equip_title_object'], 5, 5, 5, "5", "center","link:open_url(%s\,'$url'),ID"); 
-//        if($this->multiuser){
-//            $objGrid -> FormatColumn("Object", $_lang['equip_title_object'], 180, 100, 0, "300", "left" ,"link:open_url(%s\,'$url'),ID"); 
-//        }else{
-//            $objGrid -> FormatColumn("Object", $_lang['equip_title_object'], 180, 100, 0, "300", "left" ,"link:open_url(%s\,'$url'),ID"); 
-
-//        }
-//        $objGrid -> FormatColumn("Manufacturer", $_lang['equip_title_manufacturer'], 180, 100, 0, "150", "left"); 
-//        $grid = $GridClass->get_grid($objGrid);
-//        $t->assign('grid_display' ,1);
-//        $t->assign('grid',$grid );
-///*}}}*/
-//    }
     function get_equipment_overview_grid(){
         global $t, $_lang, $globals, $_config;/*{{{*/
-          $sql = sql_file('equiplist.sql');
-         // $sql .=  " ORDER BY Place ASC";
+        $sql = sql_file('equiplist.sql');
+        // $sql .=  " ORDER BY Place ASC";
         $data = parse_mysql_query(0,$sql);;
         $GridClass = new TableGrid($this->user_id,$data);
         $grid = $GridClass->get_grid_class();
@@ -2548,7 +2454,6 @@ class Divestats{
     function get_divestats_info(){
         global $globals, $_config;/*{{{*/
         if(($this->multiuser && !empty($this->user_id)) || !$this->multiuser ){
-            set_config_table_prefix($this->table_prefix);
             // Get number of dives
             $count = parse_mysql_query('divecount.sql');
             $this->end = $count[0]['COUNT(*)'];
@@ -2693,7 +2598,6 @@ class Divestats{
             $this->divecert = parse_mysql_query('brevetlist.sql');
             $this->number_cert = count($this->divecert);
 
-            reset_config_table_prefix();
         } else {
             /**
              * If the request type is not already set(by divers choice), set it to overview  
@@ -2713,14 +2617,12 @@ class Divestats{
     function get_lastdive_info(){
        global $globals, $_config;/*{{{*/
         if(($this->multiuser && !empty($this->user_id)) || !$this->multiuser ){
-            set_config_table_prefix($this->table_prefix);
             $lastdive = parse_mysql_query('lastdive.sql');
             $this->LastEntryTime = $lastdive[0]['Entrytime'];
             $this->LastDivePlace = $lastdive[0]['Place'];
             $this->LastDiveID= $lastdive[0]['PlaceID'];
             $this->LastCity = $lastdive[0]['City'];
             $this->LastCountry = $lastdive[0]['Country'];
-            reset_config_table_prefix();
         }/*}}}*/
     }
     /**
@@ -3095,7 +2997,6 @@ class DivePictures{
     function get_divegallery_info($dive_id = 0, $site_id = 0, $equipment_nr = 0){
         global $globals, $_config,$_lang,$t;
         if(($this->multiuser && !empty($this->user_id)) || !$this->multiuser ){
-           set_config_table_prefix($this->table_prefix);
             if($dive_id == 0 && $site_id == 0 && $equipment_nr == 0 ){
                 $divepics = parse_mysql_query('divepicsall.sql');
                 $base_path = $_config['picpath_web'];
@@ -3197,7 +3098,6 @@ class DivePictures{
 
                 }
             }
-            reset_config_table_prefix();
         } else {
             /**
              * if the request type is not already set(by divers choice), set it to overview  
@@ -3358,9 +3258,7 @@ class AppInfo{
         }
         $this->phpDivelogVersion = $_config['app_version'];
         $this->Appname = $_config['app_name'];
-        set_config_table_prefix($this->table_prefix);
         $dbinfo = parse_mysql_query('dbinfo.sql');
-        reset_config_table_prefix();
         $this->Divelogname = $dbinfo[0]['PrgName'];
         $this->DivelogVersion = $dbinfo[0]['DBVersion'];
     }
