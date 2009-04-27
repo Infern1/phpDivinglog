@@ -48,11 +48,13 @@ $_lang['dive_stats'] = "Statistiken";
 $_lang['dive_equip'] = "Ausr&uuml;stung";
 $_lang['diver_choice_linktitle'] = "Zeige Taucher &Uuml;bersicht";
 $_lang['diver_choice'] = "Taucher &Uuml;bersicht";
+$_lang['dive_gallery'] = "Tauchgangsgallerie";
 
 $_lang['dive_log_linktitle'] = "Logbuch anzeigen";
 $_lang['dive_sites_linktitle'] = "Tauchpl&auml;tze anzeigen";
 $_lang['dive_stats_linktitle'] = "Statistiken anzeigen";
 $_lang['dive_equip_linktitle'] = "Ausr&uuml;stung anzeigen";
+$_lang['dive_gallery_linktitle'] = "Tauchgangsgallerie anzeigen"; 
 
 
 // Dive Entry / Logbook related values

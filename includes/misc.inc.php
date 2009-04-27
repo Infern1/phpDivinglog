@@ -350,12 +350,12 @@ function GetProfileData($result){
 		$sac = (($result[0]['PresS'] - $result[0]['PresE']) * $result[0]['Tanksize']) / ($divetime * ($averagedepth / 10 + 1));
 
 		if ($_config['length']) {
-			$averagedepth = MetreToFeet($averagedepth, 2) ."&nbsp;";
+            $averagedepth = MetreToFeet($averagedepth / 3.2808399, 2) ."&nbsp;";
 		} else {
 			$averagedepth = number_format($averagedepth, 2) ."&nbsp;";
 		}
 		if ($_config['volume']) {
-			$sac = LitreToCuft($sac, 1) ."&nbsp;". $_lang['unit_rate_imp'];
+            $sac = LitreToCuft($sac, 2) ."&nbsp;". $_lang['unit_rate_imp'];
 		} else {
 			$sac = number_format($sac, 2) ."&nbsp;". $_lang['unit_rate'];
 		}
@@ -366,7 +366,7 @@ function GetProfileData($result){
 define('MetreToFeet', "calc:(Depth*3.2808399)");
 function MetreToFeet($value, $precision = 2) 
 {
-	return round(($value * 3.2808399), $precision);
+    return round(($value * sqrt( 3.2808399 ) ), $precision);
 }
  
 function BarToPsi($value, $precision = 2) 
@@ -386,7 +386,7 @@ function CelsiusToFahrenh($value, $precision = 2)
  
 function LitreToCuft($value, $precision = 2) 
 {
-	return round(($value * 7), $precision);
+    return round(($value * 0.0353146667), $precision);
 }
 
 
