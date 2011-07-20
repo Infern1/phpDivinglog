@@ -125,6 +125,12 @@ $_config['enable_resize'] = true;
 $_config['thumb-width'] = 100; 
 
 /**
+ * Set the height of the thumbnails, which are created automaticly 
+ * Height is set in px
+ */
+$_config['thumb-height'] = 80; 
+
+/**
  * Set the width of the pictures in the gallery 
  * Width is set in px
  */

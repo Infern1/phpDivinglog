@@ -163,6 +163,9 @@ if (PEAR::isError($db)) {
 $t->assign('title', 'My divelog online');
 $t->assign('web_root', $_config['web_root']);
 $t->assign('app_path',$_config['abs_url_path']);
+$t->assign('thumb_width',$_config['thumb-width']);
+$t->assign('thumb_height',$_config['thumb-height']);
+
 if(($_config['embed_mode'])){
     $t->assign('embed',true);
 }
