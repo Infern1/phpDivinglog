@@ -3,7 +3,7 @@
  * Classes file contains all classes needed for phpdivinglog
  * 
  * @package phpdivinglog
- * @version $Rev$
+ * @version $Revision$
  * @copyright Copyright (C) 2007 Rob Lensen. All rights reserved.
  * @author Rob Lensen <rob@bsdfreaks.nl> 
  * @license LGPL v3 http://www.gnu.org/licenses/lgpl-3.0.txt
