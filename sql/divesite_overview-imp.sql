@@ -5,5 +5,4 @@ SELECT  $_config[table_prefix]Place.ID AS ID,
         ROUND($_config[table_prefix]Place.MaxDepth*3.2808,1) as MaxDepth
 FROM $_config[table_prefix]Place INNER JOIN $_config[table_prefix]Logbook 
         ON $_config[table_prefix]Place.ID =  $_config[table_prefix]Logbook.PlaceID
-GROUP BY ID";
-
+GROUP BY ID

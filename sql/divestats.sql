@@ -8,5 +8,9 @@ SELECT		MIN(Divedate) AS DivedateMin,
 		MAX(Depth) AS DepthMax,
 		AVG(Depth) AS DepthAvg,
 		MIN(Watertemp) AS WatertempMin,
-		MAX(Watertemp) AS WatertempMax
+		MAX(Watertemp) AS WatertempMax,
+		AVG(Watertemp) AS WatertempAvg,
+		MIN(Airtemp) AS AirtempMin,
+		MAX(Airtemp) AS AirtempMax,
+		AVG(Airtemp) AS AirtempAvg
 FROM		$_config[table_prefix]Logbook

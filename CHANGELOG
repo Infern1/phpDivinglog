@@ -1,3 +1,16 @@
+phpDivingLog v3.0-alpha - 2011-07-24 - Lloyd Borrett
+    * Added ability to display photo descriptions on more images
+    * Ability to set the width and height of the thumbnails which is then used to display them
+    * Display program version and database version on statistics page
+    * Display average water temp on statistics page
+    * Display coldest, warmest and average air temp on statistics page
+    * Display number of no deco and no rep dives on statistics page
+    * Added the ability to display coordinates in different formats
+    * Fixed some formatting issues
+
+phpDivingLog v2.2 - 2010-03-28 - Rob Lensen
+    * Lots of changes
+ 
 phpDivingLog v2.1 - 2008-03-28 - Rob Lensen
     * Added the option the use query strings for hosts that don't support mod_rewrite
     * Changed SAC calculation to read the divetime from the Divelog table

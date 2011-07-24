@@ -390,10 +390,6 @@ class TableGrid{
         global $_config;
         $this->language = $_config['language'];
         $objGrid = new dataGrid($data,$void);
-        //$objGrid->friendlyHTML(); 
-        //$objGrid->conectadb($_config['database_server']  , $_config['database_username'], $_config['database_password'], $_config['database_db']); 
-        //$objGrid -> pathtoimages($_config['abs_url_path']. "/images/");
-        //$objGrid->rowsOnPage($_config['max_list']);
         if($_config['query_string']){
             //$objGrid->methodForm('GET');
             //$objGrid->linkparam("user_id=".$user_id."&id=list");
@@ -403,6 +399,7 @@ class TableGrid{
             //$objGrid->URLa = "index.php";
         }
         $objGrid->setRowActionFunction("action");
+        $objGrid->rowsOnPage = $_config['max_list'];
         $this->gridtable  =& $objGrid;
         $this->SetGridLanguage();
     }
@@ -1415,7 +1412,7 @@ class Divelog {
             $t->assign('logbook_decostops', $_lang['logbook_decostops'] );
 
             $r = $result[0]['Decostops'];
-            $r = str_replace("\r\n", "<br>\n", $r);
+            $r = str_replace(array("\r\n","\r","\n"), "<br>\n", $r);
             $t->assign('stops', $r);
         }/*}}}*/
     }
@@ -1491,7 +1488,7 @@ class Divelog {
                     }
              */
             $r = $result[0]['Comments'];
-            $r = str_replace("\r\n", "<br>\n", $r);
+            $r = str_replace(array("\r\n", "\r", "\n"), "<br>", $r);
             $t->assign('Comments', $r);
         }/*}}}*/
     }
@@ -1822,8 +1819,8 @@ class Divesite{
         $result = $this->result;
         $t->assign('pagetitle',$_lang['dive_site_pagetitle'].$result[0]['Place']);
         $t->assign('divesite_id', $this->divesite_nr);
-        $t->assign('place_place',   $_lang['place_place']);
-        $t->assign('place_city',    $_lang['place_city']);
+        $t->assign('place_place', $_lang['place_place']);
+        $t->assign('place_city', $_lang['place_city']);
         $t->assign('place_country', $_lang['place_country']);
         $t->assign('place_maxdepth',$_lang['place_maxdepth'] );
 
@@ -1951,7 +1948,7 @@ class Divesite{
         if ($result[0]['Comments'] != "") {
             $t->assign('site_sect_comments', $_lang['site_sect_comments']);
             $r = $result[0]['Comments'];
-            $r = str_replace("\r\n", "<br>\n", $r);
+            $r = str_replace(array("\r\n", "\r", "\n"), "<br>", $r);
 
             //		Handle Google Map URL
             $r = str_replace('[url]','<a href="',$r);
@@ -2259,7 +2256,7 @@ class Equipment{
             $t->assign('equip_sect_comments', $_lang['equip_sect_comments'] );
 
             $r = $result[0]['Comments'];
-            $r = str_replace("\r\n", "<br>\n", $r);
+            $r = str_replace(array("\r\n", "\r", "\n"), "<br>", $r);
             $t->assign('Comments', $r);
         }/*}}}*/
     }
@@ -2351,7 +2348,6 @@ class Equipment{
         /*}}}*/
     }
 
-
 /*}}}*/
 }
 
@@ -2383,7 +2379,9 @@ class Divestats{
     var $freshwaterdives;
     var $brackishdives;
     var $decodives;
+    var $nodecodives;
     var $repdives;
+    var $norepdives;
     var $DivedateMinNr;
     var $DivedateMaxNr;
     var $DivetimeMinNr;
@@ -2392,6 +2390,8 @@ class Divestats{
     var $DepthMaxNr;
     var $WatertempMinNr;
     var $WatertempMaxNr;
+    var $AirempMinNr;
+    var $AirtempMaxNr;
     var $depthrange;
     var $depthrange1_per;
     var $depthrange2_per;
@@ -2519,11 +2519,13 @@ class Divestats{
             $globals['stats'] = "Deco = 'True'";
             $divestatsother = parse_mysql_query('divestatsother.sql');
             $this->decodives = $divestatsother[0]['Count'];
+            $this->nodecodives = $this->end - $this->decodives;
 
             // Get the number of rep dives
             $globals['stats'] = "Rep = 'True'";
             $divestatsother = parse_mysql_query('divestatsother.sql');
             $this->repdives = $divestatsother[0]['Count'];
+            $this->norepdives = $this->end - $this->repdives;
 
             // Get dive number for first dive
             $globals['stats'] = "Divedate = '" . $divestats[0]['DivedateMin'] . "'";
@@ -2555,15 +2557,25 @@ class Divestats{
             $divestatsnr = parse_mysql_query('divestatsnr.sql');
             $this->DepthMaxNr = $divestatsnr[0]['Number'];
 
-            // Get dive number for coldest dive
+            // Get dive number for coldest water dive
             $globals['stats'] = "Watertemp = '" . $divestats[0]['WatertempMin'] . "'";
             $divestatsnr = parse_mysql_query('divestatsnr.sql');
             $this->WatertempMinNr = $divestatsnr[0]['Number'];
 
-            // Get dive number for warmest dive
+            // Get dive number for warmest water dive
             $globals['stats'] = "Watertemp = '" . $divestats[0]['WatertempMax'] . "'";
             $divestatsnr = parse_mysql_query('divestatsnr.sql');
             $this->WatertempMaxNr = $divestatsnr[0]['Number'];
+
+            // Get dive number for coldest air dive
+            $globals['stats'] = "Airtemp = '" . $divestats[0]['AirtempMin'] . "'";
+            $divestatsnr = parse_mysql_query('divestatsnr.sql');
+            $this->AirtempMinNr = $divestatsnr[0]['Number'];
+
+            // Get dive number for warmest air dive
+            $globals['stats'] = "Airtemp = '" . $divestats[0]['AirtempMax'] . "'";
+            $divestatsnr = parse_mysql_query('divestatsnr.sql');
+            $this->AirtempMaxNr = $divestatsnr[0]['Number'];
 
             // Get the number of 1st depth range dives
             $globals['stats'] = "Depth <= 18";
@@ -2767,12 +2779,60 @@ class Divestats{
         }
         $t->assign('WatertempMax', $WatertempMax);
         $t->assign('WatertempMaxNr', $this->WatertempMaxNr );
-        $decodives_per =  round(($this->decodives / $this->end) * 100) ;
-        $repdives_per =   round(($this->repdives / $this->end) * 100) ;
-        $t->assign('decodives',$this->decodives);
+
+        if ($_config['temp']) {
+            $WatertempAvg =  CelsiusToFahrenh($divestats[0]['WatertempAvg'], 0) ."&nbsp;". $_lang['unit_temp_imp'];
+        } else {
+            $WatertempAvg =  round($divestats[0]['WatertempAvg'],1) ."&nbsp;". $_lang['unit_temp'];
+        }
+        $t->assign('WatertempAvg', $WatertempAvg);
+
+        // Show air temp details
+        $t->assign('stats_airtempmin', $_lang['stats_airtempmin']);
+        $t->assign('stats_airtempmax', $_lang['stats_airtempmax'] );
+        $t->assign('stats_airtempavg', $_lang['stats_airtempavg'] );
+
+        if ($_config['temp']) {
+            $AirtempMin =  CelsiusToFahrenh($divestats[0]['AirtempMin'], 0) ."&nbsp;". $_lang['unit_temp_imp'];
+        } else {
+            $AirtempMin =  $divestats[0]['AirtempMin'] ."&nbsp;". $_lang['unit_temp'];
+        }
+        $t->assign('AirtempMin', $AirtempMin);
+        $t->assign('AirtempMinNr', $this->AirtempMinNr );
+
+        if ($_config['temp']) {
+            $AirtempMax =  CelsiusToFahrenh($divestats[0]['AirtempMax'], 0) ."&nbsp;". $_lang['unit_temp_imp'];
+        } else {
+            $AirtempMax =  $divestats[0]['AirtempMax'] ."&nbsp;". $_lang['unit_temp'];
+        }
+        $t->assign('AirtempMax', $AirtempMax);
+        $t->assign('AirtempMaxNr', $this->AirtempMaxNr );
+
+        if ($_config['temp']) {
+            $AirtempAvg =  CelsiusToFahrenh($divestats[0]['AirtempAvg'], 0) ."&nbsp;". $_lang['unit_temp_imp'];
+        } else {
+            $AirtempAvg =  round($divestats[0]['AirtempAvg'],1) ."&nbsp;". $_lang['unit_temp'];
+        }
+        $t->assign('AirtempAvg', $AirtempAvg);
+
+        // Show deco and rep details
+        $t->assign('stats_decodives', $_lang['stats_decodives'] );
+        $t->assign('stats_nodecodives', $_lang['stats_nodecodives'] );
+        $t->assign('stats_repdives',$_lang['stats_repdives'] );
+        $t->assign('stats_norepdives',$_lang['stats_norepdives'] );
+
+        $decodives_per = round(($this->decodives / $this->end) * 100) ;
+        $nodecodives_per = round(($this->nodecodives / $this->end) * 100) ;
+        $repdives_per = round(($this->repdives / $this->end) * 100) ;
+        $norepdives_per = round(($this->norepdives / $this->end) * 100) ;
+        $t->assign('decodives', $this->decodives);
+        $t->assign('nodecodives', $this->nodecodives);
         $t->assign('repdives', $this->repdives);
-        $t->assign('decodives_per',$decodives_per);
+        $t->assign('norepdives', $this->norepdives);
+        $t->assign('decodives_per', $decodives_per);
+        $t->assign('nodecodives_per', $nodecodives_per);
         $t->assign('repdives_per', $repdives_per);
+        $t->assign('norepdives_per', $norepdives_per);
 
         // Show water type details
         $t->assign('stats_saltwaterdives', $_lang['stats_saltwaterdives'] );
@@ -2789,16 +2849,16 @@ class Divestats{
         $t->assign('stats_deepdives' ,$_lang['stats_deepdives'] );
         $t->assign('stats_cavedives', $_lang['stats_cavedives']);
         $t->assign('stats_wreckdives', $_lang['stats_wreckdives']);
-        $t->assign('stats_photodives' , $_lang['stats_photodives']);
+        $t->assign('stats_photodives', $_lang['stats_photodives']);
 
         $t->assign('deepdives', $this->deepdives );
-        $t->assign('deepdives_per' , round(($this->deepdives / $this->end) * 100));
+        $t->assign('deepdives_per', round(($this->deepdives / $this->end) * 100));
         $t->assign('cavedives', $this->cavedives );
         $t->assign('cavedives_per', round(($this->cavedives / $this->end) * 100));
-        $t->assign('wreckdives' , $this->wreckdives );
-        $t->assign('wreckdives_per' , round(($this->wreckdives / $this->end) * 100));
+        $t->assign('wreckdives', $this->wreckdives );
+        $t->assign('wreckdives_per', round(($this->wreckdives / $this->end) * 100));
         $t->assign('photodives', $this->photodives);
-        $t->assign('photodives_per' , round(($this->photodives / $this->end) * 100));
+        $t->assign('photodives_per', round(($this->photodives / $this->end) * 100));
 
         // Show dive type details
         $t->assign('stats_shoredives', $_lang['stats_shoredives'] );
@@ -2808,11 +2868,11 @@ class Divestats{
         $t->assign('shoredives', $this->shoredives );
         $t->assign('shoredives_per', round(($this->shoredives / $this->end) * 100));
         $t->assign('boatdives', $this->boatdives );
-        $t->assign('boatdives_per' , round(($this->boatdives / $this->end) * 100));
+        $t->assign('boatdives_per', round(($this->boatdives / $this->end) * 100));
         $t->assign('nightdives', $this->nightdives );
         $t->assign('nightdives_per', round(($this->nightdives / $this->end) * 100));
-        $t->assign('driftdives' , $this->driftdives );
-        $t->assign('driftdives_per' , round(($this->driftdives / $this->end) * 100));/*}}}*/
+        $t->assign('driftdives', $this->driftdives );
+        $t->assign('driftdives_per', round(($this->driftdives / $this->end) * 100));/*}}}*/
     }
 
     /**
@@ -2829,6 +2889,7 @@ class Divestats{
         $t->assign('LastCity',$this->LastCity);
         $t->assign('LastCountry',$this->LastCountry);/*}}}*/
     }
+
     /**
      * set_dive_certifications 
      * 
@@ -2853,12 +2914,12 @@ class Divestats{
                 if ($divecert[$i]['Brevet'] == "") {
                     $Brevet = "-";
                 } else {
-                    $Brevet =  $divecert[$i]['Brevet'] ;
+                    $Brevet = $divecert[$i]['Brevet'] ;
                 }
                 if ($divecert[$i]['Org'] == "") {
                     $Org = "-";
                 } else {
-                    $Org =  $divecert[$i]['Org'] ;
+                    $Org = $divecert[$i]['Org'] ;
                 }
                 if ($divecert[$i]['CertDate'] == "") {
                     $CertDate = "-";
@@ -2878,19 +2939,30 @@ class Divestats{
                 if (($divecert[$i]['Scan1Path'] != "") || ($divecert[$i]['Scan2Path'] != "")) {
                     $title = $divecert[$i]['Org'] . " " .$divecert[$i]['Brevet']; 
                     $userpath_web = $_config['userpath_web'] ;
-                    $Scan1Path = array();
-                    $Scan2Path = array();
                     $cert_scan_front = "";
-                    $cert_scan_back ="";
+                    $cert_scan_back = "";
                     if (!empty($divecert[$i]['Scan1Path'])) {
+                        $Scan1Path = array();
                         $Scan1Path =  $divecert[$i]['Scan1Path'];
                         $cert_scan_front =  $_lang['cert_scan_front'];
                     }
                     if (!empty($divecert[$i]['Scan2Path'])) {
-                        $Scan2Path =  $divecert[$i]['Scan2Path'] ;
+                        $Scan2Path = array();
+                        $Scan2Path = $divecert[$i]['Scan2Path'] ;
                         $cert_scan_back = $_lang['cert_scan_back'];
                     }
+                } else {
+                    /**
+                     * Declare the variables otherwise an error is displayed
+                     */
+                    $userpath_web = "";
+                    $title = "";
+                    $Scan1Path = "";
+                    $cert_scan_front = "";
+                    $Scan2Path = "";
+                    $cert_scan_back = "";
                 }
+
                 $rowdata[$i] = array (
                         'brevet' => $Brevet , 'org' => $Org , 'certdate' => $CertDate , 'number' => $Number , 'instructor' => $Instructor ,
                         'userpath_web' => $userpath_web , 'title' => $title , 'scan1path' => $Scan1Path , 'cert_scan_front' => $cert_scan_front ,
@@ -3014,7 +3086,6 @@ class DivePictures{
                 $divepics = parse_mysql_query('divepics_equip.sql');
             }
 
-            
             $pics = count($divepics);
             if ($pics != 0 && !empty($divepics[0]['Path'])) {
                 $this->image_link = array();
@@ -3160,7 +3231,6 @@ class DivePictures{
     function return_array_images_for_resize(){
         $temp = array();/*{{{*/
         for($i=0 ; $i < count($this->image_link) ; $i++){
-     
             $temp[] = array_filter($this->image_link[$i]);
         }   
         for($a = 0 ; $a < count($temp) ; $a++){
@@ -3244,7 +3314,7 @@ class AppInfo{
      * @return void
      */
     function AppInfo($request){
-        global $_config;
+        global $_lang, $_config;
         if($_config['multiuser']){
             $this->user_id = $request->get_user_id();
             $user = new User();
@@ -3261,6 +3331,11 @@ class AppInfo{
         $dbinfo = parse_mysql_query('dbinfo.sql');
         $this->Divelogname = $dbinfo[0]['PrgName'];
         $this->DivelogVersion = $dbinfo[0]['DBVersion'];
+        $this->dbversion = $_lang['dbversion'];
+        $this->and = $_lang['and'];
+        $this->app_url = $_config['app_url'];
+        $this->dlog_url = $_config['dlog_url'];
+        $this->dlog_version = $_config['dlog_version'];
     }
 
     /**
@@ -3276,5 +3351,10 @@ class AppInfo{
         $t->assign('DivelogVersion', $this->DivelogVersion);
         $t->assign('Appname', $this->Appname);
         $t->assign('phpDivelogVersion', $this->phpDivelogVersion);
+        $t->assign('dbversion', $this->dbversion);
+        $t->assign('and', $this->and);
+        $t->assign('app_url', $this->app_url);
+        $t->assign('dlog_url', $this->dlog_url);
+        $t->assign('dlog_version', $this->dlog_version);
     }/*}}}*/
 }

@@ -78,7 +78,6 @@ title="{$dlog_number_title}{$DepthMinNr}">{$DepthMinNr}</a></td>
  {else}
 <td>{$DepthMax}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep2}{$DepthMaxNr}"  title="{$dlog_number_title}{$DepthMaxNr}">{$DepthMaxNr}</a></td>
  <td>{$DepthMin}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep2}{$DepthMinNr}"  title="{$dlog_number_title}{$DepthMinNr}">{$DepthMinNr}</a></td>
-
  {/if}
  <td>{$DepthAvg}</td>
 </tr>
@@ -92,26 +91,63 @@ title="{$dlog_number_title}{$DepthMinNr}">{$DepthMinNr}</a></td>
                 <img src="{$app_path}/drawpiechart.php"  alt="" title="">
             {/if}
 		    </td>
-
+</tr>
 
 {* Show water temp details *}
 <tr class="divetitle">
  <td>{$stats_watertempmin}</td>
  <td>{$stats_watertempmax}</td>
- <td>{$stats_decodives}</td>
- <td>{$stats_repdives}</td>
+ <td>{$stats_watertempavg}</td>
+ <td>&nbsp;</td>
 </tr>
 
 <tr class="divecontent">
  {if isset($multiuser_id)}
 <td>{$WatertempMin}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep1}{$multiuser_id}{$sep2}{$WatertempMinNr}" title="{$dlog_number_title} {$WatertempMinNr}">{$WatertempMinNr}</a></td>
 <td>{$WatertempMax}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep1}{$multiuser_id}{$sep2}{$WatertempMaxNr}" title="{$dlog_number_title} {$WatertempMaxNr}">{$WatertempMaxNr}</a></td>
+<td>{$WatertempAvg}</td>
  {else}
 <td>{$WatertempMin}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep2}{$WatertempMinNr}" title="{$dlog_number_title} {$WatertempMinNr}">{$WatertempMinNr}</a></td>
 <td>{$WatertempMax}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep2}{$WatertempMaxNr}" title="{$dlog_number_title} {$WatertempMaxNr}">{$WatertempMaxNr}</a></td>
+<td>{$WatertempAvg}</td>
  {/if}
+ <td>&nbsp;</td>
+</tr>
+
+{* Show air temp details *}
+<tr class="divetitle">
+ <td>{$stats_airtempmin}</td>
+ <td>{$stats_airtempmax}</td>
+ <td>{$stats_airtempavg}</td>
+ <td>&nbsp;</td>
+</tr>
+
+<tr class="divecontent">
+ {if isset($multiuser_id)}
+<td>{$AirtempMin}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep1}{$multiuser_id}{$sep2}{$AirtempMinNr}" title="{$dlog_number_title} {$AirtempMinNr}">{$AirtempMinNr}</a></td>
+<td>{$AirtempMax}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep1}{$multiuser_id}{$sep2}{$AirtempMaxNr}" title="{$dlog_number_title} {$AirtempMaxNr}">{$AirtempMaxNr}</a></td>
+<td>{$AirtempAvg}</td>
+ {else}
+<td>{$AirtempMin}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep2}{$AirtempMinNr}" title="{$dlog_number_title} {$AirtempMinNr}">{$AirtempMinNr}</a></td>
+<td>{$AirtempMax}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep2}{$AirtempMaxNr}" title="{$dlog_number_title} {$AirtempMaxNr}">{$AirtempMaxNr}</a></td>
+<td>{$AirtempAvg}</td>
+ {/if}
+ <td>&nbsp;</td>
+</tr>
+
+{* Show Deco and rep details *}
+<tr class="divetitle">
+ <td>{$stats_decodives}</td>
+ <td>{$stats_nodecodives}</td>
+ <td>{$stats_repdives}</td>
+ <td>{$stats_norepdives}</td>
+</tr>
+
+<tr class="divecontent">
  <td>{$decodives} ({$decodives_per}%)</td>
+ <td>{$nodecodives} ({$nodecodives_per}%)</td>
  <td>{$repdives} ({$repdives_per}%)</td>
+ <td>{$norepdives} ({$norepdives_per}%)</td>
 </tr>
 
 {*  Show water type details *}
@@ -158,8 +194,6 @@ title="{$dlog_number_title}{$DepthMinNr}">{$DepthMinNr}</a></td>
  <td>{$wreckdives} ({$wreckdives_per}%)</td>
  <td>{$photodives} ({$photodives_per}%)</td>
 </tr>
-
-
 </table>
 
 {* Dive Certifications *}
@@ -167,47 +201,86 @@ title="{$dlog_number_title}{$DepthMinNr}">{$DepthMinNr}</a></td>
 {if isset($count)}
 
 	<table class="divetable" cellspacing="0" cellpadding="0" width="100%">
-	<tr><td colspan="4" class="spacing">&nbsp;</td></tr>
-	<tr class="divesection"><td colspan="5">{$stats_sect_certs}</td></tr>
+<tr>
+ <td colspan="4" class="spacing">&nbsp;</td>
+</tr>
+<tr class="divesection">
+ <td colspan="4">{$stats_sect_certs}</td>
+</tr>
+
+{* Loop through the array *}
+{section name=cell_data loop=$cells }
 
 	{* Show dive certification titles *}
 	<tr class="divetitle">
-	 <td>{$cert_brevet}</td>
-	 <td>{$cert_org}</td>
+ <td colspan="2">{$cert_org}</td>
+ <td colspan="2">{$cert_brevet}</td>
+</tr>
+
+<tr class="divecontent">
+ <td colspan="2">{$cells[cell_data].org}</td>
+ <td colspan="2">{$cells[cell_data].brevet}</td>
+</tr>
+
+<tr class="divetitle">
 	 <td>{$cert_certdate}</td>
 	 <td>{$cert_number}</td>
-	 <td>{$cert_instructor}</td>
+ <td colspan="2">{$cert_instructor}</td>
 	</tr>
 
-    {* Loop through the array *}
-    {section name=cell_data loop=$cells }
         <tr class="divecontent">
-            <td>{$cells[cell_data].brevet}</td>
-			<td>{$cells[cell_data].org}</td>
 			<td>{$cells[cell_data].certdate}</td>
 			<td>{$cells[cell_data].number}</td>
-			<td>{$cells[cell_data].instructor}</td>
+ <td colspan="2">{$cells[cell_data].instructor}</td>
 		</tr>
-		{if isset($cells[cell_data].scan1path) or  isset($cells[cell_data].scan2path)}
+
+{*
+{if $cells[cell_data].scan2path == ''}
+<tr class="divecontent"><td colspan="4">True 
+[{$cells[cell_data].scan2path}]</td></tr>
+{else}
+<tr class="divecontent"><td colspan="4">False 
+[{$cells[cell_data].scan2path}]</td></tr>
+{/if}
+*}
+{if ($cells[cell_data].scan1path != '') or ($cells[cell_data].scan2path != '')}
 			<tr class="divecontent">
-			 <td colspan="5" align="center">
-			{if isset($cells[cell_data].scan1path)}
+ <td colspan="4" align="center">
+{if $cells[cell_data].scan1path != ''}
                 <img src="{$app_path}/{$cells[cell_data].userpath_web}{$cells[cell_data].scan1path}" title="{$cells[cell_data].title} {$cells[cell_data].cert_scan_front}" alt="{$cells[cell_data].title} {$cells[cell_data].cert_scan_front}">
 			{/if}
-			{if isset($cells[cell_data].scan2path)}
+{if $cells[cell_data].scan2path != ''}
 				<img src="{$app_path}/{$cells[cell_data].userpath_web}{$cells[cell_data].scan2path}" title="{$cells[cell_data].title} {$cells[cell_data].cert_scan_back}" alt="{$cells[cell_data].title} {$cells[cell_data].cert_scan_back}">
 			{/if}
-			<br>
-			 &nbsp;</td>
+</td>
 			</tr>
         {/if}
+
+<tr class="divecontent">
+ <td colspan="4"><hr></td>
+</tr>
     {/section}
     {/if}
-    <tr class="divesection">
-	    <td colspan="5">&nbsp;</td>
-	</tr>
 </table>
 {/if}
+
+{* Show the program deails *}
+<table class="divetable" cellspacing="0" cellpadding="0" width="100%">
+<tr class="divecontent"><td class="spacing">&nbsp;</td></tr>
+<tr class="divecontent">
+ <td>{$poweredby} <a href="{$dlog_url}" target="_blank"
+title="{$Divelogname} web site">{$Divelogname}</a> {$dlog_version}
+{$dbversion}{$DivelogVersion}{$and}
+<a href="{$app_url}" target="_blank"
+title="{$Appname} web site">{$Appname}</a>
+{$phpDivelogVersion}</td>
+</tr>
+<tr class="divecontent"><td class="spacing">&nbsp;</td></tr>
+    <tr class="divesection">
+ <td colspan="4">&nbsp;</td>
+	</tr>
+</table>
+
 <!-- Include links_overview -->
 	{include file='links_overview.tpl'}
 <!-- End include links_overview -->

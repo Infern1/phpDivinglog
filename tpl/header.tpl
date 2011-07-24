@@ -9,8 +9,6 @@
 {include file='header_css.tpl'}
 {include file='header_script.tpl'}
 
-
-
 </head>
  <body> 
 {/if}

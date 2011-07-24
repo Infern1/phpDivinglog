@@ -74,6 +74,12 @@ a.divelogcrumbs:hover {
     padding:0px;
     }
 
+div#center_images {
+    position: relative;
+    overflow: hidden;
+    margin-left: 30px;
+}
+
 div.thumbwrapper {
     background:#F0EEE0 none repeat scroll 0% 0%;
     border:1px solid #AFAB8E;

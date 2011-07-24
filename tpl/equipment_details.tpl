@@ -12,12 +12,16 @@
 	</tr>
 
 	<tr class="divecontent">
-        {if isset($Object)} <td colspan="2">{$Object}</td>
-        {else} <td>-</td>
+        {if $Object != ''}
+	<td colspan="2" width="50%">{$Object}</td>
+        {else}
+	<td colspan="2" width="50%>-</td>
         {/if}
 
-        {if isset($Manufacturer)}  <td colspan="2">{$Manufacturer}</td>
-        {else } <td>-</td>
+        {if $Manufacturer != ''}
+	<td colspan="2">{$Manufacturer}</td>
+        {else}
+	<td colspan="2">-</td>
         {/if}
 	</tr>
 
@@ -29,17 +33,17 @@
 	 </tr>
 
 	 <tr class="divecontent">
-	{if isset($Shop)} 
+	{if $Shop != ''} 
     <td colspan="2">{$Shop}</td>
 	{else} 
-    <td>-</td>
+	<td colspan="2">-</td>
 	{/if}
-	{if isset($DateP)}
+	{if $DateP != ''}
 	<td>{$DateP}</td>
     {else}
 	 <td>-</td>
 	{/if}
-	{if isset($Price)}
+	{if $Price != ''}
     <td>{$Price}</td>
     {else} 
     <td>-</td>
@@ -47,42 +51,50 @@
 	 </tr>
     {*	Show the rest of the details *}
 	 <tr class="divetitle">
-	  <td>{$equip_serial}</td>
+	<td colspan="2">{$equip_serial}</td>
 	  <td>{$equip_warranty}</td>
 	  <td>{$equip_dater}</td>
-	  { if isset($PhotoPath)} <td>{$equip_photo}</td>
-        {else} <td>&nbsp;</td>
-	    {/if}
 	 </tr>
 
 	 <tr class="divecontent">
-	{if isset($Serial)}<td>{$Serial}</td>
-    {else}<td>-</td>
+	{if $Serial != ''}
+	<td colspan="2">{$Serial}</td>
+	{else}
+	<td colspan="2">-</td>
 	{/if}
-	{if isset($Warranty)} <td>{$Warranty}</td>
-    { else } <td>-</td>
+	{if $Warranty != ''}
+	<td>{$Warranty}</td>
+	{else}
+	<td>-</td>
 	{/if}
-	{if isset($DateR)}<td>{$DateR}</td>
-	{else } <td>-</td>
+	{if $DateR != ''}
+	<td>{$DateR}</td>
+	{else}
+	<td>-</td>
 	{/if}
+    </tr>
+
 	{if isset($PhotoPath)}
-<!--		<div>-->
-        <td>
+    <tr class="divetitle">
+	<td colspan="4">{$equip_photo}</td>
+    </tr>
+
+    <tr class="divecontent">
+	<td colspan="4">
     {foreach from=$image_link key=id item=i name=images}
-             <a id="thumb" href="{$web_root}/{$i.img_url}" class="highslide" onclick="return hs.expand(this)">
-                    <img src="{$web_root}/{$i.img_url}" alt="Highslide JS" title="{$i.img_title}" height="80" width="120" ></a>
+             <a id="thumb" href="{$web_root}/{$i.img_url}" class="highslide" onclick="return hs.expand(this)" title="{$i.img_title}">
+                    <img src="{$web_root}/{$i.img_url}" alt="{$i.img_title}" title="{$i.img_title}" height="{$thumb_height}" width="{$thumb_width}" ></a>
        <div class='highslide-caption'>
         {$i.img_title}
         </div>
     {/foreach}
 		</td>
-<!--</div>-->
-    {else}
-	    <td>&nbsp;</td>
-	{/if}
 	 </tr>
+    {/if}
 
-	 <tr><td colspan="4" class="spacing">&nbsp;</td></tr>
+    <tr>
+	<td colspan="4" class="spacing">&nbsp;</td>
+    </tr>
 
     {*	Comments *}
     {*	Show them if we have them *}
@@ -94,6 +106,7 @@
             <td colspan="4">{$Comments}</td>
         </tr>
     {/if}
+
 	   <tr class="divesection">
 	    <td colspan="4">&nbsp;</td>
 	</tr>

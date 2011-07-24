@@ -31,7 +31,7 @@ INSTALLATION:
 $_config['database_server'] = "localhost";
 $_config['database_db'] = "your_database";
 $_config['database_username'] = "your_username";
-$_config['database_password'] = "your_passwordj";
+$_config['database_password'] = "your_password";
 	with the appropriate values for your database.
 
 3.	If you are planning to use a language file other than
@@ -47,8 +47,8 @@ $_config['language'] = "english";
 	Set values to true if you want to convert from metric units 
 	to imperial units, or to false if values should be left as metric units. 
 
-5.  You can change the templates in tpl/ directory. Here you can
-    change phpDivinglog into your own taste.
+5.	You can change the templates in the tpl/ directory. Here you can
+	change phpDivinglog into your own taste.
 
 6.	You can change the styles used to display values by
 	editing the CSS file includes/divelog.css.
@@ -69,7 +69,7 @@ DEFINE("MBTTF_DIR","includes/jpgraph/fonts/");
 
 8.	Upload, via FTP, all of the files into a directory on 
 	your server. Example: /divelog. If you know your location
-    change config.inc.php according:
+	change config.inc.php according:
     /**
      * change this to your website url
      */
@@ -117,11 +117,9 @@ DEFINE("MBTTF_DIR","includes/jpgraph/fonts/");
 	Click n 'Start Export'
 
 10.	Edit the dump file produced as required to change
-	the pathnames to images, if yu were unable to achieve 
+	the pathnames to images, if you were unable to achieve 
 	what you needed using the options on the 'Additonal' tab.
 	(See USAGE below for details.)
 
 11.	Use phpMyAdmin or similar to upload the data into your 
 	MySQL database.
-
-

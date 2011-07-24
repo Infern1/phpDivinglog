@@ -405,8 +405,8 @@ function backhtmlentities($str_h){
 }
 
 /**
- * DECtoDMS  Converts decimal longitude / latitude to DMS
- * ( Degrees / minutes / seconds ) 
+ * DECtoDMS  Converts decimal longitude / latitude to d, dm or dms
+ * ( degrees / minutes / seconds ) 
  * This is the piece of code which may appear to 
  * be inefficient, but to avoid issues with floating
  * point math we extract the integer part and the float
@@ -415,38 +415,72 @@ function backhtmlentities($str_h){
  * @access public
  * @return void
  */
-function DECtoDMS($dec)
-{
-	if ($dec == "") {/*{{{*/
+function DECtoDMS($dec, $fmt) {
+	if ($dec == "") { /*{{{*/
 		$dms = "";
 	} else {
-		$vars = explode(".",$dec);
-		$deg = $vars[0];
-		$tempma = "0.".$vars[1];
+		switch ($fmt) {
+		case "dm":
+			// degrees and minutes
+			$vars = explode(".", $dec);
+			$deg = $vars[0];
+			$tempma = "0." . $vars[1];
 
-		$tempma = $tempma * 3600;
-		$min = floor($tempma / 60);
-		$sec = $tempma - ($min*60);
-
-		$dms = $deg . '&#176;';
-		if (($min != 0) || ($sec != 0)) {
-			$dms .= ' ' . $min . '&#8242;';
-			if ($sec != 0) {
-//				format to xx.xx
-				$s = number_format($sec,2);
-//				remove trailing zeroes
-				$s = rtrim($s,"0");
-//				remove a trailing decimal point
-				$s = rtrim($s,".");
-				$dms .= ' ' . $s . '&#8243;';
+			$min = $tempma * 60;
+			$dms = $deg . '&#176;';
+			if ($min != 0) {
+				// format to xx.xxxx
+				$m = number_format($min, 4); 
+				// remove trailing zeroes
+				$m = rtrim($m, "0"); 
+				// remove a trailing decimal point
+				$m = rtrim($m, ".");
+				$dms .= '&nbsp;' . $m . '&#8242;';
 			}
+			break;
+
+		case "dms":
+			// degrees, minutes and seconds
+			$vars = explode(".", $dec);
+			$deg = $vars[0];
+			$tempma = "0." . $vars[1];
+
+			$tempmb = $tempma * 3600;
+			$min = floor($tempmb / 60);
+			$sec = $tempmb - ($min * 60);
+			$dms = $deg . '&#176;';
+			if (($min != 0) || ($sec != 0)) {
+				$dms .= '&nbsp;' . $min . '&#8242;';
+				if ($sec != 0) {
+					// format to xx.xx
+					$s = number_format($sec, 2); 
+					// remove trailing zeroes
+					$s = rtrim($s, "0"); 
+					// remove a trailing decimal point
+					$s = rtrim($s, ".");
+					$dms .= '&nbsp;' . $s . '&#8243;';
+				} 
+			} 
+			break;
+
+		default:
+			// degress only
+
+			// format to xx.xxxxxx
+			$d = number_format($dec, 6); 
+			// remove trailing zeroes
+			$d = rtrim($d, "0"); 
+			// remove a trailing decimal point
+			$d = rtrim($d, ".");
+			$dms = $d . '&#176;';
 		}
-	}
-	return $dms;/*}}}*/
-}    
+	} 
+	return $dms; /*}}}*/
+} 
+
 
 /**
- * convert_date converts the date to format the use whishes
+ * convert_date converts the date to format the user whishes
  * 
  * @param mixed $date 
  * @access public
@@ -541,13 +575,14 @@ function add_unit_time($value){
  * @return void
  */
 function latitude_format($coord){
-//	Change coordinates into a displayable format/*{{{*/
+//	Change coordinates into a displayable format
+	global $_config; /*{{{*/
 
 	if ($coord == "") {
 		$dms = "";
 	} else {
 //		Converts decimal latitude to degrees / minutes / seconds
-		$dms = DECtoDMS(abs($coord));
+		$dms = DECtoDMS(abs($coord),$_config['coord_format']);
 
 //		Add North or South
 		if ($coord < 0) {
@@ -568,13 +603,14 @@ function latitude_format($coord){
  * @return void
  */
 function longitude_format($coord){
-//	Change coordinates into a displayable format/*{{{*/
+//	Change coordinates into a displayable format
+	global $_config; /*{{{*/
 
 	if ($coord == "") {
 		$dms = "";
 	} else {
 //		Converts decimal longitude to degrees / minutes / seconds
-		$dms = DECtoDMS(abs($coord));
+		$dms = DECtoDMS(abs($coord),$_config['coord_format']);
 
 //		Add East or West
 		if ($coord < 0) {

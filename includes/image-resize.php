@@ -324,6 +324,21 @@ class Thumbnail {
             $this->error_msg='Not Save File';
             return false;
         }
+        
+        // Make sure target directory exists
+        $strTargetDir = mb_substr( $save, 0, -mb_strlen( strrchr( $save, '/' ) ) );
+        if( FALSE === file_exists( $strTargetDir ) ) {
+            if( FALSE === mkdir( $strTargetDir ) ) {
+                echo "Failed to create directory: " . $strTargetDir;
+                return false;
+            }
+        }
+
+        if( FALSE === is_dir( $strTargetDir ) ) {
+            echo "Directory already exists but as file: " . $strTargetDir;
+            return false;
+        }
+
         if ($this->output_format=="PNG") { //PNG
             imagePNG($this->img["des"],"$save");
         } else {

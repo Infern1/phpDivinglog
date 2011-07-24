@@ -23,81 +23,115 @@
 	</tr>
 
     <tr class="divecontent">
-	    <td>{$dive_date}</td>
-		<td>{$entry_time}</td>
-		<td>{$dive_time}</td>
-        <td>{$dive_depth}</td>
+    {if $dive_date != ''}
+      <td>{$dive_date}</td>
+    {else}
+      <td>-</td>
+    {/if} 
+
+    {if $entry_time != ''}
+      <td>{$entry_time}</td>
+    {else}
+      <td>-</td>
+    {/if} 
+
+    {if $dive_time != ''}
+      <td>{$dive_time}</td>
+    {else}
+      <td>-</td>
+    {/if} 
+
+    {if $dive_depth != ''}
+      <td>{$dive_depth}</td>
+    {else}
+      <td>-</td>
+    {/if} 
     </tr>
 
     {*	Show dive location details *}
     <tr class="divetitle">
-	    <td>{$logbook_place}</td>
-	    <td colspan="2">{$logbook_city}</td>
-	    <td>{$logbook_country}</td>
-	</tr>
+      <td>{$logbook_place}</td>
+      <td colspan="2">{$logbook_city}</td>
+      <td>{$logbook_country}</td>
+    </tr>
 
-	<tr class="divecontent">
-        {if isset($dive_site_nr)} 
-            {if isset($multiuser_id)}
-            <td><a href="{$app_path}/divesite.php{$sep1}{$multiuser_id}{$sep2}{$dive_site_nr}" title="{$dive_place} {$logbook_place_linktitle}">{$dive_place}</a></td>
-            {else}
-            <td><a href="{$app_path}/divesite.php{$sep2}{$dive_site_nr}" title="{$dive_place} {$logbook_place_linktitle}">{$dive_place}</a></td>
-            {/if}
-        {else}
-            <td>-</td>
-        {/if} 
-        {if isset($dive_city)} 
-        <td colspan="2">{$dive_city}</td>
-        {else}
-        <td>-</td>
-        {/if}
-        {if isset($dive_country)} 
-        <td>{$dive_country}</td>
-        {else}
-        <td>-</td>
-        {/if}
-	</tr>
+    <tr class="divecontent">
+    {if isset($dive_site_nr)} 
+      {if isset($multiuser_id)}
+      <td><a href="{$app_path}/divesite.php{$sep1}{$multiuser_id}{$sep2}{$dive_site_nr}" title="{$dive_place} {$logbook_place_linktitle}">{$dive_place}</a></td>
+      {else}
+      <td><a href="{$app_path}/divesite.php{$sep2}{$dive_site_nr}" title="{$dive_place} {$logbook_place_linktitle}">{$dive_place}</a></td>
+      {/if}
+    {else}
+      <td>-</td>
+    {/if} 
 
-    {* 	Show buddy details *}
-	{if isset($buddy)}
-        <tr class="divetitle">
-		    <td colspan="4">{$logbook_buddy}</td>
-        </tr>
-        <tr class="divecontent">
-		    <td colspan="4">{$buddy}</td>
-		</tr>
-	{/if}
+    {if $dive_city != ''} 
+      <td colspan="2">{$dive_city}</td>
+    {else}
+      <td colspan="2">-</td>
+    {/if}
+
+    {if $dive_country != ''} 
+      <td>{$dive_country}</td>
+    {else}
+      <td>-</td>
+    {/if}
+    </tr>
+
+    {* Show buddy details *}
+    {if $buddy != ''}
+    <tr class="divetitle">
+      <td colspan="4">{$logbook_buddy}</td>
+    </tr>
+    <tr class="divecontent">
+      <td colspan="4">{$buddy}</td>
+    </tr>
+    {/if}
 
     {* Dive pictures *}
     {if isset($pics)}
-		<tr><td colspan="4" class="spacing">&nbsp;</td></tr>
-        <tr><td colspan="4">
-		        <p class="centeredImage"><a href="{$picpath_web}"  rel="lightbox[others]"  title="{$divepic_linktit}">{$divepic_pt}</a>
-            {foreach from=$image_link item=foo}
-                {$foo}
-            {/foreach}
-		</p>
-		</td></tr>
-
+    <tr><td colspan="4" class="spacing">&nbsp;</td></tr>
+    <tr>
+      <td colspan="4">
+        <p class="centeredImage"><a href="{$picpath_web}"
+rel="lightbox[others]" title="{$divepic_linktit}">{$divepic_pt}</a>
+        {foreach from=$image_link item=foo}
+          {$foo}
+        {/foreach}
+        </p>
+      </td>
+    </tr>
     {/if}
     {if isset($pics2)}
-<!--	<div>-->
-    	<tr><td colspan="4" class="spacing">&nbsp;</td></tr>
-        <tr><td colspan="4">
-		        <p class="centeredImage">
-             {foreach from=$image_link key=id item=i name=images}
-                {if isset($pics_resized)}
-             <a id="thumb{$id}" href="{$web_root}/{$i.img_url}" class="highslide" onclick="return hs.expand(this)">
-                    <img src="{$web_root}/{$i.img_thumb_url}" alt="Highslide JS" title="{$i.img_title}" height="{$thumb_height}"
-                    width="{$thumb_width}" ></a>
-                {else}
-             <a id="thumb{$id}" href="{$web_root}/{$i.img_url}" class="highslide" onclick="return hs.expand(this)">
-                    <img src="{$web_root}/imagesize.php?w=100&img={$i.img_url}" alt="Highslide JS" title="{$i.img_title}" height="{$thumb_height}" width="{$thumb_height}" ></a>
-                {/if}
-            {/foreach}
-		</p>
-		</td></tr>
-<!--</div> -->
+    <tr>
+      <td colspan="4" class="spacing">&nbsp;</td>
+    </tr>
+    <tr>
+      <td colspan="4">
+        <p class="centeredImage">
+          {foreach from=$image_link key=id item=i name=images}
+            {if isset($pics_resized)}
+            <a id="thumb{$id}" href="{$web_root}/{$i.img_url}" 
+class="highslide" onclick="return hs.expand(this)" 
+title="{$i.img_title}"><img 
+src="{$web_root}/{$i.img_thumb_url}" 
+alt="{$i.img_title}" 
+title="{$i.img_title}" 
+height="{$thumb_height}" width="{$thumb_width}" ></a>
+            {else}
+            <a id="thumb{$id}" href="{$web_root}/{$i.img_url}" 
+class="highslide" onclick="return hs.expand(this)" 
+title="{$i.img_title}"><img
+src="{$web_root}/imagesize.php?w={$thumb_width}&img={$i.img_url}" 
+alt="{$i.img_title}" 
+title="{$i.img_title}" 
+height="{$thumb_height}" width="{$thumb_width}" ></a>
+            {/if}
+          {/foreach}
+        </p>
+      </td>
+    </tr>
     {/if}
 
     {* Dive profile *}
@@ -114,8 +148,11 @@
 		    </td>
         </tr>
     {/if}
+
     {*  Conditions *}
-	    <tr><td colspan="4" class="spacing">&nbsp;</td></tr>
+    <tr>
+      <td colspan="4" class="spacing">&nbsp;</td>
+    </tr>
         <tr class="divesection">
             <td colspan="4">{$dive_sect_conditions}</td>
 	    </tr>
@@ -129,24 +166,25 @@
 	    </tr>
 	
     <tr class="divecontent">
-	{if isset($Weather)}
+    {if $Weather != ''}
 	    <td>{$Weather}</td>
     {else}
         <td>-</td>
 	{/if}
-    {if isset($Visibility)}
+
+    {if $Visibility != ''}
 	    <td>{$Visibility}</td>
 	{else}
 	    <td>-</td>
     {/if}
 
-    {if isset($Altitude)}
+    {if $Altitude != ''}
         <td>{$Altitude}</td>
 	{else}
         <td>-</td>
     {/if}
 
-	{if isset($Airtemp)}
+    {if $Airtemp != ''}
         <td>{$Airtemp}</td>
     {else}
         <td>-</td>
@@ -160,23 +198,27 @@
 	    <td>{$logbook_uwcurrent}</td>
 	    <td>{$logbook_watertemp}</td>
 	</tr>
+
 	<tr class="divecontent">
-	{if isset($Water)}
+    {if $Water != ''}
         <td>{$Water}</td>
 	{else}
         <td>-</td>
     {/if}
-	{if isset($Surface)}
+
+    {if $Surface != ''}
         <td>{$Surface}</td>
     {else}
         <td>-</td>
     {/if}
-    {if isset($UWCurrent)}
+
+    {if $UWCurrent != ''}
         <td>{$UWCurrent}</td>
 	{else}
         <td>-</td>
     {/if}
-	{if isset($Watertemp)}
+
+    {if $Watertemp != ''}
 	    <td>{$Watertemp}</td>
 	{else}
         <td>-</td>
@@ -200,25 +242,25 @@
 	</tr>
 
 	<tr class="divecontent">
-	{ if isset($Tanktype)}
+    {if $Tanktype != ''}
         <td>{$Tanktype}</td>
 	{else}
         <td>-</td>
     {/if}
 
-	{if isset($Tanksize)}
+    {if $Tanksize != ''}
         <td>{$Tanksize}</td>
     {else}
         <td>-</td>
     {/if}
 
-	{if isset($Gas)}
+    {if $Gas != ''}
 	    <td>{$Gas}</td>
 	{else}
         <td>-</td>
     {/if}
 
-	{if isset($averagedepth)}
+    {if $averagedepth != ''}
 	    <td>{$averagedepth} {$unit_length_short}</td>
     {else}
         <td>-</td>
@@ -234,27 +276,28 @@
 	</tr>
 
 	<tr class="divecontent">
-	{if isset($PresS)}
+    {if $PresS != ''}
         <td>{$PresS}</td>
     {else}
         <td>-</td>
     {/if}
-    { if isset($PresE)}
+
+    {if $PresE != ''}
 		<td>{$PresE}</td>
 	{else }
         <td>-</td>
     {/if}
 	
-    {if isset($PresSPresE)}
+    {if $PresSPresE != ''}
         <td>{$PresSPresE}</td>
 	{else }
         <td>-</td>
     {/if}
-	{if isset($sac)}
+
+    {if $sac != ''}
 	    <td>{$sac}</td>
 	{else}
 	    <td>-</td>
-	
     {/if}
 	</tr>
 
@@ -273,15 +316,25 @@
     </tr>
 
     <tr class="divecontent">
-        {if isset($Entry)}
+    {if $Entry != ''}
         <td>{$Entry}</td>
         {else}
 		<td>-</td>
         {/if}
 
+    {if $Deco != ''}
 	    <td>{$Deco}</td>
+    {else}
+      <td>-</td>
+    {/if}
+
+    {if $Rep != ''}
 	    <td>{$Rep}</td>
-	{if isset($Surfint)}
+    {else}
+      <td>-</td>
+    {/if}
+
+    {if $Surfint != ''}
 	    <td>{$Surfint}</td>
 	{else }
         <td>-</td>
@@ -314,19 +367,19 @@
 	</tr>
 
 	<tr class="divecontent">
-	{ if isset($Weight)}
+    {if $Weight != ''}
         <td>{$Weight}</td>
 	{else }
         <td>-</td>
     {/if}
 
-	{if isset($Divesuit)}
+    {if $Divesuit != ''}
 		<td>{$Divesuit}</td>
 	{else}
         <td>-</td>
     {/if}
 
-	{if isset($Computer)}
+    {if $Computer != ''}
 	    <td colspan="2">{$Computer}</td>
 	{else}
 	    <td>-</td>
@@ -354,7 +407,8 @@
 	<tr>
         <td colspan="4" class="spacing">&nbsp;</td>
     </tr>
-    {if isset($Comments)}
+
+    {if $Comments != ''}
 		<tr class="divesection">
 		    <td colspan="4">{$dive_sect_comments}</td>
 		</tr>

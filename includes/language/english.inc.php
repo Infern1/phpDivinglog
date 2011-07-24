@@ -46,8 +46,8 @@ $_lang['dive_log'] = "Dive Log";
 $_lang['dive_sites'] = "Dive Sites";
 $_lang['dive_stats'] = "Dive Statistics";
 $_lang['dive_equip'] = "Dive Equipment";
-$_lang['diver_choice_linktitle'] = "Show diveroverview";
-$_lang['diver_choice'] = "Diver overview";
+$_lang['diver_choice_linktitle'] = "Show Diver Overview";
+$_lang['diver_choice'] = "Diver Overview";
 $_lang['dive_gallery'] = "Dive Gallery";
 
 $_lang['dive_log_linktitle'] = "Show the Dive Log";
@@ -145,7 +145,7 @@ $_lang['dlog_title_divedate'] = "Dive Date";
 $_lang['dlog_title_depth'] = "Max Depth";
 $_lang['dlog_title_divetime'] = "Dive Time";
 $_lang['dlog_title_location'] = "Location";
-$_lang['dlog_title_place'] = "Dive site";
+$_lang['dlog_title_place'] = "Dive Site";
 
 $_lang['dlog_number_title'] = "Details for dive # ";
 
@@ -174,9 +174,9 @@ $_lang['site_dive_plural'] = " dives at this location:";
 $_lang['site_sect_comments'] = "Comments:";
 $_lang['site_google_link'] = "Google Map of ";
 
-$_lang['display_rows_dives'] = 'Displaying dives';
-$_lang['display_rows_divesites'] = 'Displaying divesites';
-$_lang['display_rows_equipment'] = 'Displaying equipment';
+$_lang['display_rows_dives'] = 'Displaying Dives';
+$_lang['display_rows_divesites'] = 'Displaying Dive Sites';
+$_lang['display_rows_equipment'] = 'Displaying Equipment';
 
 // Dive Site List related values
 
@@ -206,6 +206,10 @@ $_lang['stats_depthmin'] = "Shallowest Dive:";
 $_lang['stats_depthavg'] = "Average Depth:";
 $_lang['stats_watertempmin'] = "Coldest Water Temp.:";
 $_lang['stats_watertempmax'] = "Warmest Water Temp.:";
+$_lang['stats_watertempavg'] = "Average Water Temp.:";
+$_lang['stats_airtempmin'] = "Coldest Air Temp.:";
+$_lang['stats_airtempmax'] = "Warmest Air Temp.:";
+$_lang['stats_airtempavg'] = "Average Air Temp.:";
 $_lang['stats_shoredives'] = "Shore dives:";
 $_lang['stats_boatdives'] = "Boat dives:";
 $_lang['stats_nightdives'] = "Night dives:";
@@ -218,7 +222,9 @@ $_lang['stats_saltwaterdives'] = "Saltwater dives:";
 $_lang['stats_freshwaterdives'] = "Freshwater dives:";
 $_lang['stats_brackishdives'] = "Brackish dives:";
 $_lang['stats_decodives'] = "Deco. dives:";
+$_lang['stats_nodecodives'] = "No Deco. dives:";
 $_lang['stats_repdives'] = "Rep. dives:";
+$_lang['stats_norepdives'] = "No Rep. dives:";
 $_lang['stats_depth1m'] = "0 - 18 msw:";
 $_lang['stats_depth2m'] = "19 - 30 msw:";
 $_lang['stats_depth3m'] = "31 - 40 msw:";
@@ -233,7 +239,7 @@ $_lang['stats_depth5i'] = "&gt; 180 fsw:";
 
 // Dive Certification related value
 
-$_lang['cert_brevet'] = "Certifications:";
+$_lang['cert_brevet'] = "Certification:";
 $_lang['cert_org'] = "Organisation:";
 $_lang['cert_certdate'] = "Date:";
 $_lang['cert_number'] = "Cert. #:";
@@ -283,11 +289,11 @@ $_lang['unit_length_short_imp'] = "ft";
 $_lang['unit_pressure'] = "bar";
 $_lang['unit_pressure_imp'] = "psi";
 $_lang['unit_rate'] = "litres/min";
-$_lang['unit_rate_imp'] = "cu ft/min";
+$_lang['unit_rate_imp'] = "cu&nbsp;ft/min";
 $_lang['unit_temp'] = "&deg;C";
 $_lang['unit_temp_imp'] = "&deg;F";
 $_lang['unit_volume'] = "litres";
-$_lang['unit_volume_imp'] = "cu ft";
+$_lang['unit_volume_imp'] = "cu&nbsp;ft";
 $_lang['unit_weight'] = "kg";
 $_lang['unit_weight_imp'] = "lbs";
 $_lang['unit_time'] = "minutes";
@@ -297,6 +303,7 @@ $_lang['unit_time_short'] = "min";
 // Application ID related values
 
 $_lang['poweredby'] = "Powered by ";
+$_lang['dbversion'] = "database version ";
 $_lang['and'] = " and ";
 
 ?>

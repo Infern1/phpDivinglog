@@ -29,31 +29,50 @@
 	</tr>
 
 	<tr class="divecontent">
+    {if $Lat != ''}
 	    <td>{$Lat}</td>
+    {else}
+      <td>-</td>
+    {/if} 
+
+    {if $Lon != ''}
 	    <td>{$Lon}</td>
+    {else}
+      <td>-</td>
+    {/if} 
+
         {if isset($site_google_link)}
 		<td><a href="http://maps.google.com/maps?f=q&amp;hl=en&amp;q={$LatDec},{$LonDec}+({strip}{$Place}{/strip})&amp;ie=UTF8&amp;t=k&amp;om=1" target="_blank" title="{$site_google_link}">Google Map</a></td>
         {else}
         <td>&nbsp;</td>
         {/if}
 
+      <td>&nbsp;</td>
+    </tr>
+
  	    {if isset($pics2)}
-	<!--<div>-->
-        <td>
+    {* Show maps *}
+    <tr class="divetitle">
+      <td colspan="4">{$place_map}</td>
+    </tr>
+
+    <tr class="divecontent">
+      <td colspan="4">
     {foreach from=$image_link key=id item=i name=images}
-             <a id="thumb" href="{$web_root}/{$i.img_url}" class="highslide" onclick="return hs.expand(this)">
-                    <img src="{$web_root}/{$i.img_url}" alt="Highslide JS" title="{$i.img_title}" height="80" width="120" ></a>
+        <a id="thumb" href="{$web_root}/{$i.img_url}" 
+class="highslide" onclick="return hs.expand(this)" 
+title="{$i.img_title}"><img 
+src="{$web_root}/{$i.img_url}" 
+alt="{$i.img_title}" 
+title="{$i.img_title}" 
+height="{$thumb_height}" width="{$thumb_width}"></a>
         <div class='highslide-caption'>
         {$i.img_title}
         </div>
    {/foreach}
 		</td>
-<!-- </div> -->
-{else}
-   <td>&nbsp;</td>
-{/if}
-
 </tr>
+    {/if}
 
     {* Show site dives if we have them *}
 	{if $dive_count != 0}
@@ -80,7 +99,7 @@
 
     {*	Comments *}
     {*	Show them if we have them *}
-	{if isset($Comments) }
+    {if $Comments != ''}
 		<tr class="divesection">
 		    <td colspan="4">{$site_sect_comments}</td>
 		</tr>
@@ -88,10 +107,12 @@
             <td colspan="4">{$Comments}</td>
         </tr>
 	{/if}
+
 	  <tr class="divesection">
 	    <td colspan="4">&nbsp;</td>
 	</tr>
-     </table>   <!-- Include links_details -->
+  </table>
+
+<!-- Include links_details -->
 	{include file='links_details.tpl'}
     <!-- End include links_details -->
-

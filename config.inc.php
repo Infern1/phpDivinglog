@@ -69,14 +69,15 @@ $_config['view_type'] = 1;
  * Data for all the users should be in the same database
  */
 $_config['multiuser'] = false;
+
 /**
  * Define the table prefix for each user
  * $_config['user_prefix'][user_id] = 'table_prefix'
  * The user_id should start with 1 and can be defined. 
  */
-$_config['user_prefix'][1] = 'rob';
-$_config['user_prefix'][2] = 'sjaak';
-$_config['user_prefix'][3] = 'sjaak2';
+$_config['user_prefix'][1] = 'diver1';
+$_config['user_prefix'][2] = 'diver2';
+$_config['user_prefix'][3] = 'diver3';
 
 /**
  * number of items per page in the lists
@@ -84,7 +85,7 @@ $_config['user_prefix'][3] = 'sjaak2';
 $_config['max_list'] = 15;
 
 /**
- * Set to true if you want to display to profile in the dive detail 
+ * Set to true if you want to display the profile in the dive detail 
  */
 $_config['show_profile'] = true;
 
@@ -119,16 +120,12 @@ $_config['divepics_preview'] = true;
 $_config['enable_resize'] = true;
 
 /**
- * Set the width of the thumbnails, which are created automaticly 
- * Width is set in px
+ * Set the width and height of the thumbnails, which are created automaticly
+ * Usually a 4:3 ratio, e.g. 100:75, 120:100 
+ * Width and height are set in px
  */
 $_config['thumb-width'] = 100; 
-
-/**
- * Set the height of the thumbnails, which are created automaticly 
- * Height is set in px
- */
-$_config['thumb-height'] = 80; 
+$_config['thumb-height'] = 75; 
 
 /**
  * Set the width of the pictures in the gallery 
@@ -198,8 +195,14 @@ $_config['temp'] = false;
  */
 $_config['volume'] = false;
 
-
-
+/**
+ * Lattitue and Longitude format
+ * Valid values are:
+ * d - degrees - ddd.dddddd
+ * dm - degress & minutes - ddd mm.mmmm
+ * dms - degrees, minutes & seconds - ddd mm ss.ss
+ */
+$_config['coord_format'] = 'dm';
 
 /**
  * ABS path to your website (no need to change normaly)

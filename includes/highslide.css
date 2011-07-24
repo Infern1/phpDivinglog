@@ -2,6 +2,9 @@
     font-family: Verdana, Helvetica;
     font-size: 10pt;
 }
+.highslide-container table {
+	background: none;
+}
 .highslide {
     outline: none;
     text-decoration: none;
@@ -12,9 +15,13 @@
 .highslide:hover img {
     border-color: gray;
 }
-
-.highslide-active-anchor img, .highslide-active-anchor:hover img {
+.highslide-active-anchor img {
+	visibility: hidden;
+}
+.highslide-gallery .highslide-active-anchor img {
     border-color: black;
+	visibility: visible;
+	cursor: default;
 }
 .highslide-image {
     border-width: 2px;
@@ -22,10 +29,19 @@
     border-color: white;
     background: gray;
 }
-.highslide-wrapper, .rounded-white {
+.highslide-wrapper, .highslide-outline {
     background: white;
 }
+.glossy-dark {
+	background: #111;
+}
+
 .highslide-image-blur {
+}
+.highslide-number {
+	font-weight: bold;
+	color: gray;
+	font-size: .9em;
 }
 .highslide-caption {
     display: none;
@@ -37,11 +53,18 @@
 .highslide-heading {
     display: none;
     font-weight: bold;
-    margin-bottom: 0.4em;
+	margin: 0.4em;
 }
 .highslide-dimming {
     position: absolute;
     background: black;
+}
+a.highslide-full-expand {
+   background: url(graphics/fullexpand.gif) no-repeat;
+   display: block;
+   margin: 0 10px 10px 0;
+   width: 34px;
+   height: 34px;
 }
 .highslide-loading {
     display: block;
@@ -54,6 +77,7 @@
     border: 1px solid white;
     background-color: white;
     padding-left: 22px;
+	background-image: url(graphics/loader.white.gif);
     background-repeat: no-repeat;
     background-position: 3px 1px;
 }
@@ -69,15 +93,95 @@ a.highslide-credits:hover i {
     color: white;
     background-color: gray;
 }
+.highslide-move, .highslide-move * {
+	cursor: move;
+}
 
+.highslide-viewport {
+	display: none;
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	z-index: 1;
+	background: none;
+	left: 0;
+	top: 0;
+}
+.highslide-overlay {
+	display: none;
+}
+.hidden-container {
+	display: none;
+}
+/* Example of a semitransparent, offset closebutton */
+.closebutton {
+	position: relative;
+	top: -15px;
+	left: 15px;
+	width: 30px;
+	height: 30px;
+	cursor: pointer;
+	background: url(graphics/close.png);
+	/* NOTE! For IE6, you also need to update the highslide-ie6.css file. */
+}
 
-/* Controls. See http://www.google.com/search?q=css+sprites */
+/*****************************************************************************/
+/* Thumbnail boxes for the galleries.                                        */
+/* Remove these if you are not using a gallery.                              */
+/*****************************************************************************/
+.highslide-gallery ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+.highslide-gallery ul li {
+	display: block;
+	position: relative;
+	float: left;
+	width: 106px;
+	height: 106px;
+	border: 1px solid silver;
+	background: #ededed;
+	margin: 2px;
+	padding: 0;
+	line-height: 0;
+	overflow: hidden;
+}
+.highslide-gallery ul a {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+}
+.highslide-gallery ul img {
+ 	position: relative;
+	top: -50%;
+	left: -50%;
+}
+html>/**/body .highslide-gallery ul li {
+	display: table;
+	text-align: center;
+}
+html>/**/body .highslide-gallery ul li {
+	text-align: center;
+}
+html>/**/body .highslide-gallery ul a {
+	position: static;
+	display: table-cell;
+	vertical-align: middle;
+}
+html>/**/body .highslide-gallery ul img {
+	position: static;
+}
+
+/*****************************************************************************/
+/* Controls for the galleries.											     */
+/* Remove these if you are not using a gallery							     */
+/*****************************************************************************/
 .highslide-controls {
     width: 195px;
     height: 40px;
-    margin-right: 15px;
-    margin-bottom: 10px;
-    margin-top: 20px;
+	background: url(graphics/controlbar-white.gif) 0 -90px no-repeat;
+	margin: 20px 15px 10px 0;
 }
 .highslide-controls ul {
     position: relative;
@@ -86,12 +190,17 @@ a.highslide-credits:hover i {
     list-style: none;
     margin: 0;
     padding: 0;
+	background: url(graphics/controlbar-white.gif) right -90px no-repeat;
+
 }
 .highslide-controls li {
     float: left;
     padding: 5px 0;
+	margin:0;
+	list-style: none;
 }
 .highslide-controls a {
+	background-image: url(graphics/controlbar-white.gif);
     display: block;
     float: left;
     height: 30px;
@@ -101,15 +210,17 @@ a.highslide-credits:hover i {
 .highslide-controls a.disabled {
     cursor: default;
 }
+.highslide-controls a.disabled span {
+	cursor: default;
+}
 .highslide-controls a span {
     /* hide the text for these graphic buttons */
     display: none;
-}
-.highslide-move a {
-    cursor: move;
+	cursor: pointer;
 }
 
-/* The CSS sprites for the controlbar */
+
+/* The CSS sprites for the controlbar - see http://www.google.com/search?q=css+sprites */
 .highslide-controls .highslide-previous a {
     background-position: 0 0;
 }

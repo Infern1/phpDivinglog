@@ -1,6 +1,8 @@
 phpDivinglog $Rev$
 ====================
 Last modified $Date$
+github:
+    https://github.com/Infern1/phpDivinglog
 
 Sourceforge:
     http://sourceforge.net/projects/phpdivinglog
@@ -31,7 +33,7 @@ USAGE:
 	Version 1.2+ supports a user provided link to Google Maps.
 
 	If you add a line like:
-		[url]http://maps.google.com/?ie=UTF8&t=k&om=1&ll=-38.356776,144.772693&spn=0.005645,0.007124[/url]
+[url]http://maps.google.com/?ie=UTF8&t=k&om=1&ll=-38.356776,144.772693&spn=0.005645,0.007124[/url]
 	in the Dive Location Details Comments, it will get 
 	turned into a link to the specified Google Map.
 
