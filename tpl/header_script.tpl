@@ -1,24 +1,24 @@
 {literal}
 <style type="text/css">
 .highslide {
-    cursor: url({/literal}{$web_root}{literal}/highslide/graphics/zoomin.cur), pointer;
+    cursor: url({/literal}{$web_root}{literal}/includes/highslide/graphics/zoomin.cur), pointer;
 }
 .highslide-loading {
-    background-image: url({/literal}{$web_root}{literal}/highslide/graphics/loader.white.gif);
+    background-image: url({/literal}{$web_root}{literal}/includes/highslide/graphics/loader.white.gif);
 }
 .highslide-controls {
-    background: url({/literal}{$web_root}{literal}/highslide/graphics/controlbar-white.gif) 0 -90px no-repeat;
+    background: url({/literal}{$web_root}{literal}/includes/highslide/graphics/controlbar-white.gif) 0 -90px no-repeat;
 }
 .highslide-controls ul {
-    background: url({/literal}{$web_root}{literal}/highslide/graphics/controlbar-white.gif) right -90px no-repeat;
+    background: url({/literal}{$web_root}{literal}/includes/highslide/graphics/controlbar-white.gif) right -90px no-repeat;
 }
 .highslide-controls a {
-    background-image: url({/literal}{$web_root}{literal}/highslide/graphics/controlbar-white.gif);
+    background-image: url({/literal}{$web_root}{literal}/includes/highslide/graphics/controlbar-white.gif);
 }
 </style>
 {/literal}
 <script type="text/javascript" src="{$app_path}/includes/misc.js"></script>
-<script type="text/javascript" src="{$app_path}/highslide/highslide-with-gallery.js"></script>
+<script type="text/javascript" src="{$app_path}/includes/highslide/highslide-with-gallery.js"></script>
 {literal}
 <script type="text/javascript">
 function open_url(index, link){
@@ -46,5 +46,4 @@ window.location.href = '{/literal}{$web_root}{literal}' + link + index  ;
     });
 </script>
 {/literal}
-{$grid_header}
 

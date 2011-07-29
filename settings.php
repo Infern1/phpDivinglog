@@ -6,7 +6,7 @@
  * @license LGPL v3 http://www.gnu.org/licenses/lgpl-3.0.txt
  * @package phpdivinglog
  * @version $Rev: 202 $
- * Last Modified: $Date: 2008-04-18 09:39:06 +0200 (Fri, 18 Apr 2008) $
+ * Last Modified: $Date$
  * 
 */
 
@@ -29,7 +29,7 @@ $_config['dlog_version'] = "5.0";
 /**
  * ABS path to your pear installation
  */
-$_config['pear_path']       = $_config['app_root'] .  'pear';  
+$_config['pear_path']       = $_config['app_root'] .  'includes/pear';  
 /**
  * logbook pics
  */
@@ -77,7 +77,11 @@ if ( ! defined( "PATH_SEPARATOR" ) ) {
       define( "PATH_SEPARATOR", ";" );
   else define( "PATH_SEPARATOR", ":" );
 }
-ini_set('include_path', get_include_path() . PATH_SEPARATOR . $_config['pear_path'] . PATH_SEPARATOR . $_config['app_root']."include". PATH_SEPARATOR . $_config['app_root']);
+ini_set('include_path', get_include_path() . PATH_SEPARATOR . 
+                        $_config['pear_path'] . PATH_SEPARATOR . 
+                        $_config['app_root']."includes/". PATH_SEPARATOR . 
+                        $_config['app_root']."includes/jpgraph/"
+                        );
 
 
 /**
@@ -95,19 +99,18 @@ if(!isset($_SERVER['REQUEST_URI'])) {
 
 require_once (ABSPATH_DIVELOG . 'includes/misc.inc.php');
 require_once (ABSPATH_DIVELOG . 'includes/image-resize.php');
-//require_once 'phpmydatagrid.class.php';
 require_once (ABSPATH_DIVELOG . 'includes/class.datagrid.php');
-require_once 'smarty/Smarty.class.php';
+// hack version example that works on both *nix and windows
+// Smarty is assumend to be in 'includes/' dir under current script
+define('SMARTY_DIR',str_replace("\\","/",getcwd()).'/includes/smarty/');
+require_once(SMARTY_DIR . 'Smarty.class.php');
+
 require_once 'classes.inc.php';
 require_once 'PEAR.php';
 
-if(version_compare("5.1", PHP_VERSION, "<")){
-    require_once 'includes/jpgraph2/src/jpgraph.php';
-    require_once 'includes/jpgraph2/src/jpgraph_line.php';
-} else {
-   require_once 'includes/jpgraph/src/jpgraph.php';
-   require_once 'includes/jpgraph/src/jpgraph_line.php';
-}
+require_once 'jpgraph.php';
+require_once 'jpgraph_line.php';
+require_once 'jpgraph_pie.php';
 
 require_once 'Pager/Pager.php';
 require_once 'Pager_Wrapper.php';
@@ -117,26 +120,26 @@ require_once 'MDB2.php';
 /**
  * Smarty part shouldn't need a change 
  */
-$t = new smarty;
-$t->template_dir = TEMPLATE_DIR;
+$t = new Smarty;
+$t->setTemplateDir(TEMPLATE_DIR);
 
-$t->compile_dir = $_config['app_root'] .DIRECTORY_SEPARATOR . 'compile';
+$t->setCompileDir($_config['app_root'] .DIRECTORY_SEPARATOR . 'compile');
 /**
  * Before smarty we gonna check the rights in the compile dir 
  */
-if(!is__writable($t->compile_dir."/")){
+if(!is__writable($t->getCompileDir()."/")){
 echo "Change the right on ".  $t->compile_dir ." so the webuser can write<br>
 chmod -R 777 " .$t->compile_dir ;
 }
 
-$t->cache_dir = $_config['app_root'] . DIRECTORY_SEPARATOR . 'cache';
-$t->plugins_dir = array($_config['app_root'] . '/include', $_config['app_root'] . '/smarty/plugins');
+$t->setCacheDir($_config['app_root'] . DIRECTORY_SEPARATOR . 'cache');
+$t->setPluginsDir(array($_config['app_root'] . 'includes/smarty/plugins'));
 
 /**
  *  Change comment on these when you're done developing to improve performance
  */
-$t->force_compile = false;
-$t->caching = false;
+//$t->force_compile = false;
+//$t->caching = false;
 
 /**
  * Define settings for MDB2 connection

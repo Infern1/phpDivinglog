@@ -3,7 +3,7 @@
  * Classes file contains all classes needed for phpdivinglog
  * 
  * @package phpdivinglog
- * @version $Revision$
+ * @version $Rev$
  * @copyright Copyright (C) 2007 Rob Lensen. All rights reserved.
  * @author Rob Lensen <rob@bsdfreaks.nl> 
  * @license LGPL v3 http://www.gnu.org/licenses/lgpl-3.0.txt
@@ -113,7 +113,7 @@ class HandleRequest {
      */
     function set_file_depth($depth = 0){
         global $_config;
-        $app_depth  = count_all((split("/", $_config['abs_url_path'])));
+        $app_depth  = count_all((preg_split("#/#", $_config['abs_url_path'])));
         $this->request_file_depth = $depth + $app_depth;
     }
     function get_user_id(){
@@ -1091,10 +1091,17 @@ class Divelog {
         }
         if (!empty($result[0]['City'])){
             $t->assign('dive_city', $result[0]['City'] );
+        } else {
+            $t->assign('dive_city', "" );
         }
+
         if (!empty($result[0]['Country'])){
             $t->assign('dive_country',$result[0]['Country']);
-        }/*}}}*/
+        } else {
+            $t->assign('dive_country', "");
+        }
+        
+        /*}}}*/
     }
 
     /**
@@ -1280,9 +1287,14 @@ class Divelog {
 
         if ($result[0]['Surface'] != "") {
             $t->assign('Surface',$result[0]['Surface'] );
+        }else {
+            $t->assign('Surface',"" );
         }
+
         if ($result[0]['UWCurrent'] != "") {
             $t->assign('UWCurrent',$result[0]['UWCurrent'] );
+        } else {
+            $t->assign('UWCurrent',"" );
         }
         if ($result[0]['Watertemp'] != "") 
         {
@@ -1292,7 +1304,10 @@ class Divelog {
                 $Watertemp = $result[0]['Watertemp'] ."&nbsp;". $_lang['unit_temp'] ;
             }
             $t->assign('Watertemp', $Watertemp);
-        }/*}}}*/
+        } else {
+            $t->assign('Watertemp', "");
+        }
+        /*}}}*/
     }
 
     /**
@@ -1334,11 +1349,15 @@ class Divelog {
                 $avg_depth = MetreToFeet($this->averagedepth);
                 if($avg_depth != '-'){
                     $t->assign('unit_length_short', $_lang['unit_length_short_imp']);
+                } else {
+                    $t->assign('unit_length_short', "");
                 }
             } else {
                 $avg_depth = $this->averagedepth;
                 if($avg_depth != '-'){
                     $t->assign('unit_length_short', $_lang['unit_length_short']);
+                } else {
+                    $t->assign('unit_length_short', "");
                 }
             }
             $t->assign('averagedepth', $avg_depth ) ;
@@ -1366,7 +1385,11 @@ class Divelog {
                 $PresE =  $result[0]['PresE'] ."&nbsp;". $_lang['unit_pressure'] ;
             }
             $t->assign('PresE' ,$PresE);
+        } else {
+            $t->assign('PresE' ,"");
         }
+
+
         if (($result[0]['PresS'] != "") || ($result[0]['PresE'] != "")) {
             $diff = intval($result[0]['PresS']) - intval($result[0]['PresE']);
             if ($_config['pressure']) {
@@ -1375,10 +1398,15 @@ class Divelog {
                 $PresSPresE = $diff ."&nbsp;". $_lang['unit_pressure'] ;
             }
             $t->assign('PresSPresE', $PresSPresE);
+        } else {
+            $t->assign('PresSPresE', "");
         }
         if ($this->sac != "") {
             $t->assign('sac', $this->sac ); 
-        }/*}}}*/
+        } else {
+            $t->assign('sac', "" ); 
+        }
+        /*}}}*/
     }
     
     /**
@@ -1405,6 +1433,8 @@ class Divelog {
         $t->assign('Rep', ($result[0]['Rep'] == 'True' ? $_lang['yes'] : $_lang['no']) );
         if ($result[0]['Surfint'] != "") {
             $t->assign('Surfint', $result[0]['Surfint'] );
+        } else {
+            $t->assign('Surfint', "" );
         }
 
         if ($result[0]['Decostops']) {
@@ -1440,10 +1470,15 @@ class Divelog {
         }
         if ($result[0]['Divesuit'] != "") {
             $t->assign('Divesuit', $result[0]['Divesuit'] );
+        } else {
+            $t->assign('Divesuit', "" );
         }
         if ($result[0]['Computer'] != "") {
             $t->assign('Computer', $result[0]['Computer'] );
+        } else {
+            $t->assign('Computer', "") ;
         }
+
         if ($result[0]['UsedEquip'] != "") {
             $t->assign('UsedEquip',1);
             $t->assign('logbook_usedequip', $_lang['logbook_usedequip'] );
@@ -1476,21 +1511,15 @@ class Divelog {
         if ($result[0]['Comments'] != "") {
 
             $t->assign('dive_sect_comments', $_lang['dive_sect_comments']);
-            /*		
-                    $r = new rtf( $result[0]['Comments']);
-                    $r->output("html");
-                    $r->parse();
-                    if( count( $r->err) == 0) {
-                    $find = '<div align="left">';
-                    $str = str_replace ($find, '', strip_tags($r->out, '<div>'));
-                    $str = str_replace ('</div>', '<br />', $str);
-                    echo $str;
-                    }
-             */
             $r = $result[0]['Comments'];
             $r = str_replace(array("\r\n", "\r", "\n"), "<br>", $r);
             $t->assign('Comments', $r);
-        }/*}}}*/
+        } else {
+            $t->assign('Comments', "");
+        }
+        
+        
+        /*}}}*/
     }
     
     /**
@@ -1931,7 +1960,12 @@ class Divesite{
             }
             $t->assign('dlog_number_title', $_lang['dlog_number_title'] );
             $t->assign('dives',$dives);
-        }/*}}}*/
+        }else {
+            $t->assign('dlog_number_title', "" );
+            $t->assign('dives',"");
+        }
+
+        /*}}}*/
     }
 
     /**
@@ -2043,9 +2077,9 @@ class Divesite{
          * Define the table according some info 
          */
         if($this->multiuser){
-            $url =  "/divesite.php".$t->get_template_vars('sep1').$this->user_id.$t->get_template_vars('sep2');
+            $url =  "/divesite.php".$t->getTemplateVars('sep1').$this->user_id.$t->getTemplateVars('sep2');
         } else {
-            $url =  "/divesite.php".$t->get_template_vars('sep2');
+            $url =  "/divesite.php".$t->getTemplateVars('sep2');
         }
         //print_r($data);
         $grid->showColumn('Place');
@@ -2333,9 +2367,9 @@ class Equipment{
          * Define the table according some info 
          */
         if($this->multiuser){
-            $url =  "/divesite.php".$t->get_template_vars('sep1').$this->user_id.$t->get_template_vars('sep2');
+            $url =  "/divesite.php".$t->getTemplateVars('sep1').$this->user_id.$t->getTemplateVars('sep2');
         } else {
-            $url =  "/divesite.php".$t->get_template_vars('sep2');
+            $url =  "/divesite.php".$t->getTemplateVars('sep2');
         }
         //print_r($data);
         $grid->showColumn('Object');
@@ -2442,7 +2476,8 @@ class Divestats{
             }
         } else {
             $this->request_type = 3;
-        }/*}}}*/
+        }
+        /*}}}*/
     }
 
     /**
@@ -2761,6 +2796,8 @@ class Divestats{
         // Show water temp details
         $t->assign('stats_watertempmin', $_lang['stats_watertempmin']);
         $t->assign('stats_watertempmax', $_lang['stats_watertempmax'] );
+        $t->assign('stats_watertempavg', $_lang['stats_watertempavg'] );
+
         $t->assign('stats_decodives', $_lang['stats_decodives'] );
         $t->assign('stats_repdives',$_lang['stats_repdives'] );
 
@@ -2898,6 +2935,16 @@ class Divestats{
      */
     function set_dive_certifications(){
         global $globals, $_config, $t , $_lang;/*{{{*/
+        /**
+         * Declare the variables otherwise an error is displayed
+         */
+        $userpath_web = "";
+        $title = "";
+        $Scan1Path = "";
+        $cert_scan_front = "";
+        $Scan2Path = "";
+        $cert_scan_back = "";
+
         if ($this->number_cert != 0) {
             $divecert = $this->divecert;
             $t->assign('count',$this->number_cert);
@@ -2951,18 +2998,7 @@ class Divestats{
                         $Scan2Path = $divecert[$i]['Scan2Path'] ;
                         $cert_scan_back = $_lang['cert_scan_back'];
                     }
-                } else {
-                    /**
-                     * Declare the variables otherwise an error is displayed
-                     */
-                    $userpath_web = "";
-                    $title = "";
-                    $Scan1Path = "";
-                    $cert_scan_front = "";
-                    $Scan2Path = "";
-                    $cert_scan_back = "";
-                }
-
+                } 
                 $rowdata[$i] = array (
                         'brevet' => $Brevet , 'org' => $Org , 'certdate' => $CertDate , 'number' => $Number , 'instructor' => $Instructor ,
                         'userpath_web' => $userpath_web , 'title' => $title , 'scan1path' => $Scan1Path , 'cert_scan_front' => $cert_scan_front ,

@@ -174,6 +174,7 @@ $_lang['stats_depthmin']                = "Ondiepste duik:";
 $_lang['stats_depthavg']                = "Gemiddelde diepte:";
 $_lang['stats_watertempmin']            = "Koudste watertemperatuur:";
 $_lang['stats_watertempmax']            = "Warmste watertemperatuur:";
+$_lang['stats_watertempavg']            = "Gem. watertemperatuur:";
 $_lang['stats_shoredives']              = "Kantduiken:";
 $_lang['stats_boatdives']               = "Bootduiken:";
 $_lang['stats_nightdives']              = "Nachtduiken:";

@@ -11,7 +11,7 @@
 	<td colspan="2">{$equip_manufacturer}</td>
 	</tr>
 
-	<tr class="divecontent">
+	<tr class="divedetails">
         {if $Object != ''}
 	<td colspan="2" width="50%">{$Object}</td>
         {else}
@@ -32,7 +32,7 @@
 	  <td>{$equip_price}</td>
 	 </tr>
 
-	 <tr class="divecontent">
+	 <tr class="divedetails">
 	{if $Shop != ''} 
     <td colspan="2">{$Shop}</td>
 	{else} 
@@ -56,7 +56,7 @@
 	  <td>{$equip_dater}</td>
 	 </tr>
 
-	 <tr class="divecontent">
+	 <tr class="divedetails">
 	{if $Serial != ''}
 	<td colspan="2">{$Serial}</td>
 	{else}
@@ -79,7 +79,7 @@
 	<td colspan="4">{$equip_photo}</td>
     </tr>
 
-    <tr class="divecontent">
+    <tr class="divedetails">
 	<td colspan="4">
     {foreach from=$image_link key=id item=i name=images}
              <a id="thumb" href="{$web_root}/{$i.img_url}" class="highslide" onclick="return hs.expand(this)" title="{$i.img_title}">

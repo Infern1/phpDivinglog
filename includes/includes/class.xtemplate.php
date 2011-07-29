@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: xtemplate.class.php,v 1.7 2005/04/11 11:20:28 cocomp Exp $
+/* $Id$
 // $Log: xtemplate.class.php,v $
 // Revision 1.7  2005/04/11 11:20:28  cocomp
 // Fixed backslashes issue (properly\!)

@@ -6,7 +6,7 @@
 {if isset($diver_overview)}
 {include file='diver_overview.tpl'}
 {else}
-<table class="divetable" cellspacing="0" cellpadding="0" width="100%">
+<table class="details" cellspacing="0" cellpadding="0" width="100%">
 
 <tr><td colspan="4" class="spacing">&nbsp;</td></tr>
 
@@ -22,7 +22,7 @@
  <td>&nbsp;</td>
 </tr>
 
-<tr class="divecontent">
+<tr class="divedetails">
  <td>{$end}</td>
  {if isset($multiuser_id)}
 <td>{$DivedateMax}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep1}{$multiuser_id}{$sep2}{$DivedateMaxNr}"
@@ -48,7 +48,7 @@ title="{$dlog_number_title}{$DivedateMinNr}">{$DivedateMinNr}</a></td>
  <td>{$stats_divetimeavg}</td>
 </tr>
 
-<tr class="divecontent">
+<tr class="divedetails">
  <td>{$total_abt}</td>
  {if isset($multiuser_id)}
 <td>{$DivetimeMax}&nbsp;{$unit_time}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep1}{$multiuser_id}{$sep2}{$DivetimeMaxNr}"  title="{$dlog_number_title}{$DivetimeMaxNr}">{$DivetimeMaxNr}</a></td>
@@ -68,7 +68,7 @@ title="{$dlog_number_title}{$DivedateMinNr}">{$DivedateMinNr}</a></td>
  <td>{$stats_depthavg}</td>
 </tr>
 
-<tr class="divecontent">
+<tr class="divedetails">
  <td>&nbsp;</td>
  {if isset($multiuser_id)}
 <td>{$DepthMax}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep1}{$multiuser_id}{$sep2}{$DepthMaxNr}"  
@@ -83,7 +83,7 @@ title="{$dlog_number_title}{$DepthMinNr}">{$DepthMinNr}</a></td>
 </tr>
 
 {* Show dive depth tablea *}
-<tr class="divecontent">
+<tr class="divedetails">
 <td colspan="4">
             {if isset($multiuser_id)}
 		        <img src="{$app_path}/drawpiechart.php{$sep1}{$multiuser_id}{$sep2}{$get_nr}"  alt="" title="">
@@ -101,7 +101,7 @@ title="{$dlog_number_title}{$DepthMinNr}">{$DepthMinNr}</a></td>
  <td>&nbsp;</td>
 </tr>
 
-<tr class="divecontent">
+<tr class="divedetails">
  {if isset($multiuser_id)}
 <td>{$WatertempMin}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep1}{$multiuser_id}{$sep2}{$WatertempMinNr}" title="{$dlog_number_title} {$WatertempMinNr}">{$WatertempMinNr}</a></td>
 <td>{$WatertempMax}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep1}{$multiuser_id}{$sep2}{$WatertempMaxNr}" title="{$dlog_number_title} {$WatertempMaxNr}">{$WatertempMaxNr}</a></td>
@@ -122,7 +122,7 @@ title="{$dlog_number_title}{$DepthMinNr}">{$DepthMinNr}</a></td>
  <td>&nbsp;</td>
 </tr>
 
-<tr class="divecontent">
+<tr class="divedetails">
  {if isset($multiuser_id)}
 <td>{$AirtempMin}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep1}{$multiuser_id}{$sep2}{$AirtempMinNr}" title="{$dlog_number_title} {$AirtempMinNr}">{$AirtempMinNr}</a></td>
 <td>{$AirtempMax}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep1}{$multiuser_id}{$sep2}{$AirtempMaxNr}" title="{$dlog_number_title} {$AirtempMaxNr}">{$AirtempMaxNr}</a></td>
@@ -143,7 +143,7 @@ title="{$dlog_number_title}{$DepthMinNr}">{$DepthMinNr}</a></td>
  <td>{$stats_norepdives}</td>
 </tr>
 
-<tr class="divecontent">
+<tr class="divedetails">
  <td>{$decodives} ({$decodives_per}%)</td>
  <td>{$nodecodives} ({$nodecodives_per}%)</td>
  <td>{$repdives} ({$repdives_per}%)</td>
@@ -158,7 +158,7 @@ title="{$dlog_number_title}{$DepthMinNr}">{$DepthMinNr}</a></td>
  <td>&nbsp;</td>
 </tr>
 
-<tr class="divecontent">
+<tr class="divedetails">
  <td>{$saltwaterdives} ({$saltwaterdives_per}%)</td>
  <td>{$freshwaterdives} ({$freshwaterdives_per}%)</td>
  <td>{$brackishdives} ({$brackishdives_per})%)</td>
@@ -173,7 +173,7 @@ title="{$dlog_number_title}{$DepthMinNr}">{$DepthMinNr}</a></td>
  <td>{$stats_driftdives}</td>
 </tr>
 
-<tr class="divecontent">
+<tr class="divedetails">
  <td>{$shoredives} ({$shoredives_per}%)</td>
  <td>{$boatdives} ({$boatdives_per}%)</td>
  <td>{$nightdives} ({$nightdives_per}%)</td>
@@ -188,7 +188,7 @@ title="{$dlog_number_title}{$DepthMinNr}">{$DepthMinNr}</a></td>
  <td>{$stats_photodives}</td>
 </tr>
 
-<tr class="divecontent">
+<tr class="divedetails">
  <td>{$deepdives} ({$deepdives_per}%)</td>
  <td>{$cavedives} ({$cavedives_per}%)</td>
  <td>{$wreckdives} ({$wreckdives_per}%)</td>
@@ -200,7 +200,7 @@ title="{$dlog_number_title}{$DepthMinNr}">{$DepthMinNr}</a></td>
 {* Get the certification details *}
 {if isset($count)}
 
-	<table class="divetable" cellspacing="0" cellpadding="0" width="100%">
+	<table class="details" cellspacing="0" cellpadding="0" width="100%">
 <tr>
  <td colspan="4" class="spacing">&nbsp;</td>
 </tr>
@@ -217,7 +217,7 @@ title="{$dlog_number_title}{$DepthMinNr}">{$DepthMinNr}</a></td>
  <td colspan="2">{$cert_brevet}</td>
 </tr>
 
-<tr class="divecontent">
+<tr class="divedetails">
  <td colspan="2">{$cells[cell_data].org}</td>
  <td colspan="2">{$cells[cell_data].brevet}</td>
 </tr>
@@ -228,7 +228,7 @@ title="{$dlog_number_title}{$DepthMinNr}">{$DepthMinNr}</a></td>
  <td colspan="2">{$cert_instructor}</td>
 	</tr>
 
-        <tr class="divecontent">
+        <tr class="divedetails">
 			<td>{$cells[cell_data].certdate}</td>
 			<td>{$cells[cell_data].number}</td>
  <td colspan="2">{$cells[cell_data].instructor}</td>
@@ -236,15 +236,15 @@ title="{$dlog_number_title}{$DepthMinNr}">{$DepthMinNr}</a></td>
 
 {*
 {if $cells[cell_data].scan2path == ''}
-<tr class="divecontent"><td colspan="4">True 
+<tr class="divedetails"><td colspan="4">True 
 [{$cells[cell_data].scan2path}]</td></tr>
 {else}
-<tr class="divecontent"><td colspan="4">False 
+<tr class="divedetails"><td colspan="4">False 
 [{$cells[cell_data].scan2path}]</td></tr>
 {/if}
 *}
 {if ($cells[cell_data].scan1path != '') or ($cells[cell_data].scan2path != '')}
-			<tr class="divecontent">
+			<tr class="divedetails">
  <td colspan="4" align="center">
 {if $cells[cell_data].scan1path != ''}
                 <img src="{$app_path}/{$cells[cell_data].userpath_web}{$cells[cell_data].scan1path}" title="{$cells[cell_data].title} {$cells[cell_data].cert_scan_front}" alt="{$cells[cell_data].title} {$cells[cell_data].cert_scan_front}">
@@ -256,7 +256,7 @@ title="{$dlog_number_title}{$DepthMinNr}">{$DepthMinNr}</a></td>
 			</tr>
         {/if}
 
-<tr class="divecontent">
+<tr class="divedetails">
  <td colspan="4"><hr></td>
 </tr>
     {/section}
@@ -265,9 +265,9 @@ title="{$dlog_number_title}{$DepthMinNr}">{$DepthMinNr}</a></td>
 {/if}
 
 {* Show the program deails *}
-<table class="divetable" cellspacing="0" cellpadding="0" width="100%">
-<tr class="divecontent"><td class="spacing">&nbsp;</td></tr>
-<tr class="divecontent">
+<table class="details" cellspacing="0" cellpadding="0" width="100%">
+<tr class="divedetails"><td class="spacing">&nbsp;</td></tr>
+<tr class="divedetails">
  <td>{$poweredby} <a href="{$dlog_url}" target="_blank"
 title="{$Divelogname} web site">{$Divelogname}</a> {$dlog_version}
 {$dbversion}{$DivelogVersion}{$and}
@@ -275,7 +275,7 @@ title="{$Divelogname} web site">{$Divelogname}</a> {$dlog_version}
 title="{$Appname} web site">{$Appname}</a>
 {$phpDivelogVersion}</td>
 </tr>
-<tr class="divecontent"><td class="spacing">&nbsp;</td></tr>
+<tr class="divedetails"><td class="spacing">&nbsp;</td></tr>
     <tr class="divesection">
  <td colspan="4">&nbsp;</td>
 	</tr>

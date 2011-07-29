@@ -218,7 +218,7 @@ function check_number($number)
 	if (!$number) {/*{{{*/
 		$get = "";
 	} else {
-		if (ereg('[^0-9]', $number)) {
+		if (preg_match('[^0-9]', $number)) {
 			$get = "";
 		} else {
 			if ($number == 0) {

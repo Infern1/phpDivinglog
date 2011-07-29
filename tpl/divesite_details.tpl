@@ -13,7 +13,7 @@
 	    <td>{$place_maxdepth}</td>
 	</tr>
 
-	<tr class="divecontent">
+	<tr class="divedetails">
     	<td>{$Place}</td>
 	    <td>{$city}</td>
 	    <td>{$country}</td>
@@ -28,7 +28,7 @@
 	    <td>{$place_map}</td>
 	</tr>
 
-	<tr class="divecontent">
+	<tr class="divedetails">
     {if $Lat != ''}
 	    <td>{$Lat}</td>
     {else}
@@ -56,7 +56,7 @@
       <td colspan="4">{$place_map}</td>
     </tr>
 
-    <tr class="divecontent">
+    <tr class="divedetails">
       <td colspan="4">
     {foreach from=$image_link key=id item=i name=images}
         <a id="thumb" href="{$web_root}/{$i.img_url}" 
@@ -80,7 +80,7 @@ height="{$thumb_height}" width="{$thumb_width}"></a>
 		    <td colspan="4">{$dive_count} {$site_dive_trans}</td>
 		</tr>
 
-		<tr class="divecontent">
+		<tr class="divedetails">
 		    <td colspan="4">
 		{foreach from=$dives  item=dive}
            {if isset($multiuser_id)}

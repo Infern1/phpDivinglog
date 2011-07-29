@@ -1,7 +1,7 @@
 <!-- Include links_details -->
 {include file='links_details.tpl'}
 <!-- End include links_details -->
-   <table class="divetable" cellspacing="0" cellpadding="0" width="100%">
+   <table class="details" cellspacing="0" cellpadding="0" width="100%">
    <colgroup>
    <col width="25%">
    <col width="25%">
@@ -22,7 +22,7 @@
 	    <td >{$logbook_depth}</td>
 	</tr>
 
-    <tr class="divecontent">
+    <tr class="divedetails">
     {if $dive_date != ''}
       <td>{$dive_date}</td>
     {else}
@@ -55,7 +55,7 @@
       <td>{$logbook_country}</td>
     </tr>
 
-    <tr class="divecontent">
+    <tr class="divedetails">
     {if isset($dive_site_nr)} 
       {if isset($multiuser_id)}
       <td><a href="{$app_path}/divesite.php{$sep1}{$multiuser_id}{$sep2}{$dive_site_nr}" title="{$dive_place} {$logbook_place_linktitle}">{$dive_place}</a></td>
@@ -84,7 +84,7 @@
     <tr class="divetitle">
       <td colspan="4">{$logbook_buddy}</td>
     </tr>
-    <tr class="divecontent">
+    <tr class="divedetails">
       <td colspan="4">{$buddy}</td>
     </tr>
     {/if}
@@ -165,7 +165,7 @@ height="{$thumb_height}" width="{$thumb_width}" ></a>
 	        <td>{$logbook_airtemp}</td>
 	    </tr>
 	
-    <tr class="divecontent">
+    <tr class="divedetails">
     {if $Weather != ''}
 	    <td>{$Weather}</td>
     {else}
@@ -199,7 +199,7 @@ height="{$thumb_height}" width="{$thumb_width}" ></a>
 	    <td>{$logbook_watertemp}</td>
 	</tr>
 
-	<tr class="divecontent">
+	<tr class="divedetails">
     {if $Water != ''}
         <td>{$Water}</td>
 	{else}
@@ -241,7 +241,7 @@ height="{$thumb_height}" width="{$thumb_width}" ></a>
 	    <td>{$logbook_avgdepth}</td>
 	</tr>
 
-	<tr class="divecontent">
+	<tr class="divedetails">
     {if $Tanktype != ''}
         <td>{$Tanktype}</td>
 	{else}
@@ -275,7 +275,7 @@ height="{$thumb_height}" width="{$thumb_width}" ></a>
 	    <td>{$logbook_sac}</td>
 	</tr>
 
-	<tr class="divecontent">
+	<tr class="divedetails">
     {if $PresS != ''}
         <td>{$PresS}</td>
     {else}
@@ -315,7 +315,7 @@ height="{$thumb_height}" width="{$thumb_width}" ></a>
         <td>{$logbook_surfint}</td>
     </tr>
 
-    <tr class="divecontent">
+    <tr class="divedetails">
     {if $Entry != ''}
         <td>{$Entry}</td>
         {else}
@@ -366,7 +366,7 @@ height="{$thumb_height}" width="{$thumb_width}" ></a>
 	    <td colspan="2" >{$logbook_computer}</td>
 	</tr>
 
-	<tr class="divecontent">
+	<tr class="divedetails">
     {if $Weight != ''}
         <td>{$Weight}</td>
 	{else }
@@ -390,7 +390,7 @@ height="{$thumb_height}" width="{$thumb_width}" ></a>
 		<tr class="divetitle">
 		    <td colspan="4">{$logbook_usedequip}</td>
 		</tr>
-        <tr class="divecontent">
+        <tr class="divedetails">
 		  <td colspan="4">
        {foreach from=$equip_link key=id item=i name=equipment}
            {if isset($multiuser_id)}
