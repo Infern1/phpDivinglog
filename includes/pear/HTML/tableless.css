@@ -1,0 +1,92 @@
+/**
+ * Default stylesheet used to display the HTML_Progress2_Generator Web frontend
+ * with QF tableless renderer
+ *
+ * @category   HTML
+ * @package    HTML_Progress2
+ * @author     Laurent Laville <pear@laurent-laville.org>
+ * @copyright  2006-2008 Laurent Laville
+ * @license    http://www.opensource.org/licenses/bsd-license.php  New BSD License
+ * @version    CVS: $Id: tableless.css,v 1.5 2008/03/16 09:30:58 farell Exp $
+ * @since      File available since Release 2.1.0
+ */
+
+body {
+  background-color: #7B7B88;
+  font-family: Verdana, Arial, helvetica;
+  font-size: 10pt;
+}
+
+form {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    background-color: #EEE;
+}
+form fieldset {
+    border: 0px solid black;
+    padding: 10px 0;
+    margin: 0;
+    width: 100%;
+}
+form fieldset.hidden {
+    border: 0;
+    border-bottom: 2px solid #AAA;
+    padding: 0;
+}
+form fieldset legend {
+    font-weight: bold;
+    color: #FFC;
+    background-color: #AAA;
+    text-align: center;
+    padding: 0 50px;
+}
+form label {
+    margin: 0 0 0 5px;
+}
+form label.qflabel {
+    font-weight: bold;
+    display: block;
+    float: left;
+    width: 200px;
+    padding: 0;
+    margin: 5px 0 0 0;
+    text-align: right;
+}
+form span.qfLabel2 {
+  font-size: 90%;
+}
+form input, form textarea, form select {
+    width: auto;
+}
+form textarea {
+    overflow: auto;
+}
+form br {
+    clear: left;
+}
+form div.qfelement {
+    display: inline;
+    float: left;
+    margin: 5px 0 0 10px;
+    padding: 0;
+}
+form span.error, form span.required {
+    color: red;
+}
+form div.error {
+    border: 1px solid red;
+    padding: 5px;
+}
+form input.flat {
+    border-style: solid;
+    border-width: 2px 2px 0 2px;
+    border-color: #AAA;
+    width: 80px;
+}
+form input.cmdButton {
+    width: 80px;
+    background-color: #EEE;
+    border: 2px solid #7B7B88;
+}
+

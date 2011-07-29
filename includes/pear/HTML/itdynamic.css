@@ -1,0 +1,99 @@
+/**
+ * Default stylesheet used to display the HTML_Progress2_Generator Web frontend
+ * with QF IT dynamic renderer and Sigma template engine
+ *
+ * @category   HTML
+ * @package    HTML_Progress2
+ * @author     Laurent Laville <pear@laurent-laville.org>
+ * @copyright  2006-2008 Laurent Laville
+ * @license    http://www.opensource.org/licenses/bsd-license.php  New BSD License
+ * @version    CVS: $Id: itdynamic.css,v 1.4 2008/03/16 09:30:58 farell Exp $
+ * @since      File available since Release 2.1.0
+ */
+
+body {
+  background-color: #444444;
+  font-family: Verdana, Arial, helvetica;
+  font-size: 10pt;
+}
+
+h1 {
+  color: #FFC;
+  text-align: center;
+}
+
+td.header {
+  background-color: #ffcc00;
+}
+td.menuHeader {
+  background-color: red;
+  width: 15%;
+  text-align: left;
+  color: white;
+}
+td.footer {
+  background-color: white;
+  text-align: right;
+  font-weight: bold;
+  padding-right: 1em;
+}
+td.form {
+  background-color: #EEE;
+}
+
+table.maintable {
+  width: 100%;
+  border: thin dashed #D0D0D0;
+  background-color: #EEE;
+}
+
+table.maintable, table.group {
+  font-size: 8pt;
+}
+
+table.maintable caption {
+  font-size: 180%;
+  padding: 10px 0;
+}
+
+td {
+  margin: 2pt;
+  padding: 3pt;
+}
+
+th {
+  text-align: center;
+  color:            #FFC;
+  background-color: #AAA;
+  white-space: nowrap;
+}
+
+td.qfLabel {
+  font-weight: bold;
+  text-align: right;
+  width: 200px;
+}
+
+span.qfLabel, span.qfLabel2 {
+  font-size: 90%;
+}
+
+span.qfError, span.qfRequired {
+    color: red;
+}
+
+input {
+  font-family: Verdana, Arial, helvetica;
+}
+
+input.flat {
+  border-style: solid;
+  border-width: 2px 2px 0 2px;
+  border-color: #996;
+}
+
+input.cmdButton {
+  width: 80px;
+  border: 2px solid #996;
+}
+
