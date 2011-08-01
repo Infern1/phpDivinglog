@@ -9,7 +9,7 @@
    <col width="25%">
    </colgroup>
     <tr class="divesection">
-	    <td colspan="4">&nbsp;</td>
+      <td colspan="4">{$pagetitle}</td>
 	</tr>
 
 {* Show Dive Information *}
@@ -82,10 +82,12 @@
     {* Show buddy details *}
     {if $buddy != ''}
     <tr class="divetitle">
-      <td colspan="4">{$logbook_buddy}</td>
+      <td colspan="3">{$logbook_buddy}</td>
+      <td>{$logbook_divemaster}</td>
     </tr>
     <tr class="divedetails">
-      <td colspan="4">{$buddy}</td>
+      <td colspan="3">{$buddy}</td>
+      <td>{$divemaster}</td>
     </tr>
     {/if}
 
@@ -136,8 +138,11 @@ height="{$thumb_height}" width="{$thumb_width}" ></a>
 
     {* Dive profile *}
     {if isset($profile)}
-		<tr><td colspan="4" class="spacing">&nbsp;</td></tr>
-        <tr><td colspan="4">
+    <tr>
+      <td colspan="4" class="spacing">&nbsp;</td>
+    </tr>
+    <tr>
+      <td colspan="4">
             <p class="centeredImage">
             {if isset($multiuser_id)}
 		        <img src="{$app_path}/drawprofile.php{$sep1}{$multiuser_id}{$sep2}{$get_nr}"  alt="{$dive_profile_title}" title="{$dive_profile_title}">
@@ -161,8 +166,8 @@ height="{$thumb_height}" width="{$thumb_width}" ></a>
 	    <tr class="divetitle">
 	        <td>{$logbook_weather}</td>
 	        <td>{$logbook_visibility}</td>
-	        <td>{$logbook_altitude}</td>
-	        <td>{$logbook_airtemp}</td>
+      <td>{$logbook_vishor}</td>
+      <td>{$logbook_visver}</td>
 	    </tr>
 	
     <tr class="divedetails">
@@ -178,6 +183,27 @@ height="{$thumb_height}" width="{$thumb_width}" ></a>
 	    <td>-</td>
     {/if}
 
+    {if $VisHor != ''}
+      <td>{$VisHor}</td>
+    {else}
+      <td>-</td>
+    {/if}
+
+    {if $VisVer != ''}
+      <td>{$VisVer}</td>
+    {else}
+      <td>-</td>
+    {/if}
+    </tr>
+
+    <tr class="divetitle">
+      <td>{$logbook_altitude}</td>
+      <td>{$logbook_airtemp}</td>
+      <td>{$logbook_watertemp}</td>
+      <td>&nbsp;</td>
+    </tr>
+
+    <tr class="divecontent">
     {if $Altitude != ''}
         <td>{$Altitude}</td>
 	{else}
@@ -189,6 +215,13 @@ height="{$thumb_height}" width="{$thumb_width}" ></a>
     {else}
         <td>-</td>
     {/if}
+
+    {if $Watertemp != ''}
+      <td>{$Watertemp}</td>
+    {else}
+      <td>-</td>
+    {/if}
+      <td>&nbsp;</td>
 	</tr>
 
     {* Show water conditions *}
@@ -196,7 +229,7 @@ height="{$thumb_height}" width="{$thumb_width}" ></a>
 	    <td>{$logbook_water}</td>
 	    <td>{$logbook_surface}</td>
 	    <td>{$logbook_uwcurrent}</td>
-	    <td>{$logbook_watertemp}</td>
+      <td>&nbsp;</td>
 	</tr>
 
 	<tr class="divedetails">
@@ -217,12 +250,7 @@ height="{$thumb_height}" width="{$thumb_width}" ></a>
 	{else}
         <td>-</td>
     {/if}
-
-    {if $Watertemp != ''}
-	    <td>{$Watertemp}</td>
-	{else}
-        <td>-</td>
-    {/if}
+      <td>&nbsp;</td>
 	</tr>
 
     {* Breathing *}
@@ -237,8 +265,8 @@ height="{$thumb_height}" width="{$thumb_width}" ></a>
 	<tr class="divetitle">
 	    <td>{$logbook_tanktype}</td>
 	    <td>{$logbook_tanksize}</td>
-	    <td>{$logbook_gas}</td>
-	    <td>{$logbook_avgdepth}</td>
+      <td>{$logbook_presw}</td>
+      <td>{$logbook_supplytype}</td>
 	</tr>
 
 	<tr class="divedetails">
@@ -249,13 +277,73 @@ height="{$thumb_height}" width="{$thumb_width}" ></a>
     {/if}
 
     {if $Tanksize != ''}
-        <td>{$Tanksize}</td>
+      <td>{$DblTankImage}{$Tanksize}</td>
     {else}
         <td>-</td>
     {/if}
 
-    {if $Gas != ''}
-	    <td>{$Gas}</td>
+    {if $PresW != ''}
+      <td>{$PresW}</td>
+    {else}
+      <td>-</td>
+    {/if}
+
+    {if $SupplyType != ''}
+      <td>{$SupplyTypeImage}{$SupplyType}</td>
+    {else}
+      <td>-</td>
+    {/if}
+    </tr>
+ 
+    <tr class="divetitle">
+      <td>{$logbook_o2}</td>
+      <td>{$logbook_he}</td>
+      <td>{$logbook_minppo2}</td>
+      <td>{$logbook_maxppo2}</td>
+    </tr>
+
+    <tr class="divecontent">
+    {if $O2 != ''}
+      <td>{$O2}</td>
+    {else}
+      <td>-</td>
+    {/if}
+
+    {if $He != ''}
+      <td>{$He}</td>
+    {else}
+      <td>-</td>
+    {/if}
+
+    {if $MinPPO2 != ''}
+      <td>{$MinPPO2}</td>
+    {else}
+      <td>-</td>
+    {/if}
+
+    {if $MaxPPO2 != ''}
+      <td>{$MaxPPO2}</td>
+    {else}
+      <td>-</td>
+    {/if}
+    </tr>
+ 
+    <tr class="divetitle">
+      <td rowspan="2">{$GasTypeImage}</td>
+      <td>{$logbook_mod}</td>
+      <td>{$logbook_ead}</td>
+      <td>{$logbook_avgdepth}</td>
+    </tr>
+
+    <tr class="divecontent">
+    {if $MOD != ''}
+      <td>{$MOD}</td>
+    {else}
+      <td>-</td>
+    {/if}
+
+    {if $EAD != ''}
+      <td>{$EAD}</td>
 	{else}
         <td>-</td>
     {/if}
@@ -301,6 +389,18 @@ height="{$thumb_height}" width="{$thumb_width}" ></a>
     {/if}
 	</tr>
 
+    <tr class="divetitle">
+      <td colspan="4">{$logbook_gas}</td>
+    </tr>
+
+    <tr class="divecontent">
+    {if $Gas != ''}
+      <td colspan="4">{$Gas}</td>
+    {else}
+      <td>-</td>
+    {/if}
+    </tr>
+
     {* Dive Details *}
 	<tr>
         <td colspan="4" class="spacing">&nbsp;</td>
@@ -310,9 +410,9 @@ height="{$thumb_height}" width="{$thumb_width}" ></a>
     </tr>
     <tr class="divetitle">
         <td>{$logbook_entry}</td>
-        <td>{$logbook_deco}</td>
-        <td>{$logbook_rep}</td>
-        <td>{$logbook_surfint}</td>
+      <td>{$logbook_boat}</td>
+      <td>{$logbook_pgstart}</td>
+      <td>{$logbook_pgend}</td>
     </tr>
 
     <tr class="divedetails">
@@ -322,6 +422,34 @@ height="{$thumb_height}" width="{$thumb_width}" ></a>
 		<td>-</td>
         {/if}
 
+    {if $Boat != ''}
+      <td>{$Boat}</td>
+    {else}
+      <td>-</td>
+    {/if}
+
+    {if $PGStart != ''}
+      <td>{$PGStart}</td>
+    {else}
+      <td>-</td>
+    {/if}
+
+    {if $PGEnd != ''}
+      <td>{$PGEnd}</td>
+    {else}
+      <td>-</td>
+    {/if}
+
+    </tr>
+
+    <tr class="divetitle">
+      <td>{$logbook_deco}</td>
+      <td>{$logbook_rep}</td>
+      <td>{$logbook_surfint}</td>
+      <td>{$logbook_exittime}</td>
+    </tr>
+
+    <tr class="divecontent">
     {if $Deco != ''}
 	    <td>{$Deco}</td>
     {else}
@@ -339,6 +467,12 @@ height="{$thumb_height}" width="{$thumb_width}" ></a>
 	{else }
         <td>-</td>
 	{/if}
+
+    {if $ExitTime != ''}
+      <td>{$ExitTime}</td>
+    {else }
+      <td>-</td>
+    {/if}
 	</tr>
 
 	{if isset($Decostops) }

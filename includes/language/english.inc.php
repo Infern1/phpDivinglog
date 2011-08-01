@@ -64,13 +64,18 @@ $_lang['dive_details_pagetitle'] = "Dive # ";
 $_lang['logbook_divedate'] = "Date:";
 $_lang['logbook_entrytime'] = "Entry Time:";
 $_lang['logbook_divetime'] = "Dive Time:";
+$_lang['logbook_exittime'] = "Exit Time:";
 $_lang['logbook_depth'] = "Max. Depth:";
 $_lang['logbook_place'] = "Dive Location:";
 $_lang['logbook_city'] = "City / Island:";
 $_lang['logbook_country'] = "Country:";
 $_lang['logbook_buddy'] = "Buddy/Buddies:";
+$_lang['logbook_signature'] = "Signature:";
+$_lang['logbook_divemaster'] = "Dive Master:";
 $_lang['logbook_weather'] = "Weather:";
 $_lang['logbook_visibility'] = "Visibility:";
+$_lang['logbook_vishor'] = "Horizontal Vis.:";
+$_lang['logbook_visver'] = "Vertical Vis.:";
 $_lang['logbook_altitude'] = "Altitude:";
 $_lang['logbook_airtemp'] = "Air Temp.:";
 $_lang['logbook_water'] = "Water:";
@@ -79,25 +84,42 @@ $_lang['logbook_uwcurrent'] = "Current:";
 $_lang['logbook_watertemp'] = "Water Temp.:";
 $_lang['logbook_tanktype'] = "Tank Type:";
 $_lang['logbook_tanksize'] = "Tank Size:";
+$_lang['logbook_supplytype'] = "Supply Type:";
+$_lang['logbook_presw'] = "Working Pressure:";
 $_lang['logbook_gas'] = "Gas Mixture:";
+$_lang['logbook_o2'] = "O2:";
+$_lang['logbook_he'] = "He:";
 $_lang['logbook_avgdepth'] = "Avg. Depth:";
 $_lang['logbook_press'] = "Start Pressure:";
 $_lang['logbook_prese'] = "End Pressure:";
 $_lang['logbook_presdiff'] = "Diff. Pressure:";
 $_lang['logbook_sac'] = "SAC Rate:";
+$_lang['logbook_cns'] = "CNS:";
+$_lang['logbook_minppo2'] = "Min. PPO2:";
+$_lang['logbook_maxppo2'] = "Max. PPO2:";
+$_lang['logbook_mod'] = "MOD:";
+$_lang['logbook_ead'] = "EAD:";
 $_lang['logbook_entry'] = "Entry:";
+$_lang['logbook_boat'] = "Boat Name:";
+$_lang['logbook_pgstart'] = "Start PG:";
+$_lang['logbook_pgend'] = "End PG:";
 $_lang['logbook_deco'] = "Deco. Dive:";
 $_lang['logbook_rep'] = "Rep. Dive:";
 $_lang['logbook_surfint'] = "Surface Interval:";
-$_lang['logbook_decostops'] = "Deco Stop Details:";
+$_lang['logbook_decostops'] = "Deco. Stop Details:";
 $_lang['logbook_weight'] = "Weight:";
 $_lang['logbook_divesuit'] = "Dive Suit:";
 $_lang['logbook_computer'] = "Dive Computer:";
 $_lang['logbook_usedequip'] = "Equipment used on this dive:";
+$_lang['logbook_rating'] = "Rating:";
+$_lang['logbook_diveshop'] = "Dive Shop:";
+$_lang['logbook_divetrip'] = "Dive Trip:";
 
 $_lang['visibility'] = array("Good", "Average", "Bad");
 $_lang['water'] = array("Salt", "Fesh", "Brackish");
 $_lang['tanktype'] = array("Alumimium", "Steel", "Carbon");
+$_lang['dbltank'] = array("Single Cylinder", "Twin Cylinders");
+$_lang['supplytype'] = array("Open Circuit (OC)", "Semi Closed Rebreather (SCR)", "Closed Circuit Rebreather (CCR)");
 $_lang['entry'] = array("Shore", "Boat");
 
 $_lang['logbook_place_linktitle'] = "details";
@@ -164,6 +186,16 @@ $_lang['place_maxdepth'] = "Max. Depth:";
 $_lang['place_lat'] = "Latitude:";
 $_lang['place_lon'] = "Longitude:";
 $_lang['place_map'] = "Map:";
+$_lang['place_rating'] = "Rating:";
+$_lang['place_water'] = "Water:";
+$_lang['place_altitude'] = "Altitude:";
+$_lang['place_watername'] = "Aquatic Name:";
+$_lang['place_difficulty'] = "Difficulty:";
+
+$_lang['place_datum'] = "Datum:";
+$_lang['datum'] = "WGS84";
+$_lang['google_map'] = "Google Map";
+
 
 $_lang['mappic_linktitle'] = "Map for ";
 $_lang['mappic'] = "View map";
@@ -177,6 +209,9 @@ $_lang['site_google_link'] = "Google Map of ";
 $_lang['display_rows_dives'] = 'Displaying Dives';
 $_lang['display_rows_divesites'] = 'Displaying Dive Sites';
 $_lang['display_rows_equipment'] = 'Displaying Equipment';
+
+$_lang['rating'] = array("not rated", "1 star", "2 star", "3 star", "4 star", "5 star");
+
 
 // Dive Site List related values
 
@@ -258,15 +293,21 @@ $_lang['equip_object'] = "Product:";
 $_lang['equip_manufacturer'] = "Manufacturer:";
 $_lang['equip_serial'] = "Serial Number:";
 $_lang['equip_datep'] = "Purchase Date:";
-$_lang['equip_dater'] = "Service Date:";
+$_lang['equip_dater'] = "Last Service Date:";
+$_lang['equip_datern'] = "Next Service Date:";
+$_lang['equip_o2servicedate'] = "Next O2 Service:";
 $_lang['equip_warranty'] = "Warranty:";
 $_lang['equip_shop'] = "Dive Shop:";
 $_lang['equip_price'] = "Price:";
 $_lang['equip_photo'] = "Photo:";
 $_lang['equip_comments'] = "Comments:";
+$_lang['equip_inactive'] = "Inactive:";
+$_lang['equip_weight'] = "Weight:";
 
 $_lang['equip_photo_linktitle'] = "Photo of ";
 $_lang['equip_photo_link'] = "View photo";
+
+$_lang['inactive'] = array("Still in service", "Not in service");
 
 // based on the PHP date() function
 $_lang['equip_date_format'] = "D, d-M-Y";

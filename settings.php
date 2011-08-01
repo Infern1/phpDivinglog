@@ -15,7 +15,7 @@
  * application name and revision number
  */
 $_config['app_name'] = "phpDivingLog";
-$_config['app_version'] = "3.0-alpha";
+$_config['app_version'] = "3.0-alpha2";
 $_config['app_url'] = "http://www.borrett.id.au/interests/phpdivinglog.htm";
 $_config['dlog_url'] = "http://www.divinglog.de/";
 $_config['dlog_version'] = "5.0";

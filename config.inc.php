@@ -205,6 +205,13 @@ $_config['volume'] = false;
 $_config['coord_format'] = 'dm';
 
 /**
+ * DEFAULT VALUES
+ * Values to use as defaults if none given.
+ */
+$_config['default_maxppo2'] = "1.4";
+$_config['default_o2'] = "21";
+
+/**
  * ABS path to your website (no need to change normaly)
  */
 define('ABSPATH_DIVELOG', dirname(__FILE__).DIRECTORY_SEPARATOR);

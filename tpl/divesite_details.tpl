@@ -3,21 +3,42 @@
 <!-- End include links_details -->
     <table class="divetable" cellspacing="0" cellpadding="0" width="100%">
      <tr class="divesection">
-	    <td colspan="4">&nbsp;</td>
+      <td colspan="4">{$pagetitle}</td>
 	</tr>
     {* Show main site details *}
 	<tr class="divetitle">
-	    <td>{$place_place}</td>
-	    <td>{$place_city}</td>
-	    <td>{$place_country}</td>
-	    <td>{$place_maxdepth}</td>
-	</tr>
+      <td colspan="2">{$place_place}</td>
+      <td colspan="2">{$place_city}</td>
+    </tr>
+    <tr class="divecontent">
+      <td colspan="2">{$Place}</td>
+      <td colspan="2">{$city}</td>
+    </tr>
 
-	<tr class="divedetails">
-    	<td>{$Place}</td>
-	    <td>{$city}</td>
+    <tr class="divetitle">
+	    <td>{$place_country}</td>
+      <td>{$place_rating}</td>
+	    <td>{$place_maxdepth}</td>
+      <td>{$place_difficulty}</td>
+	</tr>
+    <tr class="divecontent">
 	    <td>{$country}</td>
+      <td>{$Rating}</td>
 	    <td>{$MaxDepth}</td>
+      <td>{$Difficulty}</td>
+    </tr>
+
+    <tr class="divetitle">
+      <td>{$place_watername}</td>
+      <td>{$place_water}</td>
+      <td>{$place_altitude}</td>
+      <td>&nbsp;</td>
+    </tr>
+    <tr class="divecontent">
+      <td>{$WaterName}</td>
+      <td>{$Water}</td>
+      <td>{$Altitude}</td>
+      <td>&nbsp;</td>
 	</tr>
 
     {* 	Show extra site details *}
@@ -25,7 +46,7 @@
 	    <td>{$place_lat}</td>
 	    <td>{$place_lon}</td>
 	    <td>&nbsp;</td>
-	    <td>{$place_map}</td>
+      <td>{$place_datum}</td>
 	</tr>
 
 	<tr class="divedetails">
@@ -42,12 +63,13 @@
     {/if} 
 
         {if isset($site_google_link)}
-		<td><a href="http://maps.google.com/maps?f=q&amp;hl=en&amp;q={$LatDec},{$LonDec}+({strip}{$Place}{/strip})&amp;ie=UTF8&amp;t=k&amp;om=1" target="_blank" title="{$site_google_link}">Google Map</a></td>
+      <td><a
+href="http://maps.google.com/maps?f=q&amp;hl=en&amp;q={$LatDec},{$LonDec}+({strip}{$Place}{/strip})&amp;ie=UTF8&amp;t=k&amp;om=1" target="_blank" title="{$site_google_link}">{$google_map}</a></td>
         {else}
         <td>&nbsp;</td>
         {/if}
 
-      <td>&nbsp;</td>
+      <td>{$datum}</td>
     </tr>
 
  	    {if isset($pics2)}

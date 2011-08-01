@@ -3,7 +3,7 @@
 <!-- End include links_details -->
 <table class="divetable" cellspacing="0" cellpadding="0" width="100%">
     <tr class="divesection">
-	    <td colspan="4">&nbsp;</td>
+	<td colspan="4">{$pagetitle}</td>
 	</tr>
     {* Show main equipment details *}
 	<tr class="divetitle">
@@ -53,7 +53,7 @@
 	 <tr class="divetitle">
 	<td colspan="2">{$equip_serial}</td>
 	  <td>{$equip_warranty}</td>
-	  <td>{$equip_dater}</td>
+	<td>{$equip_inactive}</td>
 	 </tr>
 
 	 <tr class="divedetails">
@@ -67,8 +67,39 @@
 	{else}
 	<td>-</td>
 	{/if}
+	{if $Inactive != ''}
+	<td>{$Inactive}</td>
+	{else}
+	<td>-</td>
+	{/if}
+    </tr>
+
+    {*	Show the rest of the details *}
+    <tr class="divetitle">
+	<td>{$equip_dater}</td>
+	<td>{$equip_datern}</td>
+	<td>{$equip_o2servicedate}</td>
+	<td>{$equip_weight}</td>
+    </tr>
+
+    <tr class="divedetails">
 	{if $DateR != ''}
 	<td>{$DateR}</td>
+	{else}
+	<td>-</td>
+	{/if}
+	{if $DateRN != ''}
+	<td>{$DateRN}</td>
+	{else}
+	<td>-</td>
+	{/if}
+	{if $O2ServiceDate != ''}
+	<td>{$O2ServiceDate}</td>
+	{else}
+	<td>-</td>
+	{/if}
+	{if $Weight != ''}
+	<td>{$Weight}</td>
 	{else}
 	<td>-</td>
 	{/if}

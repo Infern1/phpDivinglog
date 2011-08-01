@@ -1092,13 +1092,13 @@ class Divelog {
         if (!empty($result[0]['City'])){
             $t->assign('dive_city', $result[0]['City'] );
         } else {
-            $t->assign('dive_city', "" );
+            $t->assign('dive_city','-');	
         }
 
         if (!empty($result[0]['Country'])){
             $t->assign('dive_country',$result[0]['Country']);
         } else {
-            $t->assign('dive_country', "");
+            $t->assign('dive_country','-');	
         }
         
         /*}}}*/
@@ -1113,10 +1113,21 @@ class Divelog {
     function set_buddy_details(){
         global $t, $_lang;/*{{{*/
 	    $result =  $this->result; 
+        $t->assign('logbook_buddy', $_lang['logbook_buddy']);
+        $t->assign('logbook_divemaster', $_lang['logbook_divemaster']);
+
         if ($result[0]['Buddy'] != "") {
             $t->assign('buddy', $result[0]['Buddy'] );
-            $t->assign('logbook_buddy', $_lang['logbook_buddy'] );
-        }/*}}}*/
+        } else {
+            $t->assign('buddy','-');	
+        }
+
+        if ($result[0]['Divemaster'] != "") {
+            $t->assign('divemaster', $result[0]['Divemaster']);
+        } else {
+            $t->assign('divemaster','-');	
+        }
+        /*}}}*/
     }
 
     function get_log_id_for_dive_nr($dive_nr){
@@ -1126,7 +1137,7 @@ class Divelog {
     }
 
     /**
-     * dive_has_pictures checks if there are any pictures for an specific dive 
+     * dive_has_pictures checks if there are any pictures for a specific dive 
      * 
      * This function should be called stand alone!
      * @param mixed $dive_nr 
@@ -1234,8 +1245,8 @@ class Divelog {
             $t->assign('profile','1');
             $t->assign('get_nr',$this->dive_nr);
             $t->assign('dive_profile_title', $_lang['dive_profile_title'] . $result[0]['Number'] );
-            $t->assign('dive_profile_title', $_lang['dive_profile_title'] . $result[0]['Number'] );
-        }/*}}}*/
+        }
+        /*}}}*/
     }
 
     /**
@@ -1251,19 +1262,19 @@ class Divelog {
 
         //	Show weather conditions
         $t->assign('logbook_weather', $_lang['logbook_weather'] );
-        $t->assign('logbook_visibility', $_lang['logbook_visibility']);
         $t->assign('logbook_altitude', $_lang['logbook_altitude']);
         $t->assign('logbook_airtemp', $_lang['logbook_airtemp'] );
 
 
         if ($result[0]['Weather'] != "") {
             $t->assign('Weather', $result[0]['Weather']);
-        }
-        if ( $result[0]['Visibility'] != 0 && $_lang['visibility'][($result[0]['Visibility'] - 1)]) {
-            $t->assign('Visibility', $_lang['visibility'][($result[0]['Visibility'] - 1)]);
+        } else {
+            $t->assign('Weather','-');	
         }
         if ($result[0]['Altitude'] != "") {
             $t->assign('Altitude', $result[0]['Altitude'] );
+        } else {
+            $t->assign('Altitude','-');	
         }
         if ($result[0]['Airtemp'] != "") {
 
@@ -1273,6 +1284,8 @@ class Divelog {
                 $Airtemp = $result[0]['Airtemp'] ."&nbsp;". $_lang['unit_temp'] ;
             }
             $t->assign('Airtemp',$Airtemp);
+        } else {
+            $t->assign('Airtemp','-');	
         }
 
         //	Show water conditions
@@ -1280,24 +1293,48 @@ class Divelog {
         $t->assign('logbook_surface', $_lang['logbook_surface']);
         $t->assign('logbook_uwcurrent', $_lang['logbook_uwcurrent']);
         $t->assign('logbook_watertemp', $_lang['logbook_watertemp']);
+        $t->assign('logbook_visibility', $_lang['logbook_visibility']);
+        $t->assign('logbook_vishor', $_lang['logbook_vishor']);
+        $t->assign('logbook_visver', $_lang['logbook_visver']);
 
         if ( $result[0]['Water'] != 0 && $_lang['water'][($result[0]['Water'] - 1)]) {
             $t->assign('Water', $_lang['water'][($result[0]['Water'] - 1)]);
+        } else {
+            $t->assign('Water','-');	
+        }
+
+        if ($result[0]['Visibility'] != 0 && $_lang['visibility'][($result[0]['Visibility'] - 1)]) {
+            $viz = $_lang['visibility'][($result[0]['Visibility'] - 1)];
+            $vizimage = '<img src="'.$_config['web_root'].'/images/vis-'.$result[0]['Visibility'].'.gif" alt="'.$viz.'" title="'.$viz.'" border="0" width="50" height="15"> ';
+            $t->assign('Visibility', $vizimage.' '.$viz);
+        } else {
+            $t->assign('Visibility','-');	
+        }
+        if ($result[0]['VisHor'] != "") {
+            $t->assign('VisHor', htmlentities($result[0]['VisHor']));
+        } else {
+            $t->assign('VisHor','-');	
+        }
+
+        if ($result[0]['VisVer'] != "") {
+            $t->assign('VisVer', htmlentities($result[0]['VisVer']));
+        } else {
+            $t->assign('VisVer','-');	
         }
 
         if ($result[0]['Surface'] != "") {
             $t->assign('Surface',$result[0]['Surface'] );
         }else {
-            $t->assign('Surface',"" );
+            $t->assign('Surface','-');	
         }
 
         if ($result[0]['UWCurrent'] != "") {
             $t->assign('UWCurrent',$result[0]['UWCurrent'] );
         } else {
-            $t->assign('UWCurrent',"" );
+            $t->assign('UWCurrent','-');	
         }
-        if ($result[0]['Watertemp'] != "") 
-        {
+
+        if ($result[0]['Watertemp'] != "") {
             if ($_config['temp']) {
                 $Watertemp = CelsiusToFahrenh($result[0]['Watertemp'], 0) ."&nbsp;". $_lang['unit_temp_imp'] ;
             } else {
@@ -1305,7 +1342,7 @@ class Divelog {
             }
             $t->assign('Watertemp', $Watertemp);
         } else {
-            $t->assign('Watertemp', "");
+            $t->assign('Watertemp','-');	
         }
         /*}}}*/
     }
@@ -1324,13 +1361,23 @@ class Divelog {
         //	Show tank details
         $t->assign('logbook_tanktype', $_lang['logbook_tanktype'] );
         $t->assign('logbook_tanksize', $_lang['logbook_tanksize'] );
+        $t->assign('logbook_supplytype', $_lang['logbook_supplytype']);
         $t->assign('logbook_gas', $_lang['logbook_gas'] );
+        $t->assign('logbook_o2', $_lang['logbook_o2']);
+        $t->assign('logbook_he', $_lang['logbook_he']);
         $t->assign('logbook_avgdepth', $_lang['logbook_avgdepth'] );
+        $t->assign('logbook_presw', $_lang['logbook_presw']);
+        $t->assign('logbook_minppo2', $_lang['logbook_minppo2']);
+        $t->assign('logbook_maxppo2', $_lang['logbook_maxppo2']);
+        $t->assign('logbook_mod', $_lang['logbook_mod']);
+        $t->assign('logbook_ead', $_lang['logbook_ead']);
 
         if (isset($result[0]['Tanktype'] ) ) {
             $arr_number = $result[0]['Tanktype'] - 1;
             if($arr_number >= 0)
                 $t->assign('Tanktype', $_lang['tanktype'][$arr_number]);
+        } else {
+            $t->assign('Tanktype','-');	
         }
 
         if ($result[0]['Tanksize'] != "") {
@@ -1340,10 +1387,145 @@ class Divelog {
                 $Tanksize = $result[0]['Tanksize'] ." ". $_lang['unit_volume'] ;
             }
             $t->assign('Tanksize',$Tanksize);
+        } else {
+            $t->assign('Tanksize','-');	
         }
+
+        if ($result[0]['DblTank'] != "") {
+            if ($result[0]['DblTank'] == 'True') {
+                $tankimagealt = $_lang['dbltank'][1];
+                $tankimagefile = "twin_cylinders.gif";
+            } else {
+                $tankimagealt = $_lang['dbltank'][0];
+                $tankimagefile = "single_cylinder.gif";
+            }
+            $tankimage = '<img src="'.$_config['web_root'].'/images/'.$tankimagefile.'" alt="'.$tankimagealt.'" title="'.$tankimagealt.'" border="0" width="19" height="20"> ';
+            $t->assign('DblTankImage',$tankimage);	
+        } else {
+            $t->assign('DblTankImage','');	
+        }
+
+        if ($result[0]['PresW'] != "") {
+            if ($_config['pressure']) {
+                $PresW = BarToPsi($result[0]['PresW'], -1) ."&nbsp;". $_lang['unit_pressure_imp'] ;
+            } else {
+                $PresW = $result[0]['PresW'] ."&nbsp;". $_lang['unit_pressure'] ;
+            }
+            $t->assign('PresW', $PresW);
+        } else {
+            $t->assign('PressW','-');	
+        }
+
+        if ($result[0]['SupplyType'] != "") {
+            switch ($result[0]['SupplyType']) {
+              case '0':
+                $supplytypefile = "oc.gif";
+                break;
+              case '1':
+                $supplytypefile = "scr.gif";
+                break;
+              case '2':
+                $supplytypefile = "ccr.gif";
+                break;
+              default:
+                $supplytypefile = "oc.gif";
+                break;
+        }
+            $supplytype = $_lang['supplytype'][$result[0]['SupplyType']];
+            $supplytypeimage = '<img src="'.$_config['web_root'].'/images/'.$supplytypefile.'" alt="'.$supplytype.'" title="'.$supplytype.'" border="0" width="19" height="20"> ';
+            $t->assign('SupplyTypeImage', $supplytypeimage);
+            $t->assign('SupplyType', $supplytype);
+        } else {
+            $t->assign('SupplyTypeImage','');
+            $t->assign('SupplyType','-');
+        }
+
         if ($result[0]['Gas'] != "") {
             $t->assign('Gas', $result[0]['Gas'] );
+        } else {
+            $t->assign('Gas','-');	
         }
+
+        if ($result[0]['O2'] != "") {
+            $t->assign('O2', $result[0]['O2'].'%');
+            $o2 = $result[0]['O2'];
+        } else {
+            if ($result[0]['He'] != "") {
+                $t->assign('O2','-');
+            } else {
+                $t->assign('O2', $_config['default_o2'].'%');
+                $o2 = $_config['default_o2'];
+            }
+        }
+
+        if ($result[0]['He'] != "") {
+            $t->assign('He', $result[0]['He'].'%');
+        } else {
+            $t->assign('He','-');	
+        }
+
+        if ($result[0]['MinPPO2'] != "") {
+            $t->assign('MinPPO2', $result[0]['MinPPO2']."&nbsp;".$_lang['unit_pressure']);
+        } else {
+            $t->assign('MinPPO2','-');	
+        }
+
+        if ($result[0]['MaxPPO2'] != "") {
+            $t->assign('MaxPPO2', $result[0]['MaxPPO2']."&nbsp;".$_lang['unit_pressure']);
+            $maxppo2 = $result[0]['MaxPPO2'];
+        } else {
+            $t->assign('MaxPPO2', $_config['default_maxppo2']."&nbsp;".$_lang['unit_pressure']);
+            $maxppo2 = $_config['default_maxppo2'];
+//            $t->assign('MaxPPO2','-');	
+        }
+
+        $gasimage = "gas_air.gif";  // default air
+        $gasimagealt = "Air";
+        if (($result[0]['O2'] > "21") && ($result[0]['He'] == "") || ($result[0]['He'] == "0")) {
+            $gasimage = "gas_ean.gif";  // EAN
+            $gasimagealt = "EAN ".$result[0]['O2'];
+        }
+        if (($result[0]['O2'] == "32") && ($result[0]['He'] == "") || ($result[0]['He'] == "0")) {
+            $gasimage = "gas_n32.gif";  // N32
+            $gasimagealt = "EAN ".$result[0]['O2'];
+        }
+        if (($result[0]['O2'] == "36") && ($result[0]['He'] == "") || ($result[0]['He'] == "0")) {
+            $gasimage = "gas_n36.gif";  // N36
+            $gasimagealt = "EAN ".$result[0]['O2'];
+        }
+        if (($result[0]['He'] != "") && ($result[0]['He'] != "0")) {
+            $gasimage = "gas_tri.gif";  // Trimix
+            $gasimagealt = "Trimix";
+        }
+        if (($result[0]['O2'] == "100")) {
+            $gasimage = "gas_o2.gif";  // oxygen
+            $gasimagealt = "Oxygen";
+        }
+        $gastypeimage = '<img src="'.$_config['web_root'].'/images/'.$gasimage.'" alt="'.$gasimagealt.'" title="'.$gasimagealt.'" border="0" width="19" height="20">';
+            $t->assign('GasTypeImage', $gastypeimage);
+
+        //	Calculate MOD and EAD
+        if ($result[0]['He'] != "") {
+            $t->assign('MOD','-');
+            $t->assign('EAD','-');
+        } else {
+            if($_config['length']){
+                $mod_imperial = 33 * (($maxppo2 / ($o2 / 100)) - 1);
+                $mod = number_format(floor($mod_imperial), 0);
+                $ead_imperial = (($mod + 33) * ((1 - ($o2 / 100)) / .79)) - 33;
+                $ead = number_format(ceil($ead_imperial), 0);
+                $t->assign('MOD', $mod."&nbsp;". $_lang['unit_length_short_imp']);
+                $t->assign('EAD', $ead."&nbsp;". $_lang['unit_length_short_imp']);
+            } else {
+                $mod_metric = 10 * (($maxppo2 / ($o2 / 100)) - 1);
+                $mod = number_format((floor($mod_metric*10)/10), 1);
+                $ead_metric = (($mod + 10) * ((1 - ($o2 / 100)) / .79)) - 10;
+                $ead = number_format((ceil($ead_metric*10)/10), 1);
+                $t->assign('MOD', $mod."&nbsp;". $_lang['unit_length_short']);
+                $t->assign('EAD', $ead."&nbsp;". $_lang['unit_length_short']);
+            }
+        }
+
         if ($this->averagedepth != "") {
             if($_config['length']){
                 $avg_depth = MetreToFeet($this->averagedepth);
@@ -1361,7 +1543,8 @@ class Divelog {
                 }
             }
             $t->assign('averagedepth', $avg_depth ) ;
-
+        } else {
+            $t->assign('averagedepth','-');	
         }
 
         //	Show pressure details
@@ -1377,6 +1560,8 @@ class Divelog {
                 $PresS = $result[0]['PresS'] ."&nbsp;". $_lang['unit_pressure'] ;
             }
             $t->assign('PresS', $PresS);
+        } else {
+            $t->assign('PresS','-');	
         }
         if ($result[0]['PresE'] != "") {
             if ($_config['pressure']) {
@@ -1386,7 +1571,7 @@ class Divelog {
             }
             $t->assign('PresE' ,$PresE);
         } else {
-            $t->assign('PresE' ,"");
+            $t->assign('PresE','-');	
         }
 
 
@@ -1422,19 +1607,47 @@ class Divelog {
         $t->assign('dive_sect_details', $_lang['dive_sect_details'] );
 
         $t->assign('logbook_entry', $_lang['logbook_entry'] );
+        $t->assign('logbook_boat', $_lang['logbook_boat'] );
+        $t->assign('logbook_pgstart', $_lang['logbook_pgstart'] );
+        $t->assign('logbook_pgend', $_lang['logbook_pgend'] );
         $t->assign('logbook_deco', $_lang['logbook_deco'] );
         $t->assign('logbook_rep', $_lang['logbook_rep'] );
         $t->assign('logbook_surfint', $_lang['logbook_surfint'] );
+        $t->assign('logbook_exittime', $_lang['logbook_exittime'] );
+
         if (isset($_lang['entry'][($result[0]['Entry'] - 1)])) {
             $t->assign('Entry', $_lang['entry'][($result[0]['Entry'] - 1)]);
+        }
+
+        if ($result[0]['Boat'] != "") {
+            $t->assign('Boat', $result[0]['Boat'] );
+        } else {
+            $t->assign('Boat','-');	
+        }
+
+        if ($result[0]['PGStart'] != "") {
+            $t->assign('PGStart', $result[0]['PGStart'] );
+        } else {
+            $t->assign('PGStart','-');	
+        }
+
+        if ($result[0]['PGEnd'] != "") {
+            $t->assign('PGEnd', $result[0]['PGEnd'] );
+        } else {
+            $t->assign('PGEnd','-');	
         }
 
         $t->assign('Deco', ($result[0]['Deco'] == 'True' ? $_lang['yes'] : $_lang['no']) );
         $t->assign('Rep', ($result[0]['Rep'] == 'True' ? $_lang['yes'] : $_lang['no']) );
         if ($result[0]['Surfint'] != "") {
             $t->assign('Surfint', $result[0]['Surfint'] );
+        }
+
+        if (($result[0]['Entrytime'] != "") && ($result[0]['Divetime'] != "")) {
+            $exittime = date('H:i:s', strtotime($result[0]['Entrytime']) + ($result[0]['Divetime'] * 60));
+            $t->assign('ExitTime',$exittime);	
         } else {
-            $t->assign('Surfint', "" );
+            $t->assign('ExitTime','-');	
         }
 
         if ($result[0]['Decostops']) {
@@ -1861,6 +2074,16 @@ class Divesite{
         $t->assign('Place',$Place);
         $t->assign('city', $this->city );
         $t->assign('country', $this->country);
+
+        $t->assign('place_rating', $_lang['place_rating']);
+        if ($result[0]['Rating'] != "") {
+            $desc = $_lang['rating'][$result[0]['Rating']];
+            $Rating = '<img src="'.$_config['web_root'].'/images/ratings5-'.$result[0]['Rating'].'.gif" alt="'.$desc.'" title="'.$desc.'" border="0" width="84" height="15">';
+            $t->assign('Rating', $Rating);
+        } else {
+            $t->assign('Rating','-');	
+        }
+
         if ($result[0]['MaxDepth'] == "") {
             $MaxDepth = "-";
         } else {
@@ -1907,8 +2130,40 @@ class Divesite{
             $maplink_url .=  "   title=\"". $_lang['mappic_linktitle']. $result[0]['Place'];
             $maplink_url .=  "\">". $_lang['mappic'] ."</a>\n";
             $t->assign('maplink_url',$maplink_url);
+        }
+        $t->assign('google_map', $_lang['google_map']);
+        $t->assign('place_datum', $_lang['place_datum']);
+        $t->assign('datum', $_lang['datum']);
 
-        }/*}}}*/
+        $t->assign('place_watername', $_lang['place_watername']);
+        if ($result[0]['WaterName'] != "") {
+            $t->assign('WaterName', $result[0]['WaterName'] );
+        } else {
+            $t->assign('WaterName','-');	
+        }
+
+        $t->assign('place_water', $_lang['place_water']);
+        if ( $result[0]['Water'] != 0 && $_lang['water'][($result[0]['Water'] - 1)]) {
+            $t->assign('Water', $_lang['water'][($result[0]['Water'] - 1)]);
+        } else {
+            $t->assign('Water','-');	
+        }
+
+        $t->assign('place_altitude', $_lang['place_altitude']);
+        if ($result[0]['Altitude'] != "") {
+            $t->assign('Altitude', $result[0]['Altitude'] );
+        } else {
+            $t->assign('Altitude','-');	
+        }
+
+        $t->assign('place_difficulty', $_lang['place_difficulty']);
+        if ($result[0]['Difficulty'] != "") {
+            $t->assign('Difficulty', $result[0]['Difficulty'] );
+        } else {
+            $t->assign('Difficulty','-');	
+        }
+
+        /*}}}*/
     }
     /**
      * set_divesite_pictures 
@@ -2206,22 +2461,88 @@ class Equipment{
         $t->assign('pagetitle',$_lang['equip_details_pagetitle'].$result[0]['Object']);
         $t->assign('equip_object',$_lang['equip_object'] );
         $t->assign('equip_manufacturer', $_lang['equip_manufacturer']);
-        $t->assign('equip_shop', $_lang['equip_shop'] );
         $t->assign('equip_datep',$_lang['equip_datep']);
+        $t->assign('equip_dater', $_lang['equip_dater'] );
+        $t->assign('equip_datern', $_lang['equip_datern'] );
+        $t->assign('equip_o2servicedate', $_lang['equip_o2servicedate'] );
+        $t->assign('equip_serial', $_lang['equip_serial'] );
+        $t->assign('equip_warranty', $_lang['equip_warranty'] );
+        $t->assign('equip_shop', $_lang['equip_shop'] );
         $t->assign('equip_price',$_lang['equip_price']);
+        $t->assign('equip_weight', $_lang['equip_weight'] );
+        $t->assign('equip_inactive', $_lang['equip_inactive'] );
 
         //	Show main equipment details
         $t->assign('Object',$result[0]['Object'] );
         $t->assign('Manufacturer', $result[0]['Manufacturer']);
 
         //	Show equipment purchase details
-        $t->assign('Shop',$result[0]['Shop']);
-
         if ($result[0]['DateP'] != "") {
             $t->assign('DateP', date($_lang['equip_date_format'], strtotime($result[0]['DateP'])));
+        } else {
+            $t->assign('DateP','-');	
         }
+
+        if ($result[0]['DateR'] != "") {
+            $t->assign('DateR', date($_lang['equip_date_format'], strtotime($result[0]['DateR'])) );
+        } else {
+            $t->assign('DateR','-');	
+        }
+
+        if ($result[0]['DateRN'] != "") {
+            $t->assign('DateRN', date($_lang['equip_date_format'], strtotime($result[0]['DateRN'])) );
+        } else {
+            $t->assign('DateRN','-');	
+        }
+
+        if ($result[0]['O2ServiceDate'] != "") {
+            $t->assign('O2ServiceDate', date($_lang['equip_date_format'], strtotime($result[0]['O2ServiceDate'])) );
+        } else {
+            $t->assign('O2ServiceDate','-');	
+        }
+
+        if ($result[0]['Inactive'] != "") {
+            if ($result[0]['Inactive']) {
+                $t->assign('Inactive', $_lang['inactive'][0]);
+            } else {
+                $t->assign('Inactive', $_lang['inactive'][1]);
+            }
+        } else {
+            $t->assign('Inactive','-');	
+        }
+
+        if ($result[0]['Serial'] != "") {
+            $t->assign('Serial', $result[0]['Serial']);
+        } else {
+            $t->assign('Serial','-');	
+        }
+
+        if ($result[0]['Warranty'] != "") {
+            $t->assign('Warranty', $result[0]['Warranty'] );
+        } else {
+            $t->assign('Warranty','-');	
+        }
+
+        if ($result[0]['Shop'] != "") {
+            $t->assign('Shop', $result[0]['Shop']);
+        } else {
+            $t->assign('Shop','-');	
+        }
+
         if ($result[0]['Price'] != "") {
             $t->assign('Price',$_lang['currency_prefix'] .number_format($result[0]['Price'],2) .$_lang['currency_suffix'] );
+        } else {
+            $t->assign('Price','-');	
+        }
+
+        if ($result[0]['Weight'] != "") {
+            if ($_config['weight']) {
+                $Weight = KgToLbs($result[0]['Weight'], 0) ."&nbsp;". $_lang['unit_weight_imp'] ;
+            } else {
+                $Weight = $result[0]['Weight'] ."&nbsp;". $_lang['unit_weight'] ;
+            }$t->assign('Weight' ,$Weight);
+        } else {
+            $t->assign('Weight','-');	
         }
 
         //	Show the rest of the details
@@ -2716,7 +3037,7 @@ class Divestats{
         $t->assign('dive_equip',$_lang['dive_equip']);
         $t->assign('dive_stats_linktitle', $_lang['dive_stats_linktitle']);
         $t->assign('dive_stats', $_lang['dive_stats']);
-        $t->assign('stats_sect_stats', $this->username .' ' .$_lang['stats_sect_stats']);
+        $t->assign('stats_sect_stats', $this->username ."'s " .$_lang['stats_sect_stats']);
      
         // Show overall details
         $t->assign('stats_totaldives', $_lang['stats_totaldives'] );

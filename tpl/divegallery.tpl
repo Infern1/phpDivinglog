@@ -11,7 +11,7 @@
 <tr><td colspan="4" class="spacing">&nbsp;</td></tr>
 
 <tr class="divesection">
- <td colspan="4">{$gallery_title}</td>
+ <td colspan="4">{$gallery_title}&nbsp;</td>
 </tr>
 </table>
 {* Show photos per dive *}
@@ -54,7 +54,6 @@
                    {else}
 <a href="{$app_path}/divesite.php{$sep2}{$i.site_nr}" title="{$dlog_number_title}{$i.site_nr}">{$i.site_nr}</a>
                    {/if}
- </p>
         </div>
     {/foreach}
 

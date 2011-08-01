@@ -1,4 +1,16 @@
-phpDivingLog v3.0-alpha - 2011-07-24 - Lloyd Borrett
+phpDivingLog v3.0-alpha2 - 2011-08-01 - Lloyd Borrett
+    * Added ability to display lots of additional values 
+    *   on the dive details, dive sites and dive equipment pages
+    * Added ability to show visibilty type as a set of images
+    * Added ability to show the dive site ratings as a set of images
+    * Added images to show if single or twin cylinders being used
+    * Added images to show if supply type is OC, SCR or CCR 
+    * Added default values for maxPPO2, O2 and datum
+    * Added in calculated values for MOD, EAD and exit time
+    * Added in display of an image for the back gas type
+    * Fixed some formatting issues
+
+phpivingLog v3.0-alpha1 - 2011-07-24 - Lloyd BorrettD
     * Added ability to display photo descriptions on more images
     * Ability to set the width and height of the thumbnails which is then used to display them
     * Display program version and database version on statistics page

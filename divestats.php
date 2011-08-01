@@ -65,23 +65,8 @@ if($request->get_multiuser()){
     $app_info = new AppInfo($request);
     $app_info->SetAppInfo(); 
 }
-/*
-echo "<table class=\"divetable\" cellspacing=\"0\" cellpadding=\"0\" width=\"100%\">\n";
 
-echo " <tr><td class=\"spacing\">&nbsp;</td></tr>\n";
 
-echo " <tr class=\"divetitle\">\n";
-echo "  <td>". $_lang['poweredby'] ."\n";
-echo "   <a href=\"http://www.divinglog.de/\" target=\"_blank\"\n";
-echo "   title=\"Diving Log web site\">". $dbinfo[0]['PrgName'] ."</a>\n";
-echo "   ". $dbinfo[0]['DBVersion'] .$_lang['and'] ."\n";
-echo "   <a href=\"http://www.borrett.id.au/interests/phpdivinglog.htm\"\n";
-echo "   target=\"_blank\"\n";
-echo "   title=\"phpDivingLog web site\">". $_config['app_name'] ."</a> ";
-echo $_config['app_version'] ."</td>\n";
-echo " </tr>\n";
-
-echo "</table>\n";*/
 if($_config['embed_mode'] == TRUE){
     // Get the HTML output and send it to the requesting
     include('header.php');
