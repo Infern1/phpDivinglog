@@ -18,7 +18,7 @@ $_config['app_name'] = "phpDivingLog";
 $_config['app_version'] = "3.0-alpha3";
 $_config['app_url'] = "http://www.borrett.id.au/interests/phpdivinglog.htm";
 $_config['dlog_url'] = "http://www.divinglog.de/";
-$_config['dlog_version'] = "5.0";
+$_config['dlog_version'] = "5.0.4";
 
 /**
  * FILE LOCATIONS

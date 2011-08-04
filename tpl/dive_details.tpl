@@ -121,9 +121,11 @@
     {/if}
 
     {* Conditions *}
+    {*
     <tr>
       <td colspan="4" class="spacing">&nbsp;</td>
     </tr>
+    *}
     <tr class="divesection">
       <td colspan="4">{$dive_sect_conditions}</td>
     </tr>
@@ -220,9 +222,11 @@
     </tr>
 
     {* Dive Details *}
+    {*
     <tr>
       <td colspan="4" class="spacing">&nbsp;</td>
     </tr>
+    *}
     <tr class="divesection">
       <td colspan="4">{$dive_sect_details}</td>
     </tr>
@@ -307,9 +311,11 @@
     {/if}
 
     {* Equipment *}
+    {*
     <tr>
       <td colspan="4" class="spacing">&nbsp;</td>
     </tr>
+    *}
     <tr class="divesection">
       <td colspan="4">{$dive_sect_equipment}</td>
     </tr>

@@ -2231,7 +2231,7 @@ class Divesite{
             }
             $t->assign('dlog_number_title', $_lang['dlog_number_title'] );
             $t->assign('dives',$dives);
-        }else {
+        } else {
             $t->assign('dlog_number_title', "" );
             $t->assign('dives',"");
         }
@@ -2463,7 +2463,7 @@ class Equipment{
      * @return void
      */
     function get_overview_divers(){
-        global $t, $_lang, $globals, $_config;/*{{{*/
+        global $t, $_lang, $globals, $_config; /*{{{*/
         $users = new Users();
         $user_list = $users->get_user_data();
         $t->assign('diver_overview',1);
@@ -2472,7 +2472,7 @@ class Equipment{
     }
 
     function set_main_equipment_details(){
-        global $t, $_config,$globals, $_lang; /*{{{*/
+        global $t, $_config, $globals, $_lang; /*{{{*/
 	    $result = $this->result; 
         $t->assign('pagetitle', $_lang['equip_details_pagetitle'].$result[0]['Object']);
         $t->assign('equip_object', $_lang['equip_object'] );
@@ -2606,7 +2606,6 @@ class Equipment{
                 /**
                  *  
                  */
-                
             }
         }
         /*}}}*/

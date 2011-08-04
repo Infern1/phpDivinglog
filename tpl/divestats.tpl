@@ -15,6 +15,7 @@
       <col width="25%">
      <col width="25%">
     </colgroup>
+
     <tr class="divesection">
       <td colspan="4">{$pagetitle}</td>
     </tr>
@@ -116,7 +117,7 @@ title="{$dlog_number_title}{$DepthMinNr}">{$DepthMinNr}</a></td>
 <tr class="divedetails">
  <td colspan="4" align="center">
  {if isset($multiuser_id)}
-  <img src="{$app_path}/drawpiechart.php{$sep1}{$multiuser_id}{$sep2}{$get_nr}" align="center" border="0" alt="" title="">
+  <img src="{$app_path}/drawpiechart.php{$sep1}{$multiuser_id}{$sep2}{$get_nr}" border="0" alt="" title="">
  {else}
   <img src="{$app_path}/drawpiechart.php" align="center" border="0" alt="" title="">
  {/if}
@@ -286,15 +287,6 @@ title="{$dlog_number_title}{$DepthMinNr}">{$DepthMinNr}</a></td>
  <td colspan="2">{$cells[cell_data].instructor}</td>
 </tr>
 
-{*
-{if $cells[cell_data].scan2path == ''}
-<tr class="divedetails"><td colspan="4">True 
-[{$cells[cell_data].scan2path}]</td></tr>
-{else}
-<tr class="divedetails"><td colspan="4">False 
-[{$cells[cell_data].scan2path}]</td></tr>
-{/if}
-*}
 {if ($cells[cell_data].scan1path != '') or ($cells[cell_data].scan2path != '')}
 <tr class="divedetails">
  <td colspan="4" align="center">
@@ -304,16 +296,16 @@ title="{$dlog_number_title}{$DepthMinNr}">{$DepthMinNr}</a></td>
 {if $cells[cell_data].scan2path != ''}
   <img src="{$app_path}/{$cells[cell_data].userpath_web}{$cells[cell_data].scan2path}" title="{$cells[cell_data].title} {$cells[cell_data].cert_scan_back}" alt="{$cells[cell_data].title} {$cells[cell_data].cert_scan_back}">
 {/if}
-</td>
+ </td>
 </tr>
 {/if}
 
-<tr class="divedetails">
- <td colspan="4"><hr></td>
+<tr>
+ <td colspan="4" class="spacing"><hr></td>
 </tr>
 {/section}
 {else}
-    <tr>
+    <tr class="divedetails">
       <td colspan="4">No certifications available.</td>
     </tr>
 {/if}

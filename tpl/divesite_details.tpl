@@ -1,7 +1,7 @@
 <!-- Include links_details -->
 {include file='links_details.tpl'}
 <!-- End include links_details -->
-  <table class="divetable" cellspacing="0" cellpadding="0" width="100%">
+  <table class="details" cellspacing="0" cellpadding="0" width="100%">
     <tr class="divesection">
       <td colspan="4">{$pagetitle}</td>
     </tr>
@@ -10,7 +10,7 @@
       <td colspan="2">{$place_place}</td>
       <td colspan="2">{$place_city}</td>
     </tr>
-    <tr class="divecontent">
+    <tr class="divedetails">
       <td colspan="2">{$Place}</td>
       <td colspan="2">{$city}</td>
     </tr>
@@ -21,7 +21,7 @@
       <td>{$place_maxdepth}</td>
       <td>{$place_difficulty}</td>
     </tr>
-    <tr class="divecontent">
+    <tr class="divedetails">
       <td>{$country}</td>
       <td>{$Rating}</td>
       <td>{$MaxDepth}</td>
@@ -34,7 +34,7 @@
       <td>{$place_altitude}</td>
       <td>&nbsp;</td>
     </tr>
-    <tr class="divecontent">
+    <tr class="divedetails">
       <td>{$WaterName}</td>
       <td>{$Water}</td>
       <td>{$Altitude}</td>

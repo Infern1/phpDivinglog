@@ -1,3 +1,7 @@
+phpDivingLog v3.0-alpha3 - 2011-08-04 - Lloyd Borrett
+    * Added tabs for dive details and dive statistics pages 
+    * Modified the calculation of imperial cylinder size to use working pressure if available
+
 phpDivingLog v3.0-alpha2 - 2011-08-01 - Lloyd Borrett
     * Added ability to display lots of additional values 
     *   on the dive details, dive sites and dive equipment pages
@@ -10,7 +14,7 @@ phpDivingLog v3.0-alpha2 - 2011-08-01 - Lloyd Borrett
     * Added in display of an image for the back gas type
     * Fixed some formatting issues
 
-phpivingLog v3.0-alpha1 - 2011-07-24 - Lloyd BorrettD
+phpDivingLog v3.0-alpha1 - 2011-07-24 - Lloyd Borrett
     * Added ability to display photo descriptions on more images
     * Ability to set the width and height of the thumbnails which is then used to display them
     * Display program version and database version on statistics page
