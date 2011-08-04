@@ -12,19 +12,21 @@
  *  database settings
  */
 $_config['database_server'] = "localhost";
-$_config['database_db'] = "phpdivinglog";
-$_config['database_username'] = "dive";
-$_config['database_password'] = "somepassword";
+$_config['database_db'] = "divelog";
+$_config['database_username'] = "divelog";
+$_config['database_password'] = "password";
 
 /**
  * Define the connection type use mysqli for php5 (check if mysqli is installed), otherwise enter mysql
  * The driver mysqli is not used everywhere (planned)
  */
-$_config['database_type'] = "mysql"; 
+$_config['database_type'] = "mysqli"; 
+
 /**
  * Enter prefix for single user mode (for multi user see below) 
  */
 $_config['table_prefix'] = ""; 
+
 /**
  *  language setting determines which language file is used
  */
@@ -40,14 +42,15 @@ $_config['query_string'] = false;
 /**
  * change this to your website url
  */
-$_config['web_root']        = 'http://www.mydivesite.com/divelog'; 
+$_config['web_root'] = 'http://localhost/lrb-2004/phpDivinglog3'; 
+
 /**
  * Your path where divelog is located
  * EXAMPLE: http://www.foo.com/users/j/jo/john
  * abs_url_path = /users/j/jo/john
  * Nothing todo where phpdivinglog is installed on your harddrive!
  */
-$_config['abs_url_path']    = '/divelog'; 
+$_config['abs_url_path'] = '/lrb-2004/phpDivinglog3'; 
 
 /**
  * See below for more file location settings 

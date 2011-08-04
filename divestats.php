@@ -45,7 +45,7 @@ if($request->get_multiuser()){
         $divestats->set_all_statistics();
         $app_info = new AppInfoi($request);
         $app_info->SetAppInfo(); 
-       $user = new User();
+        $user = new User();
         $user->set_user_id($request->get_user_id());
         set_config_table_prefix($user->get_table_prefix());
         $dbinfo = parse_mysql_query('dbinfo.sql');

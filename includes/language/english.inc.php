@@ -157,6 +157,11 @@ $_lang['dive_sect_details'] = "Dive Details:";
 $_lang['dive_sect_equipment'] = "Equipment:";
 $_lang['dive_sect_comments'] = "Comments:";
 
+$_lang['dive_tab_logbook'] = "Logbook";
+$_lang['dive_tab_breathing'] = "Breathing";
+$_lang['dive_tab_comments'] = "Comments";
+$_lang['dive_tab_photos'] = "Photos";
+$_lang['dive_tab_profile'] = "Profile";
 
 // Dive Log List related values
 
@@ -224,6 +229,9 @@ $_lang['dsite_title_maxdepth'] = "Max Depth";
 
 
 // Dive Statistics related values
+
+$_lang['dive_tab_stats'] = "Statistics";
+$_lang['dive_tab_certs'] = "Certifications";
 
 $_lang['stats_sect_stats'] = "Diving Statistics:";
 $_lang['stats_sect_certs'] = "Diving Certifications:";

@@ -81,7 +81,6 @@ function action($value_of_clicked_field, $array_values) {
             return "javascript:open_url(".$array_values["ID"].",'/equipment.php".$ext."' )";
         }
     }
-
 /*}}}*/
 }
 
@@ -98,7 +97,7 @@ if ($_config['language'] != "english") {
 		print "<p>Language file includes/language/english.inc.php not found.</p>";
 		exit;
 	}
-	include_once ($_config['app_root'] .  'includes/language/english.inc.php');
+	include_once($_config['app_root'] . 'includes/language/english.inc.php');
 }
 
 // include the specified language file
@@ -126,7 +125,7 @@ include_once ($language_filename);
  * @return void
  */
 function sql_file($filename){
-	global $_config;/*{{{*/
+	global $_config; /*{{{*/
 	$sqlpath = $_config['sqlpath'];
 	global $globals;
 
@@ -158,7 +157,7 @@ function sql_file($filename){
 		return $contents;
 	} else {
 		return false;
-	}/*}}}*/
+	} /*}}}*/
 }
 
 
@@ -170,7 +169,7 @@ function sql_file($filename){
  * @return void
  */
 function parse_mysql_query($filename, $sql_query = 0, $debug = false){
-    global $_config;/*{{{*/
+    global $_config; /*{{{*/
     $username = $_config['database_username'];
 	$password = $_config['database_password'];
 	$server = $_config['database_server'];
@@ -202,8 +201,7 @@ function parse_mysql_query($filename, $sql_query = 0, $debug = false){
 			$result[$i] = $query_output;
 		}
 	}
-	return $result;
-/*}}}*/
+	return $result; /*}}}*/
 }
 
 /**
@@ -215,7 +213,7 @@ function parse_mysql_query($filename, $sql_query = 0, $debug = false){
  */
 function check_number($number) 
 {
-	if (!$number) {/*{{{*/
+	if (!$number) { /*{{{*/
 		$get = "";
 	} else {
 		if (preg_match('[^0-9]', $number)) {
@@ -228,7 +226,7 @@ function check_number($number)
 			}
 		}
 	}
-	return $get;/*}}}*/
+	return $get; /*}}}*/
 }
 
 /**
@@ -285,7 +283,7 @@ function GetRequestVar($url, $request_file_depth=0){
 
     }
     //print_r($paginas);
-    return $paginas;/*}}}*/
+    return $paginas; /*}}}*/
 }
 
 /**
@@ -297,7 +295,7 @@ function GetRequestVar($url, $request_file_depth=0){
  * @return void
  */
 function is__writable($path) {
-//will work in despite of Windows ACLs bug/*{{{*/
+//will work in despite of Windows ACLs bug /*{{{*/
 //NOTE: use a trailing slash for folders!!!
 //see http://bugs.php.net/bug.php?id=27609
 //see http://bugs.php.net/bug.php?id=30931
@@ -314,7 +312,7 @@ function is__writable($path) {
     fclose($f);
     if (!$rm)
         unlink($path);
-    return true;/*}}}*/
+    return true; /*}}}*/
 }
 
 /**
@@ -325,7 +323,7 @@ function is__writable($path) {
  * @return void
  */
 function GetProfileData($result){
-    	global $_config;/*{{{*/
+    	global $_config; /*{{{*/
         global $_lang;
         $profile = $result[0]['Profile'];
         $length = ( strlen($profile) / 12 );
@@ -350,16 +348,16 @@ function GetProfileData($result){
 		$sac = (($result[0]['PresS'] - $result[0]['PresE']) * $result[0]['Tanksize']) / ($divetime * ($averagedepth / 10 + 1));
 
 		if ($_config['length']) {
-            $averagedepth = MetreToFeet($averagedepth / 3.2808399, 2) ."&nbsp;";
+			$averagedepth = MetreToFeet($averagedepth / 3.2808399, 2) ."&nbsp;";
 		} else {
 			$averagedepth = number_format($averagedepth, 2) ."&nbsp;";
 		}
 		if ($_config['volume']) {
-            $sac = LitreToCuft($sac, 2) ."&nbsp;". $_lang['unit_rate_imp'];
+			$sac = LitreToCuft($sac, 2) ."&nbsp;". $_lang['unit_rate_imp'];
 		} else {
 			$sac = number_format($sac, 2) ."&nbsp;". $_lang['unit_rate'];
 		}
-        return array('averagedepth' => $averagedepth , 'sac' => $sac);/*}}}*/
+        return array('averagedepth' => $averagedepth , 'sac' => $sac); /*}}}*/
 }
 
 
@@ -386,7 +384,7 @@ function CelsiusToFahrenh($value, $precision = 2)
  
 function LitreToCuft($value, $precision = 2) 
 {
-    return round(($value * 0.0353146667), $precision);
+    return round(($value * 0.035335689046), $precision);
 }
 
 
@@ -398,10 +396,10 @@ function LitreToCuft($value, $precision = 2)
  * @return void
  */
 function backhtmlentities($str_h){
-   $trans = get_html_translation_table(HTML_ENTITIES);/*{{{*/
+   $trans = get_html_translation_table(HTML_ENTITIES); /*{{{*/
    $trans = array_flip($trans);
    $str_h = strtr($str_h, $trans);
-   return $str_h;/*}}}*/
+   return $str_h; /*}}}*/
 }
 
 /**
@@ -487,7 +485,7 @@ function DECtoDMS($dec, $fmt) {
  * @return void
  */
 function convert_date($value){
-    global $_config;/*{{{*/
+    global $_config; /*{{{*/
     $mask = $_config['date_format'];
     if($value != "") {
         $format='';
@@ -517,7 +515,7 @@ function convert_date($value){
  * @return void
  */
 function datecheck($date,$format='ymd',$separator='-',$toformat='mdy',$toseparator='-') {
-        $format = ($format=='')?'ymd':strtolower($format);/*{{{*/
+        $format = ($format=='')?'ymd':strtolower($format); /*{{{*/
         if (count($datebits=explode($separator,$date))!=3) return false;
         $year = intval($datebits[strpos($format, 'y')]);
         $month = intval($datebits[strpos($format, 'm')]);
@@ -530,7 +528,7 @@ function datecheck($date,$format='ymd',$separator='-',$toformat='mdy',$toseparat
         if (($month<1) || ($month>12) || ($day<1) || (($month==2) && ($day>28+(!($year%4))-(!($year%100))+(!($year%400)))) || ($day>30+(($month>7)^($month&1)))) return false; // date out of range 
         $arrDate= array('y' => $year, 'm' => $month, 'd' => $day, 'iso' => $year.'-'.$month.'-'.$day, 'fromdate'=> $date, 'todate' => '' );
         $arrDate['todate'] = $arrDate[$toformat[0]].$toseparator.$arrDate[$toformat[1]].$toseparator.$arrDate[$toformat[2]];
-        return $arrDate;/*}}}*/
+        return $arrDate; /*}}}*/
 }
 
 /**
@@ -541,7 +539,7 @@ function datecheck($date,$format='ymd',$separator='-',$toformat='mdy',$toseparat
  * @return void
  */
 function add_unit_depth($value){
-    global $_config, $_lang;/*{{{*/
+    global $_config, $_lang; /*{{{*/
     if(!empty($value)){
         if($_config['length']){
             $value .=  " ".$_lang['unit_length_short_imp']  ;
@@ -549,7 +547,7 @@ function add_unit_depth($value){
             $value .= " ".$_lang['unit_length_short']  ;
         }
     }
-    return $value;/*}}}*/
+    return $value; /*}}}*/
 }
 
 /**
@@ -560,12 +558,10 @@ function add_unit_depth($value){
  * @return void
  */
 function add_unit_time($value){
-    global $_config, $_lang;/*{{{*/
+    global $_config, $_lang; /*{{{*/
     $value .=  " ".$_lang['unit_time_short'];
-    return $value;/*}}}*/
+    return $value; /*}}}*/
 }
-
-
 
 /**
  * latitude_format 
@@ -591,9 +587,8 @@ function latitude_format($coord){
 			$dms .= " N";
 		}
 	}
-	return $dms;/*}}}*/
+	return $dms; /*}}}*/
 }
-
 
 /**
  * longitude_format 
@@ -619,7 +614,7 @@ function longitude_format($coord){
 			$dms .= " E";
 		}
 	}
-	return $dms;/*}}}*/
+	return $dms; /*}}}*/
 }
 
 /**
@@ -653,11 +648,11 @@ function reset_config_table_prefix(){
  * @return void
  */
 function resize_image($img){
-    global $_config;/*{{{*/
+    global $_config; /*{{{*/
     $obj = new Thumbnail($img); 
     $obj->size_width($_config['pic-width']);
     $obj->process();
-    $obj->save($img);/*}}}*/
+    $obj->save($img); /*}}}*/
 }
 
 /**
@@ -669,7 +664,7 @@ function resize_image($img){
  * @return void
  */
 function make_thumb($img,$thumb, $i = 0 ){
-    global $_config,$t;/*{{{*/
+    global $_config, $t; /*{{{*/
     $obj = new Thumbnail($img);
     $obj->size_auto($_config['thumb-width']); 
     $obj->process();
@@ -678,7 +673,7 @@ function make_thumb($img,$thumb, $i = 0 ){
     set_time_limit(30);
     $obj->save($thumb);
     flush();
-    //    echo "Error". $obj->error_msg ;/*}}}*/
+    //    echo "Error". $obj->error_msg; /*}}}*/
 }
 
 /**

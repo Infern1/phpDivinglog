@@ -38,7 +38,7 @@ reset_config_table_prefix();
 $data =
 array($divestats->depthrange1_per,$divestats->depthrange2_per,$divestats->depthrange3_per,$divestats->depthrange4_per,$divestats->depthrange5_per);
 
-$graph = new PieGraph(650,200,"auto");
+$graph = new PieGraph(450,200,"auto");
 //$graph->SetShadow();
 ;
 //$graph->title->Set("A simple Pie plot");

@@ -3,13 +3,45 @@
 <!-- Include links_overview -->
 	{include file='links_overview.tpl'}
 <!-- End include links_overview -->
+
 {if isset($diver_overview)}
 {include file='diver_overview.tpl'}
 {else}
-<table class="details" cellspacing="0" cellpadding="0" width="100%">
 
+  <table class="details" cellspacing="0" cellpadding="0" width="100%">
+    <colgroup>
+      <col width="25%">
+      <col width="25%">
+      <col width="25%">
+     <col width="25%">
+    </colgroup>
+    <tr class="divesection">
+      <td colspan="4">{$pagetitle}</td>
+    </tr>
+  </table>
+
+<!-- the tabs -->
+<ul class="css-tabs">
+  <li><a href="#">{$dive_tab_stats}</a></li>
+  <li><a href="#">{$dive_tab_certs}</a></li>
+</ul>
+
+<!-- tab "panes" -->
+<div class="css-panes">
+
+<!-- pane 1 -->
+  <div>
+  <table class="details" cellspacing="0" cellpadding="0" width="100%">
+    <colgroup>
+      <col width="25%">
+      <col width="25%">
+      <col width="25%">
+     <col width="25%">
+    </colgroup>
+
+{*
 <tr><td colspan="4" class="spacing">&nbsp;</td></tr>
-
+*}
 <tr class="divesection">
  <td colspan="4">{$stats_sect_stats}</td>
 </tr>
@@ -25,18 +57,16 @@
 <tr class="divedetails">
  <td>{$end}</td>
  {if isset($multiuser_id)}
-<td>{$DivedateMax}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep1}{$multiuser_id}{$sep2}{$DivedateMaxNr}"
+ <td>{$DivedateMax}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep1}{$multiuser_id}{$sep2}{$DivedateMaxNr}"
 title="{$dlog_number_title}{$DivedateMaxNr}">{$DivedateMaxNr}</a></td>
-<td>{$DivedateMin}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep1}{$multiuser_id}{$sep2}{$DivedateMinNr}"
+ <td>{$DivedateMin}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep1}{$multiuser_id}{$sep2}{$DivedateMinNr}"
 title="{$dlog_number_title}{$DivedateMinNr}">{$DivedateMinNr}</a></td>
-
-{else}
+ {else}
  <td>{$DivedateMax}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep2}{$DivedateMaxNr}" 
- title="{$dlog_number_title}{$DivedateMaxNr}">{$DivedateMaxNr}</a></td>
+title="{$dlog_number_title}{$DivedateMaxNr}">{$DivedateMaxNr}</a></td>
  <td>{$DivedateMin}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep2}{$DivedateMinNr}" 
- title="{$dlog_number_title}{$DivedateMinNr}">{$DivedateMinNr}</a></td>
-
-{/if}
+title="{$dlog_number_title}{$DivedateMinNr}">{$DivedateMinNr}</a></td>
+ {/if}
  <td>&nbsp;</td>
 </tr>
 
@@ -51,13 +81,13 @@ title="{$dlog_number_title}{$DivedateMinNr}">{$DivedateMinNr}</a></td>
 <tr class="divedetails">
  <td>{$total_abt}</td>
  {if isset($multiuser_id)}
-<td>{$DivetimeMax}&nbsp;{$unit_time}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep1}{$multiuser_id}{$sep2}{$DivetimeMaxNr}"  title="{$dlog_number_title}{$DivetimeMaxNr}">{$DivetimeMaxNr}</a></td>
-<td>{$DivetimeMin}&nbsp;{$unit_time}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep1}{$multiuser_id}{$sep2}{$DivetimeMinNr}"  title="{$dlog_number_title}{$DivetimeMinNr}">{$DivetimeMinNr}</a></td>
-{else}
-<td>{$DivetimeMax}&nbsp;{$unit_time}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep2}{$DivetimeMaxNr}"  title="{$dlog_number_title} {$DivetimeMaxNr}">{$DivetimeMaxNr}</a></td>
-<td>{$DivetimeMin}&nbsp;{$unit_time}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep2}{$DivetimeMinNr}"  title="{$dlog_number_title} {$DivetimeMinNr}">{$DivetimeMinNr}</a></td>
-{/if}
-<td>{$DivetimeAvg}&nbsp;{$unit_time}</td>
+ <td>{$DivetimeMax}&nbsp;{$unit_time}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep1}{$multiuser_id}{$sep2}{$DivetimeMaxNr}"  title="{$dlog_number_title}{$DivetimeMaxNr}">{$DivetimeMaxNr}</a></td>
+ <td>{$DivetimeMin}&nbsp;{$unit_time}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep1}{$multiuser_id}{$sep2}{$DivetimeMinNr}"  title="{$dlog_number_title}{$DivetimeMinNr}">{$DivetimeMinNr}</a></td>
+ {else}
+ <td>{$DivetimeMax}&nbsp;{$unit_time}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep2}{$DivetimeMaxNr}" title="{$dlog_number_title} {$DivetimeMaxNr}">{$DivetimeMaxNr}</a></td>
+ <td>{$DivetimeMin}&nbsp;{$unit_time}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep2}{$DivetimeMinNr}" title="{$dlog_number_title} {$DivetimeMinNr}">{$DivetimeMinNr}</a></td>
+ {/if}
+ <td>{$DivetimeAvg}&nbsp;{$unit_time}</td>
 </tr>
 
 {* Show dive depth details *}
@@ -71,12 +101,12 @@ title="{$dlog_number_title}{$DivedateMinNr}">{$DivedateMinNr}</a></td>
 <tr class="divedetails">
  <td>&nbsp;</td>
  {if isset($multiuser_id)}
-<td>{$DepthMax}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep1}{$multiuser_id}{$sep2}{$DepthMaxNr}"  
+ <td>{$DepthMax}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep1}{$multiuser_id}{$sep2}{$DepthMaxNr}"  
 title="{$dlog_number_title}{$DepthMaxNr}">{$DepthMaxNr}</a></td>
-<td>{$DepthMin}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep1}{$multiuser_id}{$sep2}{$DepthMinNr}"  
+ <td>{$DepthMin}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep1}{$multiuser_id}{$sep2}{$DepthMinNr}"  
 title="{$dlog_number_title}{$DepthMinNr}">{$DepthMinNr}</a></td>
  {else}
-<td>{$DepthMax}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep2}{$DepthMaxNr}"  title="{$dlog_number_title}{$DepthMaxNr}">{$DepthMaxNr}</a></td>
+ <td>{$DepthMax}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep2}{$DepthMaxNr}"  title="{$dlog_number_title}{$DepthMaxNr}">{$DepthMaxNr}</a></td>
  <td>{$DepthMin}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep2}{$DepthMinNr}"  title="{$dlog_number_title}{$DepthMinNr}">{$DepthMinNr}</a></td>
  {/if}
  <td>{$DepthAvg}</td>
@@ -84,13 +114,13 @@ title="{$dlog_number_title}{$DepthMinNr}">{$DepthMinNr}</a></td>
 
 {* Show dive depth tablea *}
 <tr class="divedetails">
-<td colspan="4">
-            {if isset($multiuser_id)}
-		        <img src="{$app_path}/drawpiechart.php{$sep1}{$multiuser_id}{$sep2}{$get_nr}"  alt="" title="">
-            {else}
-                <img src="{$app_path}/drawpiechart.php"  alt="" title="">
-            {/if}
-		    </td>
+ <td colspan="4" align="center">
+ {if isset($multiuser_id)}
+  <img src="{$app_path}/drawpiechart.php{$sep1}{$multiuser_id}{$sep2}{$get_nr}" align="center" border="0" alt="" title="">
+ {else}
+  <img src="{$app_path}/drawpiechart.php" align="center" border="0" alt="" title="">
+ {/if}
+ </td>
 </tr>
 
 {* Show water temp details *}
@@ -194,16 +224,38 @@ title="{$dlog_number_title}{$DepthMinNr}">{$DepthMinNr}</a></td>
  <td>{$wreckdives} ({$wreckdives_per}%)</td>
  <td>{$photodives} ({$photodives_per}%)</td>
 </tr>
-</table>
+
+    {*
+    <tr>
+      <td colspan="4" class="spacing">&nbsp;</td>
+    </tr>
+    <tr class="divesection">
+      <td colspan="4">&nbsp;</td>
+    </tr>
+    *}
+  </table>
+  </div>
+
+
+<!-- pane 2 -->
+  <div>
+  <table class="details" cellspacing="0" cellpadding="0" width="100%">
+    <colgroup>
+      <col width="25%">
+      <col width="25%">
+      <col width="25%">
+     <col width="25%">
+    </colgroup>
 
 {* Dive Certifications *}
 {* Get the certification details *}
 {if isset($count)}
 
-	<table class="details" cellspacing="0" cellpadding="0" width="100%">
+{*
 <tr>
  <td colspan="4" class="spacing">&nbsp;</td>
 </tr>
+*}
 <tr class="divesection">
  <td colspan="4">{$stats_sect_certs}</td>
 </tr>
@@ -211,8 +263,8 @@ title="{$dlog_number_title}{$DepthMinNr}">{$DepthMinNr}</a></td>
 {* Loop through the array *}
 {section name=cell_data loop=$cells }
 
-	{* Show dive certification titles *}
-	<tr class="divetitle">
+{* Show dive certification titles *}
+<tr class="divetitle">
  <td colspan="2">{$cert_org}</td>
  <td colspan="2">{$cert_brevet}</td>
 </tr>
@@ -223,16 +275,16 @@ title="{$dlog_number_title}{$DepthMinNr}">{$DepthMinNr}</a></td>
 </tr>
 
 <tr class="divetitle">
-	 <td>{$cert_certdate}</td>
-	 <td>{$cert_number}</td>
+ <td>{$cert_certdate}</td>
+ <td>{$cert_number}</td>
  <td colspan="2">{$cert_instructor}</td>
-	</tr>
+</tr>
 
-        <tr class="divedetails">
-			<td>{$cells[cell_data].certdate}</td>
-			<td>{$cells[cell_data].number}</td>
+<tr class="divedetails">
+ <td>{$cells[cell_data].certdate}</td>
+ <td>{$cells[cell_data].number}</td>
  <td colspan="2">{$cells[cell_data].instructor}</td>
-		</tr>
+</tr>
 
 {*
 {if $cells[cell_data].scan2path == ''}
@@ -244,24 +296,54 @@ title="{$dlog_number_title}{$DepthMinNr}">{$DepthMinNr}</a></td>
 {/if}
 *}
 {if ($cells[cell_data].scan1path != '') or ($cells[cell_data].scan2path != '')}
-			<tr class="divedetails">
+<tr class="divedetails">
  <td colspan="4" align="center">
 {if $cells[cell_data].scan1path != ''}
-                <img src="{$app_path}/{$cells[cell_data].userpath_web}{$cells[cell_data].scan1path}" title="{$cells[cell_data].title} {$cells[cell_data].cert_scan_front}" alt="{$cells[cell_data].title} {$cells[cell_data].cert_scan_front}">
-			{/if}
+  <img src="{$app_path}/{$cells[cell_data].userpath_web}{$cells[cell_data].scan1path}" title="{$cells[cell_data].title} {$cells[cell_data].cert_scan_front}" alt="{$cells[cell_data].title} {$cells[cell_data].cert_scan_front}">
+{/if}
 {if $cells[cell_data].scan2path != ''}
-				<img src="{$app_path}/{$cells[cell_data].userpath_web}{$cells[cell_data].scan2path}" title="{$cells[cell_data].title} {$cells[cell_data].cert_scan_back}" alt="{$cells[cell_data].title} {$cells[cell_data].cert_scan_back}">
-			{/if}
+  <img src="{$app_path}/{$cells[cell_data].userpath_web}{$cells[cell_data].scan2path}" title="{$cells[cell_data].title} {$cells[cell_data].cert_scan_back}" alt="{$cells[cell_data].title} {$cells[cell_data].cert_scan_back}">
+{/if}
 </td>
-			</tr>
-        {/if}
+</tr>
+{/if}
 
 <tr class="divedetails">
  <td colspan="4"><hr></td>
 </tr>
-    {/section}
-    {/if}
+{/section}
+{else}
+    <tr>
+      <td colspan="4">No certifications available.</td>
+    </tr>
+{/if}
 </table>
+  </div>
+
+</div>
+
+{* {literal}
+<!-- This JavaScript snippet activates those tabs -->
+<script type="text/javascript">
+
+// perform JavaScript after the document is scriptable.
+$(function() {
+	// setup ul.tabs to work as tabs for each div directly under div.panes
+	$("ul.tabs").tabs("div.panes > div");
+});
+</script>
+{/literal} *}
+
+{literal}
+<!-- activate tabs with JavaScript -->
+<script type="text/javascript">
+$(function() {
+	// :first selector is optional if you have only one tabs on the page
+	$(".css-tabs:first").tabs(".css-panes:first > div");
+});
+</script>
+{/literal}
+
 {/if}
 
 {* Show the program deails *}
@@ -276,9 +358,9 @@ title="{$Appname} web site">{$Appname}</a>
 {$phpDivelogVersion}</td>
 </tr>
 <tr class="divedetails"><td class="spacing">&nbsp;</td></tr>
-    <tr class="divesection">
+<tr class="divesection">
  <td colspan="4">&nbsp;</td>
-	</tr>
+</tr>
 </table>
 
 <!-- Include links_overview -->

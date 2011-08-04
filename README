@@ -20,13 +20,16 @@ EXAMPLE WEB SITE:
 DEPENDENCIES:
 	
     Included in the package:
-    - JpGraph 1.22 (http://www.aditus.nu/jpgraph/)
-    - RTFClass (http://www.phpclasses.org/browse/file/7632.html)
+    - JpGraph 3.5.0b1 (http://www.aditus.nu/jpgraph/)
+    - RTFClass v155 (http://www.phpclasses.org/browse/file/7632.html)
       Rich Text Format - Parsing Class - (c) 2000 Markus Fischer
     - Lightbox JS v2.0 (http://www.huddletogether.com/projects/lightbox2/)
       Used to overlay dive pictures on the current page.
-    - PEAR packages: MDB2, Pager
-    - phpMyDatagrid (http://www.gurusistemas.com/indexdatagrid.php)
+    - Highslide JS v4.1.4 (http://highslide.com/support)
+    - PEAR packages: MDB2 v1.318, Pager v1.26
+    - phpMyDatagrid v2007a (http://www.gurusistemas.com/indexdatagrid.php)
+    - SmartyHost v2.6.18 (http://www.smarty.net/)
+    - phpMyDatagrid v2007a (http://www.gurusistemas.com/_guru/indexdatagrid.php)
 
 USAGE:
 	GOOGLE MAPS
