@@ -4,14 +4,14 @@
 <table class="divetable" cellspacing="0" cellpadding="0" width="100%">
     <tr class="divesection">
 	<td colspan="4">{$pagetitle}</td>
-	</tr>
+    </tr>
     {* Show main equipment details *}
-	<tr class="divetitle">
+    <tr class="divetitle">
 	<td colspan="2">{$equip_object}</td>
 	<td colspan="2">{$equip_manufacturer}</td>
-	</tr>
+    </tr>
 
-	<tr class="divedetails">
+    <tr class="divedetails">
         {if $Object != ''}
 	<td colspan="2" width="50%">{$Object}</td>
         {else}
@@ -23,38 +23,38 @@
         {else}
 	<td colspan="2">-</td>
         {/if}
-	</tr>
+    </tr>
 
     {*	Show equipment purchase details *}
-	 <tr class="divetitle">
-	  <td colspan="2">{$equip_shop}</td>
-	  <td>{$equip_datep}</td>
-	  <td>{$equip_price}</td>
-	 </tr>
+    <tr class="divetitle">
+	<td colspan="2">{$equip_shop}</td>
+	<td>{$equip_datep}</td>
+	<td>{$equip_price}</td>
+    </tr>
 
-	 <tr class="divedetails">
+    <tr class="divedetails">
 	{if $Shop != ''} 
-    <td colspan="2">{$Shop}</td>
+	<td colspan="2">{$Shop}</td>
 	{else} 
 	<td colspan="2">-</td>
 	{/if}
 	{if $DateP != ''}
 	<td>{$DateP}</td>
-    {else}
-	 <td>-</td>
+	{else}
+	<td>-</td>
 	{/if}
 	{if $Price != ''}
-    <td>{$Price}</td>
-    {else} 
-    <td>-</td>
+	<td>{$Price}</td>
+	{else} 
+	<td>-</td>
 	{/if}
-	 </tr>
-    {*	Show the rest of the details *}
-	 <tr class="divetitle">
+    </tr>
+
+    <tr class="divetitle">
 	<td colspan="2">{$equip_serial}</td>
-	  <td>{$equip_warranty}</td>
+	<td>{$equip_warranty}</td>
 	<td>{$equip_inactive}</td>
-	 </tr>
+    </tr>
 
 	 <tr class="divedetails">
 	{if $Serial != ''}
@@ -105,7 +105,7 @@
 	{/if}
     </tr>
 
-	{if isset($PhotoPath)}
+    {if isset($PhotoPath)}
     <tr class="divetitle">
 	<td colspan="4">{$equip_photo}</td>
     </tr>
@@ -119,8 +119,8 @@
         {$i.img_title}
         </div>
     {/foreach}
-		</td>
-	 </tr>
+	</td>
+    </tr>
     {/if}
 
     <tr>
@@ -129,20 +129,20 @@
 
     {*	Comments *}
     {*	Show them if we have them *}
-	{if isset($Comments) }
-		<tr class="divesection">
-		    <td colspan="4">{$equip_sect_comments}</td>
-		</tr>
-        <tr>
-            <td colspan="4">{$Comments}</td>
-        </tr>
+    {if isset($Comments) }
+    <tr class="divesection">
+	<td colspan="4">{$equip_sect_comments}</td>
+    </tr>
+    <tr>
+	<td colspan="4">{$Comments}</td>
+    </tr>
     {/if}
 
-	   <tr class="divesection">
-	    <td colspan="4">&nbsp;</td>
-	</tr>
-     </table>
+    <tr class="divesection">
+	<td colspan="4">&nbsp;</td>
+    </tr>
+</table>
    <!-- Include links_details -->
 	{include file='links_details.tpl'}
-    <!-- End include links_details -->
+   <!-- End include links_details -->
 

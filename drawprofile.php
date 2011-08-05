@@ -172,7 +172,7 @@ if (!$profile) {
      */
     $n = count($ydata);
     $total = array_sum($ydata);
-    $average_depth = $total / $n;/*}}}*/
+    $average_depth = $total / $n; /*}}}*/
 } 
 
 /**
@@ -260,7 +260,6 @@ if ($_config['graph_background_image'] != "") {
 } else {
     $graph->yaxis->SetColor("#000000", "#000000");
 //    $graph->SetGridDepth(DEPTH_FRONT);
-
     $graph->ygrid->SetColor("blue");
 } 
 
@@ -288,7 +287,7 @@ if ($_config['graph_background_image'] != "") {
 } 
 
 for ($a = 0; $a < count($ydata); $a++) {
-    $ydata_asc[$a] = $ydata[$a] * $ascwarning[$a];/*{{{*/
+    $ydata_asc[$a] = $ydata[$a] * $ascwarning[$a]; /*{{{*/
     $ydata_desc[$a] = $ydata[$a] * $decwarning[$a];
     $ydata_deco[$a] = $ydata[$a] * $decowarning[$a];
     $ydata_rbt[$a] = $ydata[$a] * $rbtwarning[$a];
@@ -328,8 +327,8 @@ for ($a = 0; $a < count($ydata); $a++) {
 } 
 
 if ($_config['graph_show_two_scales'] || $_config['graph_show_both_units']) {
-   /*{{{*/
-   /*
+    /*{{{*/
+    /*
      * Create secondary Y2 scale 
      */
     $l2plot = new LinePlot($ydata, $xdata);
@@ -448,7 +447,6 @@ $graph->Add($lp_desc);
 $graph->Add($lp_deco);
 $graph->Add($lp_rbt);
 $graph->Add($lp_work);
-
 
 /**
  * Output the graph to cache 

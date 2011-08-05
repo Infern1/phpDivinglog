@@ -17,45 +17,43 @@
 {* Show photos per dive *}
 <div id="center_images">
 
-              {foreach from=$image_link key=id item=i name=images}
-    <div class="thumbwrapper">
-                   {if isset($pics_resized)}
-<a id="thumb{$id}" href="{$web_root}/{$i.img_url}" class="highslide" onclick="return hs.expand(this)">
-    <img src="{$web_root}/{$i.img_thumb_url}" alt="Highslide JS" title="Click" height="80" width="120" >
-</a>
-                    {else}
-<a id="thumb{$id}" href="{$web_root}/{$i.img_url}" class="highslide" onclick="return hs.expand(this)">
-    <img src="{$web_root}/imagesize.php?w=100&img={$i.img_url}" alt="Highslide JS" title="Click " height="80" width="120" >
-</a>
-                    {/if}
-                    <div class='highslide-caption'>
- {$dive_details_pagetitle} {if isset($multiuser_id)}
-<a href="{$app_path}/index.php{$sep1}{$multiuser_id}{$sep2}{$i.dive_nr}" title="{$dlog_number_title}{$i.dive_nr}">{$i.dive_nr}</a>
-                    {else}
-<a href="{$app_path}/index.php{$sep2}{$i.dive_nr}" title="{$dlog_number_title}{$i.dive_nr}">{$i.dive_nr}</a>
-                    {/if}<br>
+{foreach from=$image_link key=id item=i name=images}
+<div class="thumbwrapper">
+{if isset($pics_resized)}
+    <a id="thumb{$id}" href="{$web_root}/{$i.img_url}" class="highslide" onclick="return hs.expand(this)" title="{$i.img_title}">
+        <img src="{$web_root}/{$i.img_thumb_url}" alt="{$i.img_title}" title="{$i.img_title}" height="{$thumb_height}" width="{$thumb_width}" ></a>
+{else}
+    <a id="thumb{$id}" href="{$web_root}/{$i.img_url}" class="highslide" onclick="return hs.expand(this)" title="{$i.img_title}">
+        <img src="{$web_root}/imagesize.php?w={$thumb_width}&img={$i.img_url}" alt="{$i.img_title}" title="{$i.img_title}" height="{$thumb_height}" width="{$thumb_width}" ></a>
+{/if}
+    <div class='highslide-caption'>
+        {$dive_details_pagetitle} {if isset($multiuser_id)}
+        <a href="{$app_path}/index.php{$sep1}{$multiuser_id}{$sep2}{$i.dive_nr}" title="{$dlog_number_title}{$i.dive_nr}">{$i.dive_nr}</a>
+{else}
+    <a href="{$app_path}/index.php{$sep2}{$i.dive_nr}" title="{$dlog_number_title}{$i.dive_nr}">{$i.dive_nr}</a>
+{/if}<br>
 {$logbook_place}  
 {if isset($multiuser_id)}
-<a href="{$app_path}/divesite.php{$sep1}{$multiuser_id}{$sep2}{$i.site_nr}" title="{$dlog_number_title}{$i.site_nr}">{$i.site_nr}</a>
-                   {else}
-<a href="{$app_path}/divesite.php{$sep2}{$i.site_nr}" title="{$dlog_number_title}{$i.site_nr}">{$i.site_nr}</a>
-                   {/if}<br>
-                {$i.img_title} 
-                   </div>
+    <a href="{$app_path}/divesite.php{$sep1}{$multiuser_id}{$sep2}{$i.site_nr}" title="{$dlog_number_title}{$i.site_nr}">{$i.site_nr}</a>
+{else}
+    <a href="{$app_path}/divesite.php{$sep2}{$i.site_nr}" title="{$dlog_number_title}{$i.site_nr}">{$i.site_nr}</a>
+{/if}<br>
+{$i.img_title} 
+</div>
 {$dive_details_pagetitle} 
 {if isset($multiuser_id)}
-<a href="{$app_path}/index.php{$sep1}{$multiuser_id}{$sep2}{$i.dive_nr}" title="{$dlog_number_title}{$i.dive_nr}">{$i.dive_nr}</a>
-                    {else}
-<a href="{$app_path}/index.php{$sep2}{$i.dive_nr}" title="{$dlog_number_title}{$i.dive_nr}">{$i.dive_nr}</a>
-                    {/if}<br>
+    <a href="{$app_path}/index.php{$sep1}{$multiuser_id}{$sep2}{$i.dive_nr}" title="{$dlog_number_title}{$i.dive_nr}">{$i.dive_nr}</a>
+{else}
+    <a href="{$app_path}/index.php{$sep2}{$i.dive_nr}" title="{$dlog_number_title}{$i.dive_nr}">{$i.dive_nr}</a>
+{/if}<br>
 {$logbook_place}  
 {if isset($multiuser_id)}
-<a href="{$app_path}/divesite.php{$sep1}{$multiuser_id}{$sep2}{$i.site_nr}" title="{$dlog_number_title}{$i.site_nr}">{$i.site_nr}</a>
-                   {else}
-<a href="{$app_path}/divesite.php{$sep2}{$i.site_nr}" title="{$dlog_number_title}{$i.site_nr}">{$i.site_nr}</a>
-                   {/if}
-        </div>
-    {/foreach}
+    <a href="{$app_path}/divesite.php{$sep1}{$multiuser_id}{$sep2}{$i.site_nr}" title="{$dlog_number_title}{$i.site_nr}">{$i.site_nr}</a>
+{else}
+    <a href="{$app_path}/divesite.php{$sep2}{$i.site_nr}" title="{$dlog_number_title}{$i.site_nr}">{$i.site_nr}</a>
+{/if}
+</div>
+{/foreach}
 
 </div>
 

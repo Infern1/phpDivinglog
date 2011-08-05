@@ -47,3 +47,28 @@ window.location.href = '{/literal}{$web_root}{literal}' + link + index  ;
 </script>
 {/literal}
 
+{* Images based tabs - fixed width
+<script type="text/javascript" src="{$app_path}/js/jquery.tools.min.js"></script>
+<!-- tab styling -->
+<link rel="stylesheet" type="text/css" href="{$app_path}/includes/tabs.css">
+{literal}
+<!-- tab pane styling -->
+<style type="text/css">
+/* tab pane styling */
+.panes div {
+	display:none;		
+	padding:15px 10px;
+	border:1px solid #999;
+	border-top:0;
+	height:100px;
+	font-size:14px;
+	background-color:#fff;
+}
+</style>
+{/literal}
+*}
+{* No images based tabs - variable width *}
+<script type="text/javascript" src="{$app_path}/js/jquery.tools.min.js"></script>
+<!-- tab styling -->
+<link rel="stylesheet" type="text/css" href="{$app_path}/includes/tabs-no-images.css">
+

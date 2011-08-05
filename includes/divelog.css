@@ -1,78 +1,88 @@
- body, table, td, th, input, textarea, select
- {
-/* font: normal 12px arial, helvetica, "liberation sans", "dejavu sans condensed", sans-serif;*/
-	font: 90%/175% Georgia, 'Lucida Grande', 'Lucida Sans Unicode', Verdana, sans-serif;
-
- margin: 0; 
- padding: 0;
- /* text-align: center;*/
+body, table, td, th, input, textarea, select {
+/*    font: normal 12px arial, helvetica, "liberation sans", "dejavu sans condensed", sans-serif;*/
+    font: 90%/175% Georgia, 'Lucida Grande', 'Lucida Sans Unicode', Verdana, sans-serif;
+    margin: 0; 
+    padding: 0;
+/*    text-align: center; */
 }
 
-div#content
- {
- text-align: left;
- width: 700px;
-/*width: 80%;*/
- margin-right: auto;
- margin-left: auto;
-
+div#content {
+    text-align: left;
+    width: 700px;
+/*    width: 80%;*/
+    margin-right: auto;
+    margin-left: auto;
 }
 
 tr.divesection td { 
-	font-weight: bold; 
-	color: #000000; 
-	font-size: 9pt; 
-	background-color: #D3D3D3;
-	padding-bottom: 3px;
-}
-tr.divetitle td { 
-	font-weight: normal; 
-	color: #808080;
-	font-size: 9pt;
-	line-height: 140%;
-	text-decoration: none;
-}
-tr.divecontent td { 
-	font-weight: normal; 
-	color: #000000;
-	font-size: 9pt;
-	line-height: 140%;
-	text-decoration: none;
-	padding-bottom: 5px;
-}
-tr.divelogtitle td { 
-	font-weight: bold; 
-	color: #000000;
-	font-size: 8pt;
-	line-height: 140%;
-	text-decoration: none;
-	background-color: #D3D3D3;
-	padding-bottom: 5px;
-}
-a.divelogcrumbs:link,
-a.divelogcrumbs:visited {
-	color: #808080;
-	text-decoration: none;
-}
-a.divelogcrumbs:hover {
-	color: #000000;
-	text-decoration: underline;
-}
-.divelogcrumbs {
-	color: #808080;
-	font-size: 8pt;
-	line-height: 140%;
-	text-decoration: none;
-	margin-left: 0px;
+    font-weight: bold; 
+    color: #000000; 
+    font-size: 10pt; 
+    background-color: #D3D3D3;
+    padding-bottom: 3px;
 }
 
-.centeredImage
-    {
-    text-align:center;
-    margin-top:0px;
-    margin-bottom:0px;
-    padding:0px;
-    }
+tr.divetitle td { 
+    font-weight: normal; 
+    color: #808080;
+    font-size: 9pt;
+    line-height: 140%;
+    text-decoration: none;
+}
+
+tr.divecontent td { 
+    font-weight: normal; 
+    color: #000000;
+    font-size: 10pt;
+    line-height: 140%;
+    text-decoration: none;
+    padding-bottom: 5px;
+}
+
+tr.divedetails td { 
+    font-weight: normal; 
+    color: #000000;
+    font-size: 10pt;
+    line-height: 140%;
+    text-decoration: none;
+    padding-bottom: 5px;
+}
+
+tr.divelogtitle td { 
+    font-weight: bold; 
+    color: #000000;
+    font-size: 8pt;
+    line-height: 140%;
+    text-decoration: none;
+    background-color: #D3D3D3;
+    padding-bottom: 5px;
+}
+
+a.divelogcrumbs:link,
+a.divelogcrumbs:visited {
+    color: #808080;
+    text-decoration: none;
+}
+
+a.divelogcrumbs:hover {
+    color: #000000;
+    text-decoration: underline;
+}
+
+.divelogcrumbs {
+    color: #808080;
+    font-size: 8pt;
+    line-height: 140%;
+    text-decoration: none;
+    margin-left: 0px;
+}
+
+.centeredImage {
+    text-align: center;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    padding: 0px;
+}
 
 div#center_images {
     position: relative;
@@ -81,14 +91,14 @@ div#center_images {
 }
 
 div.thumbwrapper {
-    background:#F0EEE0 none repeat scroll 0% 0%;
-    border:1px solid #AFAB8E;
-    float:left;
-    height:150px;
-    margin:8px;
-    padding:5px;
-    text-align:center;
-    width:130px;
+    background: #F0EEE0 none repeat scroll 0% 0%;
+    border: 1px solid #AFAB8E;
+    float: left;
+    height: 150px;
+    margin: 8px;
+    padding: 5px;
+    text-align: center;
+    width: 130px;
 }
 
 table, th, td {
@@ -97,14 +107,14 @@ table, th, td {
     color: #555;
 }
 
-table.divetable, th,tr.divecontent, td{
+table.divetable, th, tr.divecontent, td {
     border: 1px solid #D4E0EE; 
-
 }
 
-table.details , tr.divedetails , td{
+table.details, tr.divedetails, td {
     border: 0px;
 }
+
 caption {
     font-size: 120%;
     font-weight: bold;
@@ -113,6 +123,15 @@ caption {
 
 td, th {
     padding: 4px;
+}
+
+tr.divetitle, tr.divetitle td {
+    padding-bottom: 0px;
+    line-height: 100%;
+}
+
+tr.divedetails, tr.divedetails td {
+    padding-top: 0px;
 }
 
 thead th {
@@ -126,9 +145,13 @@ tbody th {
     font-weight: bold;
 }
 
-tbody tr { background: #FCFDFE; }
+tbody tr { 
+    background: #FCFDFE;
+}
 
-tbody tr.odd { background: #F7F9FC; }
+tbody tr.odd {
+    background: #F7F9FC;
+}
 
 table a:link {
     color: #718ABE;
@@ -148,7 +171,9 @@ table a:hover {
 tfoot th, tfoot td {
     font-size: 85%;
 }
-.clear{
-	clear:both;}
+
+.clear {
+    clear:both;
+}
 
 

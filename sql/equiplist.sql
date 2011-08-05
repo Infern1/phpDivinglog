@@ -2,4 +2,4 @@ SELECT		ID,
 		Object,
 		Manufacturer
 FROM		$_config[table_prefix]Equipment
-ORDER BY 	Manufacturer ASC, Object ASC
+ORDER BY 	Object ASC, DateP ASC, Manufacturer ASC

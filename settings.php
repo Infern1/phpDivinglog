@@ -15,10 +15,10 @@
  * application name and revision number
  */
 $_config['app_name'] = "phpDivingLog";
-$_config['app_version'] = "3.0-alpha2";
+$_config['app_version'] = "3.0-alpha3";
 $_config['app_url'] = "http://www.borrett.id.au/interests/phpdivinglog.htm";
 $_config['dlog_url'] = "http://www.divinglog.de/";
-$_config['dlog_version'] = "5.0";
+$_config['dlog_version'] = "5.0.4";
 
 /**
  * FILE LOCATIONS
@@ -33,15 +33,15 @@ $_config['pear_path']       = $_config['app_root'] .  'includes/pear';
 /**
  * logbook pics
  */
-$_config['picpath_web']     = "images/pictures/"; 
+$_config['picpath_web']     = "../divelog/images/pictures/"; 
 /**
  * place maps
  */
-$_config['mappath_web'] = "images/maps/";
+$_config['mappath_web'] = "../divelog/images/maps/";
 /**
  * equipment pics
  */
-$_config['equippath_web'] = "images/equipment/";
+$_config['equippath_web'] = "../images/interests/";
 /**
  *  country flags
  */
@@ -49,11 +49,11 @@ $_config['flagpath_web'] = "images/flags/";
 /**
  *  user photo and certificate scans
  */
-$_config['userpath_web'] = "images/userinfo/"; 
+$_config['userpath_web'] = "../divelog/images/userinfo/"; 
 /**
  *  buddy photos
  */
-$_config['buddypath_web'] = "images/buddies/"; 
+$_config['buddypath_web'] = "../divelog/images/buddies/"; 
 /**
  * path to sql select statements 
  */
@@ -78,10 +78,10 @@ if ( ! defined( "PATH_SEPARATOR" ) ) {
   else define( "PATH_SEPARATOR", ":" );
 }
 ini_set('include_path', get_include_path() . PATH_SEPARATOR . 
-                        $_config['pear_path'] . PATH_SEPARATOR . 
-                        $_config['app_root']."includes/". PATH_SEPARATOR . 
-                        $_config['app_root']."includes/jpgraph/"
-                        );
+  $_config['pear_path'] . PATH_SEPARATOR . 
+  $_config['app_root']."includes/". PATH_SEPARATOR . 
+  $_config['app_root']."includes/jpgraph/"
+  );
 
 
 /**

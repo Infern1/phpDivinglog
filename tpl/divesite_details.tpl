@@ -1,30 +1,30 @@
 <!-- Include links_details -->
 {include file='links_details.tpl'}
 <!-- End include links_details -->
-    <table class="divetable" cellspacing="0" cellpadding="0" width="100%">
-     <tr class="divesection">
+  <table class="details" cellspacing="0" cellpadding="0" width="100%">
+    <tr class="divesection">
       <td colspan="4">{$pagetitle}</td>
-	</tr>
+    </tr>
     {* Show main site details *}
-	<tr class="divetitle">
+    <tr class="divetitle">
       <td colspan="2">{$place_place}</td>
       <td colspan="2">{$place_city}</td>
     </tr>
-    <tr class="divecontent">
+    <tr class="divedetails">
       <td colspan="2">{$Place}</td>
       <td colspan="2">{$city}</td>
     </tr>
 
     <tr class="divetitle">
-	    <td>{$place_country}</td>
+      <td>{$place_country}</td>
       <td>{$place_rating}</td>
-	    <td>{$place_maxdepth}</td>
+      <td>{$place_maxdepth}</td>
       <td>{$place_difficulty}</td>
-	</tr>
-    <tr class="divecontent">
-	    <td>{$country}</td>
+    </tr>
+    <tr class="divedetails">
+      <td>{$country}</td>
       <td>{$Rating}</td>
-	    <td>{$MaxDepth}</td>
+      <td>{$MaxDepth}</td>
       <td>{$Difficulty}</td>
     </tr>
 
@@ -34,45 +34,45 @@
       <td>{$place_altitude}</td>
       <td>&nbsp;</td>
     </tr>
-    <tr class="divecontent">
+    <tr class="divedetails">
       <td>{$WaterName}</td>
       <td>{$Water}</td>
       <td>{$Altitude}</td>
       <td>&nbsp;</td>
-	</tr>
+    </tr>
 
-    {* 	Show extra site details *}
-	<tr class="divetitle">
-	    <td>{$place_lat}</td>
-	    <td>{$place_lon}</td>
-	    <td>&nbsp;</td>
+    {* Show extra site details *}
+    <tr class="divetitle">
+      <td>{$place_lat}</td>
+      <td>{$place_lon}</td>
+      <td>&nbsp;</td>
       <td>{$place_datum}</td>
-	</tr>
+    </tr>
 
-	<tr class="divedetails">
+    <tr class="divedetails">
     {if $Lat != ''}
-	    <td>{$Lat}</td>
+      <td>{$Lat}</td>
     {else}
       <td>-</td>
     {/if} 
 
     {if $Lon != ''}
-	    <td>{$Lon}</td>
+      <td>{$Lon}</td>
     {else}
       <td>-</td>
     {/if} 
 
-        {if isset($site_google_link)}
+    {if isset($site_google_link)}
       <td><a
 href="http://maps.google.com/maps?f=q&amp;hl=en&amp;q={$LatDec},{$LonDec}+({strip}{$Place}{/strip})&amp;ie=UTF8&amp;t=k&amp;om=1" target="_blank" title="{$site_google_link}">{$google_map}</a></td>
-        {else}
-        <td>&nbsp;</td>
-        {/if}
+    {else}
+      <td>&nbsp;</td>
+    {/if}
 
       <td>{$datum}</td>
     </tr>
 
- 	    {if isset($pics2)}
+    {if isset($pics2)}
     {* Show maps *}
     <tr class="divetitle">
       <td colspan="4">{$place_map}</td>
@@ -92,49 +92,51 @@ height="{$thumb_height}" width="{$thumb_width}"></a>
         {$i.img_title}
         </div>
    {/foreach}
-		</td>
-</tr>
+      </td>
+    </tr>
     {/if}
 
     {* Show site dives if we have them *}
-	{if $dive_count != 0}
-	    <tr class="divetitle">
-		    <td colspan="4">{$dive_count} {$site_dive_trans}</td>
-		</tr>
-
-		<tr class="divedetails">
-		    <td colspan="4">
-		{foreach from=$dives  item=dive}
-           {if isset($multiuser_id)}
-           <a href="{$app_path}/index.php{$sep1}{$multiuser_id}{$sep2}{$dive}" title="{$dlog_number_title}{$dive}">{$dive}</a>
-           {else}
-           <a href="{$app_path}/index.php{$sep2}{$dive}" title="{$dlog_number_title}{$dive}">{$dive}</a>
-           {/if}
-		{/foreach}
-		</td>
-		</tr>
-	{/if}
-
-	<tr>
-        <td colspan="4" class="spacing">&nbsp;</td>
+    {if $dive_count != 0}
+    <tr class="divetitle">
+      <td colspan="4">{$dive_count} {$site_dive_trans}</td>
     </tr>
 
-    {*	Comments *}
-    {*	Show them if we have them *}
-    {if $Comments != ''}
-		<tr class="divesection">
-		    <td colspan="4">{$site_sect_comments}</td>
-		</tr>
-        <tr>
-            <td colspan="4">{$Comments}</td>
-        </tr>
-	{/if}
+    <tr class="divedetails">
+      <td colspan="4">
+      {foreach from=$dives item=dive}
+        {if isset($multiuser_id)}
+        <a href="{$app_path}/index.php{$sep1}{$multiuser_id}{$sep2}{$dive}"
+title="{$dlog_number_title}{$dive}">{$dive}</a>
+        {else}
+        <a href="{$app_path}/index.php{$sep2}{$dive}"
+title="{$dlog_number_title}{$dive}">{$dive}</a>
+        {/if}
+      {/foreach}
+      </td>
+    </tr>
+    {/if}
 
-	  <tr class="divesection">
-	    <td colspan="4">&nbsp;</td>
-	</tr>
+    <tr>
+      <td colspan="4" class="spacing">&nbsp;</td>
+    </tr>
+
+    {* Comments *}
+    {* Show them if we have them *}
+    {if $Comments != ''}
+    <tr class="divesection">
+      <td colspan="4">{$site_sect_comments}</td>
+    </tr>
+    <tr>
+      <td colspan="4">{$Comments}</td>
+    </tr>
+    {/if}
+
+    <tr class="divesection">
+      <td colspan="4">&nbsp;</td>
+    </tr>
   </table>
 
 <!-- Include links_details -->
-	{include file='links_details.tpl'}
-    <!-- End include links_details -->
+{include file='links_details.tpl'}
+<!-- End include links_details -->
