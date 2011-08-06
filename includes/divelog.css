@@ -20,6 +20,7 @@ tr.divesection td {
     font-size: 10pt; 
     background-color: #D3D3D3;
     padding-bottom: 3px;
+    vertical-align:top;
 }
 
 tr.divetitle td { 
@@ -28,6 +29,7 @@ tr.divetitle td {
     font-size: 9pt;
     line-height: 140%;
     text-decoration: none;
+    vertical-align:top;
 }
 
 tr.divecontent td { 
@@ -37,6 +39,7 @@ tr.divecontent td {
     line-height: 140%;
     text-decoration: none;
     padding-bottom: 5px;
+    vertical-align:top;
 }
 
 tr.divedetails td { 
@@ -46,6 +49,7 @@ tr.divedetails td {
     line-height: 140%;
     text-decoration: none;
     padding-bottom: 5px;
+    vertical-align:top;
 }
 
 tr.divelogtitle td { 
