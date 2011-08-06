@@ -33,7 +33,7 @@ http://www.gurusistemas.com/indexdatagrid.php
 For contact author: tavoarcila at gmail dot com or info at gurusistemas dot com
 */
 
-.dgError{
+.dgError {
 	margin-top:10px;
 	margin-left:10px;
 	font-family:Verdana, Arial, Helvetica, sans-serif;
@@ -43,25 +43,28 @@ For contact author: tavoarcila at gmail dot com or info at gurusistemas dot com
 	border:5px double #C0C0C0;
 	padding:5px;
 }
-.dgMainDiv{
+
+.dgMainDiv {
 	width:98%;
 	
 }
-.dgTable{
+
+.dgTable {
 	font-family:Verdana, Arial, Helvetica, sans-serif;
 	font-size:75%;
 	width:100%;
 	background-color:#FFFFFF;
 }
-div#dgDiv
- {
+
+div#dgDiv {
  width: 700px;
 }
 
 th {
     font-size: 95%;
 }
-.dgTitles{
+
+.dgTitles {
 	font-size:75%;
 	font-weight:bold;
 	background-color:#DCDCDC;
@@ -72,84 +75,86 @@ th {
 	border-top-width:2px;
 	border-bottom-color:#ece9d8;
 }
-.dgTitles: hover{
+
+.dgTitles: hover {
 	border-top-color:#ffc83c;
 }
-.dgImgLink{
+
+.dgImgLink {
 	cursor:pointer;
 	padding:2px;
 }
-.dgImgLink: hover{
+.dgImgLink: hover {
 	background-color:#CCCCCC;
 }
-.dgHeader{
+.dgHeader {
 	font-size:75%;
 	font-weight:bold;
 	background-color:#C0C0C0;
 	border:solid 1px #A0A0A0;
 	height:30px;
 }
-.dgFooter{
+.dgFooter {
 	font-size:9px;
 	background-color:#EFEFEF;
 	color:#000000;
 }
-.dgPagRow{
+.dgPagRow {
 	background:#EFEFEF;
 	border-top:solid 1px #bfcacd;
 	font-size:9px;
 }
-.dgBold{
+.dgBold {
 	font-weight:bold;
 }
-.dgLinks{
+.dgLinks {
 	cursor:pointer;
 	text-decoration:underline;
 	color:#0000FF;
 }
-.dgLinks: hover{
+.dgLinks: hover {
 	color:#FF0000;
 }
-.dgSelectpage{
+.dgSelectpage {
 	color:#000000;
 	font-size:9px;
 	font-weight:bold;
 }
-.dgRownorm{
+.dgRownorm {
 	font-size:100%;
 	border:1px solid #bfcacd;
 	border-left-color:#ffffff;
 	border-bottom-style:none;
 }
-.dgRowalt{
+.dgRowalt {
 	font-size:100%;
 	border:1px solid #bfcacd;
 	border-left-color:#ffffff;
 	border-bottom-style:none;
 }
-.dgRowsnormTR, .dgspnormRow{
+.dgRowsnormTR, .dgspnormRow {
 	height:20px;
 	background-color:#ffffff;
 	color:#000000;
 }
-.dgRowsnormTR: hover{
+.dgRowsnormTR: hover {
 	background-color:#ffffe0;
 }
-.dgRowsaltTR, .dgspaltRow{
+.dgRowsaltTR, .dgspaltRow {
 	height:20px;
 	background-color:#e9eff2;
 	color:#000000;
 }
-.dgRowsaltTR: hover{
+.dgRowsaltTR: hover {
 	background-color:#ffffe0;
 }
-.dgspnormRow{
+.dgspnormRow {
 	font-weight:bold;
 }
-.dgspaltRow{
+.dgspaltRow {
 	font-weight:bold;
 }
-.dgAjax{
+.dgAjax {
 	font-family:Verdana, Arial, Helvetica, sans-serif;
 	font-size:12px;
 	font-weight:bold;
@@ -158,7 +163,7 @@ th {
 	border-width: 2px; 
 	padding: 4px;
 }
-.dgArrows{
+.dgArrows {
 	width:5px; 
 	height:15px;
 }
@@ -171,7 +176,7 @@ th {
 	padding-top: 1px; 
 	padding-bottom: 1px;
 }
-.dgInput: focus{
+.dgInput: focus {
 	background-color: lightyellow;
 }
 .dgSearchDiv {
@@ -201,21 +206,21 @@ th {
 	cursor:move;
 	float:left;
 }
-.dgCheck{
+.dgCheck {
 	width: 17px;
 	border: 1px solid #6699FF; 
 }
-.dgTotRowsTR{
+.dgTotRowsTR {
 	height:25px;
 	background-color:#ece9d8;
 	color:#000000;
 	font-weight:bold;
 }
-.dgRowsTot{
+.dgRowsTot {
 	border:1px solid #bfcacd;
 	border-left-color:#ffffff;
 }
-.dgAddDiv{
+.dgAddDiv {
 	position:absolute; 
 	top: 0px;
 	left: 0px;
@@ -224,19 +229,19 @@ th {
 	-moz-opacity:0.98; 
 	color:#FFFFFF;
 }
-.dgAddTitle{
+.dgAddTitle {
 	background-color: #000099; 
 	height:20px;
 	font-weight:bold;
 }
-.dgAddNames{
+.dgAddNames {
 	width: 200px;
 	font-weight:bold;
 }
-.dgAddInputs{
+.dgAddInputs {
 	width: 300px;
 }
-.dgAddButons{
+.dgAddButons {
 	height:80px;
 	vertical-align:middle;
 }

@@ -1,6 +1,6 @@
 body, table, td, th, input, textarea, select {
 /*    font: normal 12px arial, helvetica, "liberation sans", "dejavu sans condensed", sans-serif;*/
-    font: 90%/175% Georgia, 'Lucida Grande', 'Lucida Sans Unicode', Verdana, sans-serif;
+    font: 110%/130% Georgia, 'Lucida Grande', 'Lucida Sans Unicode', Verdana, sans-serif;
     margin: 0; 
     padding: 0;
 /*    text-align: center; */
@@ -75,7 +75,7 @@ a.divelogcrumbs:hover {
 
 .divelogcrumbs {
     color: #808080;
-    font-size: 8pt;
+    font-size: 10pt;
     line-height: 140%;
     text-decoration: none;
     margin-left: 0px;
@@ -179,5 +179,3 @@ tfoot th, tfoot td {
 .clear {
     clear:both;
 }
-
-
