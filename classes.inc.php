@@ -2271,7 +2271,8 @@ class Divesite{
 
             $t->assign('Comments', $r);
         }
-    } /*}}}*/
+    /*}}}*/
+    } 
 
     /**
      * get_divesite_overview 
