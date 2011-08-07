@@ -1995,8 +1995,8 @@ class Divesite{
     }
 
     function get_divesite_info(){
-        global $globals, $_config;/*{{{*/
-        if(!empty($this->divesite_nr)){
+        global $globals, $_config; /*{{{*/
+        if (!empty($this->divesite_nr)) {
             $this->request_type = 1;
             $globals['placeid'] = $this->divesite_nr;
             $this->result = parse_mysql_query('oneplace.sql');
@@ -2005,21 +2005,24 @@ class Divesite{
             /**
              * If the request type is not already set(by divers choice), set it to overview  
              */
-            if($this->request_type != 3){
+            if ($this->request_type != 3) {
                 $this->request_type = 0;
             }
         }
-        return $this->result;/*}}}*/
+        return $this->result;
+    /*}}}*/
     }
 
     function get_overview_divers(){
-        global $t, $_lang, $globals, $_config;/*{{{*/
+        global $t, $_lang, $globals, $_config; /*{{{*/
         $users = new Users();
         $user_list = $users->get_user_data();
         $t->assign('diver_overview',1);
         $t->assign('divers', $user_list);
-        $t->assign('file_name','divesite.php'); /*}}}*/
+        $t->assign('file_name','divesite.php');
+    /*}}}*/
     }
+
     /**
      * get_divesite_location_details 
      * 
@@ -2027,7 +2030,7 @@ class Divesite{
      * @return void
      */
     function get_divesite_location_details(){
-        global $globals, $_config;/*{{{*/
+        global $globals, $_config; /*{{{*/
         $countrycity = $this->result_countrycity;
         if (count($countrycity) != 0) {
             if ($countrycity[0]['Country'] != "") {
@@ -2052,7 +2055,8 @@ class Divesite{
                 }
             }
 
-        }/*}}}*/
+        }
+    /*}}}*/
     }
 
     /**
@@ -2062,14 +2066,14 @@ class Divesite{
      * @return void
      */
     function get_dives_at_location(){
-        global $globals, $_config;/*{{{*/
-        //	Get the dives at this site from database
+        global $globals, $_config; /*{{{*/
+        // Get the dives at this site from database
         $globals['placeid'] = $this->divesite_nr;
         $this->dives = parse_mysql_query('divelocations.sql');
         $this->dive_count = count($this->dives);
-        //	Get the site list from database
+        // Get the site list from database
         $this->sitelist = parse_mysql_query('sitelist.sql');
-        /*}}}*/
+    /*}}}*/
     }
 
     /**
@@ -2079,9 +2083,9 @@ class Divesite{
      * @return void
      */
     function set_main_divesite_details(){
-        global $globals, $_config, $t , $_lang; /*{{{*/
+        global $globals, $_config, $t, $_lang; /*{{{*/
         $this->get_divesite_location_details(); 
-        //	Show main site details
+        // Show main site details
         $result = $this->result;
         $t->assign('pagetitle',$_lang['dive_site_pagetitle'].$result[0]['Place']);
         $t->assign('divesite_id', $this->divesite_nr);
@@ -2186,9 +2190,9 @@ class Divesite{
         } else {
             $t->assign('Difficulty','-');	
         }
-
-        /*}}}*/
+    /*}}}*/
     }
+
     /**
      * set_divesite_pictures 
      * 
@@ -2196,7 +2200,7 @@ class Divesite{
      * @return void
      */
     function set_divesite_pictures(){
-        global $_config,$t, $_lang, $globals; /*{{{*/
+        global $_config, $t, $_lang, $globals; /*{{{*/
         $pic_class = new DivePictures;
         $pic_class->set_divegallery_info_direct($this->user_id);
         $pic_class->get_divegallery_info(0,$this->divesite_nr);
@@ -2210,7 +2214,6 @@ class Divesite{
                 /**
                  *  
                  */
-                
             }
         }
     /*}}}*/
@@ -2225,7 +2228,7 @@ class Divesite{
     function set_dives_at_location(){
         global $globals, $_config, $t, $_lang; /*{{{*/
         $this->get_dives_at_location();
-        //	Show site dives if we have them
+        // Show site dives if we have them
         $dives = $this->dives;
         if ($this->dive_count != 0) {
             $t->assign('dive_count', $this->dive_count);
@@ -2234,7 +2237,7 @@ class Divesite{
             } else {
                 $t->assign('site_dive_trans', $_lang['site_dive_plural']);
             }
-            for($i=0; $i<$this->dive_count; $i++) {
+            for ($i=0; $i<$this->dive_count; $i++) {
                 $dives[$i] = $dives[$i]['Number'] ; 
             }
             $t->assign('dlog_number_title', $_lang['dlog_number_title'] );
@@ -2243,7 +2246,7 @@ class Divesite{
             $t->assign('dlog_number_title', "" );
             $t->assign('dives',"");
         }
-        /*}}}*/
+    /*}}}*/
     }
 
     /**
@@ -2253,7 +2256,7 @@ class Divesite{
      * @return void
      */
     function set_divesite_comments(){
-        global $globals, $_config, $t,$_lang; /*{{{*/
+        global $globals, $_config, $t, $_lang; /*{{{*/
         //	Comments
         $result = $this->result;
         //	Show them if we have them
