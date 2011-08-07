@@ -362,7 +362,7 @@ class User {
     function set_table_prefix($id){
         global $_config;
         //Get the prefix from the config file
-        if(isset($_config['user_prefix'][$id])){
+        if (isset($_config['user_prefix'][$id])) {
             $this->table_prefix = $_config['user_prefix'][$id];
         }
     }
@@ -464,7 +464,7 @@ class TableGrid{
                 $this->gridtable->setLanguage("pt");
                 break;
             default:
-                if(!isset($_lang['grid_cancel'])){
+                if (!isset($_lang['grid_cancel'])) {
                     echo "<center><strong>ERROR no language found for the grid (".$_config['language']. ") fix your language file</strong></center><br>";
                 } else {
                     $this->gridtable->message['cancel'] = $_lang['grid_cancel'];
@@ -503,7 +503,7 @@ class TableGrid{
                     $this->gridtable->message['of'] = $_lang['grid_of'];
                 }
         }
-        /*}}}*/
+    /*}}}*/
     }
 /*}}}*/
 }
@@ -529,7 +529,7 @@ class TablePager{
      */
     function TablePager($cpage, $path){
         global $_config;
-        if($_config['query_string']){
+        if ($_config['query_string']) {
             $pager_options = array( 
                     'mode' => 'Sliding', 
                     'perPage' => 16, 
@@ -600,6 +600,7 @@ class TablePager{
     function return_numPages(){
         return $this->pager->numPages();
     }
+
     /**
      * return_pager_data 
      * 
