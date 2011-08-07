@@ -2796,6 +2796,7 @@ class Divestats{
     var $LastDiveID;
     var $LastCity;
     var $LastCountry;
+
    /**
      * Divestats default constructor 
      * 
@@ -2815,7 +2816,8 @@ class Divestats{
      * @return void
      */
     function set_divestats_info($request){
-        //We need to extract the info from the request /*{{{*/
+        //We need to extract the info from the request 
+        /*{{{*/
         if (!$request->diver_choice) {
             if ($this->multiuser) {
                 $this->user_id = $request->get_user_id();
@@ -2833,7 +2835,7 @@ class Divestats{
         } else {
             $this->request_type = 3;
         }
-        /*}}}*/
+    /*}}}*/
     }
 
     /**
@@ -3009,7 +3011,7 @@ class Divestats{
                 $this->request_type = 0;
             }
         }
-        /*}}}*/
+    /*}}}*/
     }
 
     /**
@@ -3028,7 +3030,7 @@ class Divestats{
             $this->LastCity = $lastdive[0]['City'];
             $this->LastCountry = $lastdive[0]['Country'];
         }
-        /*}}}*/
+    /*}}}*/
     }
     /**
      * set_all_statistics 
@@ -3038,7 +3040,8 @@ class Divestats{
      */
     function set_all_statistics(){
         $this->set_dive_statistics(); /*{{{*/
-        $this->set_dive_certifications(); /*}}}*/
+        $this->set_dive_certifications(); 
+    /*}}}*/
     }
 
     /**
@@ -3053,7 +3056,8 @@ class Divestats{
         $user_list = $users->get_user_data();
         $t->assign('diver_overview',1);
         $t->assign('divers', $user_list);
-        $t->assign('file_name','divestats.php'); /*}}}*/
+        $t->assign('file_name','divestats.php'); 
+    /*}}}*/
     }
 
     /**
@@ -3272,7 +3276,7 @@ class Divestats{
         $t->assign('nightdives_per', round(($this->nightdives / $this->end) * 100));
         $t->assign('driftdives', $this->driftdives );
         $t->assign('driftdives_per', round(($this->driftdives / $this->end) * 100));
-        /*}}}*/
+    /*}}}*/
     }
 
     /**
@@ -3288,7 +3292,7 @@ class Divestats{
         $t->assign('LastDiveID',$this->LastDiveID);
         $t->assign('LastCity',$this->LastCity);
         $t->assign('LastCountry',$this->LastCountry);
-        /*}}}*/
+    /*}}}*/
     }
 
     /**
@@ -3298,7 +3302,7 @@ class Divestats{
      * @return void
      */
     function set_dive_certifications(){
-        global $globals, $_config, $t , $_lang;/*{{{*/
+        global $globals, $_config, $t, $_lang; /*{{{*/
         /**
          * Declare the variables otherwise an error is displayed
          */
@@ -3380,9 +3384,9 @@ class Divestats{
             }
             $t->assign('cells',$rowdata);
         }
-        /*}}}*/
-    }
     /*}}}*/
+    }
+/*}}}*/
 }
 
 /**
