@@ -2422,10 +2422,11 @@ class Equipment{
      * @return void
      */
     function set_equipment_info($request){
-        //We need to extract the info from the request/*{{{*/
+        //We need to extract the info from the request
+        /*{{{*/
         if (!$request->diver_choice) {
             //Find request type
-            if($request->get_view_request() == 1){
+            if ($request->get_view_request() == 1) {
                 $this->request_type = 1;
                 $this->equipment_nr = $request->get_equipment_nr();
             } else {
@@ -2444,7 +2445,7 @@ class Equipment{
         } else {
             $this->request_type = 3;
         }
-        /*}}}*/
+    /*}}}*/
     }
 
     /**
@@ -2454,7 +2455,7 @@ class Equipment{
      * @return void
      */
     function get_equipment_info(){
-        global $_config,  $globals;/*{{{*/
+        global $_config, $globals; /*{{{*/
         if (!empty($this->equipment_nr)) {
             $this->request_type = 1;
             $globals['gear'] = $this->equipment_nr;
@@ -2469,7 +2470,7 @@ class Equipment{
             }
         }
         return $this->result;
-        /*}}}*/
+    /*}}}*/
     }
 
     /**
@@ -2484,12 +2485,14 @@ class Equipment{
         $user_list = $users->get_user_data();
         $t->assign('diver_overview',1);
         $t->assign('divers', $user_list);
-        $t->assign('file_name','equipment.php'); /*}}}*/
+        $t->assign('file_name','equipment.php'); 
+    /*}}}*/
     }
 
     function set_main_equipment_details(){
         global $t, $_config, $globals, $_lang; /*{{{*/
-	    $result = $this->result; 
+        $result = $this->result; 
+
         $t->assign('pagetitle', $_lang['equip_details_pagetitle'].$result[0]['Object']);
         $t->assign('equip_object', $_lang['equip_object'] );
         $t->assign('equip_manufacturer', $_lang['equip_manufacturer']);
@@ -2592,13 +2595,14 @@ class Equipment{
         if ($result[0]['DateR'] != "") {
             $t->assign('DateR', date($_lang['equip_date_format'], strtotime($result[0]['DateR'])) );
         }
+
         if ($result[0]['PhotoPath'] != "") {
           $this->set_equipment_pictures();
           $t->assign('PhotoPathurl',  $_config['equippath_web'] . $result[0]['PhotoPath']);
             $t->assign('equip_photo_linktitle', $_lang['equip_photo_linktitle']. $result[0]['Object']);
             $t->assign('equip_photo_link', $_lang['equip_photo_link'] );
         }
-        /*}}}*/
+    /*}}}*/
     }
 
     /**
@@ -2624,7 +2628,7 @@ class Equipment{
                  */
             }
         }
-        /*}}}*/
+    /*}}}*/
     }
 
     /**
@@ -2645,7 +2649,7 @@ class Equipment{
             $r = str_replace(array("\r\n", "\r", "\n"), "<br>", $r);
             $t->assign('Comments', $r);
         }
-        /*}}}*/
+    /*}}}*/
     }
 
     /**
@@ -2668,7 +2672,7 @@ class Equipment{
             echo 'no view_type defined!';
         }
         $t->assign('pagetitle',$_lang['dive_equip']);
-        /*}}}*/
+    /*}}}*/
     }
 
     /**
@@ -2701,6 +2705,7 @@ class Equipment{
         $t->assign('cells', $paged_data['data']);
     /*}}}*/
     }
+
     /**
      * get_equipment_overview_grid 
      * 
@@ -2731,9 +2736,9 @@ class Equipment{
         $grid_ret = $grid->render(TRUE); 
         $t->assign('grid_display' ,1);
         $t->assign('grid',$grid_ret );
-        /*}}}*/
-    }
     /*}}}*/
+    }
+/*}}}*/
 }
 
 /**
