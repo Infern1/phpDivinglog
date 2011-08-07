@@ -20,7 +20,7 @@
  * @license LGPL v3 http://www.gnu.org/licenses/lgpl-3.0.txt
  */
 class HandleRequest {
-    var $request_uri;/*{{{*/
+    var $request_uri; /*{{{*/
     var $request_file_depth;
     var $multiuser;
     var $user_id;
@@ -116,30 +116,39 @@ class HandleRequest {
         $app_depth  = count_all((preg_split("#/#", $_config['abs_url_path'])));
         $this->request_file_depth = $depth + $app_depth;
     }
+
     function get_user_id(){
         return $this->user_id;
     }
+
     function get_dive_nr(){
         return $this->dive_nr;
     }
+
     function get_site_nr(){
         return $this->site_nr;
     }
+
     function get_equipment_nr(){
         return $this->equipment_nr;
     }
+
     function get_request_type(){
         return $this->get_request_type;
     }
+
     function get_view_request(){
         return $this->view_request;
     }
+
     function get_requested_page(){
         return $this->requested_page;
     }
+
     function get_multiuser(){
         return $this->multiuser;
     }
+
     /**
      * handle_url will handle the url according the type of setup. 
      * The url handling differs between single and multiuser setup 
@@ -158,18 +167,18 @@ class HandleRequest {
                 $file_req = $split_request[0];
                 $this->user_id = check_number($split_request[1]);
                 $_SESSION['user_id'] = $this->user_id;
-                if(isset($split_request[2]) && $split_request[2] == 'list'  ){
+                if (isset($split_request[2]) && $split_request[2] == 'list') {
                     $this->view_request = 0;
-                    if(isset($split_request[3])){
+                    if (isset($split_request[3])) {
                         $this->requested_page = $split_request[3];
                     }
-                }elseif(isset($split_request[2])) {
+                } elseif (isset($split_request[2])) {
                     $t->assign('dive_detail' ,1);
                     $this->view_request = 1;    
                 } else {
                     $this->diver_choice = true;
                 }
-                switch($file_req) {
+                switch ($file_req) {
                     case "index.php":
                         if($this->view_request == 1)
                             $this->dive_nr = check_number($split_request[2]);
@@ -215,33 +224,31 @@ class HandleRequest {
                 }
                 $_SESSION['request_type'] = $this->request_type;
 
-            }else {
+            } else {
                 $this->diver_choice = true;
             }
             //print_r($this);
-
-        }
-        else {
+        } else {
             //Find what the client wants to see and if a record is requested set it
             $split_request = GetRequestVar($this->request_uri, $this->request_file_depth);
-            if(!empty($split_request[0])){
-                if(isset($split_request[1]) && $split_request[1] == 'list' ){
+            if (!empty($split_request[0])) {
+                if (isset($split_request[1]) && $split_request[1] == 'list' ) {
                     $this->view_request = 0;
-                    if(isset($split_request[2]) ){
+                    if (isset($split_request[2])) {
                         $this->requested_page = $split_request[2];
                     }
-                } elseif(isset($split_request[1])) {
+                } elseif (isset($split_request[1])) {
                     $t->assign('dive_detail' ,1);
                     $this->view_request = 1;    
                 }
 
                 $file_req = $split_request[0];
                 $id = 0;
-                if(!empty($split_request[1])){
+                if (!empty($split_request[1])) {
                     $id = check_number($split_request[1]);
                 }
 
-                switch($file_req) {
+                switch ($file_req) {
                     case 'index.php':
                         $this->dive_nr = $id;
                         $this->request_type = 1;
@@ -279,11 +286,9 @@ class HandleRequest {
                         break;
                 }
                 $_SESSION['request_type'] = $this->request_type;
-
             }
         }
     }
-
 /*}}}*/
 }
 
@@ -296,11 +301,10 @@ class HandleRequest {
  * @license LGPL v3 http://www.gnu.org/licenses/lgpl-3.0.txt
  */
 class User {
-    var $user_id;/*{{{*/
+    var $user_id; /*{{{*/
     var $table_prefix;
     var $username;
     var $multiuser;
-    
     
     /**
      * User 
@@ -311,8 +315,8 @@ class User {
     function User(){
         global $_config;
         $this->multiuser = $_config['multiuser'];
-        if(!$this->multiuser){
-            if(isset($_config['table_prefix'])){
+        if (!$this->multiuser) {
+            if (isset($_config['table_prefix'])) {
                 $this->table_prefix = $_config['table_prefix'];
             }
         }
@@ -346,6 +350,7 @@ class User {
         $this->username = $user_data[0]['Firstname'] .' '.$user_data[0]['Lastname'];
         return $this->username;
     }
+
     /**
      * set_table_prefix 
      * 
@@ -359,7 +364,6 @@ class User {
         if(isset($_config['user_prefix'][$id])){
             $this->table_prefix = $_config['user_prefix'][$id];
         }
-
     }
 
     function get_table_prefix(){
@@ -378,7 +382,7 @@ class User {
  */
 
 class TableGrid{
-    var $language;/*{{{*/
+    var $language; /*{{{*/
     var $gridtable;
 
     /**
@@ -391,7 +395,7 @@ class TableGrid{
         global $_config;
         $this->language = $_config['language'];
         $objGrid = new dataGrid($data,$void);
-        if($_config['query_string']){
+        if ($_config['query_string']) {
             //$objGrid->methodForm('GET');
             //$objGrid->linkparam("user_id=".$user_id."&id=list");
             $objGrid->URLa = "user_id=".$user_id."&id=list";
@@ -423,6 +427,7 @@ class TableGrid{
     function get_grid_class(){
         return $this->gridtable;
     }
+
     /**
      * SetGridLanguage 
      * 
@@ -431,8 +436,8 @@ class TableGrid{
      * @return void
      */
     function SetGridLanguage(){
-        global $_lang, $_config;/*{{{*/
-        switch ($this->language){
+        global $_lang, $_config; /*{{{*/
+        switch ($this->language) {
             case 'english' :
                 // Do nothing since default is english for phpmydatgrid
                 break;
@@ -498,7 +503,8 @@ class TableGrid{
                 }
         }
         /*}}}*/
-    }/*}}}*/
+    }
+/*}}}*/
 }
 
 /**
