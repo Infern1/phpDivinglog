@@ -5,7 +5,7 @@
  * @author  Rob Lensen <rob@bsdfreaks.nl>
  * @package phpdivinglog
  * @version  $Rev: 172 $
- * Last Modified: $Date: 2007-11-30 15:17:52 +0100 (Fri, 30 Nov 2007) $
+ * Last Modified: $Date$
  *
  * For use with Diving Log by Sven Knoch - http://www.divinglog.de
  *

@@ -2,7 +2,7 @@
 /**
  * Mailer no timeout pattern with HTML_Progress2.
  *
- * @version    $Id: mailer1.php,v 1.5 2006/05/24 08:40:35 farell Exp $
+ * @version    $Id$
  * @author     Laurent Laville <pear@laurent-laville.org>
  * @package    HTML_Progress2
  * @subpackage Examples

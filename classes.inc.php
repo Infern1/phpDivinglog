@@ -2704,9 +2704,9 @@ class Equipment{
          * Define the table according some info 
          */
         if($this->multiuser){
-            $url =  "/divesite.php".$t->get_template_vars('sep1').$this->user_id.$t->get_template_vars('sep2');
+            $url =  "/divesite.php".$t->getTemplateVars('sep1').$this->user_id.$t->getTemplateVars('sep2');
         } else {
-            $url =  "/divesite.php".$t->get_template_vars('sep2');
+            $url =  "/divesite.php".$t->getTemplateVars('sep2');
         }
         //print_r($data);
         $grid->showColumn('Object');
