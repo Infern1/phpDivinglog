@@ -59,6 +59,7 @@ class HandleRequest {
      * @access public
      */
     var $request_type;     
+
     /**
      * HandleRequest constructor for the class, sets the defaults from the config file
      * 
@@ -71,8 +72,8 @@ class HandleRequest {
         $_SESSION['request_type'] = 1;
         $_SESSION['user_id'] = NULL;
 
-        if($_config['query_string']){
-            if($this->multiuser){
+        if ($_config['query_string']) {
+            if ($this->multiuser) {
                 $t->assign('sep1','?user_id=');
                 $t->assign('sep2','&id=');
                 $t->assign('list','&view=list');
@@ -113,7 +114,7 @@ class HandleRequest {
      */
     function set_file_depth($depth = 0){
         global $_config;
-        $app_depth  = count_all((preg_split("#/#", $_config['abs_url_path'])));
+        $app_depth = count_all((preg_split("#/#", $_config['abs_url_path'])));
         $this->request_file_depth = $depth + $app_depth;
     }
 
@@ -163,7 +164,7 @@ class HandleRequest {
             // Get the last two parts of the array
             $split_request = GetRequestVar($this->request_uri, $this->request_file_depth);
             //check if the user is set, otherwise show person chooser
-            if(isset($split_request[1]) && Users::is_valid_user($split_request[1]) ){
+            if (isset($split_request[1]) && Users::is_valid_user($split_request[1])) {
                 $file_req = $split_request[0];
                 $this->user_id = check_number($split_request[1]);
                 $_SESSION['user_id'] = $this->user_id;
