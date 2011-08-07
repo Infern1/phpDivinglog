@@ -641,7 +641,7 @@ class Users{
     function Users(){
         global $_config, $t;
         //Get the user_ids and put them in a array
-        if($_config['multiuser']){
+        if ($_config['multiuser']) {
             $this->user_ids = array_keys($_config['user_prefix']);
         }
     }
@@ -654,7 +654,7 @@ class Users{
     function get_divers(){
         global $_config, $t;
         //Get the user_ids and put them in a array
-        if($_config['multiuser']){
+        if ($_config['multiuser']) {
             $this->user_ids = array_keys($_config['user_prefix']);
         }
     }
@@ -680,7 +680,7 @@ class Users{
     function is_valid_user($id){
         global $_config, $t;
         $user_ids =  array_keys($_config['user_prefix']);
-        if(in_array($id, $user_ids)){
+        if (in_array($id, $user_ids)) {
             //user is in, return true
             return true;
         } else {
@@ -690,8 +690,8 @@ class Users{
 
     function get_table_prefix(){
         global $_config;
-        //We have the ids so just get the prefix
-        foreach($this->user_ids as $id){
+        // We have the ids so just get the prefix
+        foreach ($this->user_ids as $id) {
             $this->table_prefixes[] = $_config['user_prefix'][$id];
         }
     }
