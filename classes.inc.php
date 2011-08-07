@@ -3430,7 +3430,8 @@ class DivePictures{
      * @return void
      */
     function set_divegallery_info($request){
-        //We need to extract the info from the request /*{{{*/
+        // We need to extract the info from the request 
+        /*{{{*/
         if (!$request->diver_choice) {
             if ($this->multiuser) {
                 $this->user_id = $request->get_user_id();
@@ -3449,7 +3450,7 @@ class DivePictures{
         } else {
             $this->request_type = 3;
         }
-        /*}}}*/
+    /*}}}*/
     }
     
     /**
@@ -3488,15 +3489,15 @@ class DivePictures{
             if ($dive_id == 0 && $site_id == 0 && $equipment_nr == 0 ) {
                 $divepics = parse_mysql_query('divepicsall.sql');
                 $base_path = $_config['picpath_web'];
-            } elseif($dive_id != 0) {
+            } elseif ($dive_id != 0) {
                 $globals['logid'] = $dive_id;
                 $divepics = parse_mysql_query('divepics.sql');
                 $base_path = $_config['picpath_web'];
-            } elseif($site_id !=0) {
+            } elseif ($site_id !=0) {
                 $globals['id'] = $site_id;
                 $base_path = $_config['mappath_web'];
                 $divepics = parse_mysql_query('divepics_map.sql');
-            } elseif($equipment_nr !=0) {
+            } elseif ($equipment_nr !=0) {
                 $globals['id'] = $equipment_nr;
                 $base_path = $_config['equippath_web'];
                 $divepics = parse_mysql_query('divepics_equip.sql');
@@ -3539,7 +3540,7 @@ class DivePictures{
                         $a++;
                     }
                 }
-                if(isset($_config['enable_resize'])){
+                if (isset($_config['enable_resize'])) {
                     $t->assign('pics_resized','1');
                     /**
                      * Check if the images are correctly sized 
@@ -3591,7 +3592,6 @@ class DivePictures{
                 $this->request_type = 0;
             }
         }
-
     }
 
     /**
@@ -3601,14 +3601,15 @@ class DivePictures{
      * @return void
      */
     function resizer($ref = 0){
-        global $_config;/*{{{*/
+        global $_config; /*{{{*/
         //$host  = $_SERVER['HTTP_HOST'];
         //$uri   = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
         $extra = 'resize.php?ref='.$ref;
         //header("Location: http://$host$uri/$extra");
         $url = $_config['web_root'];
         header("Location: $url/$extra");
-        exit;/*}}}*/
+        exit;
+    /*}}}*/
     }
 
     /**
@@ -3622,7 +3623,8 @@ class DivePictures{
             return true;
         } else {
             return false;
-        } /*}}}*/
+        }
+    /*}}}*/
     }
 
     /**
@@ -3651,7 +3653,8 @@ class DivePictures{
                 $this->images_for_resize[] = $temp[$a];
             }
         }
-        return $this->images_for_resize;/*}}}*/
+        return $this->images_for_resize;
+    /*}}}*/
     }
 
     /**
@@ -3768,5 +3771,5 @@ class AppInfo{ /*{{{*/
         $t->assign('dlog_url', $this->dlog_url);
         $t->assign('dlog_version', $this->dlog_version);
     }
-    /*}}}*/
+/*}}}*/
 }
