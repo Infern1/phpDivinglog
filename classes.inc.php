@@ -2285,7 +2285,7 @@ class Divesite{
         $placetable = $this->table_prefix."Place";
         $logbooktable = $this->table_prefix."Logbook";
         
-        if($_config["length"]){
+        if ($_config["length"]) {
            $sql = sql_file("divesite_overview-imp.sql");
         } else {
             $sql = sql_file("divesite_overview.sql");
@@ -2294,17 +2294,16 @@ class Divesite{
         /**
          * when view_type = 1 display the ajax grid if type = 2 display old fashioned table 
          */
-        if($_config['view_type'] == 1){
+        if ($_config['view_type'] == 1) {
             $this->get_divesite_overview_grid($sql);
         }
-        elseif($_config['view_type'] == 2){
+        elseif ($_config['view_type'] == 2) {
             $this->get_divesite_overview_table($sql);
-        }
-        else{
+        } else{
             echo 'no view_type defined!';
         }
         $t->assign('pagetitle',$_lang['dive_sites']);
-        /*}}}*/
+    /*}}}*/
     }
 
     /**
@@ -2342,6 +2341,7 @@ class Divesite{
         $t->assign('cells', $paged_data['data']);
     /*}}}*/
     }
+
     /**
      * get_divesite_overview_grid 
      * 
@@ -2379,8 +2379,7 @@ class Divesite{
         $grid_ret = $grid->render(TRUE); 
         $t->assign('grid_display' ,1);
         $t->assign('grid',$grid_ret );
-
-        /*}}}*/
+    /*}}}*/
     }
 /*}}}*/
 }
