@@ -1846,7 +1846,7 @@ class Divelog {
         }
     }
 
-   /**
+    /**
      * get_dive_overview_grid 
      * 
      * @access public
@@ -1854,7 +1854,7 @@ class Divelog {
      */
     function get_dive_overview_grid(){
         global $db, $t, $_lang, $globals, $_config;
-        //    Get the details of the dives to be listed
+        // Get the details of the dives to be listed
         //$recentdivelist = parse_mysql_query('recentdivelist.sql');
         if ($_config['length']) {
             $recentdivelist_query = sql_file('recentdivelist-imp.sql');
@@ -1912,24 +1912,22 @@ class Divelog {
         $t->assign('grid',$grid_ret );
     }
 
-   /**
+    /**
      * get_overview_divers 
      * 
      * @access public
      * @return void
      */
     function get_overview_divers(){
-        global $t, $_lang, $globals, $_config;/*{{{*/
+        global $t, $_lang, $globals, $_config; /*{{{*/
         $users = new Users();
         $user_list = $users->get_user_data();
         $t->assign('diver_overview',1);
         $t->assign('divers', $user_list);
-        $t->assign('file_name','index.php'); /*}}}*/
-    }
-
-    
-    
+        $t->assign('file_name','index.php'); 
     /*}}}*/
+    }
+/*}}}*/
 }
 
 /**
@@ -1941,7 +1939,7 @@ class Divelog {
  * @license LGPL v3 http://www.gnu.org/licenses/lgpl-3.0.txt
  */
 class Divesite{
-    var $multiuser;/*{{{*/
+    var $multiuser; /*{{{*/
     var $table_prefix;
     var $user_id;
     var $divesite_nr;
@@ -1968,17 +1966,19 @@ class Divesite{
     function get_request_type(){
         return $this->request_type;
     }
+
     function set_divesite_info($request){
-        //We need to extract the info from the request/*{{{*/
-        if(!$request->diver_choice){
-            if($request->get_view_request() == 1){
+        // We need to extract the info from the request
+        /*{{{*/
+        if (!$request->diver_choice) {
+            if ($request->get_view_request() == 1) {
                 $this->request_type = 1;
                 $this->divesite_nr = $request->get_site_nr();
             } else {
                 $this->request_type = 0;
                 $this->requested_page = $request->get_requested_page();
             }
-            if($this->multiuser){
+            if ($this->multiuser) {
                 $this->user_id = $request->get_user_id();
                 $user = new User();
                 $user->set_user_id($this->user_id);
@@ -1991,8 +1991,9 @@ class Divesite{
         } else {
             $this->request_type = 3;
         }
-/*}}}*/
+    /*}}}*/
     }
+
     function get_divesite_info(){
         global $globals, $_config;/*{{{*/
         if(!empty($this->divesite_nr)){
