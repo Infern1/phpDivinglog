@@ -699,14 +699,14 @@ class Users{
     function set_user_data(){
         global $_config;
         //Get the personal info of each user from the DB
-        foreach($this->table_prefixes as $prefix){
+        foreach ($this->table_prefixes as $prefix) {
             //First set the prefix
             $_config['table_prefix'] = $prefix;
             //Get the data
             $user_data[] = array_shift(parse_mysql_query('personal.sql'));
         }
         $i=0;
-        foreach($this->user_ids as $id){
+        foreach ($this->user_ids as $id) {
             $this->user_array[] = array_merge($user_data[$i], array( "ID" => $id));
             $i++;
         }
@@ -719,7 +719,7 @@ class Users{
         $this->set_user_data();
         return $this->user_array;
     }
-    /*}}}*/
+/*}}}*/
 }
 
 /**
@@ -744,20 +744,20 @@ class TopLevelMenu {
      */
     function TopLevelMenu($request = 0 ){
         global $_config, $t;
-        //Get the user_ids and put them in a array
-        if($_config['multiuser']){
+        // Get the user_ids and put them in a array
+        if ($_config['multiuser']) {
             $this->multiuser = true;
         }
-        if($this->multiuser){
+        if ($this->multiuser) {
             $this->user_id = $request->get_user_id();
             $user = new User();
             $user->set_user_id($this->user_id);
             $this->table_prefix = $user->get_table_prefix();
-        }
-        else {
+        } else {
             // if prefix is set get it.
-            if(isset($_config['table_prefix']))
+            if (isset($_config['table_prefix'])) {
                 $this->table_prefix = $_config['table_prefix'];
+            }
         }
     }
 
@@ -768,8 +768,8 @@ class TopLevelMenu {
      * @return void
      */
     function get_std_links(){
-        global $t, $_lang;/*{{{*/
-        //	Dive Log, Dive Sites, Dive Statistics
+        global $t, $_lang; /*{{{*/
+        // Dive Log, Dive Sites, Dive Statistics
         $t->assign('diver_choice_linktitle', $_lang['diver_choice_linktitle']);
         $t->assign('diver_choice', $_lang['diver_choice']);
         $t->assign('dive_log_linktitle', $_lang['dive_log_linktitle']);
@@ -785,7 +785,8 @@ class TopLevelMenu {
 
         if($this->multiuser){
             $t->assign('multiuser_id', $this->user_id);
-        }/*}}}*/
+        }
+    /*}}}*/
     }
 
     /**
@@ -798,7 +799,7 @@ class TopLevelMenu {
         global $t, $_lang; /*{{{*/
         // Start filling the data in the links_overview.tpl file
         $t->assign('base_page','index.php');
-        //	Dive Sites, Dive Statistics
+        // Dive Sites, Dive Statistics
         $t->assign('diver_choice_linktitle', $_lang['diver_choice_linktitle']);
         $t->assign('diver_choice', $_lang['diver_choice']);
         $t->assign('dive_log',$_lang['dive_log']);
@@ -812,13 +813,13 @@ class TopLevelMenu {
         $t->assign('dive_gallery_linktitle', $_lang['dive_gallery_linktitle']);
         $t->assign('dive_gallery', $_lang['dive_gallery']);
 
-        if($this->multiuser){
+        if ($this->multiuser) {
             $t->assign('multiuser_id', $this->user_id);
         }
         //	Get the page header
         $pagetitle = $_lang['dive_log'];
         $t->assign('pagetitle',$pagetitle);
-        /*}}}*/
+    /*}}}*/
     }
 
     /**
@@ -830,9 +831,9 @@ class TopLevelMenu {
      */
     function get_nav_links($request){
         global $t, $globals, $_lang, $_config;
-        if($request->request_type == 1){
+        if ($request->request_type == 1) {
             $divelist = parse_mysql_query('divelist.sql');
-            for($i=0; $i<count($divelist); $i++) {
+            for ($i=0; $i<count($divelist); $i++) {
                 $divelist[$i] = $divelist[$i]['Number'];
             }
             $get_nr = $request->get_dive_nr();
@@ -856,8 +857,7 @@ class TopLevelMenu {
                 $t->assign('last_dive_linktitle', $_lang['last_dive_linktitle']);
                 $t->assign('last', $_lang['last'] );
             }
-        }
-        elseif($request->request_type == 2){
+        } elseif ($request->request_type == 2) {
             //	First, Previous, Next, Last links and Dive #
             $sitelist = parse_mysql_query('sitelist.sql');
             $last = count($sitelist) - 1;
@@ -889,7 +889,7 @@ class TopLevelMenu {
                 $t->assign('last_site_linktitle', $_lang['last_site_linktitle'] );
                 $t->assign('last', $_lang['last'] );
             } 
-        } elseif($request->request_type == 3){
+        } elseif ($request->request_type == 3) {
             $gearlist = parse_mysql_query('gearlist.sql');
             $last = count($gearlist) - 1;
             $position = -1;
@@ -935,7 +935,8 @@ class TopLevelMenu {
             } 
             //End filling the links section
         }
-    }/*}}}*/
+    }
+/*}}}*/
 }
 
 /**
@@ -972,6 +973,7 @@ class Divelog {
     function get_request_type(){
         return $this->request_type;
     }
+
     /**
      * set_divelog_info sets the basics for this class from the url requested 
      * 
@@ -980,7 +982,8 @@ class Divelog {
      * @return void
      */
     function set_divelog_info($request){
-        //We need to extract the info from the request/*{{{*/
+        // We need to extract the info from the request
+        /*{{{*/
         if (!$request->diver_choice) {
             //Find request type
             if ($request->get_view_request() == 1) {
@@ -1002,7 +1005,7 @@ class Divelog {
         } else {
             $this->request_type = 3;
         }
-        /*}}}*/
+    /*}}}*/
     }
 
     /**
@@ -1032,7 +1035,6 @@ class Divelog {
                 $this->averagedepth = $profile_info['averagedepth'];
                 $this->sac = $profile_info['sac'];
             }   
-
         } else {
             /**
              * If the request type is not already set(by divers choice), set it to overview  
@@ -1041,7 +1043,8 @@ class Divelog {
                 $this->request_type = 0;
             }
         }
-        return $this->result; /*}}}*/
+        return $this->result; 
+    /*}}}*/
     }
 
     /**
@@ -1116,7 +1119,7 @@ class Divelog {
         } else {
             $t->assign('dive_country','-');	
         } 
-        /*}}}*/
+    /*}}}*/
     }
 
     /**
@@ -1142,12 +1145,11 @@ class Divelog {
         } else {
             $t->assign('divemaster','-');	
         }
-        /*}}}*/
+    /*}}}*/
     }
 
     function get_log_id_for_dive_nr($dive_nr){
         global $_config,$t, $_lang, $globals;
-
     }
 
     /**
@@ -1159,7 +1161,7 @@ class Divelog {
      * @return void
      */
     function dive_has_pictures($dive_nr){
-        global $_config,$t, $_lang, $globals; /*{{{*/
+        global $_config, $t, $_lang, $globals; /*{{{*/
         $pic_class = new DivePictures;
         //$pic_class->set_divegallery_info_direct($this->user_id);
         /**
@@ -1194,7 +1196,8 @@ class Divelog {
             return true;
         } else {
             return false;
-        } /*}}}*/
+        } 
+    /*}}}*/
     }
 
     /**
@@ -1204,7 +1207,7 @@ class Divelog {
      * @return void
      */
     function set_dive_pictures(){
-        global $_config,$t, $_lang, $globals; /*{{{*/
+        global $_config, $t, $_lang, $globals; /*{{{*/
         $result = $this->result; 
         $pic_class = new DivePictures;
         $pic_class->set_divegallery_info_direct($this->user_id);
@@ -1241,7 +1244,7 @@ class Divelog {
                 $t->assign('image_link', $image_link);
             }
         }
-/*}}}*/
+    /*}}}*/
     }
 
     /**
@@ -1259,7 +1262,7 @@ class Divelog {
             $t->assign('get_nr',$this->dive_nr);
             $t->assign('dive_profile_title', $_lang['dive_profile_title'] . $result[0]['Number']);
         }
-        /*}}}*/
+    /*}}}*/
     }
 
     /**
@@ -1358,7 +1361,7 @@ class Divelog {
         } else {
             $t->assign('Watertemp','-');	
         }
-        /*}}}*/
+    /*}}}*/
     }
 
     /**
@@ -1369,7 +1372,7 @@ class Divelog {
      */ 
     function set_breathing_details(){
         global $t, $_config, $_lang, $globals; /*{{{*/
-        $result =  $this->result;
+        $result = $this->result;
 
         // Breathing
         $t->assign('dive_sect_breathing', $_lang['dive_sect_breathing']);
@@ -1613,7 +1616,7 @@ class Divelog {
         } else {
             $t->assign('sac', "" ); 
         } 
-        /*}}}*/
+    /*}}}*/
     }
     
     /**
@@ -1680,7 +1683,7 @@ class Divelog {
             $r = str_replace(array("\r\n","\r","\n"), "<br>\n", $r);
             $t->assign('stops', $r);
         }
-        /*}}}*/
+    /*}}}*/
     }
 
     /**
@@ -1690,7 +1693,7 @@ class Divelog {
      * @return void
      */
     function set_equipment(){
-        global $t,$_config, $_lang, $globals;/*{{{*/
+        global $t, $_config, $_lang, $globals; /*{{{*/
         $result =  $this->result; 
         $t->assign('dive_sect_equipment', $_lang['dive_sect_equipment'] );
         $t->assign('logbook_weight', $_lang['logbook_weight'] );
@@ -1733,7 +1736,8 @@ class Divelog {
             }
             $t->assign('logbook_place_linktitle', $_lang['logbook_place_linktitle']);  
             $t->assign('equip_link', $equip_link);
-        } /*}}}*/
+        } 
+    /*}}}*/
     }
 
     /**
@@ -1743,11 +1747,10 @@ class Divelog {
      * @return void
      */
     function set_comments(){
-        global $t, $_lang, $globals;/*{{{*/
-        $result =  $this->result; 
-        //	Show them if we have them
+        global $t, $_lang, $globals; /*{{{*/
+        $result = $this->result;
+        // Show them if we have them
         if ($result[0]['Comments'] != "") {
-
             $t->assign('dive_sect_comments', $_lang['dive_sect_comments']);
             $r = $result[0]['Comments'];
             $r = str_replace(array("\r\n", "\r", "\n"), "<br>", $r);
@@ -1755,7 +1758,7 @@ class Divelog {
         } else {
             $t->assign('Comments', "");
         }
-        /*}}}*/
+    /*}}}*/
     }
     
     /**
@@ -1765,22 +1768,20 @@ class Divelog {
      * @return void
      */
     function get_dive_overview(){
-        global $t, $_lang, $globals, $_config;/*{{{*/
+        global $t, $_lang, $globals, $_config; /*{{{*/
 
         /**
          * When view_type = 1 display the ajax grid if type = 2 display old fashioned table 
          */
         if ($_config['view_type'] == 1) {
             $this->get_dive_overview_grid();
-        }
-        elseif ($_config['view_type'] == 2) {
+        } elseif ($_config['view_type'] == 2) {
             $this->get_dive_overview_table();
-        }
-        else{
+        } else{
             echo 'no view_type defined!';
         }
         $t->assign('pagetitle',$_lang['dive_log']);
-        /*}}}*/
+    /*}}}*/
     }
 
     /**
@@ -1790,7 +1791,7 @@ class Divelog {
      * @return void
      */
     function get_dive_overview_table(){
-        global $db, $t, $_lang, $globals, $_config;/*{{{*/
+        global $db, $t, $_lang, $globals, $_config; /*{{{*/
         //    Get the details of the dives to be listed
         //$recentdivelist = parse_mysql_query('recentdivelist.sql');
         if ($_config['length']) {
@@ -1827,7 +1828,7 @@ class Divelog {
         $t->assign('pages', $paged_data['links']);
         $t->assign('cells', $paged_data['data']);
         //print_r($paged_data['data']);
-        /*}}}*/
+    /*}}}*/
     }
 
     /**
