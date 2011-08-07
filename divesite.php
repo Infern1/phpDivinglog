@@ -16,7 +16,6 @@
 * 
 */
 
-
 $config_file = "./config.inc.php";
 require_once ($config_file);
 
@@ -32,9 +31,8 @@ $divesite->set_divesite_info($request);
 $result = $divesite->get_divesite_info();
 global $_config;
 
-if($divesite->get_request_type() == 1){
-
-    $t->assign('divesite_id',$divesite->divesite_nr);
+if ($divesite->get_request_type() == 1) {
+    $t->assign('divesite_id', $divesite->divesite_nr);
     /**
      * Get the page header 
      */
@@ -42,16 +40,18 @@ if($divesite->get_request_type() == 1){
     $t->assign('pagetitle',$pagetitle);
     $t->assign('colspanlinks','4');
 
+    // First, Previous, Next, Last links and Dive #
     $links->get_std_links();
     $links->get_nav_links($request);
-    //print_r($divesite);
 
+    // Show main dive site details
     $divesite->set_main_divesite_details();
     $divesite->set_divesite_pictures();
     $divesite->set_dives_at_location();
+    // Comments
     $divesite->set_divesite_comments();
 
-} elseif($divesite->get_request_type() == 0) {
+} elseif ($divesite->get_request_type() == 0) {
     $links->get_ovv_links();
     $divesite->get_divesite_overview();
     /**
@@ -66,7 +66,7 @@ if($divesite->get_request_type() == 1){
        $MaxDepth = $locationlist[$i]['MaxDepth'] ."&nbsp;". $_lang['unit_length_short'] ;
        }
      */
-} elseif($divesite->get_request_type() == 3){
+} elseif ($divesite->get_request_type() == 3) {
     $divesite->get_overview_divers();
 } else {
     echo "strange...";
@@ -74,7 +74,7 @@ if($divesite->get_request_type() == 1){
 
 $t->assign('base_page','divesite.php');
 $t->assign('colspanlinks','4');
-if($_config['embed_mode'] == TRUE){
+if ($_config['embed_mode'] == TRUE) {
     // Get the HTML output and send it to the requesting
     include('header.php');
     $t->display('divesite.tpl');

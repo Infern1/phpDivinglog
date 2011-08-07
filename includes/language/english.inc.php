@@ -173,6 +173,7 @@ $_lang['dlog_title_depth'] = "Max Depth";
 $_lang['dlog_title_divetime'] = "Dive Time";
 $_lang['dlog_title_location'] = "Location";
 $_lang['dlog_title_place'] = "Dive Site";
+$_lang['dlog_title_photo'] = "Pic";
 
 $_lang['dlog_number_title'] = "Details for dive # ";
 

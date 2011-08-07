@@ -17,17 +17,15 @@
 <!-- END: headerHTML -->
 
 <table cellspacing="0" cellpadding="0" class="grid">
-
-<colgroup>
-<!-- BEGIN: colgroup -->
-<col width="{col_width}">
-<!-- END: colgroup -->
-</colgroup>
-
+    <colgroup>
+    <!-- BEGIN: colgroup -->
+        <col width="{col_width}">
+    <!-- END: colgroup -->
+    </colgroup>
     <!-- BEGIN: no_data -->
     <tr>
         <td align="center">
-            {noDataMsg}
+        {noDataMsg}
         </td>
     </tr>
     <!-- END: no_data -->
@@ -57,35 +55,26 @@
                         {languageStrings.strLang_showingRecords} <b>{showingRecordsFrom}</b> {languageStrings.strLang_to} <b>{showingRecordsTo}</b> {languageStrings.strLang_of} <b>{totalRecords}</b>
                     </td>
                     <td style="width:100%;" align="center">
-                    
                         <!-- BEGIN: previous_page_link_disabled -->
                         <span class="grid-navigation-item-disabled">&laquo;</span>
                         <!-- END: previous_page_link_disabled -->
-
                         <!-- BEGIN: previous_page_link -->
                         <a href="javascript:gotoPreviousPage()" class="grid-navigation-item" title="{languageStrings.strLang_previousPage}" onmouseover="status='';return true">&laquo;</a>
                         <!-- END: previous_page_link -->
-
                         <!-- BEGIN: item -->
-
-                            <!-- BEGIN: selectable -->
-                            <a href="javascript:gotoPage('{page}')" class="grid-navigation-item" onmouseover="status='';return true">{page}</a>
-                            <!-- END: selectable -->
-
-                            <!-- BEGIN: selected -->
-                            <span class="grid-navigation-item-selected">{page}</span>
-                            <!-- END: selected -->
-
+                        <!-- BEGIN: selectable -->
+                        <a href="javascript:gotoPage('{page}')" class="grid-navigation-item" onmouseover="status='';return true">{page}</a>
+                        <!-- END: selectable -->
+                        <!-- BEGIN: selected -->
+                        <span class="grid-navigation-item-selected">{page}</span>
+                        <!-- END: selected -->
                         <!-- END: item -->
-
                         <!-- BEGIN: next_page_link -->
                         <a href="javascript:gotoNextPage()" class="grid-navigation-item" title="{languageStrings.strLang_nextPage}" onmouseover="status='';return true">&raquo;</a>
                         <!-- END: next_page_link -->
-
                         <!-- BEGIN: next_page_link_disabled -->
                         <span class="grid-navigation-item-disabled">&raquo;</span>
-                        <!-- END: next_page_link_disabled -->
-                        
+                        <!-- END: next_page_link_disabled -->                        
                     </td>
                     <td style="white-space: nowrap;">
                         {languageStrings.strLang_recordsOnPage}:
@@ -101,68 +90,49 @@
 
     <!-- BEGIN: column -->
     <tr class="grid-column-title">
-    
         <!-- BEGIN: title -->
-        
-        <td align="center" valign="middle" class="grid-column-title-cell" {titleHTMLProperties}>
+        <td class="grid-column-title-cell" {titleHTMLProperties}>
             <table cellspacing="0" cellpadding="2">
                 <tr>
                     <td>
-                    
                         <!-- BEGIN: sortable -->
                         <a href="javascript:sortData('{originalName}')" class="grid-column-title-caption-sortable" onmouseover="status='';return true">{column}</a>
                         <!-- END: sortable -->
-                        
                         <!-- BEGIN: not_sortable -->
                         <span class="grid-column-title-caption-not-sortable">{column}</span>
                         <!-- END: not_sortable -->
-                        
                     </td>
-                    
                     <!-- BEGIN: sorted_asc -->
                     <td><div class="grid-column-sorted-asc"></div></td>
                     <!-- END: sorted_asc -->
-                    
                     <!-- BEGIN: sorted_desc -->
                     <td><div class="grid-column-sorted-desc"></div></td>
                     <!-- END: sorted_desc -->
-                    
                 </tr>
             </table>
         </td>
         <!-- END: title -->
-        
     </tr>
     <!-- END: column -->
 </thead>
 <tbody>
     <!-- BEGIN: row -->
-    
         <!-- BEGIN: even_row -->
-        
         <tr class="grid-row-even" onmouseover="tmpClassName = this.className; this.className = 'grid-row-mouseover'" onmouseout="((tmpClassName != 'grid-row-selected' && this.className == 'grid-row-selected') || (tmpClassName == 'grid-row-selected' && this.className == 'grid-row-mouseover')) ? this.className = 'grid-row-selected' : this.className = 'grid-row-even'">
-        
             <!-- BEGIN: field -->
             <td class="grid-row-even-cell" onclick="{action}" {fieldHTMLProperties}>{value}</td>
             <!-- END: field -->
-            
         </tr>
         <!-- END: even_row -->
-        
         <!-- BEGIN: odd_row -->
-        
         <tr  class="grid-row-odd" onmouseover="tmpClassName = this.className; this.className = 'grid-row-mouseover'" onmouseout="((tmpClassName != 'grid-row-selected' && this.className == 'grid-row-selected') || (tmpClassName == 'grid-row-selected' && this.className == 'grid-row-mouseover')) ? this.className = 'grid-row-selected' : this.className = 'grid-row-odd'">
-        
             <!-- BEGIN: field -->
             <td class="grid-row-odd-cell" onclick="{action}" {fieldHTMLProperties}>{value}</td>
             <!-- END: field -->
-            
         </tr>
         <!-- END: odd_row -->
-        
     <!-- END: row -->
     <!-- BEGIN: bottom_navigation -->
-    
     <tr>
         <td colspan="{totalColspan}" class="grid-navigation" style="position:relative">
             <table cellspacing="0" cellpadding="0" style="width:100%" class="grid-navigation">
@@ -171,35 +141,26 @@
                         {languageStrings.strLang_showingRecords} <b>{showingRecordsFrom}</b> {languageStrings.strLang_to} <b>{showingRecordsTo}</b> {languageStrings.strLang_of} <b>{totalRecords}</b>
                     </td>
                     <td style="width:100%;" align="center">
-                    
                         <!-- BEGIN: previous_page_link_disabled -->
                         <span class="grid-navigation-item-disabled">&laquo;</span>
                         <!-- END: previous_page_link_disabled -->
-
                         <!-- BEGIN: previous_page_link -->
                         <a href="javascript:gotoPreviousPage()" class="grid-navigation-item" title="{languageStrings.strLang_previousPage}" onmouseover="status='';return true">&laquo;</a>
                         <!-- END: previous_page_link -->
-
                         <!-- BEGIN: item -->
-
                             <!-- BEGIN: selectable -->
                             <a href="javascript:gotoPage('{page}')" class="grid-navigation-item" onmouseover="status='';return true">{page}</a>
                             <!-- END: selectable -->
-
                             <!-- BEGIN: selected -->
                             <span class="grid-navigation-item-selected">{page}</span>
                             <!-- END: selected -->
-
                         <!-- END: item -->
-
                         <!-- BEGIN: next_page_link -->
                         <a href="javascript:gotoNextPage()" class="grid-navigation-item" title="{languageStrings.strLang_nextPage}" onmouseover="status='';return true">&raquo;</a>
                         <!-- END: next_page_link -->
-
                         <!-- BEGIN: next_page_link_disabled -->
                         <span class="grid-navigation-item-disabled">&raquo;</span>
                         <!-- END: next_page_link_disabled -->
-                        
                     </td>
                     <td style="white-space: nowrap;">
                         {languageStrings.strLang_recordsOnPage}:
@@ -211,11 +172,9 @@
             </table>
         </td>
     </tr>
-    
     <!-- END: bottom_navigation -->
 
     <!-- BEGIN: bottom_action_tab -->
-    
     <tr>
         <td colspan="{totalColspan}" align="right" class="grid-custom-tab">
             <table cellspacing="2" cellpadding="2">
@@ -229,7 +188,6 @@
             </table>
         </td>
     </tr>
-    
     <!-- END: bottom_action_tab -->
 </tbody>
 </table>
@@ -258,43 +216,36 @@
 </script>
 
 <script type="text/javascript">
-
     var re = new RegExp(/{qmURLa}[0-9]+/)
 
-    function gotoPreviousPage()
-    {
+    function gotoPreviousPage() {
         document.{formName}.dataGrid_page.value = document.{formName}.dataGrid_page.value - 1
         customSubmit()
     }
 
-    function gotoPage(page)
-    {
+    function gotoPage(page) {
         document.{formName}.dataGrid_page.value = page
         customSubmit()
     }
 
-    function gotoNextPage()
-    {
+    function gotoNextPage() {
         document.{formName}.dataGrid_page.value = (isNaN(parseInt(document.{formName}.dataGrid_page.value)) ? 1 : parseInt(document.{formName}.dataGrid_page.value)) + 1
         customSubmit()
     }
 
-    function setRecordsOnPage(recordsOnPage)
-    {
+    function setRecordsOnPage(recordsOnPage) {
         document.{formName}.dataGrid_page.value = '1'
         document.{formName}.dataGrid_recordsOnPage.value = recordsOnPage
         customSubmit()
     }
 
-    function sortData(column)
-    {
+    function sortData(column) {
         document.{formName}.dataGrid_sortfield.value = column;
         document.{formName}.dataGrid_sortdirection.value = document.{formName}.dataGrid_sortdirection.value == '' ? 'desc' : '';
         customSubmit()
     }
 
-    function customSubmit()
-    {
+    function customSubmit() {
         <!-- BEGIN: useSEO -->
         if (document.{formName}.action.match(re)) {
             document.{formName}.action = document.{formName}.action.replace(re, "{URLa}" + document.{formName}.dataGrid_page.value);
@@ -303,9 +254,7 @@
         }
         <!-- END: useSEO -->
         document.{formName}.submit();
-
     }
 
 </script>
-
 <!-- END: main -->

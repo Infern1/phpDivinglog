@@ -27,6 +27,8 @@
 }
 .grid-column-title-cell
 {
+    text-align: left; 
+    vertical-align: middle;
 }
 .grid-column-title-caption-sortable
 {

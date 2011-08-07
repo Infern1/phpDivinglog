@@ -30,37 +30,43 @@ $equipment = new Equipment();
 $equipment->set_equipment_info($request);
 $result = $equipment->get_equipment_info();
 global $_config;
-if($equipment->get_request_type() == 1){
+
+if ($equipment->get_request_type() == 1) {
     $t->assign('equipment_id', $equipment->get_equipment_nr());
+    /**
+     * Get the page header 
+     */
+    $pagetitle = $_lang['equip_details_pagetitle'].$result[0]['Object'];
+    $t->assign('pagetitle',$pagetitle);
+    $t->assign('colspanlinks','4');
+
+    // First, Previous, Next, Last links and Dive #
     $links->get_std_links();
     $links->get_nav_links($request );
 
-	$pagetitle = $_lang['equip_details_pagetitle'].$result[0]['Object'];
-    $t->assign('pagetitle',$pagetitle);
-//	First, Previous, Next, Last links and Dive #
-	$t->assign('colspanlinks','4');
-    //	Show main dive details
+    // Show main equipment details
     $equipment->set_main_equipment_details();
     // Comments
     $equipment->set_comments();
 
-} elseif( $equipment->get_request_type() == 0){
+} elseif ($equipment->get_request_type() == 0) {
     $links->get_ovv_links();
     $equipment->get_equipment_overview();
+    /**
+     * Get the page header 
+     */
+    $pagetitle = $_lang['dive_equip'];
+    $t->assign('pagetitle',$pagetitle);
 
-} elseif($equipment->get_request_type() == 3){
+} elseif ($equipment->get_request_type() == 3) {
     $equipment->get_overview_divers();
+} else {
+    echo "strange...";
 }
-else {
-echo "strange...";
-
-}
-
-
-
 
 $t->assign('base_page','equipment.php');
-if($_config['embed_mode'] == TRUE){
+$t->assign('colspanlinks','4');
+if ($_config['embed_mode'] == TRUE) {
     // Get the HTML output and send it to the requesting
     include('header.php');
     $t->display('equipment.tpl');
