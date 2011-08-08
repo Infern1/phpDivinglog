@@ -1,5 +1,6 @@
 SELECT		ID,
 		Object,
-		Manufacturer
+		Manufacturer,
+		Inactive
 FROM		$_config[table_prefix]Equipment
-ORDER BY 	Object ASC, DateP ASC, Manufacturer ASC
+ORDER BY 	Inactive DESC, Object ASC, DateP ASC, Manufacturer ASC

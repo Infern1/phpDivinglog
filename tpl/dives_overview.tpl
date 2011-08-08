@@ -13,6 +13,7 @@
         <td width="15%" valign="bottom" >{$dlog_title_depth}</td>
         <td width="10%" valign="bottom" >{$dlog_title_divetime}</td>
         <td valign="bottom">{$dlog_title_location}</td>
+        <td width="5%" valign="bottom">{$dlog_title_photo}</td>
     </tr>
   </thead>
   <tbody>
@@ -29,7 +30,8 @@ title="{$dlog_number_title}{$cells[cell_data].number}" >{$cells[cell_data].numbe
         <td>{$cells[cell_data].divedate}</td>
         <td>{$cells[cell_data].depth} {$unit_length_short}</td>
         <td>{$cells[cell_data].divetime} {$unit_time_short} </td>
-        <td>{$cells[cell_data].place} {$cells[cell_data].city}</td>
+        <td>{$cells[cell_data].place}, {$cells[cell_data].city}</td>
+        <td>{$cells[cell_data].photo}</td>
     </tr>
 {/section}
   </tbody>

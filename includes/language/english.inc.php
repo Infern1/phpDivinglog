@@ -328,6 +328,7 @@ $_lang['equip_none'] = "No dive equipment is currently available.";
 
 $_lang['equip_title_object'] = "Product";
 $_lang['equip_title_manufacturer'] = "Manufacturer";
+$_lang['equip_title_inactive'] = "Active";
 
 
 // Units
