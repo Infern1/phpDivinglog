@@ -1,6 +1,6 @@
 body, table, td, th, input, textarea, select {
-/*    font: normal 12px arial, helvetica, "liberation sans", "dejavu sans condensed", sans-serif;*/
-    font: 110%/130% Georgia, 'Lucida Grande', 'Lucida Sans Unicode', Verdana, sans-serif;
+    font: normal 14px arial, helvetica, sans-serif;
+/*    font: 110%/130% Georgia, 'Lucida Grande', 'Lucida Sans Unicode', Verdana, sans-serif;
     margin: 0; 
     padding: 0;
 /*    text-align: center; */
@@ -17,7 +17,7 @@ div#content {
 tr.divesection td { 
     font-weight: bold; 
     color: #000000; 
-    font-size: 10pt; 
+    font-size: 11pt; 
     background-color: #D3D3D3;
     padding-bottom: 3px;
     vertical-align:top;
@@ -26,8 +26,8 @@ tr.divesection td {
 tr.divetitle td { 
     font-weight: normal; 
     color: #808080;
-    font-size: 9pt;
-    line-height: 140%;
+    font-size: 10.5pt;
+    line-height: 130%;
     text-decoration: none;
     vertical-align:top;
 }
@@ -35,8 +35,8 @@ tr.divetitle td {
 tr.divecontent td { 
     font-weight: normal; 
     color: #000000;
-    font-size: 10pt;
-    line-height: 140%;
+    font-size: 11pt;
+    line-height: 130%;
     text-decoration: none;
     padding-bottom: 5px;
     vertical-align:top;
@@ -45,8 +45,8 @@ tr.divecontent td {
 tr.divedetails td { 
     font-weight: normal; 
     color: #000000;
-    font-size: 10pt;
-    line-height: 140%;
+    font-size: 11pt;
+    line-height: 130%;
     text-decoration: none;
     padding-bottom: 5px;
     vertical-align:top;
@@ -150,7 +150,7 @@ tbody th {
 }
 
 tbody tr { 
-    background: #FCFDFE;
+/*    background: #FCFDFE;*/
 }
 
 tbody tr.odd {

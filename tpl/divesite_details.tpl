@@ -127,7 +127,7 @@ title="{$dlog_number_title}{$dive}">{$dive}</a>
     <tr class="divesection">
       <td colspan="4">{$site_sect_comments}</td>
     </tr>
-    <tr>
+    <tr class="divedetails">
       <td colspan="4">{$Comments}</td>
     </tr>
     {/if}
