@@ -27,7 +27,11 @@
 {/if}
            <td>{$cells[cell_data].city}</td>
            <td>{$cells[cell_data].country}</td>
-           <td>{$cells[cell_data].maxdepth}</td>
+{if $cells[cell_data].maxdepth != ''}
+           <td>{$cells[cell_data].maxdepth} {$unit_length_short}</td>
+{else}
+           <td>-</td>
+{/if}
 </tr>
 {/section}
 </tbody>

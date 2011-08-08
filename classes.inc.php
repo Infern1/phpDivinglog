@@ -1800,11 +1800,12 @@ class Divelog {
             $recentdivelist_query = sql_file('recentdivelist.sql');
         }
         $recentdivelist_query .=  " ORDER BY Number DESC";
-        $t->assign('dlog_title_number', $_lang['dlog_title_number'] );
+        $t->assign('dlog_title_number', $_lang['dlog_title_number']);
         $t->assign('dlog_title_divedate', $_lang['dlog_title_divedate']);
-        $t->assign('dlog_title_depth', $_lang['dlog_title_depth'] );
-        $t->assign('dlog_title_divetime', $_lang['dlog_title_divetime'] );
-        $t->assign('dlog_title_location', $_lang['dlog_title_location'] );
+        $t->assign('dlog_title_depth', $_lang['dlog_title_depth']);
+        $t->assign('dlog_title_divetime', $_lang['dlog_title_divetime']);
+        $t->assign('dlog_title_location', $_lang['dlog_title_location']);
+        $t->assign('dlog_title_photo', $_lang['dlog_title_photo']);
 
         if (!empty($this->multiuser)) {
             $path = $_config['web_root'].'/index.php/'.$this->user_id.'/list';
@@ -1842,7 +1843,7 @@ class Divelog {
     function dive_has_photo($value, $row){
         global $_config;
         if (Divelog::dive_has_pictures($row['Number'])) {
-            return '<img src="'.$_config['web_root'].'/images/photo_icon.gif" alt="">';
+            return '<img src="'.$_config['web_root'].'/images/photo_icon.gif" border="0" alt="" title="">';
         }
     }
 
@@ -1862,11 +1863,13 @@ class Divelog {
             $recentdivelist_query = sql_file('recentdivelist.sql');
         }
         $recentdivelist_query .= " ORDER BY Number DESC";
+
         $t->assign('dlog_title_number', $_lang['dlog_title_number'] );
         $t->assign('dlog_title_divedate', $_lang['dlog_title_divedate']);
         $t->assign('dlog_title_depth', $_lang['dlog_title_depth'] );
         $t->assign('dlog_title_divetime', $_lang['dlog_title_divetime'] );
         $t->assign('dlog_title_location', $_lang['dlog_title_location'] );
+        $t->assign('dlog_title_photo', $_lang['dlog_title_photo'] );
 
         if (!empty($this->multiuser)) {
             $path = $_config['web_root'].'/index.php/'.$this->user_id.'/list';
@@ -1903,9 +1906,8 @@ class Divelog {
         $grid->setCallbackFunction("Divedate","convert_date"); 
         $grid->setCallbackFunction("Depth","add_unit_depth");
         $grid->setCallbackFunction("Divetime","add_unit_time");
+
         $grid->setRowActionFunction("action");
-        // $grid->unsetActionFunction("photo");
-        // $grid->columnsToShow['Number']["action"] = "action";
         $grid_ret = $grid->render(TRUE);
 
         $t->assign('grid_display' ,1);
@@ -2337,6 +2339,12 @@ class Divesite{
         $t->assign('dsite_title_city', $_lang['dsite_title_city']);
         $t->assign('dsite_title_country', $_lang['dsite_title_country']);
         $t->assign('dsite_title_maxdepth', $_lang['dsite_title_maxdepth']);
+        if ($_config['length']) {
+            $t->assign('unit_length_short', $_lang['unit_length_short_imp']);
+        } else {
+            $t->assign('unit_length_short', $_lang['unit_length_short']);
+        }
+
         $t->assign('pages', $paged_data['links']);
         $t->assign('cells', $paged_data['data']);
     /*}}}*/
@@ -2653,6 +2661,24 @@ class Equipment{
     }
 
     /**
+     * equipment_inactive 
+     * 
+     * @param mixed $value 
+     * @param mixed $row 
+     * @access public
+     * @return void
+     */
+    function equipment_inactive($value, $row){
+        global $_config;
+        if ($value == 'True') {
+//            return '<img src="'.$_config['web_root'].'/images/photo_icon.gif" alt="">';
+            return 'x';
+        } else {
+            return '*';
+        }
+    }
+
+    /**
      * get_equipment_overview 
      * 
      * @access public
@@ -2687,6 +2713,8 @@ class Equipment{
         //    $t->assign('equip_none', $_lang['equip_none'] );
         $t->assign('equip_title_object', $_lang['equip_title_object'] );
         $t->assign('equip_title_manufacturer', $_lang['equip_title_manufacturer'] );
+        $t->assign('equip_title_inactive', $_lang['equip_title_inactive'] );
+
         $t->assign('logbook_place_linktitle', $_lang['logbook_place_linktitle'] );
         if (!empty($this->multiuser)) {
             $path = $_config['web_root'].'/equipment.php/'.$this->user_id.'/list';
@@ -2728,10 +2756,17 @@ class Equipment{
             $url = "/divesite.php".$t->getTemplateVars('sep2');
         }
         //print_r($data);
+
         $grid->showColumn('Object', $_lang['equip_title_object']);
         $grid->setColwidth('Object',"300");
         $grid->showColumn('Manufacturer', $_lang['equip_title_manufacturer']);
-        $grid->setColwidth('Manufacturer',"270");
+        $grid->setColwidth('Manufacturer',"260");
+        $grid->showColumn('Inactive', $_lang['equip_title_inactive']);
+        $grid->setColwidth('Inactive',"20");
+
+        $methodVariable = array($this, 'equipment_inactive'); 
+        $grid->setCallbackFunction("Inactive", $methodVariable);
+
         $grid->setRowActionFunction("action");
         $grid_ret = $grid->render(TRUE); 
         $t->assign('grid_display' ,1);
