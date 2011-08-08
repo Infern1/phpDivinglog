@@ -133,7 +133,7 @@
     <tr class="divesection">
 	<td colspan="4">{$equip_sect_comments}</td>
     </tr>
-    <tr>
+    <tr class="divedetails">
 	<td colspan="4">{$Comments}</td>
     </tr>
     {/if}

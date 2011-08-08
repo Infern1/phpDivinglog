@@ -5,7 +5,7 @@
  * @author  Lloyd Borrett - www.borrett.id.au Rob Lensen <rob@bsdfreaks.nl>
  * @package phpdivinglog
  * @version $Rev$
- * Last Modified: $Date$
+ * Last Modified: $Date:   Mon Aug 1 15:13:21 2011 +0200 $
  */
 
 /**
@@ -135,6 +135,12 @@ $_config['thumb-height'] = 75;
  * Width is set in px
  */
 $_config['pic-width'] = 800;
+
+/**
+ * get exif data from the images 
+ */
+$_config["get_exif_data"] = true;
+
 
 /**
  * DIVE PROFILE SETTINGS

@@ -564,8 +564,8 @@ title="{$i.divegear} {$logbook_place_linktitle}">{$i.divegear}</a>&nbsp;
       <td colspan="4">{$dive_sect_comments|default:'&nbsp;'}</td>
     </tr>
     *}
-    <tr>
-      <td colspan="4">{$Comments}</td>
+    <tr class="divedetails">
+      <td  colspan="4">{$Comments}</td>
     </tr>
     {else} 
     <tr>

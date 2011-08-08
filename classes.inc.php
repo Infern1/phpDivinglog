@@ -3550,6 +3550,7 @@ class DivePictures{
                        //$img_title = $_lang['divepic_linktitle_pt1']. ($a). $_lang['divepic_linktitle_pt2']. $pics;
                         //$img_title .= $_lang['divepic_linktitle_pt3']  ;
                         $img_title = $divepics[$i]['Description'];
+                        $img_date = $this->get_exif_data($img_url);
                         $dive_nr =0;
                         $site_nr =0;
                         if (isset($divepics[$i]['Number'])) {
@@ -3564,6 +3565,7 @@ class DivePictures{
                                 'img_title' => $img_title,
                                 'dive_nr' => $dive_nr,
                                 'site_nr' => $site_nr,
+                                'img_date'    => $img_date,
                                 'resize' => false,
                                 'thumb' => false
                                 );
@@ -3700,6 +3702,25 @@ class DivePictures{
      */
     function get_image_link(){
         return $this->image_link;
+    }
+    /**
+     * get_exif_data
+     * 
+     * @acces public
+     * @return array with exif data
+     */
+
+    function get_exif_data($file){
+        global $_config,$t, $_lang, $globals;
+        if(isset($_config["get_exif_data"])){
+            $exif_date = exif_read_data ( $file ,'IFD0'  ); 
+          //  print_r($exif_date);
+            $edate = $exif_date['DateTime']; 
+        } else {
+        //echo "ja";
+        }
+        return $edate;
+
     }
 
     /**
