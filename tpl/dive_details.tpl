@@ -565,10 +565,10 @@ title="{$i.divegear} {$logbook_place_linktitle}">{$i.divegear}</a>&nbsp;
     </tr>
     *}
     <tr class="divedetails">
-      <td  colspan="4">{$Comments}</td>
+      <td colspan="4">{$Comments}</td>
     </tr>
     {else} 
-    <tr>
+    <tr class="divedetails">
       <td colspan="4"><p>No comments.</p></td>
     </tr>
     {/if}

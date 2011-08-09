@@ -7,12 +7,9 @@
 {include file='diver_overview.tpl'}
 {else}
 <table class="divetable" cellspacing="0" cellpadding="0" width="100%">
-
-<tr><td colspan="4" class="spacing">&nbsp;</td></tr>
-
-<tr class="divesection">
- <td colspan="4">{$gallery_title}&nbsp;</td>
-</tr>
+    <tr class="divesection">
+        <td colspan="4">{$pagetitle}&nbsp;</td>
+    </tr>
 </table>
 {* Show photos per dive *}
 <div id="center_images">
@@ -72,7 +69,7 @@
 {if $page_numbers.total > 1}
 <table style="clear: both;" width="100%" cellspacing="0" cellpadding="0">
     <tr>
-	    <td colspan="5" align="center">{$pager_links}</td>
+        <td colspan="5" align="center">{$pager_links}</td>
     </tr>
 </table>
 <br>
@@ -80,7 +77,7 @@
 
 <table width="100%" cellspacing="0" cellpadding="0">
     <tr class="divesection">
-	    <td colspan="5">&nbsp;</td>
+        <td colspan="5">&nbsp;</td>
     </tr>
 </table>
 
