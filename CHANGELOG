@@ -3,6 +3,7 @@ phpDivingLog v3.0-alpha3 - 2011-08-08 - Lloyd Borrett
     * Modified the calculation of imperial cylinder size to use working pressure if available
     * Added Active to equipment overview listing
     * Fixed formatting issues
+    * Added TODO file so we have an overview what has to be done
 
 phpDivingLog v3.0-alpha2 - 2011-08-01 - Lloyd Borrett
     * Added ability to display lots of additional values 
