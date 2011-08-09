@@ -5,7 +5,7 @@
  * @author  Rob Lensen <rob@bsdfreaks.nl>
  * @package phpdivinglog
  * @version  $Rev: 172 $
- * Last Modified: $Date$
+ * Last Modified: $Date: 2007-11-30 15:17:52 +0100 (Fri, 30 Nov 2007) $
  *
  * For use with Diving Log by Sven Knoch - http://www.divinglog.de
  *
@@ -26,7 +26,6 @@ $links = new TopLevelMenu($request);
 $divegallery = new DivePictures();
 $divegallery->set_divegallery_info($request);
 $result = $divegallery->get_divegallery_info();
-
 if($divegallery->resize_needed()){
 //echo "resizing....";
 $divegallery->resizer(1);

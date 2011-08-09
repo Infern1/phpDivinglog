@@ -5,7 +5,7 @@
  * @author  Lloyd Borrett - www.borrett.id.au ; Rob Lensen <rob@bsdfreaks.nl>
  * @package phpdivinglog
  * @version $Rev$
- * Last Modified: $Date$
+ * Last Modified: $Date:   Fri Jul 29 22:43:17 2011 +0200 $
  * @copyright (C) 2006 Lloyd Borrett - http://www.borrett.id.au
  * 
  * Adapted from code by Olaf van Zandwijk - http://enschede.vanzandwijk.net
@@ -191,17 +191,22 @@ function parse_mysql_query($filename, $sql_query = 0, $debug = false){
 		    echo "Query: $query <br><hr>";
             exit;
         }
-		for($i=0; $query_output = mysql_fetch_assoc($server_query); $i++) {
-			while(list($key, $val) = each($query_output)) {
-				if(is_string($val)) {
-					//$val = utf8_encode($val);
-					$query_output[$key] = $val;
-				}
-			}
-			$result[$i] = $query_output;
-		}
-	}
-	return $result; /*}}}*/
+		if(mysql_num_rows($server_query) == 1){
+            $result = mysql_fetch_assoc($server_query);
+        } else {
+            for($i=0; $query_output = mysql_fetch_assoc($server_query); $i++) {
+                while(list($key, $val) = each($query_output)) {
+                    if(is_string($val)) {
+                        //$val = utf8_encode($val);
+                        $query_output[$key] = $val;
+                    }
+                }
+                $result[$i] = $query_output;
+            }
+        }
+    }
+	return $result; 
+    /*}}}*/
 }
 
 /**
@@ -325,16 +330,16 @@ function is__writable($path) {
 function GetProfileData($result){
     	global $_config; /*{{{*/
         global $_lang;
-        $profile = $result[0]['Profile'];
+        $profile = $result['Profile'];
         $length = ( strlen($profile) / 12 );
-		$profileint = ($result[0]['ProfileInt'] / 60);
+		$profileint = ($result['ProfileInt'] / 60);
         /**
          * Divetime calculation changed to Divetime from Divelog table see:
          * http://www.divinglog.de/phpbb/viewtopic.php?p=3094#3094
          */
         $divetime = $profileint * $length;
-        if(isset($result[0]['Divetime'])){
-            $divetime = $result[0]['Divetime'];
+        if(isset($result['Divetime'])){
+            $divetime = $result['Divetime'];
         } else {
             $divetime = $profileint * $length;
         }
@@ -345,7 +350,7 @@ function GetProfileData($result){
 		        $start += 12;
 		}
 		$averagedepth = $ydata / $length;
-		$sac = (($result[0]['PresS'] - $result[0]['PresE']) * $result[0]['Tanksize']) / ($divetime * ($averagedepth / 10 + 1));
+		$sac = (($result['PresS'] - $result['PresE']) * $result['Tanksize']) / ($divetime * ($averagedepth / 10 + 1));
 
 		if ($_config['length']) {
 			$averagedepth = MetreToFeet($averagedepth / 3.2808399, 2) ."&nbsp;";

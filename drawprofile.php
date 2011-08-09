@@ -5,7 +5,7 @@
  * @author  Lloyd Borrett - www.borrett.id.au  ; Rob Lensen <rob@bsdfreaks.nl>
  * @package phpdivinglog
  * @version  $Rev$
- * Last Modified: $Date$
+ * Last Modified: $Date:   Fri Jul 29 22:43:17 2011 +0200 $
  * 
  * @copyright (C) 2006 Lloyd Borrett - http://www.borrett.id.au
  * 
@@ -86,7 +86,7 @@ if($request->get_multiuser()){
 }
 $result = parse_mysql_query('onedive.sql');
 reset_config_table_prefix();
-$profile = $result[0]['Profile'];
+$profile = $result['Profile'];
 if (!$profile) {
 /*{{{*/
     /**
@@ -96,11 +96,11 @@ if (!$profile) {
     $ydata = array();
     $xdata = array();
 
-    $items = $result[0]['Divetime'] * 3;
+    $items = $result['Divetime'] * 3;
     if ($_config['length']) {
-        $depth = toFeet($result[0]['Depth']);
+        $depth = toFeet($result['Depth']);
     } else {
-        $depth = - $result[0]['Depth'];
+        $depth = - $result['Depth'];
     } 
 
     for ($i = 0; $i < $items; $i++) {
@@ -147,7 +147,7 @@ if (!$profile) {
     /**
      * Use the profile interval time to assign time values to the data 
      */
-    $profileint = ($result[0]['ProfileInt'] / 60);
+    $profileint = ($result['ProfileInt'] / 60);
     $xdata = array();
     $temp = 0;
     for ($i = 0; $i < $length; $i++) {
@@ -204,7 +204,7 @@ if ($_config['graph_background_image'] != "") {
 /**
  * Set the graph title and font 
  */
-$graph->title->Set($_lang['dive_profile_title'] . $result[0]['Number']);
+$graph->title->Set($_lang['dive_profile_title'] . $result['Number']);
 $graph->title->SetFont(FF_VERDANA, FS_BOLD, 12);
 if ($_config['graph_background_image'] != "") {
     $graph->title->SetColor("#ffffff");

@@ -36,7 +36,7 @@ if ($equipment->get_request_type() == 1) {
     /**
      * Get the page header 
      */
-    $pagetitle = $_lang['equip_details_pagetitle'].$result[0]['Object'];
+    $pagetitle = $_lang['equip_details_pagetitle'].$result['Object'];
     $t->assign('pagetitle',$pagetitle);
     $t->assign('colspanlinks','4');
 
