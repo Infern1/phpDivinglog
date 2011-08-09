@@ -3457,7 +3457,7 @@ class Divestats{
  * @license LGPL v3 http://www.gnu.org/licenses/lgpl-3.0.txt
  */
 class DivePictures{
-
+/*{{{*/
     var $multiuser;
     var $user_id;
     var $table_prefix;
@@ -3520,7 +3520,7 @@ class DivePictures{
      * @return void
      */
     function set_divegallery_info_direct($user_id){
-        if ($this->multiuser) {
+        if ($this->multiuser) {/*{{{*/
             $this->user_id = $user_id;
             $user = new User();
             $user->set_user_id($this->user_id);
@@ -3531,7 +3531,7 @@ class DivePictures{
             $user = new User();
             $this->table_prefix = $user->get_table_prefix();
             $this->username = $user->get_username();
-        }
+        }/*}}}*/
     }
     
     /**
@@ -3542,7 +3542,7 @@ class DivePictures{
      * @return void
      */
     function get_divegallery_info($dive_id = 0, $site_id = 0, $equipment_nr = 0){
-        global $globals, $_config, $_lang, $t;
+        global $globals, $_config, $_lang, $t;/*{{{*/
         if (($this->multiuser && !empty($this->user_id)) || !$this->multiuser ) {
             if ($dive_id == 0 && $site_id == 0 && $equipment_nr == 0 ) {
                 $divepics = parse_mysql_query('divepicsall.sql');
@@ -3659,7 +3659,7 @@ class DivePictures{
             if ($this->request_type != 3) {
                 $this->request_type = 0;
             }
-        }
+        }/*}}}*/
     }
 
     /**
@@ -3742,7 +3742,7 @@ class DivePictures{
      */
 
     function get_exif_data($file){
-        global $_config, $t, $_lang, $globals;
+        global $_config, $t, $_lang, $globals;/*{{{*/
         if(isset($_config["get_exif_data"]) && function_exists('exif_read_data')){
             $exif_date = exif_read_data ( $file ,'IFD0'  ); 
           //  print_r($exif_date);
@@ -3750,7 +3750,7 @@ class DivePictures{
         } else {
             $edate = "";
         }
-        return $edate;
+        return $edate;/*}}}*/
     }
 
     /**
@@ -3760,6 +3760,7 @@ class DivePictures{
      * @return void
      */
     function set_all_dive_pictures(){
+    /*{{{*/
         global $_config,$t, $_lang, $globals;
         
         if (!empty($this->multiuser)) {
@@ -3787,8 +3788,552 @@ class DivePictures{
                    );
         $t->assign('num_images_from_dive', $this->num_images_from_dive);
         $t->assign('logbook_place', $_lang['logbook_place'] );
-        $t->assign('dive_details_pagetitle', $_lang['dive_details_pagetitle'] );
+        $t->assign('dive_details_pagetitle', $_lang['dive_details_pagetitle'] );/*}}}*/
     }
+    
+    /*}}}*/
+}
+
+/**
+ * Divetrip contains all functions related to Divetrips
+ * 
+ * @package phpdivinglog
+ * @version $Rev$
+ * @copyright Copyright (C) 2011 Rob Lensen. All rights reserved.
+ * @author Rob Lensen <rob@bsdfreaks.nl> 
+ * @license LGPL v3 http://www.gnu.org/licenses/lgpl-3.0.txt
+ */
+class Divetrip{
+    var $multiuser; /*{{{*/
+    var $table_prefix;
+    var $user_id;
+    var $divetrip_nr;
+    var $result;
+    var $result_countrycity;
+    var $country;
+    var $city;
+    var $dives;
+    var $dive_count;
+    var $sitelist;
+    var $request_type; // request_type = 0 overview request_type = 1 details
+
+    /**
+     * Divesite default constructor sets some defaults for this class
+     * 
+     * @access public
+     * @return void
+     */
+    function __construct() {
+        $a = func_get_args(); 
+        $i = func_num_args(); 
+        if($i == 0){
+            global $_config;
+            $this->multiuser = $_config['multiuser'];
+        } else {
+            if (method_exists($this,$f='__construct'.$i)) { 
+                call_user_func_array(array($this,$f),$a); 
+            } 
+        }
+    }
+
+    /**
+     * __construct1 construct a Divesite class when divesite ID is given
+     * 
+     * @param mixed $a1 
+     * @access protected
+     * @return void
+     */
+    function __construct1($a1) 
+    { 
+        global $_config;
+        $this->divetrip_nr = $a1;
+        $this->get_divesite_info();
+    } 
+
+    function get_request_type(){
+        return $this->request_type;
+    }
+
+    function set_divetrip_info($request){
+        // We need to extract the info from the request
+        /*{{{*/
+        if (!$request->diver_choice) {
+            if ($request->get_view_request() == 1) {
+                $this->request_type = 1;
+                $this->divesite_nr = $request->get_site_nr();
+            } else {
+                $this->request_type = 0;
+                $this->requested_page = $request->get_requested_page();
+            }
+            if ($this->multiuser) {
+                $this->user_id = $request->get_user_id();
+                $user = new User();
+                $user->set_user_id($this->user_id);
+                $this->table_prefix = $user->get_table_prefix();
+            } else {
+                $user = new User();
+                $this->table_prefix = $user->get_table_prefix();
+                $this->divesite_nr = $request->get_site_nr();
+            }
+        } else {
+            $this->request_type = 3;
+        }
+    /*}}}*/
+    }
+
+    function get_divetrip_info(){
+        global $globals, $_config; /*{{{*/
+        if (!empty($this->divesite_nr)) {
+            $this->request_type = 1;
+            $globals['placeid'] = $this->divesite_nr;
+            $this->result = parse_mysql_query('oneplace.sql');
+            $this->result_countrycity = parse_mysql_query('countrycity.sql');
+        } else {
+            /**
+             * If the request type is not already set(by divers choice), set it to overview  
+             */
+            if ($this->request_type != 3) {
+                $this->request_type = 0;
+            }
+        }
+        return $this->result;
+    /*}}}*/
+    }
+
+    function get_overview_divers(){
+        global $t, $_lang, $globals, $_config; /*{{{*/
+        $users = new Users();
+        $user_list = $users->get_user_data();
+        $t->assign('diver_overview',1);
+        $t->assign('divers', $user_list);
+        $t->assign('file_name','divesite.php');
+    /*}}}*/
+    }
+
+    /**
+     * get_divesite_location_details 
+     * 
+     * @access public
+     * @return void
+     */
+    function get_divetrip_location_details(){
+        global $globals, $_config; /*{{{*/
+        $countrycity = $this->result_countrycity;
+        if (count($countrycity) != 0) {
+            if ($countrycity['Country'] != "") {
+                //			Get the country details from database
+                $globals['countryid'] = $countrycity['CountryID'];
+                $countrydetails = parse_mysql_query('onecountry.sql');
+                if (count($countrydetails) == 0) {
+                    $this->country = $countrycity['Country'];
+                } else {
+                    $this->country = $countrydetails['Country'];
+                }
+            }
+
+            if ($countrycity['City'] != "") {
+                //			Get the city details from database
+                $globals['cityid'] = $countrycity['CityID'];
+                $citydetails = parse_mysql_query('onecity.sql');
+                if (count($citydetails) == 0) {
+                    $this->city = $countrycity['City'];
+                } else {
+                    $this->city = $citydetails['City'];
+                }
+            }
+
+        }
+    /*}}}*/
+    }
+
+    /**
+     * get_dives_at_location 
+     * 
+     * @access public
+     * @return void
+     */
+    function get_dives_at_location(){
+        global $globals, $_config; /*{{{*/
+        // Get the dives at this site from database
+        $globals['placeid'] = $this->divesite_nr;
+        $this->dives = parse_mysql_query('divelocations.sql');
+        $this->dive_count = count($this->dives);
+        // Get the site list from database
+        $this->sitelist = parse_mysql_query('sitelist.sql');
+    /*}}}*/
+    }
+
+    /**
+     * set_main_divesite_details 
+     * 
+     * @access public
+     * @return void
+     */
+    function set_main_divetrip_details(){
+        global $globals, $_config, $t, $_lang; /*{{{*/
+        $this->get_divesite_location_details(); 
+        // Show main site details
+        $result = $this->result;
+        $t->assign('pagetitle',$_lang['dive_site_pagetitle'].$result['Place']);
+        $t->assign('divesite_id', $this->divesite_nr);
+        $t->assign('place_place', $_lang['place_place']);
+        $t->assign('place_city', $_lang['place_city']);
+        $t->assign('place_country', $_lang['place_country']);
+        $t->assign('place_maxdepth', $_lang['place_maxdepth'] );
+
+        if ($result['Place'] == "") {
+            $Place = "-";
+        } else {
+            $Place = $result['Place'];
+        }
+        $t->assign('Place', $Place);
+        $t->assign('city', $this->city );
+        $t->assign('country', $this->country);
+
+        $t->assign('place_rating', $_lang['place_rating']);
+        if ($result['Rating'] != "") {
+            $desc = $_lang['rating'][$result['Rating']];
+            $Rating = '<img src="'.$_config['web_root'].'/images/ratings5-'.$result['Rating'].'.gif" alt="'.$desc.'" title="'.$desc.'" border="0" width="84" height="15">';
+            $t->assign('Rating', $Rating);
+        } else {
+            $t->assign('Rating','-');	
+        }
+
+        if ($result['MaxDepth'] == "") {
+            $MaxDepth = "-";
+        } else {
+            if ($_config['length']) {
+                $MaxDepth = MetreToFeet($result['MaxDepth'], 0) ."&nbsp;". $_lang['unit_length_short_imp'] ;
+            } else {
+                $MaxDepth = $result['MaxDepth'] ."&nbsp;". $_lang['unit_length_short'];
+            }
+        }
+        $t->assign('MaxDepth',$MaxDepth);
+
+        //	Show extra site details
+        $t->assign('place_lat', $_lang['place_lat']);
+        $t->assign('place_lon', $_lang['place_lon']);
+        if ($result['MapPath'] == "") {
+            $MapPath = "&nbsp;";
+        } else {
+            $MapPath = $_lang['place_map'];
+        }
+        $t->assign('place_map', $MapPath);
+
+        if ($result['Lat'] == "") {
+            $Lat = "-";
+        } else {
+            $Lat = latitude_format($result['Lat']);
+        }
+        $t->assign('Lat', $Lat);
+        $t->assign('LatDec',$result['Lat']); 
+
+        if ($result['Lon'] == "") {
+            $Lon = "-";
+        } else {
+            $Lon = longitude_format($result['Lon']) ;
+        }
+        $t->assign('Lon',$Lon);
+        $t->assign('LonDec',$result['Lon']);
+        if (($result['Lat'] != "") || (($result['Lon'] != ""))) {
+            $t->assign('site_google_link', $_lang['site_google_link'] .$result['Place']);
+        }
+        if ($result['MapPath'] == "") {
+            $t->assign('maplink_url','&nbsp;');
+        } else {
+            $maplink_url = "<a href=\"".$_config['web_root']."/". $_config['mappath_web'] . $result['MapPath']."\"  rel=\"lightbox[others]\"\n";
+            $maplink_url .=  "   title=\"". $_lang['mappic_linktitle']. $result['Place'];
+            $maplink_url .=  "\">". $_lang['mappic'] ."</a>\n";
+            $t->assign('maplink_url',$maplink_url);
+        }
+        $t->assign('google_map', $_lang['google_map']);
+        $t->assign('place_datum', $_lang['place_datum']);
+        $t->assign('datum', $_lang['datum']);
+
+        $t->assign('place_watername', $_lang['place_watername']);
+        if ($result['WaterName'] != "") {
+            $t->assign('WaterName', $result['WaterName'] );
+        } else {
+            $t->assign('WaterName','-');	
+        }
+
+        $t->assign('place_water', $_lang['place_water']);
+        if ( $result['Water'] != 0 && $_lang['water'][($result['Water'] - 1)]) {
+            $t->assign('Water', $_lang['water'][($result['Water'] - 1)]);
+        } else {
+            $t->assign('Water','-');	
+        }
+
+        $t->assign('place_altitude', $_lang['place_altitude']);
+        if ($result['Altitude'] != "") {
+            $t->assign('Altitude', $result['Altitude'] );
+        } else {
+            $t->assign('Altitude','-');	
+        }
+
+        $t->assign('place_difficulty', $_lang['place_difficulty']);
+        if ($result['Difficulty'] != "") {
+            $t->assign('Difficulty', $result['Difficulty'] );
+        } else {
+            $t->assign('Difficulty','-');	
+        }
+    /*}}}*/
+    }
+
+    /**
+     * set_divesite_pictures 
+     * 
+     * @access public
+     * @return void
+     */
+    function set_divetrip_pictures(){
+        global $_config, $t, $_lang, $globals; /*{{{*/
+        $pic_class = new DivePictures;
+        $pic_class->set_divegallery_info_direct($this->user_id);
+        $pic_class->get_divegallery_info(0,$this->divesite_nr);
+        $divepics = $pic_class->get_image_link();
+        $pics = count($divepics);
+        if ($pics != 0) {
+            if(isset($_config['divepics_preview'])){
+                $t->assign('pics2' , '1');
+                $t->assign('image_link', $divepics);
+            } else {
+                /**
+                 *  
+                 */
+            }
+        }
+    /*}}}*/
+    }
+
+    function set_dives_at_trip(){
+        global $globals, $_config, $t, $_lang; /*{{{*/
+        $this->get_dives_at_location();
+        // Show site dives if we have them
+        $dives = $this->dives;
+        if ($this->dive_count != 0) {
+            $t->assign('dive_count', $this->dive_count);
+            if ($this->dive_count == 1) {
+                $t->assign('site_dive_trans', $_lang['site_dive_single']);
+            } else {
+                $t->assign('site_dive_trans', $_lang['site_dive_plural']);
+            }
+            for ($i=0; $i<$this->dive_count; $i++) {
+                $dives[$i] = $dives[$i]['Number'] ; 
+            }
+            $t->assign('dlog_number_title', $_lang['dlog_number_title'] );
+            $t->assign('dives',$dives);
+        } else {
+            $t->assign('dlog_number_title', "" );
+            $t->assign('dives',"");
+        }
+    /*}}}*/
+    }
+
+    function set_divetrip_comments(){
+        global $globals, $_config, $t, $_lang; /*{{{*/
+        //	Comments
+        $result = $this->result;
+        //	Show them if we have them
+        if ($result['Comments'] != "") {
+            $t->assign('site_sect_comments', $_lang['site_sect_comments']);
+            $r = $result['Comments'];
+            $r = str_replace(array("\r\n", "\r", "\n"), "<br>", $r);
+
+            //		Handle Google Map URL
+            $r = str_replace('[url]','<a href="',$r);
+            $r = str_replace('[/url]','" target="_blank" title="'. $_lang['site_google_link']. $result['Place'] .'">'. $_lang['site_google_link'] . $result['Place'] .'</a>',$r);
+
+            $t->assign('Comments', $r);
+        }
+    /*}}}*/
+    } 
+
+    function get_divesite_overview(){
+        global $t, $_lang, $globals, $_config; /*{{{*/
+        $placetable = $this->table_prefix."Place";
+        $logbooktable = $this->table_prefix."Logbook";
+        
+        if ($_config["length"]) {
+           $sql = sql_file("divesite_overview-imp.sql");
+        } else {
+            $sql = sql_file("divesite_overview.sql");
+        }
+
+        /**
+         * when view_type = 1 display the ajax grid if type = 2 display old fashioned table 
+         */
+        if ($_config['view_type'] == 1) {
+            $this->get_divesite_overview_grid($sql);
+        }
+        elseif ($_config['view_type'] == 2) {
+            $this->get_divesite_overview_table($sql);
+        } else{
+            echo 'no view_type defined!';
+        }
+        $t->assign('pagetitle',$_lang['dive_sites']);
+    /*}}}*/
+    }
+
+    function get_divesite_overview_table($sql){
+        global $db, $t, $_lang, $globals, $_config; /*{{{*/
+        //    Get the page header
+        //    Get the details of the locations to be listed
+        $locationlist_query = $sql." ORDER BY Place";
+        $t->assign('dsite_title_place', $_lang['dsite_title_place']);
+        $t->assign('dsite_title_city', $_lang['dsite_title_city']);
+        $t->assign('dsite_title_country', $_lang['dsite_title_country']);
+        $t->assign('dsite_title_maxdepth', $_lang['dsite_title_maxdepth']);
+        if ($this->multiuser == 1) {
+            $path = $_config['web_root'].'/divesite.php/'.$this->user_id.'/list';
+        } else {
+            $path = $_config['web_root'].'/divesite.php/list';
+        }
+        if (empty($this->requested_page)) {
+            $cpage = 0;
+        } else {
+            $cpage = $this->requested_page;
+        }
+        $pager_options = new TablePager($cpage,$path);
+        $paged_data = Pager_Wrapper_MDB2($db, $locationlist_query, $pager_options->options);
+        $t->assign('dsite_title_place', $_lang['dsite_title_place']);
+        $t->assign('dsite_title_city', $_lang['dsite_title_city']);
+        $t->assign('dsite_title_country', $_lang['dsite_title_country']);
+        $t->assign('dsite_title_maxdepth', $_lang['dsite_title_maxdepth']);
+        if ($_config['length']) {
+            $t->assign('unit_length_short', $_lang['unit_length_short_imp']);
+        } else {
+            $t->assign('unit_length_short', $_lang['unit_length_short']);
+        }
+
+        $t->assign('pages', $paged_data['links']);
+        $t->assign('cells', $paged_data['data']);
+    /*}}}*/
+    }
+
+    function get_divesite_overview_grid($sql){
+        global $t, $_lang, $globals, $_config; /*{{{*/
+        $sql .=  " ORDER BY Place ASC";
+        $data = parse_mysql_query(0,$sql);;
+        $GridClass = new TableGrid($this->user_id,$data);
+        $grid = $GridClass->get_grid_class();
+
+        /**
+         * Define the table according some info 
+         */
+        if ($this->multiuser) {
+            $url = "/divesite.php".$t->getTemplateVars('sep1').$this->user_id.$t->getTemplateVars('sep2');
+        } else {
+            $url = "/divesite.php".$t->getTemplateVars('sep2');
+        }
+        //print_r($data);
+        $grid->showColumn('Place', $_lang['dsite_title_place']);
+        $grid->setColwidth('Place',"220");
+        $grid->showColumn('Country', $_lang['dsite_title_country']);
+        $grid->setColwidth('Country',"100");
+        $grid->showColumn('City', $_lang['dsite_title_city']);
+        $grid->setColwidth('City',"200");
+        $grid->showColumn('MaxDepth', $_lang['dsite_title_maxdepth']);
+        $grid->setColwidth('MaxDepth',"55");
+        $grid->setRowActionFunction("action");
+        $grid->setCallbackFunction("MaxDepth","add_unit_depth");
+
+        $grid_ret = $grid->render(TRUE); 
+        $t->assign('grid_display' ,1);
+        $t->assign('grid',$grid_ret );
+    /*}}}*/
+    }
+/*}}}*/
+}
+
+
+/**
+ * Tank get all tanks which belong to a dive 
+ * 
+ * @package phpdivinglog
+ * @version $Rev$
+ * @copyright Copyright (C) 2011 Rob Lensen. All rights reserved.
+ * @author Rob Lensen <rob@bsdfreaks.nl> 
+ * @license LGPL v3 http://www.gnu.org/licenses/lgpl-3.0.txt
+ */
+class Tank{
+    var $multiuser; 
+    var $table_prefix;
+    var $user_id;
+    var $divetank_nr;
+    var $dive_nr;
+    var $result;
+    var $request_type; // request_type = 0 overview request_type = 1 details
+
+    /**
+     * Divesite default constructor sets some defaults for this class
+     * 
+     * @access public
+     * @return void
+     */
+    function __construct($tank_id = 0 , $dive_nr = 0) {
+        if($tank_id !=0){
+            // Class is called to get info about a tank
+            $this->get_divetank_info();
+
+        } elseif($dive_nr != 0){
+            //Class is called to get all tanks from a dive
+        } else {
+            //Class is called without arguments
+            //@TODO maybe a tank list?
+        }
+    
+    }
+
+    function get_request_type(){
+        return $this->request_type;
+    }
+    /**
+     * get_equipment_info 
+     * 
+     * @access public
+     * @return void
+     */
+    function get_divetank_info(){
+        global $_config, $globals; /*{{{*/
+        if (!empty($this->divetank_nr)) {
+            $this->request_type = 1;
+            $globals['tank_id'] = $this->divetank_nr;
+            $this->result = parse_mysql_query('onetank.sql');
+        } else {
+           /**
+             * If the request type is not already set(by divers choice), set it to overview  
+             */
+            if ($this->request_type != 3) {
+                $this->request_type = 0;
+            }
+        }
+        return $this->result;
+    /*}}}*/
+    }
+
+    /**
+     * get_tanks_from_dive checks if there are more tanks associated with a dive nr
+     * 
+     * @access public
+     * @return void
+     */
+    function get_tanks_from_dive(){
+        global $t, $_config, $_lang, $globals; /*{{{*/
+        $globals['dive_nr'] = $this->dive_nr;
+        $divetanks = parse_mysql_query('tanksdivelist.sql');
+        $num_tanks = count($divetanks);
+        if($num_tanks > 0){
+            //Get the info for each tank
+
+        
+        }
+    /*}}}*/
+    }
+
+
+
+
 }
 
 /**
