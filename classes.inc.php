@@ -3742,16 +3742,15 @@ class DivePictures{
      */
 
     function get_exif_data($file){
-        global $_config,$t, $_lang, $globals;
+        global $_config, $t, $_lang, $globals;
         if(isset($_config["get_exif_data"]) && function_exists('exif_read_data')){
             $exif_date = exif_read_data ( $file ,'IFD0'  ); 
           //  print_r($exif_date);
             $edate = $exif_date['DateTime']; 
         } else {
-        //echo "ja";
+            $edate = "";
         }
         return $edate;
-
     }
 
     /**
