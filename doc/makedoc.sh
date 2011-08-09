@@ -6,7 +6,7 @@ PACKAGES="phpdivinglog"
 PATH_PROJECT=$PWD
 PATH_DOCS=$PWD/doc
 PATH_PHPDOC=phpdoc
-IGNORE=$PWD/includes/jpgraph/*,jpg*,*jpgraph*,*smarty*,*pear*,*gd_image*,*imgdata*,*prod.inc.php*,*de.inc.php*,*en.inc.php*,*%%*
+IGNORE=jpgraph/,pchart/,smarty/,*compile*,/cache,*gif*,*jpg*,*jpgraph*,*smarty*,*pear*,*gd_image*,*imgdata*,*prod.inc.php*,*de.inc.php*,*en.inc.php*,*%%*
 
 OUTPUTFORMAT=HTML
 CONVERTER=frames
