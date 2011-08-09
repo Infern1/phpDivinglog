@@ -1,7 +1,12 @@
-* multiple dive tanks
-* display of related info from other tables in dive details (shops, trips etc.)
-* display of overview and details pages for country, city, shop, trip
-* extra profile charts
-* support links in comments [url][/url]
-* extra dive statistics
-* improvements to the photo gallery
+* Multiple dive tanks
+* Display related info from other tables in dive details (i.e. shops, trips etc.)
+* Display of overview and details pages for country, city, shop, trip
+* Extra profile charts (e.g. temperature, gas changes, Asc-/Descend rate, tank pressures, ppO2 etc.)
+* Support web links in all comments [url][/url]
+* Extra dive statistics (e.g. number of twin, single and stage dives)
+* Improvements to the photo gallery
+* Show which equipment items are due for service and/or O2 clean
+* Show the user-defined fields
+* Protected access to overview and details of buddies
+
+
