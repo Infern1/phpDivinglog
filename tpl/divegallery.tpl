@@ -16,39 +16,51 @@
 
 {foreach from=$image_link key=id item=i name=images}
 <div class="thumbwrapper">
-{if isset($pics_resized)}
-    <a id="thumb{$id}" href="{$web_root}/{$i.img_url}" class="highslide" onclick="return hs.expand(this)" title="{$i.img_title}">
-    <img src="{$web_root}/{$i.img_thumb_url}" alt="{$i.img_title}" title="{$i.img_title}" height="{$thumb_height}" width="{$thumb_width}" ></a>
-{else}
-    <a id="thumb{$id}" href="{$web_root}/{$i.img_url}" class="highslide" onclick="return hs.expand(this)" title="{$i.img_title}">
-    <img src="{$web_root}/imagesize.php?w={$thumb_width}&img={$i.img_url}" alt="{$i.img_title}" title="{$i.img_title}" height="{$thumb_height}" width="{$thumb_width}" ></a>
-{/if}
+    {if isset($pics_resized)}
+        <a id="thumb{$id}" href="{$web_root}/{$i.img_url}" class="highslide" onclick="return hs.expand(this)" title="{$i.img_title}">
+        <img src="{$web_root}/{$i.img_thumb_url}" alt="{$i.img_title}" title="{$i.img_title}" height="{$thumb_height}" width="{$thumb_width}" ></a>
+    {else}
+        <a id="thumb{$id}" href="{$web_root}/{$i.img_url}" class="highslide" onclick="return hs.expand(this)" title="{$i.img_title}">
+        <img src="{$web_root}/imagesize.php?w={$thumb_width}&img={$i.img_url}" alt="{$i.img_title}" title="{$i.img_title}" height="{$thumb_height}" width="{$thumb_width}" ></a>
+    {/if}
     <div class='highslide-caption'>
-        {$dive_details_pagetitle} {if isset($multiuser_id)}
+        {$dive_details_pagetitle} 
+        {if isset($multiuser_id)}
+            <a href="{$app_path}/index.php{$sep1}{$multiuser_id}{$sep2}{$i.dive_nr}" title="{$dlog_number_title}{$i.dive_nr}">{$i.dive_nr}</a>
+        {else}
+            <a href="{$app_path}/index.php{$sep2}{$i.dive_nr}" title="{$dlog_number_title}{$i.dive_nr}">{$i.dive_nr}</a>
+        {/if}
+        <br>
+        {$logbook_place}  
+        {if isset($multiuser_id)}
+            <a href="{$app_path}/divesite.php{$sep1}{$multiuser_id}{$sep2}{$i.site_nr}" title="{$dlog_number_title}{$i.site_nr}">{$i.site_nr}</a>
+        {else}
+            <a href="{$app_path}/divesite.php{$sep2}{$i.site_nr}" title="{$dlog_number_title}{$i.site_nr}">{$i.site_nr}</a>
+        {/if}
+        <br>
+        {$i.img_title} 
+        {if $i.img_date != ''}
+            <br>
+            Date: {$i.img_date}
+        {/if}
+    </div>
+    {$dive_details_pagetitle} 
+    {if isset($multiuser_id)}
         <a href="{$app_path}/index.php{$sep1}{$multiuser_id}{$sep2}{$i.dive_nr}" title="{$dlog_number_title}{$i.dive_nr}">{$i.dive_nr}</a>
-{else}
-    <a href="{$app_path}/index.php{$sep2}{$i.dive_nr}" title="{$dlog_number_title}{$i.dive_nr}">{$i.dive_nr}</a>
-{/if}<br>
-{$logbook_place}  
-{if isset($multiuser_id)}
-    <a href="{$app_path}/divesite.php{$sep1}{$multiuser_id}{$sep2}{$i.site_nr}" title="{$dlog_number_title}{$i.site_nr}">{$i.site_nr}</a>
-{else}
-    <a href="{$app_path}/divesite.php{$sep2}{$i.site_nr}" title="{$dlog_number_title}{$i.site_nr}">{$i.site_nr}</a>
-{/if}<br>
-{$i.img_title} 
-</div>
-{$dive_details_pagetitle} 
-{if isset($multiuser_id)}
-    <a href="{$app_path}/index.php{$sep1}{$multiuser_id}{$sep2}{$i.dive_nr}" title="{$dlog_number_title}{$i.dive_nr}">{$i.dive_nr}</a>
-{else}
-    <a href="{$app_path}/index.php{$sep2}{$i.dive_nr}" title="{$dlog_number_title}{$i.dive_nr}">{$i.dive_nr}</a>
-{/if}<br>
-{$logbook_place}  
-{if isset($multiuser_id)}
-    <a href="{$app_path}/divesite.php{$sep1}{$multiuser_id}{$sep2}{$i.site_nr}" title="{$dlog_number_title}{$i.site_nr}">{$i.site_nr}</a>
-{else}
-    <a href="{$app_path}/divesite.php{$sep2}{$i.site_nr}" title="{$dlog_number_title}{$i.site_nr}">{$i.site_nr}</a>
-{/if}
+    {else}
+        <a href="{$app_path}/index.php{$sep2}{$i.dive_nr}" title="{$dlog_number_title}{$i.dive_nr}">{$i.dive_nr}</a>
+    {/if}
+    <br>
+    {$logbook_place}  
+    {if isset($multiuser_id)}
+        <a href="{$app_path}/divesite.php{$sep1}{$multiuser_id}{$sep2}{$i.site_nr}" title="{$dlog_number_title}{$i.site_nr}">{$i.site_nr}</a>
+    {else}
+        <a href="{$app_path}/divesite.php{$sep2}{$i.site_nr}" title="{$dlog_number_title}{$i.site_nr}">{$i.site_nr}</a>
+    {/if}
+    {if $i.img_date != ''}
+        <br>
+        Date: {$i.img_date}
+    {/if}
 </div>
 {/foreach}
 
