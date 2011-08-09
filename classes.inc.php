@@ -1437,7 +1437,7 @@ class Divelog {
             }
             $t->assign('PresW', $PresW);
         } else {
-            $t->assign('PressW','-');	
+            $t->assign('PresW','-');	
         }
 
         if ($result[0]['SupplyType'] != "") {
