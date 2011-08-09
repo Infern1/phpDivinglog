@@ -3717,7 +3717,7 @@ class DivePictures{
           //  print_r($exif_date);
             $edate = $exif_date['DateTime']; 
         } else {
-        //echo "ja";
+            $edate = "";
         }
         return $edate;
     }
