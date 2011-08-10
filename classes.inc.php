@@ -2866,6 +2866,400 @@ class Equipment{
 }
 
 /**
+ * Diveshop contains all functions for displaying the diveshop information
+ * 
+ * @package phpdivinglog
+ * @copyright Copyright (C) 2007 Rob Lensen. All rights reserved.
+ * @author Rob Lensen <rob@bsdfreaks.nl> 
+ * @license LGPL v3 http://www.gnu.org/licenses/lgpl-3.0.txt
+ */
+class Diveshop{
+    var $multiuser; /*{{{*/
+    var $table_prefix;
+    var $user_id;
+    var $diveshop_nr;
+    var $result;
+    var $result_countrycity;
+    var $country;
+    var $city;
+    var $dives;
+    var $dive_count;
+    var $shoplist;
+    var $diveshop_data;
+    var $request_type; // request_type = 0 overview request_type = 1 details
+
+    /**
+     * Diveshop default constructor sets some defaults for this class
+     * 
+     * @access public
+     * @return void
+     */
+    function __construct() {
+        $a = func_get_args(); 
+        $i = func_num_args(); 
+        if($i == 0){
+            global $_config;
+            $this->multiuser = $_config['multiuser'];
+        } else {
+            if (method_exists($this,$f='__construct'.$i)) { 
+                call_user_func_array(array($this,$f),$a); 
+            } 
+        }
+    }
+
+    /**
+     * __construct1 construct a Diveshop class when diveshop ID is given
+     * 
+     * @param mixed $a1 
+     * @access protected
+     * @return void
+     */
+    function __construct1($a1) 
+    { 
+        global $_config;
+        $this->diveshop_nr = $a1;
+        $this->get_diveshop_info();
+    } 
+
+    function get_request_type(){
+        return $this->request_type;
+    }
+
+    function set_diveshop_info($request){
+        // We need to extract the info from the request
+        /*{{{*/
+        if (!$request->diver_choice) {
+            if ($request->get_view_request() == 1) {
+                $this->request_type = 1;
+                $this->diveshop_nr = $request->get_shop_nr();
+            } else {
+                $this->request_type = 0;
+                $this->requested_page = $request->get_requested_page();
+            }
+            if ($this->multiuser) {
+                $this->user_id = $request->get_user_id();
+                $user = new User();
+                $user->set_user_id($this->user_id);
+                $this->table_prefix = $user->get_table_prefix();
+            } else {
+                $user = new User();
+                $this->table_prefix = $user->get_table_prefix();
+                $this->diveshop_nr = $request->get_shop_nr();
+            }
+        } else {
+            $this->request_type = 3;
+        }
+    /*}}}*/
+    }
+
+    function get_diveshop_info(){
+        global $globals, $_config; /*{{{*/
+        if (!empty($this->diveshop_nr)) {
+            $this->request_type = 1;
+            $globals['placeid'] = $this->diveshop_nr;
+            $this->result = parse_mysql_query('oneplace.sql');
+            $this->result_countrycity = parse_mysql_query('countrycity.sql');
+        } else {
+            /**
+             * If the request type is not already set(by divers choice), set it to overview  
+             */
+            if ($this->request_type != 3) {
+                $this->request_type = 0;
+            }
+        }
+        return $this->result;
+    /*}}}*/
+    }
+
+    function get_overview_divers(){
+        global $t, $_lang, $globals, $_config; /*{{{*/
+        $users = new Users();
+        $user_list = $users->get_user_data();
+        $t->assign('diver_overview',1);
+        $t->assign('divers', $user_list);
+        $t->assign('file_name','diveshop.php');
+    /*}}}*/
+    }
+
+    /**
+     * get_diveshop_location_details 
+     * 
+     * @access public
+     * @return void
+     */
+    function get_diveshop_location_details(){
+        global $globals, $_config; /*{{{*/
+        $countrycity = $this->result_countrycity;
+        if (count($countrycity) != 0) {
+            if ($countrycity['Country'] != "") {
+                //			Get the country details from database
+                $globals['countryid'] = $countrycity['CountryID'];
+                $countrydetails = parse_mysql_query('onecountry.sql');
+                if (count($countrydetails) == 0) {
+                    $this->country = $countrycity['Country'];
+                } else {
+                    $this->country = $countrydetails['Country'];
+                }
+            }
+
+            if ($countrycity['City'] != "") {
+                //			Get the city details from database
+                $globals['cityid'] = $countrycity['CityID'];
+                $citydetails = parse_mysql_query('onecity.sql');
+                if (count($citydetails) == 0) {
+                    $this->city = $countrycity['City'];
+                } else {
+                    $this->city = $citydetails['City'];
+                }
+            }
+        }
+    /*}}}*/
+    }
+
+    /**
+     * get_dives_with_shop 
+     * 
+     * @access public
+     * @return void
+     */
+    function get_dives_with_shop(){
+        global $globals, $_config; /*{{{*/
+        // Get the dives with this shop from database
+        $globals['placeid'] = $this->diveshop_nr;
+        $this->dives = parse_mysql_query('shopdives.sql');
+        $this->dive_count = count($this->dives);
+        // Get the shop list from database
+        $this->shoplist = parse_mysql_query('shoplist.sql');
+    /*}}}*/
+    }
+
+    /**
+     * set_main_diveshop_details 
+     * 
+     * @access public
+     * @return void
+     */
+    function set_main_diveshop_details(){
+        global $globals, $_config, $t, $_lang; /*{{{*/
+        $this->get_diveshop_location_details(); 
+        // Show main shop details
+        $result = $this->result;
+        $t->assign('pagetitle',$_lang['dive_shop_pagetitle'].$result['Place']);
+        $t->assign('diveshop_id', $this->diveshop_nr);
+        $t->assign('place_place', $_lang['place_place']);
+        $t->assign('place_city', $_lang['place_city']);
+        $t->assign('place_country', $_lang['place_country']);
+
+        if ($result['Place'] == "") {
+            $Place = "-";
+        } else {
+            $Place = $result['Place'];
+        }
+        $t->assign('Place', $Place);
+        $t->assign('city', $this->city );
+        $t->assign('country', $this->country);
+
+        $t->assign('place_rating', $_lang['place_rating']);
+        if ($result['Rating'] != "") {
+            $desc = $_lang['rating'][$result['Rating']];
+            $Rating = '<img src="'.$_config['web_root'].'/images/ratings5-'.$result['Rating'].'.gif" alt="'.$desc.'" title="'.$desc.'" border="0" width="84" height="15">';
+            $t->assign('Rating', $Rating);
+        } else {
+            $t->assign('Rating','-');	
+        }
+
+    /*}}}*/
+    }
+
+    /**
+     * set_diveshop_pictures 
+     * 
+     * @access public
+     * @return void
+     */
+    function set_diveshop_pictures(){
+        global $_config, $t, $_lang, $globals; /*{{{*/
+        $pic_class = new DivePictures;
+        $pic_class->set_divegallery_info_direct($this->user_id);
+        $pic_class->get_divegallery_info(0,$this->diveshop_nr);
+        $divepics = $pic_class->get_image_link();
+        $pics = count($divepics);
+        if ($pics != 0) {
+            if(isset($_config['divepics_preview'])){
+                $t->assign('pics2' , '1');
+                $t->assign('image_link', $divepics);
+            } else {
+                /**
+                 *  
+                 */
+            }
+        }
+    /*}}}*/
+    }
+
+    /**
+     * set_dives_with_shop 
+     * 
+     * @access public
+     * @return void
+     */
+    function set_dives_with_shop(){
+        global $globals, $_config, $t, $_lang; /*{{{*/
+        $this->get_dives_with_shop();
+        // Show shop dives if we have them
+        if(count($this->dives) == 1){
+            $dives[0] = $this->dives;
+        } else {
+            $dives = $this->dives;
+        }
+        //var_dump($this);
+        if ($this->dive_count != 0) {
+            $t->assign('dive_count', $this->dive_count);
+            if ($this->dive_count == 1) {
+                $t->assign('shop_dive_trans', $_lang['shop_dive_single']);
+            } else {
+                $t->assign('shop_dive_trans', $_lang['shop_dive_plural']);
+            }
+            for ($i=0; $i<$this->dive_count; $i++) {
+                $dives[$i] = $dives[$i]['Number'] ; 
+            }
+            $t->assign('dlog_number_title', $_lang['dlog_number_title'] );
+            $t->assign('dives',$dives);
+        } else {
+            $t->assign('dlog_number_title', "" );
+            $t->assign('dives',"");
+        }
+    /*}}}*/
+    }
+
+    /**
+     * set_diveshop_comments 
+     * 
+     * @access public
+     * @return void
+     */
+    function set_diveshop_comments(){
+        global $globals, $_config, $t, $_lang; /*{{{*/
+        //	Comments
+        $result = $this->result;
+        //	Show them if we have them
+        if ($result['Comments'] != "") {
+            $t->assign('shop_sect_comments', $_lang['shop_sect_comments']);
+            $r = $result['Comments'];
+            $r = str_replace(array("\r\n", "\r", "\n"), "<br>", $r);
+
+            //		Handle URLs
+            $r = str_replace('[url]','<a href="',$r);
+            $r = str_replace('[/url]','" target="_blank" title="'. $_lang['shop_google_link']. $result['Place'] .'">'. $_lang['shop_google_link'] . $result['Place'] .'</a>',$r);
+
+            $t->assign('Comments', $r);
+        }
+    /*}}}*/
+    } 
+
+    /**
+     * get_diveshop_overview 
+     * 
+     * @access public
+     * @return void
+     */
+    function get_diveshop_overview(){
+        global $t, $_lang, $globals, $_config; /*{{{*/
+        $placetable = $this->table_prefix."Place";
+        $logbooktable = $this->table_prefix."Logbook";
+        
+        $sql = sql_file("diveshop_overview.sql");
+
+        /**
+         * when view_type = 1 display the ajax grid if type = 2 display old fashioned table 
+         */
+        if ($_config['view_type'] == 1) {
+            $this->get_diveshop_overview_grid($sql);
+        }
+        elseif ($_config['view_type'] == 2) {
+            $this->get_diveshop_overview_table($sql);
+        } else{
+            echo 'no view_type defined!';
+        }
+        $t->assign('pagetitle',$_lang['dive_shops']);
+    /*}}}*/
+    }
+
+    /**
+     * get_diveshop_overview_table 
+     * 
+     * @access public
+     * @return void
+     */
+    function get_diveshop_overview_table($sql){
+        global $db, $t, $_lang, $globals, $_config; /*{{{*/
+        //    Get the page header
+        //    Get the details of the locations to be listed
+        $locationlist_query = $sql." ORDER BY Place";
+        $t->assign('dshop_title_place', $_lang['dshop_title_place']);
+        $t->assign('dshop_title_city', $_lang['dshop_title_city']);
+        $t->assign('dshop_title_country', $_lang['dshop_title_country']);
+        $t->assign('dshop_title_maxdepth', $_lang['dshop_title_maxdepth']);
+        if ($this->multiuser == 1) {
+            $path = $_config['web_root'].'/diveshop.php/'.$this->user_id.'/list';
+        } else {
+            $path = $_config['web_root'].'/diveshop.php/list';
+        }
+        if (empty($this->requested_page)) {
+            $cpage = 0;
+        } else {
+            $cpage = $this->requested_page;
+        }
+        $pager_options = new TablePager($cpage,$path);
+        $paged_data = Pager_Wrapper_MDB2($db, $locationlist_query, $pager_options->options);
+        $t->assign('dshop_title_place', $_lang['dshop_title_place']);
+        $t->assign('dshop_title_city', $_lang['dshop_title_city']);
+        $t->assign('dshop_title_country', $_lang['dshop_title_country']);
+
+        $t->assign('pages', $paged_data['links']);
+        $t->assign('cells', $paged_data['data']);
+    /*}}}*/
+    }
+
+    /**
+     * get_diveshop_overview_grid 
+     * 
+     * @param mixed $sql 
+     * @access public
+     * @return void
+     */
+    function get_diveshop_overview_grid($sql){
+        global $t, $_lang, $globals, $_config; /*{{{*/
+        $sql .=  " ORDER BY Place ASC";
+        $data = parse_mysql_query(0,$sql);;
+        $GridClass = new TableGrid($this->user_id,$data);
+        $grid = $GridClass->get_grid_class();
+
+        /**
+         * Define the table according some info 
+         */
+        if ($this->multiuser) {
+            $url = "/diveshop.php".$t->getTemplateVars('sep1').$this->user_id.$t->getTemplateVars('sep2');
+        } else {
+            $url = "/diveshop.php".$t->getTemplateVars('sep2');
+        }
+        //print_r($data);
+        $grid->showColumn('Place', $_lang['dshop_title_place']);
+        $grid->setColwidth('Place',"220");
+        $grid->showColumn('Country', $_lang['dshop_title_country']);
+        $grid->setColwidth('Country',"100");
+        $grid->showColumn('City', $_lang['dshop_title_city']);
+        $grid->setColwidth('City',"200");
+
+        $grid_ret = $grid->render(TRUE); 
+        $t->assign('grid_display' ,1);
+        $t->assign('grid',$grid_ret );
+    /*}}}*/
+    }
+/*}}}*/
+}
+
+/**
  * Divestats contains all functions for displaying all divestatistics
  * 
  * @package phpdivinglog
