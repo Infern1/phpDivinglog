@@ -1232,10 +1232,10 @@ class Divelog {
 
         if ($pics != 0) {
             if (isset($_config['divepics_preview'])) {
-                $t->assign('pics2' , '1');
+                $t->assign('pics2', '1');
                 $t->assign('image_link', $divepics);
             } else {
-                $t->assign('pics' , '1');
+                $t->assign('pics', '1');
                 $globals['logid'] = $result['ID'];
                 $divepics = parse_mysql_query('divepics.sql');
                 
