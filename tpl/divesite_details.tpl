@@ -123,7 +123,7 @@ title="{$dlog_number_title}{$dive}">{$dive}</a>
 
     {* Comments *}
     {* Show them if we have them *}
-    {if $Comments != ''}
+    {if isset($Comments)}
     <tr class="divesection">
       <td colspan="4">{$site_sect_comments}</td>
     </tr>

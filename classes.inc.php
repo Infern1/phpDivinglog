@@ -871,7 +871,7 @@ class TopLevelMenu {
             //	First, Previous
             if ($position != 0 ) {
                 $t->assign('position',$position);
-                $t->assign('first_site_id', $sitelist['ID']);
+                $t->assign('first_site_id', $sitelist[0]['ID']);
                 $t->assign('first_site_linktitle', $_lang['first_site_linktitle']);
                 $t->assign('first', $_lang['first']);
                 $t->assign('previous_site_id', $sitelist[$position - 1]['ID']);
@@ -901,7 +901,7 @@ class TopLevelMenu {
             //	First, Previous
             if ($position != 0 ) {
                 $t->assign('equipment_first','1');
-                $t->assign('first_eq_id', $gearlist['ID']);
+                $t->assign('first_eq_id', $gearlist[0]['ID']);
                 $t->assign('first_equip_linktitle', $_lang['first_equip_linktitle']);
                 $t->assign('first', $_lang['first']);
                 $t->assign('previous_eq_id', $gearlist[$position - 1]['ID']);
@@ -2271,7 +2271,12 @@ class Divesite{
         global $globals, $_config, $t, $_lang; /*{{{*/
         $this->get_dives_at_location();
         // Show site dives if we have them
-        $dives = $this->dives;
+        if(count($this->dives) == 1){
+            $dives[0] = $this->dives;
+        } else {
+            $dives = $this->dives;
+        }
+        //var_dump($this);
         if ($this->dive_count != 0) {
             $t->assign('dive_count', $this->dive_count);
             if ($this->dive_count == 1) {
@@ -2666,15 +2671,21 @@ class Equipment{
         $pic_class->get_divegallery_info(0,0,$this->equipment_nr);
         $divepics = $pic_class->get_image_link();
         $pics = count($divepics);
-        if ($pics != 0) {
+        if ($pics > 0) {
             if (isset($_config['divepics_preview'])) {
                 $t->assign('pics2' , '1');
+                $t->assign('has_images', '1');
                 $t->assign('image_link', $divepics);
             } else {
                 /**
                  *  
                  */
+                 $t->assign('has_images', '0');
+              // $t->assign('image_link', '');
             }
+        } else {
+                    $t->assign('has_images', '0');
+        //$t->assign('image_link', '');
         }
     /*}}}*/
     }
@@ -2998,53 +3009,87 @@ class Divestats{
             // Get dive number for first dive
             $globals['stats'] = "Divedate = '" . $divestats['DivedateMin'] . "'";
             $divestatsnr = parse_mysql_query('divestatsnr.sql');
-            $this->DivedateMinNr = $divestatsnr['Number'];
+            //Check the number of dives on the first day of diving, if more than 1 get the first
+            if(count($divestatsnr) > 1){
+                $this->DivedateMinNr = $divestatsnr[0]['Number'];
+            } else {
+                $this->DivedateMinNr = $divestatsnr['Number'];
+            }
 
             // Get dive number for last dive
             $globals['stats'] = "Divedate = '" . $divestats['DivedateMax'] . "'";
             $divestatsnr = parse_mysql_query('divestatsnr.sql');
-            $this->DivedateMaxNr = $divestatsnr[count($divestatsnr)-1]['Number'];
+            //Some principle as first dive
+            if(count($divestatsnr) > 1){
+                $this->DivedateMaxNr = $divestatsnr[count($divestatsnr)-1]['Number'];
+            } else {
+                $this->DivedateMinNr = $divestatsnr['Number'];
+            }
 
             // Get dive number for sortest dive
             $globals['stats'] = "Divetime = '" . $divestats['DivetimeMin'] . "'";
             $divestatsnr = parse_mysql_query('divestatsnr.sql');
-            $this->DivetimeMinNr = $divestatsnr['Number'];
-
+            if(count($divestatsnr) > 1){
+                $this->DivetimeMinNr = $divestatsnr[0]['Number'];
+            } else {
+                $this->DivetimeMinNr = $divestatsnr['Number'];
+            }
             // Get dive number for deepest dive
             $globals['stats'] = "Divetime = '" . $divestats['DivetimeMax'] . "'";
             $divestatsnr = parse_mysql_query('divestatsnr.sql');
-            $this->DivetimeMaxNr = $divestatsnr['Number'];
-
+            if(count($divestatsnr) > 1){
+                $this->DivetimeMaxNr = $divestatsnr[0]['Number'];
+            } else {
+                $this->DivetimeMaxNr = $divestatsnr['Number'];
+            }
             // Get dive number for shallowest dive
             $globals['stats'] = "Depth = '" . $divestats['DepthMin'] . "'";
             $divestatsnr = parse_mysql_query('divestatsnr.sql');
-            $this->DepthMinNr = $divestatsnr['Number'];
-
+            if(count($divestatsnr) > 1){
+                $this->DepthMinNr = $divestatsnr[0]['Number'];
+            } else {
+                $this->DepthMinNr = $divestatsnr['Number'];
+            }
             // Get dive number for deepest dive
             $globals['stats'] = "Depth = '" . $divestats['DepthMax'] . "'";
             $divestatsnr = parse_mysql_query('divestatsnr.sql');
-            $this->DepthMaxNr = $divestatsnr['Number'];
-
+            if(count($divestatsnr) > 1){
+                $this->DepthMaxNr = $divestatsnr[0]['Number'];
+            } else {
+                $this->DepthMaxNr = $divestatsnr['Number'];
+            }
             // Get dive number for coldest water dive
             $globals['stats'] = "Watertemp = '" . $divestats['WatertempMin'] . "'";
             $divestatsnr = parse_mysql_query('divestatsnr.sql');
-            $this->WatertempMinNr = $divestatsnr['Number'];
-
+            if(count($divestatsnr) > 1){
+                $this->WatertempMinNr = $divestatsnr[0]['Number'];
+            } else {
+                $this->WatertempMinNr = $divestatsnr['Number'];
+            }
             // Get dive number for warmest water dive
             $globals['stats'] = "Watertemp = '" . $divestats['WatertempMax'] . "'";
             $divestatsnr = parse_mysql_query('divestatsnr.sql');
-            $this->WatertempMaxNr = $divestatsnr['Number'];
-
+            if(count($divestatsnr) > 1){
+                $this->WatertempMaxNr = $divestatsnr[0]['Number'];
+            } else {
+                $this->WatertempMaxNr = $divestatsnr['Number'];
+            }
             // Get dive number for coldest air dive
             $globals['stats'] = "Airtemp = '" . $divestats['AirtempMin'] . "'";
             $divestatsnr = parse_mysql_query('divestatsnr.sql');
-            $this->AirtempMinNr = $divestatsnr['Number'];
-
+            if(count($divestatsnr) > 1){
+                $this->AirtempMinNr = $divestatsnr[0]['Number'];
+            } else {
+                $this->AirtempMinNr = $divestatsnr['Number'];
+            }
             // Get dive number for warmest air dive
             $globals['stats'] = "Airtemp = '" . $divestats['AirtempMax'] . "'";
             $divestatsnr = parse_mysql_query('divestatsnr.sql');
-            $this->AirtempMaxNr = $divestatsnr['Number'];
-
+            if(count($divestatsnr) > 1){
+                $this->AirtempMaxNr = $divestatsnr[0]['Number'];
+            } else {
+                $this->AirtempMaxNr = $divestatsnr['Number'];
+            }
             // Get the number of 1st depth range dives
             $globals['stats'] = "Depth <= 18";
             $divestatsother = parse_mysql_query('divestatsother.sql');
@@ -3575,19 +3620,25 @@ class DivePictures{
             } elseif ($equipment_nr !=0) {
                 $globals['id'] = $equipment_nr;
                 $base_path = $_config['equippath_web'];
-                $divepics = parse_mysql_query('divepics_equip.sql');
+                $divepics_temp = parse_mysql_query('divepics_equip.sql');
+                if(count($divepics_temp) == 2){
+                    $divepics[0] = $divepics_temp;
+                }else {
+                    $divepics = $divepics_temp;
+                }
+                
             }
             
             $pics = count($divepics);
-            if ($pics != 0 && !empty($divepics[0]['Path'])) {
+            if ($pics != 0 && !empty($divepics[0]['Path']) )  {
                 $this->image_link = array();
                 $this->num_images_from_dive = array();
                 $a =1;
                 for ($i=0; $i<$pics; $i++) {
                     $img_url =  $base_path . $divepics[$i]['Path'];
                     if (file_exists($img_url)) {
-                       $img_thumb_url = $base_path .'thumb_' . $divepics[$i]['Path'];
-                       //$img_title = $_lang['divepic_linktitle_pt1']. ($a). $_lang['divepic_linktitle_pt2']. $pics;
+                        $img_thumb_url = $base_path .'thumb_' . $divepics[$i]['Path'];
+                        //$img_title = $_lang['divepic_linktitle_pt1']. ($a). $_lang['divepic_linktitle_pt2']. $pics;
                         //$img_title .= $_lang['divepic_linktitle_pt3']  ;
                         $img_title = $divepics[$i]['Description'];
                         $img_date = $this->get_exif_data($img_url);
