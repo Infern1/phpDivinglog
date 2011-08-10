@@ -1515,33 +1515,36 @@ class Divelog {
         } else {
             $t->assign('MaxPPO2', $_config['default_maxppo2']."&nbsp;".$_lang['unit_pressure']);
             $maxppo2 = $_config['default_maxppo2'];
-//            $t->assign('MaxPPO2','-');	
         }
 
         $gasimage = "gas_air.gif";  // default air
         $gasimagealt = "Air";
         if (($result['O2'] > "21") && ($result['He'] == "") || ($result['He'] == "0")) {
             $gasimage = "gas_ean.gif";  // EAN
-            $gasimagealt = "EAN ".$result['O2'];
+            $gasimagealt = "EAN ".floor($result['O2']);
         }
         if (($result['O2'] == "32") && ($result['He'] == "") || ($result['He'] == "0")) {
             $gasimage = "gas_n32.gif";  // N32
-            $gasimagealt = "EAN ".$result['O2'];
+            $gasimagealt = "EAN ".floor($result['O2']);
         }
         if (($result['O2'] == "36") && ($result['He'] == "") || ($result['He'] == "0")) {
             $gasimage = "gas_n36.gif";  // N36
-            $gasimagealt = "EAN ".$result['O2'];
+            $gasimagealt = "EAN ".floor($result['O2']);
         }
         if (($result['He'] != "") && ($result['He'] != "0")) {
             $gasimage = "gas_tri.gif";  // Trimix
             $gasimagealt = "Trimix";
+            if (($result['O2'] != "") && ($result['O2'] != "0")) {
+              $gasimagealt .= ' '.floor($result['O2']) .'/'. floor($result['He']) .'/'. (100 - (floor($result['He']) + floor($result['O2'])));
+            }
         }
         if (($result['O2'] == "100")) {
             $gasimage = "gas_o2.gif";  // oxygen
             $gasimagealt = "Oxygen";
         }
         $gastypeimage = '<img src="'.$_config['web_root'].'/images/'.$gasimage.'" alt="'.$gasimagealt.'" title="'.$gasimagealt.'" border="0" width="19" height="20">';
-            $t->assign('GasTypeImage', $gastypeimage);
+        $t->assign('GasTypeImage', $gastypeimage);
+        $t->assign('GasImageAlt', $gasimagealt);
 
         //	Calculate MOD and EAD
         if ($result['He'] != "") {

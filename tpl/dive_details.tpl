@@ -490,7 +490,7 @@ title="{$i.divegear} {$logbook_place_linktitle}">{$i.divegear}</a>&nbsp;
     </tr>
  
     <tr class="divetitle">
-      <td rowspan="2">{$GasTypeImage}</td>
+      <td rowspan="2">{$GasTypeImage} {$GasImageAlt}</td>
       <td>{$logbook_mod}</td>
       <td>{$logbook_ead}</td>
       <td>{$logbook_avgdepth}</td>
