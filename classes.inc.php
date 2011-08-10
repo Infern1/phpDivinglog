@@ -2931,7 +2931,7 @@ class Diveshop{
         if (!$request->diver_choice) {
             if ($request->get_view_request() == 1) {
                 $this->request_type = 1;
-                $this->diveshop_nr = $request->get_shop_nr();
+                $this->diveshop_nr = $request->get_diveshop_nr();
             } else {
                 $this->request_type = 0;
                 $this->requested_page = $request->get_requested_page();
@@ -2944,7 +2944,7 @@ class Diveshop{
             } else {
                 $user = new User();
                 $this->table_prefix = $user->get_table_prefix();
-                $this->diveshop_nr = $request->get_shop_nr();
+                $this->diveshop_nr = $request->get_diveshop_nr();
             }
         } else {
             $this->request_type = 3;
@@ -3168,7 +3168,7 @@ class Diveshop{
         $placetable = $this->table_prefix."Place";
         $logbooktable = $this->table_prefix."Logbook";
         
-        $sql = sql_file("diveshop_overview.sql");
+        $sql = sql_file("shoplist.sql");
 
         /**
          * when view_type = 1 display the ajax grid if type = 2 display old fashioned table 
@@ -3195,7 +3195,7 @@ class Diveshop{
         global $db, $t, $_lang, $globals, $_config; /*{{{*/
         //    Get the page header
         //    Get the details of the locations to be listed
-        $locationlist_query = $sql." ORDER BY Place";
+        $locationlist_query = $sql;
         $t->assign('dshop_title_place', $_lang['dshop_title_place']);
         $t->assign('dshop_title_city', $_lang['dshop_title_city']);
         $t->assign('dshop_title_country', $_lang['dshop_title_country']);
@@ -3230,7 +3230,6 @@ class Diveshop{
      */
     function get_diveshop_overview_grid($sql){
         global $t, $_lang, $globals, $_config; /*{{{*/
-        $sql .=  " ORDER BY Place ASC";
         $data = parse_mysql_query(0,$sql);;
         $GridClass = new TableGrid($this->user_id,$data);
         $grid = $GridClass->get_grid_class();
