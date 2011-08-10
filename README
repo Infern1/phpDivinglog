@@ -23,9 +23,8 @@ DEPENDENCIES:
     - JpGraph 3.5.0b1 (http://www.aditus.nu/jpgraph/)
     - RTFClass v155 (http://www.phpclasses.org/browse/file/7632.html)
       Rich Text Format - Parsing Class - (c) 2000 Markus Fischer
-    - Lightbox JS v2.0 (http://www.huddletogether.com/projects/lightbox2/)
-      Used to overlay dive pictures on the current page.
     - Highslide JS v4.1.4 (http://highslide.com/support)
+      Used to overlay dive pictures on the current page.
     - PEAR packages: MDB2 v1.318, Pager v1.26
     - phpMyDatagrid v2007a (http://www.gurusistemas.com/indexdatagrid.php)
     - SmartyHost v3.1rc1 (http://www.smarty.net/)
