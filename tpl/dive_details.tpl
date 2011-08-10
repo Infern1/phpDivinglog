@@ -108,18 +108,32 @@
     {/if}
     </tr>
     
-    {if $dive_trip_name != ''}
     <tr class="divetitle">
-      <td colspan="4">{$trip_name_head}</td>
+      <td colspan="2">{$dive_shop_head}</td>
+      <td colspan="2">{$dive_trip_head}</td>
     </tr>
+
     <tr class="divedetails">
+    {if $dive_shop_name != ''}
       {if isset($multiuser_id)}
-      <td colspan="4"><a href="{$app_path}/divetrip.php{$sep1}{$multiuser_id}{$sep2}{$dive_trip_nr}" title="{$dive_trip_name}">{$dive_trip_name}</a></td>
+      <td colspan="2"><a href="{$app_path}/diveshop.php{$sep1}{$multiuser_id}{$sep2}{$dive_shop_nr}" title="{$dive_shop_name}">{$dive_shop_name}</a></td>
       {else}
-      <td colspan="4"><a href="{$app_path}/divetrip.php{$sep2}{$dive_trip_nr}" title="{$dive_trip_name}">{$dive_trip_name}</a></td>
+      <td colspan="2"><a href="{$app_path}/diveshop.php{$sep2}{$dive_shop_nr}" title="{$dive_shop_name}">{$dive_shop_name}</a></td>
       {/if}
-    </tr>
+    {else}
+      <td>-</td>
     {/if}
+
+    {if $dive_trip_name != ''}
+      {if isset($multiuser_id)}
+      <td colspan="2"><a href="{$app_path}/divetrip.php{$sep1}{$multiuser_id}{$sep2}{$dive_trip_nr}" title="{$dive_trip_name}">{$dive_trip_name}</a></td>
+      {else}
+      <td colspan="2"><a href="{$app_path}/divetrip.php{$sep2}{$dive_trip_nr}" title="{$dive_trip_name}">{$dive_trip_name}</a></td>
+      {/if}
+    {else}
+      <td>-</td>
+    {/if}
+    </tr>
 
     {* Show buddy details *}
     {if $buddy != ''}

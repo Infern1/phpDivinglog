@@ -1101,6 +1101,8 @@ class Divelog {
         $t->assign('logbook_place', $_lang['logbook_place']);
         $t->assign('logbook_city', $_lang['logbook_city']);
         $t->assign('logbook_country', $_lang['logbook_country']);
+        $t->assign('dive_shop_head', $_lang['logbook_dive_shop']);
+        $t->assign('dive_trip_head', $_lang['logbook_dive_trip']);
 
         if (!empty($result['PlaceID'])) {
             $t->assign('dive_site_nr', $result['PlaceID']);
@@ -1118,7 +1120,20 @@ class Divelog {
             $t->assign('dive_country',$result['Country']);
         } else {
             $t->assign('dive_country','-');	
-        } 
+        }
+
+        if (!empty($result['ShopID'])){
+            $t->assign('dive_shop_name','Have shop');
+        } else {
+            $t->assign('dive_shop_name','-');	
+        }
+
+        if (!empty($result['TripID'])){
+            $t->assign('dive_trip_name','Have trip');
+        } else {
+            $t->assign('dive_trip_name','-');	
+        }
+
     /*}}}*/
     }
 
@@ -1657,7 +1672,7 @@ class Divelog {
         }
 
         if ($result['PGEnd'] != "") {
-            $t->assign('PGEnd', $result['PGEnd'] );
+            $t->assign('PGEnd', $result['PGEnd']);
         } else {
             $t->assign('PGEnd','-');	
         }
@@ -1665,7 +1680,9 @@ class Divelog {
         $t->assign('Deco', ($result['Deco'] == 'True' ? $_lang['yes'] : $_lang['no']) );
         $t->assign('Rep', ($result['Rep'] == 'True' ? $_lang['yes'] : $_lang['no']) );
         if ($result['Surfint'] != "") {
-            $t->assign('Surfint', $result['Surfint'] );
+            $t->assign('Surfint', $result['Surfint']);
+        } else {
+            $t->assign('Surfint','-');
         }
 
         if (($result['Entrytime'] != "") && ($result['Divetime'] != "")) {
@@ -3587,7 +3604,8 @@ class DivePictures{
                             } else {
                                 $divesite_name = '';
                             }
-
+                        } else {
+                            $divesite_name = '';
                         }
                         $this->image_link[] = array(
                                 'img_url' => $img_url, 
