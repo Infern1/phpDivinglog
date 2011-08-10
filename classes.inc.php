@@ -20,7 +20,8 @@
  * @license LGPL v3 http://www.gnu.org/licenses/lgpl-3.0.txt
  */
 class HandleRequest {
-    var $request_uri; /*{{{*/
+    /*{{{*/
+    var $request_uri;     
     var $request_file_depth;
     var $multiuser;
     var $user_id;
@@ -28,6 +29,8 @@ class HandleRequest {
     var $dive_nr;
     var $site_nr;
     var $diver_choice;
+    var $divetrip_nr;
+    var $diveshop_nr;
 
     /**
      * requested_page contains the requested page of the paginate
@@ -54,6 +57,8 @@ class HandleRequest {
      * 5 = dive profile or dive piechart
      * 6 = dive gallery
      * 7 = resizer
+     * 8 = divetrip
+     * 9 = diveshop
      *
      * @var mixed
      * @access public
@@ -67,7 +72,7 @@ class HandleRequest {
      * @return void
      */
     function HandleRequest(){
-        global $_config, $t;
+        global $_config, $t;/*{{{*/
         $this->multiuser = $_config['multiuser'];
         $_SESSION['request_type'] = 1;
         $_SESSION['user_id'] = NULL;
@@ -86,7 +91,7 @@ class HandleRequest {
             $t->assign('sep1',"/");
             $t->assign('sep2',"/");
             $t->assign('list','/list');
-        }            
+        }            /*}}}*/
     }
 
     /**
@@ -150,6 +155,14 @@ class HandleRequest {
         return $this->multiuser;
     }
 
+    function get_divetrip_nr(){
+        return $this->divetrip_nr;
+    }
+    function get_diveshop_nr(){
+        return $this->diveshop_nr;
+    }
+    
+
     /**
      * handle_url will handle the url according the type of setup. 
      * The url handling differs between single and multiuser setup 
@@ -158,6 +171,7 @@ class HandleRequest {
      * @return void
      */
     function handle_url(){
+    /*{{{*/
         global $_config, $t;
         if($this->multiuser){
             // The url should contain a least one select person, other wise return to the person chooser
@@ -215,6 +229,14 @@ class HandleRequest {
                         break;                   
                     case 'divesummary.php':
                         $this->request_type = 5;
+                        $this->diver_choice = false;
+                        break;
+                    case 'divetrip.php':
+                        $this->request_type = 8;
+                        $this->diver_choice = false;
+                        break;
+                    case 'diveshop.php':
+                        $this->request_type = 9;
                         $this->diver_choice = false;
                         break;
                     default:
@@ -282,6 +304,14 @@ class HandleRequest {
                         $this->user_id = $id;
                         $this->request_type = 4;
                         break;
+                    case 'divetrip.php':
+                        $this->request_type = 8;
+                        $this->divetrip_nr = $id;
+                        break;
+                    case 'diveshop.php':
+                        $this->request_type = 9;
+                        $this->divershop_nr = $id;
+                        break;
                     default:
                         //defaults to main page
                         break;
@@ -289,7 +319,9 @@ class HandleRequest {
                 $_SESSION['request_type'] = $this->request_type;
             }
         }
+    /*}}}*/
     }
+
 /*}}}*/
 }
 
@@ -830,6 +862,7 @@ class TopLevelMenu {
      * @return void
      */
     function get_nav_links($request){
+        /*{{{*/
         global $t, $globals, $_lang, $_config;
         if ($request->request_type == 1) {
             $divelist = parse_mysql_query('divelist.sql');
@@ -935,7 +968,9 @@ class TopLevelMenu {
             } 
             //End filling the links section
         }
+    /*}}}*/
     }
+
 /*}}}*/
 }
 
@@ -3916,7 +3951,7 @@ class Divetrip{
     { 
         global $_config;
         $this->divetrip_nr = $a1;
-        $this->get_divesite_info();
+        $this->get_divetrip_info();
     } 
 
     function get_request_type(){
@@ -3942,7 +3977,7 @@ class Divetrip{
             } else {
                 $user = new User();
                 $this->table_prefix = $user->get_table_prefix();
-                $this->divesite_nr = $request->get_site_nr();
+                $this->divetrip_nr = $request->get_divetrip_nr();
             }
         } else {
             $this->request_type = 3;
@@ -4326,7 +4361,7 @@ class Divetrip{
  * @license LGPL v3 http://www.gnu.org/licenses/lgpl-3.0.txt
  */
 class Tank{
-    var $multiuser; 
+    var $multiuser; /*{{{*/
     var $table_prefix;
     var $user_id;
     var $divetank_nr;
@@ -4402,7 +4437,7 @@ class Tank{
 
 
 
-
+/*}}}*/
 }
 
 /**
