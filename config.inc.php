@@ -33,6 +33,17 @@ $_config['table_prefix'] = "";
 $_config['language'] = "english";
 
 /**
+ *  Suppress DateTime warnings by setting the default timezone 
+ *  used by all date/time functions to the currently set one
+ *  or you can set the timezone to what you want, e.g.
+ *  date_default_timezone_set('Australia/Melbourne');
+ *  See http://www.php.net/manual/en/timezones.php for the list of valid timezones
+ */
+if(function_exists("date_default_timezone_set") and function_exists("date_default_timezone_get")) {
+  @date_default_timezone_set(@date_default_timezone_get());
+}
+
+/**
  * Some hosts don't support mod_rewrite, so we must have option to use old
  * query strings  like ?id=&user=
  * If query_string = false normal rewrite is used, if set to true query string is used
@@ -140,7 +151,6 @@ $_config['pic-width'] = 800;
  * get exif data from the images 
  */
 $_config["get_exif_data"] = true;
-
 
 /**
  * DIVE PROFILE SETTINGS
