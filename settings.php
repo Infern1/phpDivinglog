@@ -164,6 +164,7 @@ if (PEAR::isError($db)) {
 
 
 /**
+ * GLOBAL SMARTY VALUES
  * Assign any global smarty values here.
  */
 $t->assign('title', 'My divelog online');
@@ -177,6 +178,7 @@ if(($_config['embed_mode'])){
 }
 
 /**
+ * DEBUG MODE DETAILS
  * Set to true for debug mode 
  */
 $_config['debug'] = false;
