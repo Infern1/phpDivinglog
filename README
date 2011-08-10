@@ -12,7 +12,7 @@ CODE DOCUMENTATION
 
 EXAMPLE WEB SITE:
     NEW version:
-    - http://rob.lensen.nu/divelog_new/
+    - http://diving.lensen.nu/phpDivinglog/
     OLD version:
     - http://www.borrett.id.au/divelog/
 
@@ -28,7 +28,7 @@ DEPENDENCIES:
     - Highslide JS v4.1.4 (http://highslide.com/support)
     - PEAR packages: MDB2 v1.318, Pager v1.26
     - phpMyDatagrid v2007a (http://www.gurusistemas.com/indexdatagrid.php)
-    - SmartyHost v2.6.18 (http://www.smarty.net/)
+    - SmartyHost v3.1rc1 (http://www.smarty.net/)
     - phpMyDatagrid v2007a (http://www.gurusistemas.com/_guru/indexdatagrid.php)
 
 USAGE:
