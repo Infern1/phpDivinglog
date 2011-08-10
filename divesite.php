@@ -36,7 +36,7 @@ if ($divesite->get_request_type() == 1) {
     /**
      * Get the page header 
      */
-    $pagetitle = $_lang['dive_site_pagetitle'].$result[0]['Place'];
+    $pagetitle = $_lang['dive_site_pagetitle'].$result['Place'];
     $t->assign('pagetitle',$pagetitle);
     $t->assign('colspanlinks','4');
 

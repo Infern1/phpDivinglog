@@ -104,6 +104,10 @@ div.thumbwrapper {
     text-align: center;
     width: 130px;
 }
+div.thumbtext{
+    text-align: left;
+
+}
 
 table, th, td {
     border-collapse: collapse;

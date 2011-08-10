@@ -33,9 +33,9 @@
         <br>
         {$logbook_place}  
         {if isset($multiuser_id)}
-            <a href="{$app_path}/divesite.php{$sep1}{$multiuser_id}{$sep2}{$i.site_nr}" title="{$dlog_number_title}{$i.site_nr}">{$i.site_nr}</a>
+            <a href="{$app_path}/divesite.php{$sep1}{$multiuser_id}{$sep2}{$i.site_nr}" title="{$dlog_number_title}{$i.site_nr}">{$i.site_name}</a>
         {else}
-            <a href="{$app_path}/divesite.php{$sep2}{$i.site_nr}" title="{$dlog_number_title}{$i.site_nr}">{$i.site_nr}</a>
+            <a href="{$app_path}/divesite.php{$sep2}{$i.site_nr}" title="{$dlog_number_title}{$i.site_nr}">{$i.site_name}</a>
         {/if}
         <br>
         {$i.img_title} 
@@ -44,6 +44,8 @@
             Date: {$i.img_date}
         {/if}
     </div>
+    <div class="thumbtext">
+    <p>
     {$dive_details_pagetitle} 
     {if isset($multiuser_id)}
         <a href="{$app_path}/index.php{$sep1}{$multiuser_id}{$sep2}{$i.dive_nr}" title="{$dlog_number_title}{$i.dive_nr}">{$i.dive_nr}</a>
@@ -51,16 +53,18 @@
         <a href="{$app_path}/index.php{$sep2}{$i.dive_nr}" title="{$dlog_number_title}{$i.dive_nr}">{$i.dive_nr}</a>
     {/if}
     <br>
-    {$logbook_place}  
+    {$logbook_place}<br>  
     {if isset($multiuser_id)}
-        <a href="{$app_path}/divesite.php{$sep1}{$multiuser_id}{$sep2}{$i.site_nr}" title="{$dlog_number_title}{$i.site_nr}">{$i.site_nr}</a>
+        <a href="{$app_path}/divesite.php{$sep1}{$multiuser_id}{$sep2}{$i.site_nr}" title="{$dlog_number_title}{$i.site_nr}">{$i.site_name}</a>
     {else}
-        <a href="{$app_path}/divesite.php{$sep2}{$i.site_nr}" title="{$dlog_number_title}{$i.site_nr}">{$i.site_nr}</a>
+        <a href="{$app_path}/divesite.php{$sep2}{$i.site_nr}" title="{$dlog_number_title}{$i.site_nr}">{$i.site_name}</a>
     {/if}
     {if $i.img_date != ''}
         <br>
         Date: {$i.img_date}
     {/if}
+    </p>
+    </div>
 </div>
 {/foreach}
 

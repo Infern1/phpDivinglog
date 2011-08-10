@@ -107,6 +107,19 @@
       <td>-</td>
     {/if}
     </tr>
+    
+    {if $dive_trip_name != ''}
+    <tr class="divetitle">
+      <td colspan="4">{$trip_name_head}</td>
+    </tr>
+    <tr class="divedetails">
+      {if isset($multiuser_id)}
+      <td colspan="4"><a href="{$app_path}/divetrip.php{$sep1}{$multiuser_id}{$sep2}{$dive_trip_nr}" title="{$dive_trip_name}">{$dive_trip_name}</a></td>
+      {else}
+      <td colspan="4"><a href="{$app_path}/divetrip.php{$sep2}{$dive_trip_nr}" title="{$dive_trip_name}">{$dive_trip_name}</a></td>
+      {/if}
+    </tr>
+    {/if}
 
     {* Show buddy details *}
     {if $buddy != ''}

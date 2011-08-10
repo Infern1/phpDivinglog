@@ -43,7 +43,7 @@ if ($divelog->get_request_type() == 1) {
     $links->get_nav_links($request );
 
     //	Get the page header
-    $pagetitle = $_lang['dive_details_pagetitle'].$result[0]['Number'];
+    $pagetitle = $_lang['dive_details_pagetitle'].$result['Number'];
     $t->assign('colspanlinks','5');	
     //include($_config['header']);
     // Show Dive Information
