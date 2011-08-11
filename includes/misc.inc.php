@@ -58,7 +58,6 @@ function action($value_of_clicked_field, $array_values) {
     }
 
     if(isset($_SESSION['request_type'])){        
-
         $request_type = $_SESSION['request_type'];
         if($request_type == 1){ 
             return "javascript:open_url(".$array_values["Number"].",'/index.php".$ext."' )";
@@ -66,6 +65,10 @@ function action($value_of_clicked_field, $array_values) {
             return "javascript:open_url(".$array_values["ID"].",'/divesite.php".$ext."' )";
         } elseif($request_type == 3){
             return "javascript:open_url(".$array_values["ID"].",'/equipment.php".$ext."' )";
+        } elseif($request_type == 8){
+            return "javascript:open_url(".$array_values["ID"].",'/divetrip.php".$ext."' )";
+        } elseif($request_type == 9){
+            return "javascript:open_url(".$array_values["ID"].",'/diveshop.php".$ext."' )";
         }
     }else {
         $request = new HandleRequest();
@@ -79,7 +82,12 @@ function action($value_of_clicked_field, $array_values) {
             return "javascript:open_url(".$array_values["ID"].",'/divesite.php".$ext."' )";
         } elseif($request_type == 3){
             return "javascript:open_url(".$array_values["ID"].",'/equipment.php".$ext."' )";
+        } elseif($request_type == 8){
+            return "javascript:open_url(".$array_values["ID"].",'/divetrip.php".$ext."' )";
+        } elseif($request_type == 9){
+            return "javascript:open_url(".$array_values["ID"].",'/diveshop.php".$ext."' )";
         }
+
     }
 /*}}}*/
 }

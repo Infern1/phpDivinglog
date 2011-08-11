@@ -237,7 +237,7 @@ class HandleRequest {
                         break;
                     case 'diveshop.php':
                         if($this->view_request == 1)
-                            $this->site_nr = check_number($split_request[2]);
+                            $this->diveshop_nr = check_number($split_request[2]);
                         $this->request_type = 9;
                         break;
                     default:
@@ -251,7 +251,6 @@ class HandleRequest {
             } else {
                 $this->diver_choice = true;
             }
-            //print_r($this);
         } else {
             //Find what the client wants to see and if a record is requested set it
             $split_request = GetRequestVar($this->request_uri, $this->request_file_depth);
@@ -310,7 +309,7 @@ class HandleRequest {
                         $this->divetrip_nr = $id;
                         break;
                     case 'diveshop.php':
-                        $this->shop_nr = $id;
+                        $this->diveshop_nr = $id;
                         $this->request_type = 9;
                         break;
                     default:
@@ -1920,7 +1919,6 @@ class Divelog {
         $t->assign('unit_time_short', $_lang['unit_time_short']);
         $t->assign('pages', $paged_data['links']);
         $t->assign('cells', $paged_data['data']);
-        //print_r($paged_data['data']);
     /*}}}*/
     }
 
@@ -2351,7 +2349,6 @@ class Divesite{
         } else {
             $dives = $this->dives;
         }
-        //var_dump($this);
         if ($this->dive_count != 0) {
             $t->assign('dive_count', $this->dive_count);
             if ($this->dive_count == 1) {
@@ -2378,7 +2375,7 @@ class Divesite{
      * @return void
      */
     function set_divesite_comments(){
-        global $globals, $_config, $t, $_lang; /*{{{*/
+        global $globals, $_lang, $_config, $t; /*{{{*/
         //	Comments
         $result = $this->result;
         //	Show them if we have them
@@ -2492,7 +2489,6 @@ class Divesite{
         } else {
             $url = "/divesite.php".$t->getTemplateVars('sep2');
         }
-        //print_r($data);
         $grid->showColumn('Place', $_lang['dsite_title_place']);
         $grid->setColwidth('Place',"220");
         $grid->showColumn('Country', $_lang['dsite_title_country']);
@@ -2881,7 +2877,6 @@ class Equipment{
         } else {
             $url = "/divesite.php".$t->getTemplateVars('sep2');
         }
-        //print_r($data);
 
         $grid->showColumn('Object', $_lang['equip_title_object']);
         $grid->setColwidth('Object',"300");
@@ -2906,7 +2901,8 @@ class Equipment{
  * Diveshop contains all functions for displaying the diveshop information
  * 
  * @package phpdivinglog
- * @copyright Copyright (C) 2007 Rob Lensen. All rights reserved.
+ * @version $Rev$
+ * @copyright Copyright (C) 2011 Rob Lensen. All rights reserved.
  * @author Rob Lensen <rob@bsdfreaks.nl> 
  * @license LGPL v3 http://www.gnu.org/licenses/lgpl-3.0.txt
  */
@@ -2984,7 +2980,7 @@ class Diveshop{
                 $this->diveshop_nr = $request->get_diveshop_nr();
             }
         } else {
-            $this->request_type = 3;
+            $this->request_type = 9;
         }
     /*}}}*/
     }
@@ -3043,7 +3039,7 @@ class Diveshop{
      */
     function set_main_diveshop_details(){
         global $globals, $_config, $t, $_lang; /*{{{*/
-        $this->get_diveshop_location_details(); 
+        //$this->get_diveshop_location_details(); 
         // Show main shop details
         $result = $this->result;
         $t->assign('pagetitle',$_lang['dive_shop_pagetitle'].$result['Place']);
@@ -3195,7 +3191,6 @@ class Diveshop{
         } else {
             $dives = $this->dives;
         }
-        //var_dump($this);
         if ($this->dive_count != 0) {
             $t->assign('dive_count', $this->dive_count);
             if ($this->dive_count == 1) {
@@ -3321,7 +3316,6 @@ class Diveshop{
         } else {
             $url = "/diveshop.php".$t->getTemplateVars('sep2');
         }
-        //print_r($data);
 
         $grid->showColumn('ShopName', $_lang['dshop_title_shop']);
         $grid->setColwidth('ShopName',"250");
@@ -3329,6 +3323,7 @@ class Diveshop{
         $grid->setColwidth('ShopType',"150");
         $grid->showColumn('Country', $_lang['dshop_title_country']);
         $grid->setColwidth('Country',"150");
+        $grid->setRowActionFunction("action");
 
         $grid_ret = $grid->render(TRUE); 
         $t->assign('grid_display' ,1);
@@ -4325,7 +4320,6 @@ class DivePictures{
         global $_config, $t, $_lang, $globals;/*{{{*/
         if(isset($_config["get_exif_data"]) && function_exists('exif_read_data')){
             $exif_date = exif_read_data ( $file ,'IFD0'  ); 
-          //  print_r($exif_date);
             $edate = $exif_date['DateTime']; 
         } else {
             $edate = "";
@@ -4806,7 +4800,6 @@ class Divetrip{
         } else {
             $url = "/divesite.php".$t->getTemplateVars('sep2');
         }
-        //print_r($data);
         $grid->showColumn('Place', $_lang['dsite_title_place']);
         $grid->setColwidth('Place',"220");
         $grid->showColumn('Country', $_lang['dsite_title_country']);

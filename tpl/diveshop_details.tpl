@@ -24,10 +24,11 @@
       <td colspan="2" rowspan="5">
         {if $Street != ""}
           {$Street}<br>
-        {if $Address != ""}
+        {/if}
+        {if $Address2 != ""}
           {$Address2}<br>
         {/if}
-          {$City} {$State} {Zip}<br>
+          {$City} {$State} {$Zip}<br>
         {if $Country != ""}
           {$Country}
         {/if}

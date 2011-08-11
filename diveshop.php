@@ -30,21 +30,19 @@ $diveshop = new Diveshop();
 $diveshop->set_diveshop_info($request);
 $result = $diveshop->get_diveshop_info();
 global $_config;
-
 if ($diveshop->get_request_type() == 1) {
     $t->assign('diveshop_id', $diveshop->diveshop_nr);
     /**
      * Get the page header 
      */
-//    $pagetitle = $_lang['dive_shop_pagetitle'].$result['Place'];
+    //    $pagetitle = $_lang['dive_shop_pagetitle'].$result['Place'];
     $pagetitle = $_lang['dive_shop_pagetitle'];
     $t->assign('pagetitle',$pagetitle);
     $t->assign('colspanlinks','4');
-
+    
     // First, Previous, Next, Last links and Dive #
     $links->get_std_links();
     $links->get_nav_links($request);
-
     // Show main dive shop details
     $diveshop->set_main_diveshop_details();
     $diveshop->set_diveshop_pictures();
