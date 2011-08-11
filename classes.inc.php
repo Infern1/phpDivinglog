@@ -3077,37 +3077,37 @@ class Diveshop{
         if ($result['Street'] != "") {
             $t->assign('Street', $result['Street']);
         } else {
-            $t->assign('Street','-');
+            $t->assign('Street','');
         }
 
         if ($result['Address2'] != "") {
             $t->assign('Address2', $result['Address2']);
         } else {
-            $t->assign('Address2','-');
+            $t->assign('Address2','');
         }
 
         if ($result['Zip'] != "") {
             $t->assign('Zip', $result['Zip']);
         } else {
-            $t->assign('Zip', '-');
+            $t->assign('Zip','');
         }
 
         if ($result['City'] != "") {
             $t->assign('City', $result['City']);
         } else {
-            $t->assign('City', '-');
+            $t->assign('City','');
         }
 
         if ($result['State'] != "") {
             $t->assign('State', $result['State']);
         } else {
-            $t->assign('State', '-');
+            $t->assign('State','');
         }
 
         if ($result['Country'] != "") {
             $t->assign('Country', $result['Country']);
         } else {
-            $t->assign('Country', '-');
+            $t->assign('Country','');
         }
 
         if ($result['Phone'] != "") {
@@ -3169,6 +3169,7 @@ class Diveshop{
         if ($pics != 0) {
             if(isset($_config['divepics_preview'])){
                 $t->assign('pics2' , '1');
+                $t->assign('shop_photo', $_lang['shop_photo']);
                 $t->assign('image_link', $divepics);
             } else {
                 /**

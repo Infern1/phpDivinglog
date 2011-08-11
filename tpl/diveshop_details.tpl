@@ -21,39 +21,51 @@
       <td colspan="2">{$shop_rating}</td>
     </tr>
     <tr class="divedetails">
-      <td colspan="2">{$Street}<br>
-         {$Address2}<br>
-         {$City} {$State} {Zip}<br><br>
-         {$Country}</td>
+      <td colspan="2" rowspan="5">
+        {if $Street != ""}
+          {$Street}<br>
+        {if $Address != ""}
+          {$Address2}<br>
+        {/if}
+          {$City} {$State} {Zip}<br>
+        {if $Country != ""}
+          {$Country}
+        {/if}
+      </td>
       <td colspan="2">{$Rating}</td>
+    </tr>
+
+    <tr class="divetitle">
+      <td colspan="2">{$shop_email}</td>
+    </tr>
+    <tr class="divedetails">
+      <td colspan="2">{$Email}</td>
+    </tr>
+
+    <tr class="divetitle">
+      <td colspan="2">{$shop_url}</td>
+    </tr>
+    <tr class="divedetails">
+      <td colspan="2">{$URL}</td>
     </tr>
 
     <tr class="divetitle">
       <td>{$shop_phone}</td>
       <td>{$shop_mobile}</td>
       <td>{$shop_fax}</td>
-      <td>???</td>
+      <td>&nbsp;</td>
     </tr>
     <tr class="divedetails">
       <td>{$Phone}</td>
       <td>{$Mobile}</td>
       <td>{$Fax}</td>
-      <td>-</td>
-    </tr>
-
-    <tr class="divetitle">
-      <td colspan="2">{$shop_email}</td>
-      <td colspan="2">{$shop_url}</td>
-    </tr>
-    <tr class="divedetails">
-      <td colspan="2">{$Email}</td>
-      <td colspan="2">{$URL}</td>
+      <td>&nbsp;</td>
     </tr>
 
     {if isset($pics2)}
-    {* Show maps *}
+    {* Show pics *}
     <tr class="divetitle">
-      <td colspan="4">{$place_map}</td>
+      <td colspan="4">{$shop_photo}</td>
     </tr>
 
     <tr class="divedetails">
