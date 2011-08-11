@@ -46,6 +46,7 @@ $_lang['dive_log'] = "Dive Log";
 $_lang['dive_sites'] = "Dive Sites";
 $_lang['dive_stats'] = "Dive Statistics";
 $_lang['dive_equip'] = "Dive Equipment";
+$_lang['dive_shops'] = "Dive Shops";
 $_lang['diver_choice_linktitle'] = "Show Diver Overview";
 $_lang['diver_choice'] = "Diver Overview";
 $_lang['dive_gallery'] = "Dive Gallery";
@@ -229,6 +230,40 @@ $_lang['dsite_title_place'] = "Dive Location";
 $_lang['dsite_title_city'] = "City / Island";
 $_lang['dsite_title_country'] = "Country";
 $_lang['dsite_title_maxdepth'] = "Max Depth";
+
+
+// Dive Shop related values
+
+$_lang['dive_shop_pagetitle'] = "Dive Shop - ";
+
+$_lang['shop_name'] = "Shop Name:";
+$_lang['shop_type'] = "Shop Type:";
+$_lang['shop_street'] = "Street:";
+$_lang['shop_address2'] = "Address 2:";
+$_lang['shop_zip'] = "Post/Zip Code:";
+$_lang['shop_city'] = "City:";
+$_lang['shop_state'] = "State:";
+$_lang['shop_country'] = "Country:";
+$_lang['shop_phone'] = "Phone:";
+$_lang['shop_mobile'] = "Mobile:";
+$_lang['shop_fax'] = "Fax:";
+$_lang['shop_email'] = "Email:";
+$_lang['shop_url'] = "URL:";
+$_lang['shop_rating'] = "Rating:";
+
+$_lang['shop_dive_single'] = " dive with this shop:";
+$_lang['shop_dive_plural'] = " dives with this shop:";
+
+$_lang['shop_sect_comments'] = "Comments:";
+
+
+// Dive Shop List related values
+
+$_lang['dshop_none'] = "No dive shops are currently available.";
+
+$_lang['dshop_title_shop'] = "Dive Shop";
+$_lang['dshop_title_type'] = "Shop Type";
+$_lang['dshop_title_country'] = "Country";
 
 
 // Dive Statistics related values

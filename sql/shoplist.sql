@@ -1,5 +1,6 @@
 SELECT		ID,
 		ShopName,
-		ShopType
+		ShopType,
+                Country
 FROM		$_config[table_prefix]Shop
 ORDER BY 	ShopName ASC

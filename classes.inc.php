@@ -3242,6 +3242,7 @@ class Diveshop{
         $t->assign('dshop_title_shop', $_lang['dshop_title_shop']);
         $t->assign('dshop_title_type', $_lang['dshop_title_type']);
         $t->assign('dshop_title_country', $_lang['dshop_title_country']);
+
         if ($this->multiuser == 1) {
             $path = $_config['web_root'].'/diveshop.php/'.$this->user_id.'/list';
         } else {
@@ -3252,11 +3253,9 @@ class Diveshop{
         } else {
             $cpage = $this->requested_page;
         }
+
         $pager_options = new TablePager($cpage,$path);
         $paged_data = Pager_Wrapper_MDB2($db, $locationlist_query, $pager_options->options);
-        $t->assign('dshop_title_shop', $_lang['dshop_title_shop']);
-        $t->assign('dshop_title_type', $_lang['dshop_title_type']);
-        $t->assign('dshop_title_country', $_lang['dshop_title_country']);
 
         $t->assign('pages', $paged_data['links']);
         $t->assign('cells', $paged_data['data']);
@@ -3285,6 +3284,7 @@ class Diveshop{
             $url = "/diveshop.php".$t->getTemplateVars('sep2');
         }
         //print_r($data);
+
         $grid->showColumn('ShopName', $_lang['dshop_title_shop']);
         $grid->setColwidth('ShopName',"250");
         $grid->showColumn('ShopType', $_lang['dshop_title_type']);
