@@ -236,8 +236,9 @@ class HandleRequest {
                         $this->diver_choice = false;
                         break;
                     case 'diveshop.php':
+                        if($this->view_request == 1)
+                            $this->site_nr = check_number($split_request[2]);
                         $this->request_type = 9;
-                        $this->diver_choice = false;
                         break;
                     default:
                         $this->diver_choice = true;
@@ -309,8 +310,8 @@ class HandleRequest {
                         $this->divetrip_nr = $id;
                         break;
                     case 'diveshop.php':
+                        $this->shop_nr = $id;
                         $this->request_type = 9;
-                        $this->divershop_nr = $id;
                         break;
                     default:
                         //defaults to main page
@@ -801,7 +802,7 @@ class TopLevelMenu {
      */
     function get_std_links(){
         global $t, $_lang; /*{{{*/
-        // Dive Log, Dive Sites, Dive Statistics
+        // Dive Log, Dive Sites, Dive Shops, Dive Statistics
         $t->assign('diver_choice_linktitle', $_lang['diver_choice_linktitle']);
         $t->assign('diver_choice', $_lang['diver_choice']);
         $t->assign('dive_log_linktitle', $_lang['dive_log_linktitle']);
@@ -810,6 +811,8 @@ class TopLevelMenu {
         $t->assign('dive_sites',$_lang['dive_sites']);
         $t->assign('dive_equip_linktitle', $_lang['dive_equip_linktitle']);
         $t->assign('dive_equip',$_lang['dive_equip']);
+        $t->assign('dive_shops_linktitle', $_lang['dive_shops_linktitle']);
+        $t->assign('dive_shops',$_lang['dive_shops']);
         $t->assign('dive_stats_linktitle', $_lang['dive_stats_linktitle']);
         $t->assign('dive_stats', $_lang['dive_stats']);
         $t->assign('dive_gallery_linktitle', $_lang['dive_gallery_linktitle']);
@@ -840,6 +843,8 @@ class TopLevelMenu {
         $t->assign('dive_sites', $_lang['dive_sites'] );
         $t->assign('dive_equip_linktitle', $_lang['dive_equip_linktitle']);
         $t->assign('dive_equip', $_lang['dive_equip'] );
+        $t->assign('dive_shops_linktitle', $_lang['dive_shops_linktitle']);
+        $t->assign('dive_shops', $_lang['dive_shops'] );
         $t->assign('dive_stats_linktitle', $_lang['dive_stats_linktitle']);
         $t->assign('dive_stats', $_lang['dive_stats'] );
         $t->assign('dive_gallery_linktitle', $_lang['dive_gallery_linktitle']);
@@ -967,6 +972,38 @@ class TopLevelMenu {
                 $t->assign('last', $_lang['last'] );
             } 
             //End filling the links section
+        } elseif ($request->request_type == 4) {
+            //	First, Previous, Next, Last links and Dive #
+            $shoplist = parse_mysql_query('shoplist.sql');
+            $last = count($shoplist) - 1;
+            $position = -1;
+            for ($i=0; $i<count($shoplist); $i++) {
+                if ($shoplist[$i]['ID'] == $globals['placeid']) {
+                    $position = $i;
+                }
+            }
+
+            //	First, Previous
+            if ($position != 0 ) {
+                $t->assign('position',$position);
+                $t->assign('first_shop_id', $shoplist[0]['ID']);
+                $t->assign('first_shop_linktitle', $_lang['first_shop_linktitle']);
+                $t->assign('first', $_lang['first']);
+                $t->assign('previous_shop_id', $sitelist[$position - 1]['ID']);
+                $t->assign('previous_shop_linktitle', $_lang['previous_shop_linktitle']);
+                $t->assign('previous', $_lang['previous']);
+            }
+
+            //	Next, Last
+            if ($position != $last) {
+                $t->assign('diveshop_not_null','1');
+                $t->assign('next_diveshop_nr', $shoplist[$position + 1]['ID']);
+                $t->assign('next_shop_linktitle', $_lang['next_shop_linktitle']);
+                $t->assign('next', $_lang['next'] );
+                $t->assign('last_diveshop_nr', $shoplist[$last]['ID']);
+                $t->assign('last_shop_linktitle', $_lang['last_shop_linktitle'] );
+                $t->assign('last', $_lang['last'] );
+            } 
         }
     /*}}}*/
     }
