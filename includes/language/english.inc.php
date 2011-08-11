@@ -234,7 +234,7 @@ $_lang['dsite_title_maxdepth'] = "Max Depth";
 
 // Dive Shop related values
 
-$_lang['dive_shop_pagetitle'] = "Dive Shop - ";
+$_lang['dive_shop_pagetitle'] = "Dive Shop/Centre - ";
 
 $_lang['shop_name'] = "Shop Name:";
 $_lang['shop_type'] = "Shop Type:";
