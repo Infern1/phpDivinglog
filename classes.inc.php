@@ -2982,41 +2982,6 @@ class Diveshop{
     }
 
     /**
-     * get_diveshop_location_details 
-     * 
-     * @access public
-     * @return void
-     */
-    function get_diveshop_location_details(){
-        global $globals, $_config; /*{{{*/
-        $countrycity = $this->result_countrycity;
-        if (count($countrycity) != 0) {
-            if ($countrycity['Country'] != "") {
-                //			Get the country details from database
-                $globals['countryid'] = $countrycity['CountryID'];
-                $countrydetails = parse_mysql_query('onecountry.sql');
-                if (count($countrydetails) == 0) {
-                    $this->country = $countrycity['Country'];
-                } else {
-                    $this->country = $countrydetails['Country'];
-                }
-            }
-
-            if ($countrycity['City'] != "") {
-                //			Get the city details from database
-                $globals['cityid'] = $countrycity['CityID'];
-                $citydetails = parse_mysql_query('onecity.sql');
-                if (count($citydetails) == 0) {
-                    $this->city = $countrycity['City'];
-                } else {
-                    $this->city = $citydetails['City'];
-                }
-            }
-        }
-    /*}}}*/
-    }
-
-    /**
      * get_dives_with_shop 
      * 
      * @access public
@@ -3046,20 +3011,100 @@ class Diveshop{
         $result = $this->result;
         $t->assign('pagetitle',$_lang['dive_shop_pagetitle'].$result['Place']);
         $t->assign('diveshop_id', $this->diveshop_nr);
-        $t->assign('place_place', $_lang['place_place']);
-        $t->assign('place_city', $_lang['place_city']);
-        $t->assign('place_country', $_lang['place_country']);
+        $t->assign('shop_name', $_lang['shop_name']);
+        $t->assign('shop_type', $_lang['shop_type']);
+        $t->assign('shop_street', $_lang['shop_street']);
+        $t->assign('shop_address2', $_lang['shop_address2']);
+        $t->assign('shop_zip', $_lang['shop_zip']);
+        $t->assign('shop_city', $_lang['shop_city']);
+        $t->assign('shop_state', $_lang['shop_state']);
+        $t->assign('shop_country', $_lang['shop_country']);
+        $t->assign('shop_phone', $_lang['shop_phone']);
+        $t->assign('shop_mobile', $_lang['shop_mobile']);
+        $t->assign('shop_fax', $_lang['shop_fax']);
+        $t->assign('shop_email', $_lang['shop_email']);
+        $t->assign('shop_url', $_lang['shop_url']);
 
-        if ($result['Place'] == "") {
-            $Place = "-";
+        if ($result['ShopName'] != "") {
+            $t->assign('ShopName', $result['ShopName']);
         } else {
-            $Place = $result['Place'];
+            $t->assign('ShopName','-');
         }
-        $t->assign('Place', $Place);
-        $t->assign('city', $this->city );
-        $t->assign('country', $this->country);
 
-        $t->assign('place_rating', $_lang['place_rating']);
+        if ($result['ShopType'] != "") {
+            $t->assign('ShopType', $result['ShopType']);
+        } else {
+            $t->assign('ShopType','-');
+        }
+
+        if ($result['Street'] != "") {
+            $t->assign('Street', $result['Street']);
+        } else {
+            $t->assign('Street','-');
+        }
+
+        if ($result['Address2'] != "") {
+            $t->assign('Address2', $result['Address2']);
+        } else {
+            $t->assign('Address2','-');
+        }
+
+        if ($result['Zip'] != "") {
+            $t->assign('Zip', $result['Zip']);
+        } else {
+            $t->assign('Zip', '-');
+        }
+
+        if ($result['City'] != "") {
+            $t->assign('City', $result['City']);
+        } else {
+            $t->assign('City', '-');
+        }
+
+        if ($result['State'] != "") {
+            $t->assign('State', $result['State']);
+        } else {
+            $t->assign('State', '-');
+        }
+
+        if ($result['Country'] != "") {
+            $t->assign('Country', $result['Country']);
+        } else {
+            $t->assign('Country', '-');
+        }
+
+        if ($result['Phone'] != "") {
+            $t->assign('Phone', $result['Phone']);
+        } else {
+            $t->assign('Phone', '-');
+        }
+
+
+        if ($result['Mobile'] != "") {
+            $t->assign('Mobile', $result['Mobile']);
+        } else {
+            $t->assign('Mobile', '-');
+        }
+
+        if ($result['Fax'] != "") {
+            $t->assign('Fax', $result['Fax']);
+        } else {
+            $t->assign('Fax', '-');
+        }
+
+        if ($result['Email'] != "") {
+            $t->assign('Email', $result['Email']);
+        } else {
+            $t->assign('Email', '-');
+        }
+
+        if ($result['URL'] != "") {
+            $t->assign('URL', $result['URL']);
+        } else {
+            $t->assign('URL', '-');
+        }
+
+        $t->assign('shop_rating', $_lang['shop_rating']);
         if ($result['Rating'] != "") {
             $desc = $_lang['rating'][$result['Rating']];
             $Rating = '<img src="'.$_config['web_root'].'/images/ratings5-'.$result['Rating'].'.gif" alt="'.$desc.'" title="'.$desc.'" border="0" width="84" height="15">';
@@ -3165,9 +3210,7 @@ class Diveshop{
      */
     function get_diveshop_overview(){
         global $t, $_lang, $globals, $_config; /*{{{*/
-        $placetable = $this->table_prefix."Place";
-        $logbooktable = $this->table_prefix."Logbook";
-        
+        $shoptable = $this->table_prefix."Shop";
         $sql = sql_file("shoplist.sql");
 
         /**
@@ -3196,10 +3239,9 @@ class Diveshop{
         //    Get the page header
         //    Get the details of the locations to be listed
         $locationlist_query = $sql;
-        $t->assign('dshop_title_place', $_lang['dshop_title_place']);
-        $t->assign('dshop_title_city', $_lang['dshop_title_city']);
+        $t->assign('dshop_title_shop', $_lang['dshop_title_shop']);
+        $t->assign('dshop_title_type', $_lang['dshop_title_type']);
         $t->assign('dshop_title_country', $_lang['dshop_title_country']);
-        $t->assign('dshop_title_maxdepth', $_lang['dshop_title_maxdepth']);
         if ($this->multiuser == 1) {
             $path = $_config['web_root'].'/diveshop.php/'.$this->user_id.'/list';
         } else {
@@ -3212,8 +3254,8 @@ class Diveshop{
         }
         $pager_options = new TablePager($cpage,$path);
         $paged_data = Pager_Wrapper_MDB2($db, $locationlist_query, $pager_options->options);
-        $t->assign('dshop_title_place', $_lang['dshop_title_place']);
-        $t->assign('dshop_title_city', $_lang['dshop_title_city']);
+        $t->assign('dshop_title_shop', $_lang['dshop_title_shop']);
+        $t->assign('dshop_title_type', $_lang['dshop_title_type']);
         $t->assign('dshop_title_country', $_lang['dshop_title_country']);
 
         $t->assign('pages', $paged_data['links']);
@@ -3243,12 +3285,12 @@ class Diveshop{
             $url = "/diveshop.php".$t->getTemplateVars('sep2');
         }
         //print_r($data);
-        $grid->showColumn('Place', $_lang['dshop_title_place']);
-        $grid->setColwidth('Place',"220");
+        $grid->showColumn('ShopName', $_lang['dshop_title_shop']);
+        $grid->setColwidth('ShopName',"250");
+        $grid->showColumn('ShopType', $_lang['dshop_title_type']);
+        $grid->setColwidth('ShopType',"150");
         $grid->showColumn('Country', $_lang['dshop_title_country']);
-        $grid->setColwidth('Country',"100");
-        $grid->showColumn('City', $_lang['dshop_title_city']);
-        $grid->setColwidth('City',"200");
+        $grid->setColwidth('Country',"150");
 
         $grid_ret = $grid->render(TRUE); 
         $t->assign('grid_display' ,1);
