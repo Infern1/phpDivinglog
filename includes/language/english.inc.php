@@ -252,6 +252,7 @@ $_lang['shop_email'] = "E-mail:";
 $_lang['shop_url'] = "Web Site:";
 $_lang['shop_rating'] = "Rating:";
 $_lang['shop_photo'] = "Photo:";
+$_lang['shop_location'] = "Location:";
 
 $_lang['shop_dive_single'] = " dive with this ";
 $_lang['shop_dive_plural'] = " dives with this ";

@@ -17,7 +17,7 @@
     </tr>
 
     <tr class="divetitle">
-      <td colspan="2">{$shop_street}</td>
+      <td colspan="2">{$shop_location}</td>
       <td colspan="2">{$shop_rating}</td>
     </tr>
     <tr class="divedetails">
@@ -34,7 +34,7 @@
         {if $Country != ""}
           {$Country}
         {/if}
-      </td>
+      &nbsp;</td>
       <td colspan="2">{$Rating}</td>
     </tr>
 

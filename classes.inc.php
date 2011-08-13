@@ -3080,6 +3080,7 @@ class Diveshop{
         $t->assign('shop_fax', $_lang['shop_fax']);
         $t->assign('shop_email', $_lang['shop_email']);
         $t->assign('shop_url', $_lang['shop_url']);
+        $t->assign('shop_location', $_lang['shop_location']);
 
         if ($result['ShopName'] != "") {
             $t->assign('ShopName', $result['ShopName']);
