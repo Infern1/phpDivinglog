@@ -1753,6 +1753,7 @@ class Divelog {
 
         $t->assign('Deco', ($result['Deco'] == 'True' ? $_lang['yes'] : $_lang['no']) );
         $t->assign('Rep', ($result['Rep'] == 'True' ? $_lang['yes'] : $_lang['no']) );
+
         if ($result['Surfint'] != "") {
             $t->assign('Surfint', $result['Surfint']);
         } else {
@@ -1771,7 +1772,10 @@ class Divelog {
             $t->assign('logbook_decostops', $_lang['logbook_decostops'] );
 
             $r = $result['Decostops'];
-            $r = str_replace(array("\r\n","\r","\n"), "<br>\n", $r);
+	    $r = htmlentities($r, ENT_QUOTES, "ISO-8859-1");
+            $r = str_replace("\r\n", "\n", $r);
+            $r = str_replace("\n", "<br>\n", $r);
+
             $t->assign('stops', $r);
         }
     /*}}}*/
@@ -1844,7 +1848,11 @@ class Divelog {
         if ($result['Comments'] != "") {
             $t->assign('dive_sect_comments', $_lang['dive_sect_comments']);
             $r = $result['Comments'];
-            $r = str_replace(array("\r\n", "\r", "\n"), "<br>", $r);
+
+	    $r = htmlentities($r, ENT_QUOTES, "ISO-8859-1");
+            $r = str_replace("\r\n", "\n", $r);
+            $r = str_replace("\n", "<br>\n", $r);
+
             $t->assign('Comments', $r);
         } else {
             $t->assign('Comments', "");
@@ -2169,7 +2177,6 @@ class Divesite{
                     $this->city = $citydetails['City'];
                 }
             }
-
         }
     /*}}}*/
     }
@@ -2382,7 +2389,10 @@ class Divesite{
         if ($result['Comments'] != "") {
             $t->assign('site_sect_comments', $_lang['site_sect_comments']);
             $r = $result['Comments'];
-            $r = str_replace(array("\r\n", "\r", "\n"), "<br>", $r);
+
+	    $r = htmlentities($r, ENT_QUOTES, "ISO-8859-1");
+            $r = str_replace("\r\n", "\n", $r);
+            $r = str_replace("\n", "<br>\n", $r);
 
             //		Handle Google Map URL
             $r = str_replace('[url]','<a href="',$r);
@@ -2776,7 +2786,15 @@ class Equipment{
             $t->assign('equip_sect_comments', $_lang['equip_sect_comments'] );
 
             $r = $result['Comments'];
-            $r = str_replace(array("\r\n", "\r", "\n"), "<br>", $r);
+
+	    $r = htmlentities($r, ENT_QUOTES, "ISO-8859-1");
+            $r = str_replace("\r\n", "\n", $r);
+            $r = str_replace("\n", "<br>\n", $r);
+
+            //		Handle URLs
+            // $r = str_replace('[url]','<a href="',$r);
+            // $r = str_replace('[/url]','" target="_blank"">'. $_lang['shop_google_link'] . $result['Place'] .'</a>',$r);
+
             $t->assign('Comments', $r);
         }
     /*}}}*/
@@ -2989,12 +3007,12 @@ class Diveshop{
         global $globals, $_config; /*{{{*/
         if (!empty($this->diveshop_nr)) {
             $this->request_type = 1;
-            $globals['placeid'] = $this->diveshop_nr;
-            $this->result = parse_mysql_query('oneplace.sql');
-            $this->result_countrycity = parse_mysql_query('countrycity.sql');
+            $globals['shopid'] = $this->diveshop_nr;
+            $this->result = parse_mysql_query('oneshop.sql');
+//            $this->result_countrycity = parse_mysql_query('countrycity.sql');
         } else {
             /**
-             * If the request type is not already set(by divers choice), set it to overview  
+             * If the request type is not already set (by divers choice), set it to overview  
              */
             if ($this->request_type != 3) {
                 $this->request_type = 0;
@@ -3023,7 +3041,7 @@ class Diveshop{
     function get_dives_with_shop(){
         global $globals, $_config; /*{{{*/
         // Get the dives with this shop from database
-        $globals['placeid'] = $this->diveshop_nr;
+        $globals['shopid'] = $this->diveshop_nr;
         $this->dives = parse_mysql_query('shopdives.sql');
         $this->dive_count = count($this->dives);
         // Get the shop list from database
@@ -3224,7 +3242,10 @@ class Diveshop{
         if ($result['Comments'] != "") {
             $t->assign('shop_sect_comments', $_lang['shop_sect_comments']);
             $r = $result['Comments'];
-            $r = str_replace(array("\r\n", "\r", "\n"), "<br>", $r);
+
+	    $r = htmlentities($r, ENT_QUOTES, "ISO-8859-1");
+            $r = str_replace("\r\n", "\n", $r);
+            $r = str_replace("\n", "<br>\n", $r);
 
             //		Handle URLs
             $r = str_replace('[url]','<a href="',$r);

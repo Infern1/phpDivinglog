@@ -332,7 +332,7 @@
     <tr class="divesection">
       <td colspan="4">{$logbook_decostops}</td>
     </tr>
-    <tr>
+    <tr class="divedetails">
       <td colspan="4">{$stops}</td>
     </tr>
     {/if}
