@@ -132,6 +132,7 @@ $_lang['supplytype'] = array("Open Circuit (OC)", "Semi Closed Rebreather (SCR)"
 $_lang['entry'] = array("Shore", "Boat");
 
 $_lang['logbook_place_linktitle'] = "details";
+$_lang['logbook_shop_linktitle'] = "details";
 
 // based on the PHP date() function
 $_lang['logbook_divedate_format'] = "D, d-M-Y";

@@ -1129,7 +1129,7 @@ class Divelog {
      * @return void
      */
     function set_main_dive_details(){
-        global $t, $_config, $_lang; /*{{{*/
+        global $t, $_config, $_lang, $globals; /*{{{*/
 	$result = $this->result; 
  
         $t->assign('dive_tab_logbook', $_lang['dive_tab_logbook']);
@@ -1198,11 +1198,16 @@ class Divelog {
         }
 
         if (!empty($result['ShopID'])){
+            $globals['shopid'] = $result['ShopID'];
+            $diveshop = parse_mysql_query('oneshop.sql');
             $t->assign('dive_shop_nr', $result['ShopID']);
-            $t->assign('dive_shop', $result['Shop']);
+            $t->assign('dive_shop_name', $diveshop['ShopName']);
             $t->assign('logbook_shop_linktitle', $_lang['logbook_shop_linktitle']);
-//            $t->assign('dive_shop_name','Have shop');
+            if ($diveshop['ShopType'] != '') {
+                $t->assign('dive_shop_head', $diveshop['ShopType']);
+            }
         } else {
+            $t->assign('dive_shop_nr', '');
             $t->assign('dive_shop_name','-');	
         }
 
