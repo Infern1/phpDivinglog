@@ -114,7 +114,7 @@
     </tr>
 
     <tr class="divedetails">
-    {if $dive_shop_name != ''}
+    {if isset($dive_shop_nr)} 
       {if isset($multiuser_id)}
       <td colspan="2"><a href="{$app_path}/diveshop.php{$sep1}{$multiuser_id}{$sep2}{$dive_shop_nr}" title="{$dive_shop_name}">{$dive_shop_name}</a></td>
       {else}

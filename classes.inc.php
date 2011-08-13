@@ -1198,7 +1198,10 @@ class Divelog {
         }
 
         if (!empty($result['ShopID'])){
-            $t->assign('dive_shop_name','Have shop');
+            $t->assign('dive_shop_nr', $result['ShopID']);
+            $t->assign('dive_shop', $result['Shop']);
+            $t->assign('logbook_shop_linktitle', $_lang['logbook_shop_linktitle']);
+//            $t->assign('dive_shop_name','Have shop');
         } else {
             $t->assign('dive_shop_name','-');	
         }
