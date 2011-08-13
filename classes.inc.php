@@ -3154,14 +3154,14 @@ class Diveshop{
         }
 
         if ($result['Email'] != "") {
-            $email = '<a href="'.$result['Email'].'" target="_blank">'.$result['Email'].'</a>';
+            $email = '<a href="mailto:'.$result['Email'].'" target="_blank">'.$result['Email'].'</a>';
             $t->assign('Email', $email);
         } else {
             $t->assign('Email', '-');
         }
 
         if ($result['URL'] != "") {
-            $url = '<a href="mailto:'.$result['Email'].'" target="_blank">'.$result['Email'].'</a>';
+            $url = '<a href="'.$result['URL'].'" target="_blank">'.$result['URL'].'</a>';
             $t->assign('URL', $url);
         } else {
             $t->assign('URL', '-');
