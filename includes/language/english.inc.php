@@ -32,30 +32,35 @@ $_lang['last_group_linktitle'] = "Last group";
 $_lang['previous_group_linktitle'] = "Previous group";
 $_lang['next_group_linktitle'] = "Next group";
 
-$_lang['first_site_linktitle'] = "First site";
-$_lang['last_site_linktitle'] = "Last site";
-$_lang['previous_site_linktitle'] = "Previous site";
-$_lang['next_site_linktitle'] = "Next site";
+$_lang['first_site_linktitle'] = "First dive site";
+$_lang['last_site_linktitle'] = "Last dive site";
+$_lang['previous_site_linktitle'] = "Previous dive site";
+$_lang['next_site_linktitle'] = "Next dive site";
 
 $_lang['first_equip_linktitle'] = "First item";
 $_lang['last_equip_linktitle'] = "Last item";
 $_lang['previous_equip_linktitle'] = "Previous item";
 $_lang['next_equip_linktitle'] = "Next item";
 
+$_lang['first_shop_linktitle'] = "First dive shop/centre";
+$_lang['last_shop_linktitle'] = "Last dive shop/centre";
+$_lang['previous_shop_linktitle'] = "Previous dive shop/centre";
+$_lang['next_shop_linktitle'] = "Next dive shop/centre";
+
 $_lang['dive_log'] = "Dive Log";
 $_lang['dive_sites'] = "Dive Sites";
-$_lang['dive_stats'] = "Dive Statistics";
 $_lang['dive_equip'] = "Dive Equipment";
-$_lang['dive_shops'] = "Shops / Dive Centres";
+$_lang['dive_shops'] = "Dive Shops";
+$_lang['dive_stats'] = "Dive Statistics";
+$_lang['dive_gallery'] = "Dive Gallery";
 $_lang['diver_choice_linktitle'] = "Show Diver Overview";
 $_lang['diver_choice'] = "Diver Overview";
-$_lang['dive_gallery'] = "Dive Gallery";
 
 $_lang['dive_log_linktitle'] = "Show the Dive Log";
 $_lang['dive_sites_linktitle'] = "List the Dive Sites";
-$_lang['dive_shops_linktitle'] = "List the Dive Shops";
-$_lang['dive_stats_linktitle'] = "Show the Dive Statistics";
 $_lang['dive_equip_linktitle'] = "List the Dive Equipment";
+$_lang['dive_shops_linktitle'] = "List the Dive Shops/Centres";
+$_lang['dive_stats_linktitle'] = "Show the Dive Statistics";
 $_lang['dive_gallery_linktitle'] = "Show the Dive Gallery";
 
 

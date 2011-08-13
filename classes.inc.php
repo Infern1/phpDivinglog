@@ -868,6 +868,7 @@ class TopLevelMenu {
     function get_nav_links($request){
         /*{{{*/
         global $t, $globals, $_lang, $_config;
+
         if ($request->request_type == 1) {
             $divelist = parse_mysql_query('divelist.sql');
             for ($i=0; $i<count($divelist); $i++) {
@@ -894,6 +895,7 @@ class TopLevelMenu {
                 $t->assign('last_dive_linktitle', $_lang['last_dive_linktitle']);
                 $t->assign('last', $_lang['last'] );
             }
+
         } elseif ($request->request_type == 2) {
             //	First, Previous, Next, Last links and Dive #
             $sitelist = parse_mysql_query('sitelist.sql');
@@ -926,6 +928,7 @@ class TopLevelMenu {
                 $t->assign('last_site_linktitle', $_lang['last_site_linktitle'] );
                 $t->assign('last', $_lang['last'] );
             } 
+
         } elseif ($request->request_type == 3) {
             $gearlist = parse_mysql_query('gearlist.sql');
             $last = count($gearlist) - 1;
@@ -970,25 +973,25 @@ class TopLevelMenu {
                 $t->assign('last_equip_linktitle', $_lang['last_equip_linktitle'] );
                 $t->assign('last', $_lang['last'] );
             } 
-            //End filling the links section
-        } elseif ($request->request_type == 4) {
+
+        } elseif ($request->request_type == 9) {
             //	First, Previous, Next, Last links and Dive #
             $shoplist = parse_mysql_query('shoplist.sql');
             $last = count($shoplist) - 1;
             $position = -1;
             for ($i=0; $i<count($shoplist); $i++) {
-                if ($shoplist[$i]['ID'] == $globals['placeid']) {
+                if ($shoplist[$i]['ID'] == $globals['shopid']) {
                     $position = $i;
                 }
             }
 
             //	First, Previous
             if ($position != 0 ) {
-                $t->assign('position',$position);
+                $t->assign('shop_first','1');
                 $t->assign('first_shop_id', $shoplist[0]['ID']);
                 $t->assign('first_shop_linktitle', $_lang['first_shop_linktitle']);
                 $t->assign('first', $_lang['first']);
-                $t->assign('previous_shop_id', $sitelist[$position - 1]['ID']);
+                $t->assign('previous_shop_id', $shoplist[$position - 1]['ID']);
                 $t->assign('previous_shop_linktitle', $_lang['previous_shop_linktitle']);
                 $t->assign('previous', $_lang['previous']);
             }
@@ -1003,6 +1006,7 @@ class TopLevelMenu {
                 $t->assign('last_shop_linktitle', $_lang['last_shop_linktitle'] );
                 $t->assign('last', $_lang['last'] );
             } 
+            //End filling the links section
         }
     /*}}}*/
     }
