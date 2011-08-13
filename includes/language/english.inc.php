@@ -253,8 +253,8 @@ $_lang['shop_url'] = "Web Site:";
 $_lang['shop_rating'] = "Rating:";
 $_lang['shop_photo'] = "Photo:";
 
-$_lang['shop_dive_single'] = " dive with this shop:";
-$_lang['shop_dive_plural'] = " dives with this shop:";
+$_lang['shop_dive_single'] = " dive with this ";
+$_lang['shop_dive_plural'] = " dives with this ";
 
 $_lang['shop_sect_comments'] = "Comments:";
 

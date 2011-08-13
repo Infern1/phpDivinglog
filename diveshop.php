@@ -35,8 +35,11 @@ if ($diveshop->get_request_type() == 1) {
     /**
      * Get the page header 
      */
-    //    $pagetitle = $_lang['dive_shop_pagetitle'].$result['Place'];
-    $pagetitle = $_lang['dive_shop_pagetitle'];
+    if ($result['ShopType'] != '') {
+        $pagetitle = $result['ShopType'].' - '.$result['ShopName'];
+    } else {
+        $pagetitle = $_lang['dive_shop_pagetitle'].$result['ShopName'];
+    }
     $t->assign('pagetitle',$pagetitle);
     $t->assign('colspanlinks','4');
     

@@ -3009,7 +3009,6 @@ class Diveshop{
             $this->request_type = 1;
             $globals['shopid'] = $this->diveshop_nr;
             $this->result = parse_mysql_query('oneshop.sql');
-//            $this->result_countrycity = parse_mysql_query('countrycity.sql');
         } else {
             /**
              * If the request type is not already set (by divers choice), set it to overview  
@@ -3060,7 +3059,13 @@ class Diveshop{
         //$this->get_diveshop_location_details(); 
         // Show main shop details
         $result = $this->result;
-        $t->assign('pagetitle',$_lang['dive_shop_pagetitle'].$result['Place']);
+
+        if ($result['ShopType'] != '') {
+            $t->assign('pagetitle',$result['ShopType'].' - '.$result['ShopName']);
+        } else {
+            $t->assign('pagetitle',$_lang['dive_shop_pagetitle'].$result['ShopName']);
+        }
+
         $t->assign('diveshop_id', $this->diveshop_nr);
         $t->assign('shop_name', $_lang['shop_name']);
         $t->assign('shop_type', $_lang['shop_type']);
@@ -3144,13 +3149,15 @@ class Diveshop{
         }
 
         if ($result['Email'] != "") {
-            $t->assign('Email', $result['Email']);
+            $email = '<a href="'.$result['Email'].'" target="_blank">'.$result['Email'].'</a>';
+            $t->assign('Email', $email);
         } else {
             $t->assign('Email', '-');
         }
 
         if ($result['URL'] != "") {
-            $t->assign('URL', $result['URL']);
+            $url = '<a href="mailto:'.$result['Email'].'" target="_blank">'.$result['Email'].'</a>';
+            $t->assign('URL', $url);
         } else {
             $t->assign('URL', '-');
         }
@@ -3222,6 +3229,7 @@ class Diveshop{
             $t->assign('dlog_number_title', $_lang['dlog_number_title'] );
             $t->assign('dives',$dives);
         } else {
+            $t->assign('dive_count', $this->dive_count);
             $t->assign('dlog_number_title', "" );
             $t->assign('dives',"");
         }
@@ -3248,8 +3256,8 @@ class Diveshop{
             $r = str_replace("\n", "<br>\n", $r);
 
             //		Handle URLs
-            $r = str_replace('[url]','<a href="',$r);
-            $r = str_replace('[/url]','" target="_blank" title="'. $_lang['shop_google_link']. $result['Place'] .'">'. $_lang['shop_google_link'] . $result['Place'] .'</a>',$r);
+//            $r = str_replace('[url]','<a href="',$r);
+//            $r = str_replace('[/url]','" target="_blank" title="'. $_lang['shop_google_link']. $result['Shop'] .'">'. $_lang['shop_google_link'] . $result['Shop'] .'</a>',$r);
 
             $t->assign('Comments', $r);
         }

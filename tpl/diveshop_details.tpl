@@ -21,14 +21,16 @@
       <td colspan="2">{$shop_rating}</td>
     </tr>
     <tr class="divedetails">
-      <td colspan="2" rowspan="5">
+      <td colspan="2">
         {if $Street != ""}
           {$Street}<br>
         {/if}
         {if $Address2 != ""}
           {$Address2}<br>
         {/if}
+        {if $City != "" || $State != "" || $Zip != ""} 
           {$City} {$State} {$Zip}<br>
+        {/if}
         {if $Country != ""}
           {$Country}
         {/if}
@@ -38,15 +40,10 @@
 
     <tr class="divetitle">
       <td colspan="2">{$shop_email}</td>
-    </tr>
-    <tr class="divedetails">
-      <td colspan="2">{$Email}</td>
-    </tr>
-
-    <tr class="divetitle">
       <td colspan="2">{$shop_url}</td>
     </tr>
     <tr class="divedetails">
+      <td colspan="2">{$Email}</td>
       <td colspan="2">{$URL}</td>
     </tr>
 
@@ -90,7 +87,7 @@ height="{$thumb_height}" width="{$thumb_width}"></a>
     {* Show shop dives if we have them *}
     {if $dive_count != 0}
     <tr class="divetitle">
-      <td colspan="4">{$dive_count} {$shop_dive_trans}</td>
+      <td colspan="4">{$dive_count} {$shop_dive_trans} {$ShopType}:</td>
     </tr>
 
     <tr class="divedetails">
@@ -116,7 +113,7 @@ title="{$dlog_number_title}{$dive}">{$dive}</a>
     {* Show them if we have them *}
     {if isset($Comments)}
     <tr class="divesection">
-      <td colspan="4">{$site_sect_comments}</td>
+      <td colspan="4">{$shop_sect_comments}</td>
     </tr>
     <tr class="divedetails">
       <td colspan="4">{$Comments}</td>
