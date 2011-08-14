@@ -297,8 +297,8 @@ $_lang['trip_rating'] = "Rating:";
 $_lang['trip_photo'] = "Photo:";
 $_lang['trip_buddies'] = "Buddies:";
 
-$_lang['trip_dive_single'] = " dive on this ";
-$_lang['trip_dive_plural'] = " dives on this ";
+$_lang['trip_dive_single'] = " dive on this Trip / Vacation:";
+$_lang['trip_dive_plural'] = " dives on this Trip / Vacation:";
 
 $_lang['trip_sect_comments'] = "Comments:";
 

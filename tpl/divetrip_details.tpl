@@ -26,8 +26,8 @@
     </tr>
 
     <tr class="divetitle">
-      <td colspan="2">{$shop_startdate}</td>
-      <td colspan="2">{$shop_enddate}</td>
+      <td colspan="2">{$trip_startdate}</td>
+      <td colspan="2">{$trip_enddate}</td>
     </tr>
     <tr class="divedetails">
       <td colspan="2">{$StartDate}</td>
@@ -61,7 +61,7 @@ height="{$thumb_height}" width="{$thumb_width}"></a>
     {* Show trip dives if we have them *}
     {if $dive_count != 0}
     <tr class="divetitle">
-      <td colspan="4">{$dive_count} {$trip_dive_trans}:</td>
+      <td colspan="4">{$dive_count} {$trip_dive_trans}</td>
     </tr>
 
     <tr class="divedetails">

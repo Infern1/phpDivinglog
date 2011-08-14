@@ -3592,6 +3592,30 @@ class Divetrip{
             $t->assign('Rating','-');	
         }
 
+        if ($result['ShopName'] != "") {
+            $t->assign('ShopName', $result['ShopName']);
+        } else {
+            $t->assign('ShopName','-');
+        }
+
+        if ($result['Country'] != "") {
+            $t->assign('Country', $result['Country']);
+        } else {
+            $t->assign('Country','-');
+        }
+
+        if ($result['StartDate'] != "") {
+            $t->assign('StartDate', date($_lang['logbook_divedate_format'], strtotime($result['StartDate'])));
+        } else {
+            $t->assign('StartDate','-');	
+        }
+
+        if ($result['EndDate'] != "") {
+            $t->assign('EndDate', date($_lang['logbook_divedate_format'], strtotime($result['EndDate'])));
+        } else {
+            $t->assign('EndDate','-');	
+        }
+
     /*}}}*/
     }
 
