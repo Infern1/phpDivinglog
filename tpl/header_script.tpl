@@ -24,7 +24,7 @@
 function open_url(index, link){
 window.location.href = '{/literal}{$web_root}{literal}' + link + index  ;
 }
-    hs.graphicsDir = '{/literal}{$web_root}/{literal}/includes/highslide/graphics/';
+    hs.graphicsDir = '{/literal}{$web_root}{literal}/includes/highslide/graphics/';
     hs.align = 'center';
     hs.transitions = ['expand', 'crossfade'];
     hs.outlineType = 'rounded-white';
