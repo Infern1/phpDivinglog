@@ -9,6 +9,8 @@ class="divelogcrumbs" title="{$dive_sites_linktitle}">{$dive_sites}</a> |
 class="divelogcrumbs" title="{$dive_equip_linktitle}">{$dive_equip}</a><br> 
     <a href="{$app_path}/diveshop.php{$sep1}{$multiuser_id}{$sep2}list" 
 class="divelogcrumbs" title="{$dive_shops_linktitle}">{$dive_shops}</a> |
+    <a href="{$app_path}/divetrip.php{$sep1}{$multiuser_id}{$sep2}list" 
+class="divelogcrumbs" title="{$dive_trips_linktitle}">{$dive_trips}</a> |
     <a href="{$app_path}/divestats.php{$sep1}{$multiuser_id}{$sep2}list" 
 class="divelogcrumbs" title="{$dive_stats_linktitle}">{$dive_stats}</a> |
     <a href="{$app_path}/divegallery.php{$sep1}{$multiuser_id}{$sep2}list" 
@@ -22,6 +24,8 @@ class="divelogcrumbs" title="{$dive_sites_linktitle}">{$dive_sites}</a> |
 class="divelogcrumbs" title="{$dive_equip_linktitle}">{$dive_equip}</a><br> 
     <a href="{$app_path}/diveshop.php{$list}" 
 class="divelogcrumbs" title="{$dive_shops_linktitle}">{$dive_shops}</a> | 
+    <a href="{$app_path}/divetrip.php{$list}" 
+class="divelogcrumbs" title="{$dive_trips_linktitle}">{$dive_trips}</a> | 
     <a href="{$app_path}/divestats.php{$list}" 
 class="divelogcrumbs" title="{$dive_stats_linktitle}">{$dive_stats}</a>
 |    <a href="{$app_path}/divegallery.php{$list}" 

@@ -135,6 +135,7 @@ class HandleRequest {
         return $this->site_nr;
     }
 
+
     function get_equipment_nr(){
         return $this->equipment_nr;
     }
@@ -232,8 +233,10 @@ class HandleRequest {
                         $this->diver_choice = false;
                         break;
                     case 'divetrip.php':
+                        if($this->view_request == 1)
+                            $this->divetrip_nr = check_number($split_request[2]);
                         $this->request_type = 8;
-                        $this->diver_choice = false;
+                        $this->diver_choice = true;
                         break;
                     case 'diveshop.php':
                         if($this->view_request == 1)
@@ -480,7 +483,7 @@ class TableGrid{
             case 'deutch': case 'german' :
                 $this->gridtable->setLanguage("de");
                 break;
-           case 'espa.ol': case 'es' :
+            case 'espa.ol': case 'es' :
                 $this->gridtable->Language("es");
                 break;
             case 'francais': case 'fr' :
@@ -812,6 +815,8 @@ class TopLevelMenu {
         $t->assign('dive_equip',$_lang['dive_equip']);
         $t->assign('dive_shops_linktitle', $_lang['dive_shops_linktitle']);
         $t->assign('dive_shops',$_lang['dive_shops']);
+        $t->assign('dive_trips_linktitle', $_lang['dive_trips_linktitle']);
+        $t->assign('dive_trips',$_lang['dive_trips']);
         $t->assign('dive_stats_linktitle', $_lang['dive_stats_linktitle']);
         $t->assign('dive_stats', $_lang['dive_stats']);
         $t->assign('dive_gallery_linktitle', $_lang['dive_gallery_linktitle']);
@@ -844,6 +849,8 @@ class TopLevelMenu {
         $t->assign('dive_equip', $_lang['dive_equip'] );
         $t->assign('dive_shops_linktitle', $_lang['dive_shops_linktitle']);
         $t->assign('dive_shops', $_lang['dive_shops'] );
+        $t->assign('dive_trips_linktitle', $_lang['dive_trips_linktitle']);
+        $t->assign('dive_trips', $_lang['dive_trips'] );
         $t->assign('dive_stats_linktitle', $_lang['dive_stats_linktitle']);
         $t->assign('dive_stats', $_lang['dive_stats'] );
         $t->assign('dive_gallery_linktitle', $_lang['dive_gallery_linktitle']);
@@ -971,6 +978,39 @@ class TopLevelMenu {
                 $t->assign('next', $_lang['next'] );
                 $t->assign('last_eq_id', $gearlist[$last]['ID']);
                 $t->assign('last_equip_linktitle', $_lang['last_equip_linktitle'] );
+                $t->assign('last', $_lang['last'] );
+            }
+
+        } elseif ($request->request_type == 8) {
+            //	First, Previous, Next, Last links and Trip #
+            $triplist = parse_mysql_query('triplist.sql');
+            $last = count($triplist) - 1;
+            $position = -1;
+            for ($i=0; $i<count($triplist); $i++) {
+                if ($triplist[$i]['ID'] == $globals['tripid']) {
+                    $position = $i;
+                }
+            }
+
+            //	First, Previous
+            if ($position != 0 ) {
+                $t->assign('trip_first','1');
+                $t->assign('first_trip_id', $triplist[0]['ID']);
+                $t->assign('first_trip_linktitle', $_lang['first_trip_linktitle']);
+                $t->assign('first', $_lang['first']);
+                $t->assign('previous_trip_id', $triplist[$position - 1]['ID']);
+                $t->assign('previous_trip_linktitle', $_lang['previous_trip_linktitle']);
+                $t->assign('previous', $_lang['previous']);
+            }
+
+            //	Next, Last
+            if ($position != $last) {
+                $t->assign('divetrip_not_null','1');
+                $t->assign('next_divetrip_nr', $triplist[$position + 1]['ID']);
+                $t->assign('next_trip_linktitle', $_lang['next_trip_linktitle']);
+                $t->assign('next', $_lang['next'] );
+                $t->assign('last_divetrip_nr', $triplist[$last]['ID']);
+                $t->assign('last_trip_linktitle', $_lang['last_trip_linktitle'] );
                 $t->assign('last', $_lang['last'] );
             } 
 

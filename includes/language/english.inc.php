@@ -47,10 +47,16 @@ $_lang['last_shop_linktitle'] = "Last dive shop/centre";
 $_lang['previous_shop_linktitle'] = "Previous dive shop/centre";
 $_lang['next_shop_linktitle'] = "Next dive shop/centre";
 
+$_lang['first_trip_linktitle'] = "First dive trip/vacation";
+$_lang['last_tripp_linktitle'] = "Last dive trip/vacation";
+$_lang['previous_trip_linktitle'] = "Previous dive trip/vacation";
+$_lang['next_trip_linktitle'] = "Next dive trip/vacation";
+
 $_lang['dive_log'] = "Dive Log";
 $_lang['dive_sites'] = "Dive Sites";
 $_lang['dive_equip'] = "Dive Equipment";
 $_lang['dive_shops'] = "Dive Shops";
+$_lang['dive_trips'] = "Dive Trips";
 $_lang['dive_stats'] = "Dive Statistics";
 $_lang['dive_gallery'] = "Dive Gallery";
 $_lang['diver_choice_linktitle'] = "Show Diver Overview";
@@ -60,6 +66,7 @@ $_lang['dive_log_linktitle'] = "Show the Dive Log";
 $_lang['dive_sites_linktitle'] = "List the Dive Sites";
 $_lang['dive_equip_linktitle'] = "List the Dive Equipment";
 $_lang['dive_shops_linktitle'] = "List the Dive Shops/Centres";
+$_lang['dive_trips_linktitle'] = "List the Dive Trips/Vacations";
 $_lang['dive_stats_linktitle'] = "Show the Dive Statistics";
 $_lang['dive_gallery_linktitle'] = "Show the Dive Gallery";
 
@@ -133,6 +140,7 @@ $_lang['entry'] = array("Shore", "Boat");
 
 $_lang['logbook_place_linktitle'] = "details";
 $_lang['logbook_shop_linktitle'] = "details";
+$_lang['logbook_trip_linktitle'] = "details";
 $_lang['logbook_trip_linktitle'] = "details";
 
 // based on the PHP date() function
@@ -274,6 +282,34 @@ $_lang['dshop_none'] = "No dive shops are currently available.";
 $_lang['dshop_title_shop'] = "Shop / Dive Centre";
 $_lang['dshop_title_type'] = "Type";
 $_lang['dshop_title_country'] = "Country";
+
+
+// Dive Trip related values
+
+$_lang['dive_trip_pagetitle'] = "Trip / Vacation - ";
+
+$_lang['trip_name'] = "Name:";
+$_lang['trip_shop'] = "Shop:";
+$_lang['trip_country'] = "Country:";
+$_lang['trip_startdate'] = "Start Date:";
+$_lang['trip_enddata'] = "End Date:";
+$_lang['trip_rating'] = "Rating:";
+$_lang['trip_photo'] = "Photo:";
+$_lang['trip_buddies'] = "Buddies:";
+
+$_lang['trip_dive_single'] = " dive on this ";
+$_lang['trip_dive_plural'] = " dives on this ";
+
+$_lang['trip_sect_comments'] = "Comments:";
+
+
+// Dive Trip List related values
+
+$_lang['dtrip_none'] = "No dive trips are currently available.";
+
+$_lang['dtrip_title_shop'] = "Trips / Vacations";
+$_lang['dtrip_title_shop'] = "Dive Shop";
+$_lang['dtrip_title_country'] = "Country";
 
 
 // Dive Statistics related values

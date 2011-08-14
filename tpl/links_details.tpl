@@ -147,6 +147,22 @@ class="divelogcrumbs" title="{$next_shop_linktitle}">{$next}</a>
 class="divelogcrumbs" title="{$last_shop_linktitle}">{$last}</a>
     {/if}
     </div>
+{elseif isset($divetrip_not_null)}
+    <div class="divelogcrumbs">
+    {if isset($multiuser_id)}
+    <a href="{$app_path}/divetrip.php{$sep1}{$multiuser_id}{$sep2}{$next_divetrip_nr}"
+class="divelogcrumbs" title="{$next_trip_linktitle}">{$next}</a>
+    &nbsp;|&nbsp;
+    <a href="{$app_path}/divetrip.php{$sep1}{$multiuser_id}{$sep2}{$last_divetrip_nr}"
+class="divelogcrumbs" title="{$last_trip_linktitle}">{$last}</a>
+    {else}
+    <a href="{$app_path}/divetrip.php{$sep2}{$next_divetrip_nr}" 
+class="divelogcrumbs" title="{$next_trip_linktitle}">{$next}</a>
+    &nbsp;|&nbsp;
+    <a href="{$app_path}/divetrip.php{$sep2}{$last_divetrip_nr}"
+class="divelogcrumbs" title="{$last_trip_linktitle}">{$last}</a>
+    {/if}
+    </div>
 {else}
     &nbsp;
 {/if}
