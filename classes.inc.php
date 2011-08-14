@@ -3593,9 +3593,15 @@ class Divetrip{
         }
 
         if ($result['ShopName'] != "") {
-            $t->assign('ShopName', $result['ShopName']);
+            $t->assign('dive_shop_nr', $result['ShopID']);
+            $t->assign('dive_shop_name', $result['ShopName']);
+            $t->assign('logbook_shop_linktitle', $_lang['logbook_shop_linktitle']);
+            if ($result['ShopType'] != '') {
+                $t->assign('trip_shop', $result['ShopType'].':');
+            }
         } else {
-            $t->assign('ShopName','-');
+            $t->assign('dive_shop_nr', '');
+            $t->assign('dive_shop_name','-');	
         }
 
         if ($result['Country'] != "") {
