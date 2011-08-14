@@ -3575,7 +3575,6 @@ class Divetrip{
         $t->assign('trip_country', $_lang['trip_country']);
         $t->assign('trip_startdate', $_lang['trip_startdate']);
         $t->assign('trip_enddate', $_lang['trip_enddate']);
-        $t->assign('trip_buddies', $_lang['trip_buddies']);
 
         if ($result['TripName'] != "") {
             $t->assign('TripName', $result['TripName']);
@@ -3683,6 +3682,25 @@ class Divetrip{
             $t->assign('dive_count', $this->dive_count);
             $t->assign('dlog_number_title', "" );
             $t->assign('dives',"");
+        }
+    /*}}}*/
+    }
+
+    /**
+     * set_buddy_details sets the buddy info
+     * 
+     * @access public
+     * @return void
+     */
+    function set_buddy_details(){
+        global $t, $_lang; /*{{{*/
+        $result = $this->result; 
+        $t->assign('trip_buddy', $_lang['trip_buddy']);
+
+        if (isset($result['BuddyIDs']) && $result['BuddyIDs'] != "") {
+            $t->assign('buddy', $result['BuddyIDs']);
+        } else {
+            $t->assign('buddy','-');	
         }
     /*}}}*/
     }

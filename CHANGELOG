@@ -8,7 +8,7 @@ phpDivingLog v3.0-alpha3 - 2011-08-14 - Lloyd Borrett and Rob Lensen
     * Changed the parse_mysql query function so if just one result is there don't create an array
     * Added the Divesite name to the gallery
     * Added EXIF information to the dive photos
-    * Added display of dive shops/centres
+    * Added display of dive shops/centres and trips/vacations
 
 phpDivingLog v3.0-alpha2 - 2011-08-01 - Lloyd Borrett
     * Added ability to display lots of additional values 

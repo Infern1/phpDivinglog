@@ -44,7 +44,11 @@ if ($divetrip->get_request_type() == 1) {
     $links->get_nav_links($request);
     // Show main dive trip details
     $divetrip->set_main_divetrip_details();
+    // Show buddy details
+    $divetrip->set_buddy_details();
+    // Trip Pictures
     $divetrip->set_divetrip_pictures();
+    // Trip Dives
     $divetrip->set_dives_on_trip();
     // Comments
     $divetrip->set_divetrip_comments();

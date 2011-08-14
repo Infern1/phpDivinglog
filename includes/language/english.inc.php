@@ -295,7 +295,7 @@ $_lang['trip_startdate'] = "Start Date:";
 $_lang['trip_enddate'] = "End Date:";
 $_lang['trip_rating'] = "Rating:";
 $_lang['trip_photo'] = "Photo:";
-$_lang['trip_buddies'] = "Buddies:";
+$_lang['trip_buddy'] = "Buddy/Buddies:";
 
 $_lang['trip_dive_single'] = " dive on this Trip / Vacation:";
 $_lang['trip_dive_plural'] = " dives on this Trip / Vacation:";

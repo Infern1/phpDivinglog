@@ -91,6 +91,16 @@ title="{$dlog_number_title}{$dive}">{$dive}</a>
       <td colspan="4" class="spacing">&nbsp;</td>
     </tr>
 
+    {* Show buddy details *}
+    {if $buddy != ''}
+    <tr class="divetitle">
+      <td colspan="4">{$trip_buddy}</td>
+    </tr>
+    <tr class="divedetails">
+      <td colspan="4">{$buddy}</td>
+    </tr>
+    {/if}
+
     {* Comments *}
     {* Show them if we have them *}
     {if isset($Comments)}
