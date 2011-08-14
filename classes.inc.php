@@ -804,7 +804,7 @@ class TopLevelMenu {
      */
     function get_std_links(){
         global $t, $_lang; /*{{{*/
-        // Dive Log, Dive Sites, Dive Shops, Dive Statistics
+        // Dive Log, Dive Sites, Dive Shops, Dive Trips, Dive Statistics
         $t->assign('diver_choice_linktitle', $_lang['diver_choice_linktitle']);
         $t->assign('diver_choice', $_lang['diver_choice']);
         $t->assign('dive_log_linktitle', $_lang['dive_log_linktitle']);
@@ -3605,7 +3605,7 @@ class Divetrip{
         global $_config, $t, $_lang, $globals; /*{{{*/
         $pic_class = new DivePictures;
         $pic_class->set_divegallery_info_direct($this->user_id);
-        $pic_class->get_divegallery_info(0,$this->diveshop_nr);
+        $pic_class->get_divegallery_info(0,$this->divetrip_nr);
         $divepics = $pic_class->get_image_link();
         $pics = count($divepics);
         if ($pics != 0) {
@@ -3769,8 +3769,8 @@ class Divetrip{
 
         $grid->showColumn('TripName', $_lang['dtrip_title_trip']);
         $grid->setColwidth('ShopName',"250");
-        $grid->showColumn('Shop', $_lang['dtrip_title_shop']);
-        $grid->setColwidth('Shop',"150");
+        $grid->showColumn('ShopName', $_lang['dtrip_title_shop']);
+        $grid->setColwidth('ShopName',"150");
         $grid->showColumn('Country', $_lang['dtrip_title_country']);
         $grid->setColwidth('Country',"150");
         $grid->setRowActionFunction("action");

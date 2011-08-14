@@ -45,7 +45,7 @@ if ($divetrip->get_request_type() == 1) {
     // Show main dive trip details
     $divetrip->set_main_divetrip_details();
     $divetrip->set_divetrip_pictures();
-    $divetrip->set_dives_with_trip();
+    $divetrip->set_dives_on_trip();
     // Comments
     $divetrip->set_divetrip_comments();
 

@@ -48,7 +48,7 @@ $_lang['previous_shop_linktitle'] = "Previous dive shop/centre";
 $_lang['next_shop_linktitle'] = "Next dive shop/centre";
 
 $_lang['first_trip_linktitle'] = "First dive trip/vacation";
-$_lang['last_tripp_linktitle'] = "Last dive trip/vacation";
+$_lang['last_trip_linktitle'] = "Last dive trip/vacation";
 $_lang['previous_trip_linktitle'] = "Previous dive trip/vacation";
 $_lang['next_trip_linktitle'] = "Next dive trip/vacation";
 
@@ -292,7 +292,7 @@ $_lang['trip_name'] = "Name:";
 $_lang['trip_shop'] = "Shop:";
 $_lang['trip_country'] = "Country:";
 $_lang['trip_startdate'] = "Start Date:";
-$_lang['trip_enddata'] = "End Date:";
+$_lang['trip_enddate'] = "End Date:";
 $_lang['trip_rating'] = "Rating:";
 $_lang['trip_photo'] = "Photo:";
 $_lang['trip_buddies'] = "Buddies:";
@@ -307,7 +307,7 @@ $_lang['trip_sect_comments'] = "Comments:";
 
 $_lang['dtrip_none'] = "No dive trips are currently available.";
 
-$_lang['dtrip_title_shop'] = "Trips / Vacations";
+$_lang['dtrip_title_trip'] = "Trips / Vacations";
 $_lang['dtrip_title_shop'] = "Dive Shop";
 $_lang['dtrip_title_country'] = "Country";
 
