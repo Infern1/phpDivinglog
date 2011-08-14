@@ -21,7 +21,15 @@
       <td colspan="2">{$trip_country}</td>
     </tr>
     <tr class="divedetails">
-      <td colspan="2">{$ShopName}</td>
+    {if $dive_shop_nr != ""} 
+      {if isset($multiuser_id)}
+      <td colspan="2"><a href="{$app_path}/diveshop.php{$sep1}{$multiuser_id}{$sep2}{$dive_shop_nr}" title="{$dive_shop_name} {$logbook_shop_linktitle}">{$dive_shop_name}</a></td>
+      {else}
+      <td colspan="2"><a href="{$app_path}/diveshop.php{$sep2}{$dive_shop_nr}" title="{$dive_shop_name} {$logbook_shop_linktitle}">{$dive_shop_name}</a></td>
+      {/if}
+    {else}
+      <td>-</td>
+    {/if} 
       <td colspan="2">{$Country}</td>
     </tr>
 
