@@ -1204,7 +1204,7 @@ class Divelog {
             $t->assign('dive_shop_name', $diveshop['ShopName']);
             $t->assign('logbook_shop_linktitle', $_lang['logbook_shop_linktitle']);
             if ($diveshop['ShopType'] != '') {
-                $t->assign('dive_shop_head', $diveshop['ShopType']);
+                $t->assign('dive_shop_head', $diveshop['ShopType'].':');
             }
         } else {
             $t->assign('dive_shop_nr', '');
@@ -1212,8 +1212,13 @@ class Divelog {
         }
 
         if (!empty($result['TripID'])){
-            $t->assign('dive_trip_name','Have trip');
+            $globals['tripid'] = $result['TripID'];
+            $divetrip = parse_mysql_query('onetrip.sql');
+            $t->assign('dive_trip_nr', $result['TripID']);
+            $t->assign('dive_trip_name', $divetrip['TripName']);
+            $t->assign('logbook_trip_linktitle', $_lang['logbook_trip_linktitle']);
         } else {
+            $t->assign('dive_trip_nr', '');
             $t->assign('dive_trip_name','-');	
         }
 

@@ -126,9 +126,9 @@
 
     {if $dive_trip_name != ''}
       {if isset($multiuser_id)}
-      <td colspan="2"><a href="{$app_path}/divetrip.php{$sep1}{$multiuser_id}{$sep2}{$dive_trip_nr}" title="{$dive_trip_name}">{$dive_trip_name}</a></td>
+      <td colspan="2"><a href="{$app_path}/divetrip.php{$sep1}{$multiuser_id}{$sep2}{$dive_trip_nr}" title="{$dive_trip_name} {$logbook_shop_linktitle}">{$dive_trip_name}</a></td>
       {else}
-      <td colspan="2"><a href="{$app_path}/divetrip.php{$sep2}{$dive_trip_nr}" title="{$dive_trip_name}">{$dive_trip_name}</a></td>
+      <td colspan="2"><a href="{$app_path}/divetrip.php{$sep2}{$dive_trip_nr}" title="{$dive_trip_name} {$logbook_shop_linktitle}">{$dive_trip_name}</a></td>
       {/if}
     {else}
       <td>-</td>
