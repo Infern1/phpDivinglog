@@ -4062,7 +4062,7 @@ class Divestats{
             if(count($divestatsnr) > 1){
                 $this->DivedateMaxNr = $divestatsnr[count($divestatsnr)-1]['Number'];
             } else {
-                $this->DivedateMinNr = $divestatsnr['Number'];
+                $this->DivedateMaxNr = $divestatsnr['Number'];
             }
 
             // Get dive number for sortest dive
