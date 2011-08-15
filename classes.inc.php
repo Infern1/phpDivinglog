@@ -1915,6 +1915,9 @@ class Divelog {
             $r = str_replace("\r\n", "\n", $r);
             $r = str_replace("\n", "<br>\n", $r);
 
+            // Make any URLs clickable
+            $r = make_clickable($r);
+
             $t->assign('Comments', $r);
         } else {
             $t->assign('Comments', "");
@@ -2460,6 +2463,9 @@ class Divesite{
             $r = str_replace('[url]','<a href="',$r);
             $r = str_replace('[/url]','" target="_blank" title="'. $_lang['site_google_link']. $result['Place'] .'">'. $_lang['site_google_link'] . $result['Place'] .'</a>',$r);
 
+            // Make any URLs clickable
+            $r = make_clickable($r);
+
             $t->assign('Comments', $r);
         }
     /*}}}*/
@@ -2853,9 +2859,8 @@ class Equipment{
             $r = str_replace("\r\n", "\n", $r);
             $r = str_replace("\n", "<br>\n", $r);
 
-            //		Handle URLs
-            // $r = str_replace('[url]','<a href="',$r);
-            // $r = str_replace('[/url]','" target="_blank"">'. $_lang['shop_google_link'] . $result['Place'] .'</a>',$r);
+            // Make any URLs clickable
+            $r = make_clickable($r);
 
             $t->assign('Comments', $r);
         }
@@ -3318,9 +3323,8 @@ class Diveshop{
             $r = str_replace("\r\n", "\n", $r);
             $r = str_replace("\n", "<br>\n", $r);
 
-            //		Handle URLs
-//            $r = str_replace('[url]','<a href="',$r);
-//            $r = str_replace('[/url]','" target="_blank" title="'. $_lang['shop_google_link']. $result['Shop'] .'">'. $_lang['shop_google_link'] . $result['Shop'] .'</a>',$r);
+            // Make any URLs clickable
+            $r = make_clickable($r);
 
             $t->assign('Comments', $r);
         }
@@ -3758,9 +3762,8 @@ class Divetrip{
             $r = str_replace("\r\n", "\n", $r);
             $r = str_replace("\n", "<br>\n", $r);
 
-            //		Handle URLs
-//            $r = str_replace('[url]','<a href="',$r);
-//            $r = str_replace('[/url]','" target="_blank" title="'. $_lang['shop_google_link']. $result['Shop'] .'">'. $_lang['shop_google_link'] . $result['Shop'] .'</a>',$r);
+            // Make any URLs clickable
+            $r = make_clickable($r);
 
             $t->assign('Comments', $r);
         }
