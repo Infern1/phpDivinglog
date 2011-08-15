@@ -3,7 +3,6 @@
 ERROR no user id set!
 {else}
 
-
     <div class="rightHDR"> LLOYD'S DIVING LOG<br> SUMMARY </div>
 
 <!-- Total dives -->
