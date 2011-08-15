@@ -184,27 +184,27 @@ function parse_mysql_query($filename, $sql_query = 0, $debug = false){
 	$db = $_config['database_db'];
 
     $result = array();
-    if(($sql_query)){
+    if (($sql_query)) {
         $query = $sql_query;
     } else {
         $query = sql_file($filename);
     }
     if ($query) {
         $connection = mysql_connect($server, $username, $password);
-		mysql_select_db($db, $connection);
+        mysql_select_db($db, $connection);
         mysql_query("SET CHARACTER SET 'utf8'", $connection);
-		$server_query = mysql_query($query, $connection);
-        if (mysql_errno()  ) {
-			echo "<hr>\n<b>MySQL error " . mysql_errno(). ": " . mysql_error() . "\n:</b><br>\n";
-		    echo "Query: $query <br><hr>";
+        $server_query = mysql_query($query, $connection);
+        if (mysql_errno()) {
+            echo "<hr>\n<b>MySQL error " . mysql_errno(). ": " . mysql_error() . "\n:</b><br>\n";
+            echo "Query: $query <br><hr>";
             exit;
         }
-		if(mysql_num_rows($server_query) == 1){
+        if (mysql_num_rows($server_query) == 1) {
             $result = mysql_fetch_assoc($server_query);
         } else {
-            for($i=0; $query_output = mysql_fetch_assoc($server_query); $i++) {
-                while(list($key, $val) = each($query_output)) {
-                    if(is_string($val)) {
+            for ($i=0; $query_output = mysql_fetch_assoc($server_query); $i++) {
+                while (list($key, $val) = each($query_output)) {
+                    if (is_string($val)) {
                         //$val = utf8_encode($val);
                         $query_output[$key] = $val;
                     }
@@ -213,7 +213,7 @@ function parse_mysql_query($filename, $sql_query = 0, $debug = false){
             }
         }
     }
-	return $result; 
+    return $result; 
     /*}}}*/
 }
 

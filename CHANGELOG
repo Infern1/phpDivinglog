@@ -9,6 +9,7 @@ phpDivingLog v3.0-alpha3 - 2011-08-14 - Lloyd Borrett and Rob Lensen
     * Added the Divesite name to the gallery
     * Added EXIF information to the dive photos
     * Added display of dive shops/centres and trips/vacations
+    * Made URLs and email addresses in dive/site/equipment/shop/trip comments clickable
 
 phpDivingLog v3.0-alpha2 - 2011-08-01 - Lloyd Borrett
     * Added ability to display lots of additional values 
