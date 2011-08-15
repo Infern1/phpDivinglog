@@ -23,6 +23,7 @@ class="divelogcrumbs" title="{$first_dive_linktitle}">{$first}</a>
 class="divelogcrumbs" title="{$previous_dive_linktitle}">{$previous}</a>
     {/if}
     </div>
+
 {elseif isset($position)}
     <div class="divelogcrumbs">
     {if isset($multiuser_id)}
@@ -39,6 +40,7 @@ class="divelogcrumbs" title="{$first_site_linktitle}">{$first}</a>
 class="divelogcrumbs" title="{$previous_site_linktitle}">{$previous}</a>
     {/if}
     </div>
+
 {elseif isset($equipment_first)}
     <div class="divelogcrumbs">
     {if isset($multiuser_id)}
@@ -55,6 +57,7 @@ title="{$first_equip_linktitle}">{$first}</a>
 title="{$previous_equip_linktitle}">{$previous}</a>
     {/if}
     </div>
+
 {elseif isset($shop_first)}
     <div class="divelogcrumbs">
     {if isset($multiuser_id)}
@@ -71,6 +74,24 @@ class="divelogcrumbs" title="{$first_shop_linktitle}">{$first}</a>
 class="divelogcrumbs" title="{$previous_shop_linktitle}">{$previous}</a>
     {/if}
     </div>
+
+{elseif isset($trip_first)}
+    <div class="divelogcrumbs">
+    {if isset($multiuser_id)}
+    <a href="{$app_path}/divetrip.php{$sep1}{$multiuser_id}{$sep2}{$first_trip_id}" 
+class="divelogcrumbs" title="{$first_trip_linktitle}">{$first}</a>
+    &nbsp;|&nbsp;
+    <a href="{$app_path}/divetrip.php{$sep1}{$multiuser_id}{$sep2}{$previous_trip_id}" 
+class="divelogcrumbs" title="{$previous_trip_linktitle}">{$previous}</a>
+    {else}
+    <a href="{$app_path}/divetrip.php{$sep2}{$first_trip_id}" 
+class="divelogcrumbs" title="{$first_trip_linktitle}">{$first}</a>
+    &nbsp;|&nbsp;
+    <a href="{$app_path}/divetrip.php{$sep2}{$previous_trip_id}" 
+class="divelogcrumbs" title="{$previous_trip_linktitle}">{$previous}</a>
+    {/if}
+    </div>
+
 {else}
 &nbsp;
 {/if}
@@ -99,6 +120,7 @@ class="divelogcrumbs" title="{$next_dive_linktitle}">{$next}</a>
 class="divelogcrumbs" title="{$last_dive_linktitle}">{$last}</a>
     {/if}
     </div>
+
 {elseif isset($divesite_not_null)}
     <div class="divelogcrumbs">
     {if isset($multiuser_id)}
@@ -115,6 +137,7 @@ class="divelogcrumbs" title="{$next_site_linktitle}">{$next}</a>
 class="divelogcrumbs" title="{$last_site_linktitle}">{$last}</a>
     {/if}
     </div>
+
 {elseif isset($equipment_not_null)}
     <div class="divelogcrumbs">
     {if isset($multiuser_id)}
@@ -131,6 +154,7 @@ class="divelogcrumbs" title="{$next_equip_linktitle}">{$next}</a>
 class="divelogcrumbs" title="{$last_equip_linktitle}">{$last}</a>
     {/if}
     </div>
+
 {elseif isset($diveshop_not_null)}
     <div class="divelogcrumbs">
     {if isset($multiuser_id)}
@@ -147,6 +171,7 @@ class="divelogcrumbs" title="{$next_shop_linktitle}">{$next}</a>
 class="divelogcrumbs" title="{$last_shop_linktitle}">{$last}</a>
     {/if}
     </div>
+
 {elseif isset($divetrip_not_null)}
     <div class="divelogcrumbs">
     {if isset($multiuser_id)}

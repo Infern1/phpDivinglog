@@ -878,7 +878,8 @@ class TopLevelMenu {
 
         if ($request->request_type == 1) {
             $divelist = parse_mysql_query('divelist.sql');
-            for ($i=0; $i<count($divelist); $i++) {
+            $divecount = count($divelist);
+            for ($i=0; $i<$divecount; $i++) {
                 $divelist[$i] = $divelist[$i]['Number'];
             }
             $get_nr = $request->get_dive_nr();
@@ -908,7 +909,8 @@ class TopLevelMenu {
             $sitelist = parse_mysql_query('sitelist.sql');
             $last = count($sitelist) - 1;
             $position = -1;
-            for ($i=0; $i<count($sitelist); $i++) {
+            $sitecount = count($sitelist);
+            for ($i=0; $i<$sitecount; $i++) {
                 if ($sitelist[$i]['ID'] == $globals['placeid']) {
                     $position = $i;
                 }
@@ -940,7 +942,8 @@ class TopLevelMenu {
             $gearlist = parse_mysql_query('gearlist.sql');
             $last = count($gearlist) - 1;
             $position = -1;
-            for ($i=0; $i<count($gearlist); $i++) {
+            $gearcount = count($gearlist);
+            for ($i=0; $i<$gearcount; $i++) {
                 if ($gearlist[$i]['ID'] == $globals['gear']) {
                     $position = $i;
                 }
@@ -986,7 +989,8 @@ class TopLevelMenu {
             $triplist = parse_mysql_query('triplist.sql');
             $last = count($triplist) - 1;
             $position = -1;
-            for ($i=0; $i<count($triplist); $i++) {
+            $tripcount = count($triplist);
+            for ($i=0; $i<$tripcount; $i++) {
                 if ($triplist[$i]['ID'] == $globals['tripid']) {
                     $position = $i;
                 }
@@ -1019,7 +1023,8 @@ class TopLevelMenu {
             $shoplist = parse_mysql_query('shoplist.sql');
             $last = count($shoplist) - 1;
             $position = -1;
-            for ($i=0; $i<count($shoplist); $i++) {
+            $shopcount = count($shoplist);
+            for ($i=0; $i<$shopcount; $i++) {
                 if ($shoplist[$i]['ID'] == $globals['shopid']) {
                     $position = $i;
                 }
@@ -3693,12 +3698,42 @@ class Divetrip{
      * @return void
      */
     function set_buddy_details(){
-        global $t, $_lang; /*{{{*/
-        $result = $this->result; 
+        global $t, $_lang, $globals; /*{{{*/
+        $result = $this->result;
         $t->assign('trip_buddy', $_lang['trip_buddy']);
 
         if (isset($result['BuddyIDs']) && $result['BuddyIDs'] != "") {
-            $t->assign('buddy', $result['BuddyIDs']);
+            // Get the names of the buddies on this trip
+            $globals['buddies'] = $result['BuddyIDs'];
+            $buddy = parse_mysql_query('buddies.sql');
+
+            $buddycount = count($buddy);
+            if ($buddycount == 1) {
+                $buddies['0'] = $buddy;
+            } else {
+                $buddies = $buddy;
+            }
+
+ echo '<br>buddycount: '.$buddycount.'<br>';
+            $buddynames = '';
+            for ($i=0; $i<$buddycount; $i++) {
+                if (($i != '0') && (($buddies[$i]['FirstName'] != '') || ($buddies[$i]['LastName'] != ''))) {
+                    $buddynames .= ', ';
+                }
+                if ($buddies[$i]['FirstName'] != '') {
+                    $buddynames .= $buddies[$i]['FirstName'];
+                    if ($buddies[$i]['LastName'] != '') {
+                        $buddynames .= ' '.$buddies[$i]['LastName'];
+                    } else {
+                        $buddynames .= $buddies[$i]['LastName'];
+                    }
+                } else {
+                    if ($buddies[$i]['LastName'] != '') {
+                        $buddynames .= $buddies[$i]['LastName'];
+                    }
+                }
+            }
+            $t->assign('buddy', $buddynames);	
         } else {
             $t->assign('buddy','-');	
         }
