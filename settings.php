@@ -20,6 +20,7 @@ $_config['app_url'] = "http://www.borrett.id.au/interests/phpdivinglog.htm";
 $_config['dlog_url'] = "http://www.divinglog.de/";
 $_config['dlog_version'] = "5.0.4";
 
+
 /**
  * FILE LOCATIONS
  * set the file locations of the various graphic images you
@@ -29,31 +30,48 @@ $_config['dlog_version'] = "5.0.4";
 /**
  * ABS path to your pear installation
  */
-$_config['pear_path']       = $_config['app_root'] .  'includes/pear';  
+$_config['pear_path']       = $_config['app_root'] .  'includes/pear'; 
+ 
 /**
  * logbook pics
  */
 $_config['picpath_web']     = "../divelog/images/pictures/"; 
+
 /**
  * place maps
  */
 $_config['mappath_web'] = "../divelog/images/maps/";
+
 /**
  * equipment pics
  */
 $_config['equippath_web'] = "../images/interests/";
+
 /**
  *  country flags
  */
 $_config['flagpath_web'] = "images/flags/"; 
+
 /**
  *  user photo and certificate scans
  */
 $_config['userpath_web'] = "../divelog/images/userinfo/"; 
+
 /**
  *  buddy photos
  */
 $_config['buddypath_web'] = "../divelog/images/buddies/"; 
+
+/**
+ *  shop photos
+ */
+$_config['shoppath_web'] = "../divelog/images/shops/"; 
+
+/**
+ *  trip photos
+ */
+$_config['trippath_web'] = "../divelog/images/trips/"; 
+
 /**
  * path to sql select statements 
  */

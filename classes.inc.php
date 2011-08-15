@@ -1337,7 +1337,7 @@ class Divelog {
         }
         $globals['divenr'] = $dive_nr; 
         $id = parse_mysql_query('divelogid.sql'); 
-        $pic_class->get_divegallery_info($id['ID']);
+        $pic_class->get_divegallery_info($id['ID'],0,0,0,0);
         $divepics = $pic_class->get_image_link();
         $pics = count($divepics);
         if ($pics > 0) {
@@ -1359,7 +1359,7 @@ class Divelog {
         $result = $this->result; 
         $pic_class = new DivePictures;
         $pic_class->set_divegallery_info_direct($this->user_id);
-        $pic_class->get_divegallery_info($result['ID']);
+        $pic_class->get_divegallery_info($result['ID'],0,0,0,0);
         $divepics = $pic_class->get_image_link();
         $pics = count($divepics);
 
@@ -2387,7 +2387,7 @@ class Divesite{
         global $_config, $t, $_lang, $globals; /*{{{*/
         $pic_class = new DivePictures;
         $pic_class->set_divegallery_info_direct($this->user_id);
-        $pic_class->get_divegallery_info(0,$this->divesite_nr);
+        $pic_class->get_divegallery_info(0,$this->divesite_nr,0,0,0);
         $divepics = $pic_class->get_image_link();
         $pics = count($divepics);
         if ($pics != 0) {
@@ -2811,7 +2811,7 @@ class Equipment{
         global $_config,$t, $_lang, $globals; /*{{{*/
         $pic_class = new DivePictures;
         $pic_class->set_divegallery_info_direct($this->user_id);
-        $pic_class->get_divegallery_info(0,0,$this->equipment_nr);
+        $pic_class->get_divegallery_info(0,0,$this->equipment_nr,0,0);
         $divepics = $pic_class->get_image_link();
         $pics = count($divepics);
         if ($pics > 0) {
@@ -3247,7 +3247,7 @@ class Diveshop{
         global $_config, $t, $_lang, $globals; /*{{{*/
         $pic_class = new DivePictures;
         $pic_class->set_divegallery_info_direct($this->user_id);
-        $pic_class->get_divegallery_info(0,$this->diveshop_nr);
+        $pic_class->get_divegallery_info(0,$this->diveshop_nr,0,0,0);
         $divepics = $pic_class->get_image_link();
         $pics = count($divepics);
         if ($pics != 0) {
@@ -3639,7 +3639,7 @@ class Divetrip{
         global $_config, $t, $_lang, $globals; /*{{{*/
         $pic_class = new DivePictures;
         $pic_class->set_divegallery_info_direct($this->user_id);
-        $pic_class->get_divegallery_info(0,$this->divetrip_nr);
+        $pic_class->get_divegallery_info(0,$this->divetrip_nr,0,0,0);
         $divepics = $pic_class->get_image_link();
         $pics = count($divepics);
         if ($pics != 0) {
@@ -4642,10 +4642,10 @@ class DivePictures{
      * @access public
      * @return void
      */
-    function get_divegallery_info($dive_id = 0, $site_id = 0, $equipment_nr = 0){
+    function get_divegallery_info($dive_id = 0, $site_id = 0, $equipment_nr = 0, $shop_id = 0, $trip_id = 0){
         global $globals, $_config, $_lang, $t;/*{{{*/
         if (($this->multiuser && !empty($this->user_id)) || !$this->multiuser ) {
-            if ($dive_id == 0 && $site_id == 0 && $equipment_nr == 0 ) {
+            if ($dive_id == 0 && $site_id == 0 && $equipment_nr == 0 && $shop_id == 0 && $trip_id == 0) {
                 $divepics = parse_mysql_query('divepicsall.sql');
                 $base_path = $_config['picpath_web'];
             } elseif ($dive_id != 0) {
@@ -4660,11 +4660,19 @@ class DivePictures{
                 $globals['id'] = $equipment_nr;
                 $base_path = $_config['equippath_web'];
                 $divepics_temp = parse_mysql_query('divepics_equip.sql');
-                if(count($divepics_temp) == 2){
+                if (count($divepics_temp) == 2) {
                     $divepics[0] = $divepics_temp;
-                }else {
+                } else {
                     $divepics = $divepics_temp;
                 }
+            } elseif ($shop_id !=0) {
+                $globals['id'] = $shop_id;
+                $base_path = $_config['shoppath_web'];
+                $divepics = parse_mysql_query('divepics_shop.sql');
+            } elseif ($trip_id !=0) {
+                $globals['id'] = $trip_id;
+                $base_path = $_config['trippath_web'];
+                $divepics = parse_mysql_query('divepics_trip.sql');
                 
             }
             
@@ -4681,8 +4689,11 @@ class DivePictures{
                         //$img_title .= $_lang['divepic_linktitle_pt3']  ;
                         $img_title = $divepics[$i]['Description'];
                         $img_date = $this->get_exif_data($img_url);
-                        $dive_nr =0;
-                        $site_nr =0;
+                        $dive_nr = 0;
+                        $site_nr = 0;
+                        $shop_nr = 0;
+                        $trip_nr = 0;
+
                         if (isset($divepics[$i]['Number'])) {
                             $dive_nr = $divepics[$i]['Number'];
                         }
