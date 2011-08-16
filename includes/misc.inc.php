@@ -25,69 +25,66 @@ global $_config;
  */
 function htmlentities_array($arr = array()) 
 {/*{{{*/
-	$rs =  array();
-	while(list($key,$val) = each($arr)) {
-		if (is_array($val)) {
-			$rs[$key] = htmlentities_array($val);
-		} else {
+    $rs =  array();
+    while(list($key,$val) = each($arr)) {
+        if (is_array($val)) {
+            $rs[$key] = htmlentities_array($val);
+        } else {
             $rs[$key] = htmlentities($val, ENT_QUOTES, "UTF-8",0);
-		}
-	}
-	return $rs;/*}}}*/
+        }
+    }
+    return $rs; 
+/*}}}*/
 }
 
 function action($value_of_clicked_field, $array_values) {
 /*{{{*/
-
     global $_config;
-    if($_config['multiuser'] && isset($_SESSION['user_id'])){
+    if ($_config['multiuser'] && isset($_SESSION['user_id'])) {
         $user_id = $_SESSION['user_id'];
-        if($_config['query_string'])
-        {
+        if ($_config['query_string']) {
             $ext = "?user_id=$user_id&id=";
         } else {
             $ext = "/$user_id/";
         }
     } else {
-        if($_config['query_string'])
-        {
+        if ($_config['query_string']) {
             $ext = "?id=";
         } else {
             $ext = "/";
         }
     }
 
-    if(isset($_SESSION['request_type'])){        
+    if (isset($_SESSION['request_type'])) {
         $request_type = $_SESSION['request_type'];
-        if($request_type == 1){ 
+        if ($request_type == 1) { 
             return "javascript:open_url(".$array_values["Number"].",'/index.php".$ext."' )";
-        } elseif($request_type == 2){
+        } elseif ($request_type == 2) {
             return "javascript:open_url(".$array_values["ID"].",'/divesite.php".$ext."' )";
-        } elseif($request_type == 3){
+        } elseif ($request_type == 3) {
             return "javascript:open_url(".$array_values["ID"].",'/equipment.php".$ext."' )";
-        } elseif($request_type == 8){
+        } elseif ($request_type == 8) {
             return "javascript:open_url(".$array_values["ID"].",'/divetrip.php".$ext."' )";
-        } elseif($request_type == 9){
+        } elseif ($request_type == 9) {
             return "javascript:open_url(".$array_values["ID"].",'/diveshop.php".$ext."' )";
         }
-    }else {
+    } else {
         $request = new HandleRequest();
         $request->set_request_uri($_SERVER['REQUEST_URI']);
         $request->set_file_depth(0);
         $foo = $request->handle_url();
         $request_type = $_SESSION['request_type'];
-        if($request_type == 1){ 
+        if ($request_type == 1) { 
             return "javascript:open_url(".$array_values["Number"].",'/index.php".$ext."' )";
-        } elseif($request_type == 2){
+        } elseif ($request_type == 2) {
             return "javascript:open_url(".$array_values["ID"].",'/divesite.php".$ext."' )";
-        } elseif($request_type == 3){
+        } elseif ($request_type == 3) {
             return "javascript:open_url(".$array_values["ID"].",'/equipment.php".$ext."' )";
-        } elseif($request_type == 8){
+        } elseif ($request_type == 8) {
             return "javascript:open_url(".$array_values["ID"].",'/divetrip.php".$ext."' )";
-        } elseif($request_type == 9){
+        } elseif ($request_type == 9) {
             return "javascript:open_url(".$array_values["ID"].",'/diveshop.php".$ext."' )";
         }
-
     }
 /*}}}*/
 }
@@ -95,7 +92,7 @@ function action($value_of_clicked_field, $array_values) {
 // Get the language values
 
 // use english if it is not set in the configuration file
-if(!isset($_config['language'])) {
+if (!isset($_config['language'])) {
 	$_config['language'] = "english"; // if not set, get the english language file.
 }
 // first get the default english values
@@ -137,7 +134,7 @@ function sql_file($filename){
 	$sqlpath = $_config['sqlpath'];
 	global $globals;
 
-    if($_config['multiuser'] && isset($_SESSION['user_id'])){
+    if ($_config['multiuser'] && isset($_SESSION['user_id'])) {
         $user_id = $_SESSION['user_id'];
         $_config['table_prefix'] = $_config['user_prefix'][$user_id];
     } else {
@@ -165,7 +162,8 @@ function sql_file($filename){
 		return $contents;
 	} else {
 		return false;
-	} /*}}}*/
+	} 
+/*}}}*/
 }
 
 
@@ -179,9 +177,9 @@ function sql_file($filename){
 function parse_mysql_query($filename, $sql_query = 0, $debug = false){
     global $_config; /*{{{*/
     $username = $_config['database_username'];
-	$password = $_config['database_password'];
-	$server = $_config['database_server'];
-	$db = $_config['database_db'];
+    $password = $_config['database_password'];
+    $server = $_config['database_server'];
+    $db = $_config['database_db'];
 
     $result = array();
     if (($sql_query)) {
@@ -224,8 +222,7 @@ function parse_mysql_query($filename, $sql_query = 0, $debug = false){
  * @access public
  * @return void  Return nothing otherwise.
  */
-function check_number($number) 
-{
+function check_number($number) {
 	if (!$number) { /*{{{*/
 		$get = "";
 	} else {
@@ -239,7 +236,8 @@ function check_number($number)
 			}
 		}
 	}
-	return $get; /*}}}*/
+	return $get;
+/*}}}*/
 }
 
 /**
@@ -254,18 +252,18 @@ function GetRequestVar($url, $request_file_depth=0){
 /*{{{*/
     global $_config, $t,$_POST;
     $paginas = NULL;
-    if($_config['query_string']){
+    if ($_config['query_string']) {
         $url_array = parse_url($url);
-        if(isset($url_array['query'])){
+        if (isset($url_array['query'])) {
             parse_str($url_array['query'],$output);
             $paginas = array();
             $file = basename($url_array['path']);
             $paginas[0] = $file;
-            if(!isset($output['DG_ajaxid']) && !isset($output['pageID']) ){
-                foreach($output as $el){
+            if (!isset($output['DG_ajaxid']) && !isset($output['pageID'])) {
+                foreach ($output as $el) {
                     $paginas[] .= $el;
                 }
-            } elseif(isset($output['pageID'])){
+            } elseif (isset($output['pageID'])) {
                 if($_config['multiuser']){
                     $paginas[] .= $output['user_id']; 
                 }
@@ -276,7 +274,7 @@ function GetRequestVar($url, $request_file_depth=0){
             }
         }
     } else {
-        $number_folders =  $request_file_depth ; //number of folders from the root of the script
+        $number_folders = $request_file_depth ; //number of folders from the root of the script
         $adres = $url;
         $possessid = strpos($adres,"?PHPSESSID");
         if ($possessid !== false) {
@@ -287,16 +285,15 @@ function GetRequestVar($url, $request_file_depth=0){
         $adres = $adres."/";
         $array = explode("/",$adres);
         $paginas = array();
-        for($i = $number_folders; $i< count($array) ; $i++)
-        {
-            if(!empty($array[$i])){ 
+        for ($i = $number_folders; $i< count($array) ; $i++) {
+            if (!empty($array[$i])) { 
                 $paginas[] = $array[$i]; 
             }  
         }
-
     }
     //print_r($paginas);
-    return $paginas; /*}}}*/
+    return $paginas;
+/*}}}*/
 }
 
 /**
@@ -325,7 +322,8 @@ function is__writable($path) {
     fclose($f);
     if (!$rm)
         unlink($path);
-    return true; /*}}}*/
+    return true;
+/*}}}*/
 }
 
 /**
@@ -335,7 +333,7 @@ function is__writable($path) {
  * @access public
  * @return void
  */
-function GetProfileData($result){
+function GetProfileData($result) {
     	global $_config; /*{{{*/
         global $_lang;
         $profile = $result['Profile'];
@@ -346,7 +344,7 @@ function GetProfileData($result){
          * http://www.divinglog.de/phpbb/viewtopic.php?p=3094#3094
          */
         $divetime = $profileint * $length;
-        if(isset($result['Divetime'])){
+        if (isset($result['Divetime'])) {
             $divetime = $result['Divetime'];
         } else {
             $divetime = $profileint * $length;
@@ -370,33 +368,29 @@ function GetProfileData($result){
 		} else {
 			$sac = number_format($sac, 2) ."&nbsp;". $_lang['unit_rate'];
 		}
-        return array('averagedepth' => $averagedepth , 'sac' => $sac); /*}}}*/
+        return array('averagedepth' => $averagedepth , 'sac' => $sac);
+/*}}}*/
 }
 
 
 define('MetreToFeet', "calc:(Depth*3.2808399)");
-function MetreToFeet($value, $precision = 2) 
-{
+function MetreToFeet($value, $precision = 2) {
     return round(($value * sqrt( 3.2808399 ) ), $precision);
 }
  
-function BarToPsi($value, $precision = 2) 
-{
+function BarToPsi($value, $precision = 2) {
 	return round(($value * 14.503774), $precision);
 }
 
-function KgToLbs($value, $precision = 2) 
-{
+function KgToLbs($value, $precision = 2) {
 	return round(($value * 2.2046226), $precision);
 }
 
-function CelsiusToFahrenh($value, $precision = 2) 
-{
+function CelsiusToFahrenh($value, $precision = 2) {
 	return round((($value * (9 / 5)) + 32), $precision);
 }
  
-function LitreToCuft($value, $precision = 2) 
-{
+function LitreToCuft($value, $precision = 2) {
     return round(($value * 0.035335689046), $precision);
 }
 
@@ -408,11 +402,12 @@ function LitreToCuft($value, $precision = 2)
  * @access public
  * @return void
  */
-function backhtmlentities($str_h){
+function backhtmlentities($str_h) {
    $trans = get_html_translation_table(HTML_ENTITIES); /*{{{*/
    $trans = array_flip($trans);
    $str_h = strtr($str_h, $trans);
-   return $str_h; /*}}}*/
+   return $str_h;
+/*}}}*/
 }
 
 /**
@@ -486,7 +481,8 @@ function DECtoDMS($dec, $fmt) {
 			$dms = $d . '&#176;';
 		}
 	} 
-	return $dms; /*}}}*/
+	return $dms;
+/*}}}*/
 } 
 
 
@@ -497,13 +493,13 @@ function DECtoDMS($dec, $fmt) {
  * @access public
  * @return void
  */
-function convert_date($value){
+function convert_date($value) {
     global $_config; /*{{{*/
     $mask = $_config['date_format'];
-    if($value != "") {
+    if ($value != "") {
         $format='';
         $separator='';
-        if (strpos($mask,':')>0){
+        if (strpos($mask,':')>0) {
             $arrMask=explode(':',$mask);
             $theType=$arrMask[0]; 
             $format=(empty($arrMask[1])) ? $format : $arrMask[1];
@@ -541,7 +537,8 @@ function datecheck($date,$format='ymd',$separator='-',$toformat='mdy',$toseparat
         if (($month<1) || ($month>12) || ($day<1) || (($month==2) && ($day>28+(!($year%4))-(!($year%100))+(!($year%400)))) || ($day>30+(($month>7)^($month&1)))) return false; // date out of range 
         $arrDate= array('y' => $year, 'm' => $month, 'd' => $day, 'iso' => $year.'-'.$month.'-'.$day, 'fromdate'=> $date, 'todate' => '' );
         $arrDate['todate'] = $arrDate[$toformat[0]].$toseparator.$arrDate[$toformat[1]].$toseparator.$arrDate[$toformat[2]];
-        return $arrDate; /*}}}*/
+        return $arrDate;
+/*}}}*/
 }
 
 /**
@@ -551,16 +548,17 @@ function datecheck($date,$format='ymd',$separator='-',$toformat='mdy',$toseparat
  * @access public
  * @return void
  */
-function add_unit_depth($value){
+function add_unit_depth($value) {
     global $_config, $_lang; /*{{{*/
-    if(!empty($value)){
-        if($_config['length']){
-            $value .=  " ".$_lang['unit_length_short_imp']  ;
+    if (!empty($value)){
+        if ($_config['length']) {
+            $value .=  " ".$_lang['unit_length_short_imp'];
         } else {
-            $value .= " ".$_lang['unit_length_short']  ;
+            $value .= " ".$_lang['unit_length_short'];
         }
     }
-    return $value; /*}}}*/
+    return $value;
+/*}}}*/
 }
 
 /**
@@ -570,10 +568,11 @@ function add_unit_depth($value){
  * @access public
  * @return void
  */
-function add_unit_time($value){
+function add_unit_time($value) {
     global $_config, $_lang; /*{{{*/
     $value .=  " ".$_lang['unit_time_short'];
-    return $value; /*}}}*/
+    return $value;
+/*}}}*/
 }
 
 /**
@@ -583,7 +582,7 @@ function add_unit_time($value){
  * @access public
  * @return void
  */
-function latitude_format($coord){
+function latitude_format($coord) {
 //	Change coordinates into a displayable format
 	global $_config; /*{{{*/
 
@@ -600,7 +599,8 @@ function latitude_format($coord){
 			$dms .= " N";
 		}
 	}
-	return $dms; /*}}}*/
+	return $dms;
+/*}}}*/
 }
 
 /**
@@ -627,7 +627,8 @@ function longitude_format($coord){
 			$dms .= " E";
 		}
 	}
-	return $dms; /*}}}*/
+	return $dms;
+/*}}}*/
 }
 
 /**
@@ -676,7 +677,7 @@ function resize_image($img){
  * @access public
  * @return void
  */
-function make_thumb($img,$thumb, $i = 0 ){
+function make_thumb($img,$thumb, $i = 0 ) {
     global $_config, $t; /*{{{*/
     $obj = new Thumbnail($img);
     $obj->size_auto($_config['thumb-width']); 
@@ -686,7 +687,8 @@ function make_thumb($img,$thumb, $i = 0 ){
     set_time_limit(30);
     $obj->save($thumb);
     flush();
-    //    echo "Error". $obj->error_msg; /*}}}*/
+    //    echo "Error". $obj->error_msg;
+/*}}}*/
 }
 
 /**
@@ -696,11 +698,11 @@ function make_thumb($img,$thumb, $i = 0 ){
  * @access public
  * @return void
  */
-function count_all($arg){
+function count_all($arg) {
     // skip if argument is empty /*{{{*/
     if ($arg) { 
         // not an array, return 1 (base case) 
-        if(!is_array($arg)) 
+        if (!is_array($arg)) 
             return 1; 
     // else call recursively for all elements $arg 
     $count = 0;

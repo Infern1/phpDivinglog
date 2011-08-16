@@ -3706,16 +3706,18 @@ class Divetrip{
         $result = $this->result;
         $t->assign('trip_buddy', $_lang['trip_buddy']);
 
-        if (isset($result['BuddyIDs']) && $result['BuddyIDs'] != "") {
+        if ($result['BuddyIDs'] != "") {
             // Get the names of the buddies on this trip
             $globals['buddies'] = $result['BuddyIDs'];
             $buddy = parse_mysql_query('buddies.sql');
-            $buddycount = count($buddy);
-            if ($buddycount == 1) {
-                $buddies['0'] = $buddy;
-            } else {
+            $buddycount = 0;
+            if (is_array($buddy)) {
+                $buddycount = count($buddy);
                 $buddies = $buddy;
-            }
+            } else {
+                $buddycount = 1;
+                $buddies['0'] = $buddy;
+            } 
 
  echo '<br>buddycount: '.$buddycount.'<br>';
             $buddynames = '';
