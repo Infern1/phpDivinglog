@@ -1624,7 +1624,7 @@ class Divelog {
         } else {
             if (isset($result['He']) && $result['He'] != "") {
                 $t->assign('O2','-');
-            } else {
+			} else {
                 $t->assign('O2', $_config['default_o2'].'%');
                 $o2 = $_config['default_o2'];
             }
@@ -1632,8 +1632,10 @@ class Divelog {
 
         if (isset($result['He']) && $result['He'] != "") {
             $t->assign('He', $result['He'].'%');
+			$he = $result['He'];
         } else {
-            $t->assign('He','-');	
+            $t->assign('He','-');
+			$he = 0;
         }
 
         if (isset($result['MinPPO2']) && $result['MinPPO2'] != "") {
@@ -1652,35 +1654,47 @@ class Divelog {
 
         $gasimage = "gas_air.gif";  // default air
         $gasimagealt = "Air";
-        if (($result['O2'] > "21") && ($result['He'] == "") || ($result['He'] == "0")) {
-            $gasimage = "gas_ean.gif";  // EAN
-            $gasimagealt = "EAN ".floor($result['O2']);
+        //We have validated values check popular mixtures
+		if ($he == 0){
+			if ($o2 == 32) {
+				$gasimage = "gas_n32.gif";  // N32
+				$gasimagealt = "EAN ".floor($o2);
+			}
+			else if ($o2 == 36) {
+				$gasimage = "gas_n36.gif";  // N36
+				$gasimagealt = "EAN ".floor($o2);
+			}
+			else if ($o2 == 50) {
+				//ToDo: Add special image
+				//$gasimage = "gas_n50.gif";  // N50
+				$gasimage = "gas_ean.gif";  // Other EAN
+				$gasimagealt = "EAN ".floor($o2);
+			}
+			else if ($o2 == 100) {
+				$gasimage = "gas_o2.gif";  // oxygen
+				$gasimagealt = "Oxygen";
+			}
+			else if ($o2 > 21) {
+				$gasimage = "gas_ean.gif";  // Other EAN
+				$gasimagealt = "EAN ".floor($result['O2']);
+			}
         }
-        if (($result['O2'] == "32") && ($result['He'] == "") || ($result['He'] == "0")) {
-            $gasimage = "gas_n32.gif";  // N32
-            $gasimagealt = "EAN ".floor($result['O2']);
-        }
-        if (($result['O2'] == "36") && ($result['He'] == "") || ($result['He'] == "0")) {
-            $gasimage = "gas_n36.gif";  // N36
-            $gasimagealt = "EAN ".floor($result['O2']);
-        }
-        if (($result['He'] != "") && ($result['He'] != "0")) {
+		else{
             $gasimage = "gas_tri.gif";  // Trimix
             $gasimagealt = "Trimix";
-            if (($result['O2'] != "") && ($result['O2'] != "0")) {
-              $gasimagealt .= ' '.floor($result['O2']) .'/'. floor($result['He']) .'/'. (100 - (floor($result['He']) + floor($result['O2'])));
+            if ($o2 != 0) {
+              $gasimagealt .= ' '.floor($o2) .'/'. floor($he) .'/'. (100 - (floor($he) + floor($o2)));
             }
         }
-        if (($result['O2'] == "100")) {
-            $gasimage = "gas_o2.gif";  // oxygen
-            $gasimagealt = "Oxygen";
-        }
+		
+		//passing values to template
         $gastypeimage = '<img src="'.$_config['web_root'].'/images/'.$gasimage.'" alt="'.$gasimagealt.'" title="'.$gasimagealt.'" border="0" width="19" height="20">';
         $t->assign('GasTypeImage', $gastypeimage);
         $t->assign('GasImageAlt', $gasimagealt);
 
         //	Calculate MOD and EAD
-        if ($result['He'] != "") {
+        if ($he != 0) { //it is posible my OSTC makes it :D
+			//ToDo: look in OSTC source code how it does it
             $t->assign('MOD','-');
             $t->assign('EAD','-');
         } else {
@@ -1795,19 +1809,19 @@ class Divelog {
             $t->assign('Entry', $_lang['entry'][($result['Entry'] - 1)]);
         }
 
-        if ($result['Boat'] != "") {
+        if (isset($result['Boat']) && $result['Boat'] != "") {
             $t->assign('Boat', $result['Boat'] );
         } else {
             $t->assign('Boat','-');	
         }
 
-        if ($result['PGStart'] != "") {
+        if (isset($result['PGStart']) && $result['PGStart'] != "") {
             $t->assign('PGStart', $result['PGStart'] );
         } else {
             $t->assign('PGStart','-');	
         }
 
-        if ($result['PGEnd'] != "") {
+        if (isset($result['PGEnd']) && $result['PGEnd'] != "") {
             $t->assign('PGEnd', $result['PGEnd']);
         } else {
             $t->assign('PGEnd','-');	
