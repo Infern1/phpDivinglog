@@ -1539,10 +1539,8 @@ class Divelog {
         $t->assign('logbook_mod', $_lang['logbook_mod']);
         $t->assign('logbook_ead', $_lang['logbook_ead']);
 
-        if (isset($result['Tanktype'])) {
-            $arr_number = $result['Tanktype'] - 1;
-            if($arr_number >= 0)
-                $t->assign('Tanktype', $_lang['tanktype'][$arr_number]);
+        if (isset($result['Tanktype']) && $result['Tanktype'] != "" && isset($_lang['tanktype'][$result['Tanktype'] - 1])) {
+            $t->assign('Tanktype', $_lang['tanktype'][$result['Tanktype'] - 1]);
         } else {
             $t->assign('Tanktype','-');	
         }
@@ -1676,7 +1674,7 @@ class Divelog {
 			}
 			else if ($o2 > 21) {
 				$gasimage = "gas_ean.gif";  // Other EAN
-				$gasimagealt = "EAN ".floor($result['O2']);
+				$gasimagealt = "EAN ".floor($o2);
 			}
         }
 		else{
@@ -1805,9 +1803,11 @@ class Divelog {
         $t->assign('logbook_surfint', $_lang['logbook_surfint'] );
         $t->assign('logbook_exittime', $_lang['logbook_exittime'] );
 
-        if (isset($_lang['entry'][($result['Entry'] - 1)])) {
+        if (isset($result['Entry']) && $result['Entry'] != "" && isset($_lang['entry'][($result['Entry'] - 1)])) {
             $t->assign('Entry', $_lang['entry'][($result['Entry'] - 1)]);
-        }
+        } else {
+			$t->assign('Entry', '-');
+		}
 
         if (isset($result['Boat']) && $result['Boat'] != "") {
             $t->assign('Boat', $result['Boat'] );
@@ -1848,7 +1848,7 @@ class Divelog {
             $t->assign('logbook_decostops', $_lang['logbook_decostops'] );
 
             $r = $result['Decostops'];
-	    $r = htmlentities($r, ENT_QUOTES, "ISO-8859-1");
+			$r = htmlentities($r, ENT_QUOTES, "ISO-8859-1");
             $r = str_replace("\r\n", "\n", $r);
             $r = str_replace("\n", "<br>\n", $r);
 
@@ -1870,14 +1870,17 @@ class Divelog {
         $t->assign('logbook_weight', $_lang['logbook_weight'] );
         $t->assign('logbook_divesuit', $_lang['logbook_divesuit'] );
         $t->assign('logbook_computer', $_lang['logbook_computer'] );
-
-        if ($result['Weight'] != "") {
+		
+		$Weight = '-';
+        if (isset($result['Weight']) && $result['Weight'] != "") {
             if ($_config['weight']) {
                 $Weight = KgToLbs($result['Weight'], 0) ."&nbsp;". $_lang['unit_weight_imp'] ;
             } else {
                 $Weight = $result['Weight'] ."&nbsp;". $_lang['unit_weight'] ;
-            }$t->assign('Weight' ,$Weight);
+            }
         }
+		$t->assign('Weight', $Weight);
+
 
         if ($result['Divesuit'] != "") {
             $t->assign('Divesuit', $result['Divesuit'] );
