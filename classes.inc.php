@@ -3901,6 +3901,8 @@ class Divestats{
     var $nodecodives;
     var $repdives;
     var $norepdives;
+    var $singletankdives;
+    var $doubletankdives;
     var $DivedateMinNr;
     var $DivedateMaxNr;
     var $DivetimeMinNr;
@@ -4048,6 +4050,16 @@ class Divestats{
             $divestatsother = parse_mysql_query('divestatsother.sql');
             $this->repdives = $divestatsother['Count'];
             $this->norepdives = $this->end - $this->repdives;
+
+            // Get the number of double tank dives
+            $globals['stats'] = "DblTank = 'True'";
+            $divestatsother = parse_mysql_query('divestatsother.sql');
+            $this->doubletankdives = $divestatsother['Count'];
+
+            // Get the number of single tank dives
+            $globals['stats'] = "DblTank = 'False'";
+            $divestatsother = parse_mysql_query('divestatsother.sql');
+            $this->singletankdives = $divestatsother['Count'];
 
             // Get dive number for first dive
             $globals['stats'] = "Divedate = '" . $divestats['DivedateMin'] . "'";
@@ -4427,11 +4439,11 @@ class Divestats{
         $t->assign('photodives_per', round(($this->photodives / $this->end) * 100));
 
         // Show dive type details
-        $t->assign('stats_shoredives', $_lang['stats_shoredives'] );
-        $t->assign('stats_boatdives', $_lang['stats_boatdives'] );
+        $t->assign('stats_shoredives', $_lang['stats_shoredives']);
+        $t->assign('stats_boatdives', $_lang['stats_boatdives']);
         $t->assign('stats_nightdives', $_lang['stats_nightdives']);
-        $t->assign('stats_driftdives', $_lang['stats_driftdives'] );
-        $t->assign('shoredives', $this->shoredives );
+        $t->assign('stats_driftdives', $_lang['stats_driftdives']);
+        $t->assign('shoredives', $this->shoredives);
         $t->assign('shoredives_per', round(($this->shoredives / $this->end) * 100));
         $t->assign('boatdives', $this->boatdives );
         $t->assign('boatdives_per', round(($this->boatdives / $this->end) * 100));
@@ -4439,6 +4451,14 @@ class Divestats{
         $t->assign('nightdives_per', round(($this->nightdives / $this->end) * 100));
         $t->assign('driftdives', $this->driftdives );
         $t->assign('driftdives_per', round(($this->driftdives / $this->end) * 100));
+
+        // Show if double or single tanks used
+        $t->assign('stats_singletankdives', $_lang['stats_singletankdives']);
+        $t->assign('singletankdives', $this->singletankdives);
+        $t->assign('singletankdives_per', round(($this->singletankdives / $this->end) * 100));
+        $t->assign('stats_doubletankdives', $_lang['stats_doubletankdives']);
+        $t->assign('doubletankdives', $this->doubletankdives);
+        $t->assign('doubletankdives_per', round(($this->doubletankdives / $this->end) * 100));
     /*}}}*/
     }
 

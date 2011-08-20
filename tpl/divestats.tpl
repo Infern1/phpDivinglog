@@ -226,6 +226,21 @@ title="{$dlog_number_title}{$DepthMinNr}">{$DepthMinNr}</a></td>
  <td>{$photodives} ({$photodives_per}%)</td>
 </tr>
 
+{*  Show single and double tank details *}
+<tr class="divetitle">
+ <td>{$stats_singletankdives}</td>
+ <td>{$stats_doubletankdives}</td>
+ <td>&nbsp;</td>
+ <td>&nbsp;</td>
+</tr>
+
+<tr class="divedetails">
+ <td>{$singletankdives} ({$singletankdives_per}%)</td>
+ <td>{$doubletankdives} ({$doubletankdives_per}%)</td>
+ <td>&nbsp;</td>
+ <td>&nbsp;</td>
+</tr>
+
     {*
     <tr>
       <td colspan="4" class="spacing">&nbsp;</td>
