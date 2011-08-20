@@ -175,12 +175,13 @@ function sql_file($filename){
  * @return void
  */
 function parse_mysql_query($filename, $sql_query = 0, $debug = false){
-    global $_config; /*{{{*/
+    global $_config, $globals; /*{{{*/
     $username = $_config['database_username'];
     $password = $_config['database_password'];
     $server = $_config['database_server'];
     $db = $_config['database_db'];
 
+    $globals['sql_num_rows'] = 0;
     $result = array();
     if (($sql_query)) {
         $query = $sql_query;
@@ -197,7 +198,8 @@ function parse_mysql_query($filename, $sql_query = 0, $debug = false){
             echo "Query: $query <br><hr>";
             exit;
         }
-        if (mysql_num_rows($server_query) == 1) {
+        $globals['sql_num_rows'] = mysql_num_rows($server_query);
+        if ($globals['sql_num_rows'] == 1) {
             $result = mysql_fetch_assoc($server_query);
         } else {
             for ($i=0; $query_output = mysql_fetch_assoc($server_query); $i++) {
@@ -214,6 +216,21 @@ function parse_mysql_query($filename, $sql_query = 0, $debug = false){
     return $result; 
     /*}}}*/
 }
+
+
+/**
+ * rows_mysql_query 
+ * 
+ * @param mixed $filename 
+ * @access public
+ * @return void
+ */
+function rows_mysql_query(){
+    global $globals; /*{{{*/
+    return $globals['sql_num_rows']; 
+    /*}}}*/
+}
+
 
 /**
  * check_number Only allow the characters 0 to 9.
@@ -704,12 +721,13 @@ function count_all($arg) {
         // not an array, return 1 (base case) 
         if (!is_array($arg)) 
             return 1; 
-    // else call recursively for all elements $arg 
-    $count = 0;
-    foreach($arg as $key => $val) 
-        $count += count_all($val); 
+        // else call recursively for all elements $arg 
+        $count = 0;
+        foreach($arg as $key => $val) 
+            $count += count_all($val); 
         return $count;       
-    } /*}}}*/
+    }
+/*}}}*/
 }
 
 

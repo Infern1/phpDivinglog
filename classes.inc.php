@@ -3710,16 +3710,15 @@ class Divetrip{
             // Get the names of the buddies on this trip
             $globals['buddies'] = $result['BuddyIDs'];
             $buddy = parse_mysql_query('buddies.sql');
-            $buddycount = 0;
-            if (is_array($buddy)) {
-                $buddycount = count($buddy);
-                $buddies = $buddy;
+            $buddycount = rows_mysql_query();
+            if ($buddycount == 1) {
+                // This works for one buddy
+                $buddies[] = $buddy;
             } else {
-                $buddycount = 1;
-                $buddies['0'] = $buddy;
-            } 
+                // This works for multiple buddies
+                $buddies = $buddy;
+            }
 
- echo '<br>buddycount: '.$buddycount.'<br>';
             $buddynames = '';
             for ($i=0; $i<$buddycount; $i++) {
                 if (($i != '0') && (($buddies[$i]['FirstName'] != '') || ($buddies[$i]['LastName'] != ''))) {

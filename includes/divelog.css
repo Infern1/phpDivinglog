@@ -14,6 +14,11 @@ div#content {
     margin-left: auto;
 }
 
+tr.divesection { 
+    margin-top: 15px;
+    margin-bottom: 10px; 
+}
+
 tr.divesection td { 
     font-weight: bold; 
     color: #000000; 
