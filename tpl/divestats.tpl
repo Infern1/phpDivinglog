@@ -241,6 +241,21 @@ title="{$dlog_number_title}{$DepthMinNr}">{$DepthMinNr}</a></td>
  <td>&nbsp;</td>
 </tr>
 
+{*  Show supply type details *}
+<tr class="divetitle">
+ <td>{$stats_ocdives}</td>
+ <td>{$stats_scrdives}</td>
+ <td>{$stats_ccrdives}</td>
+ <td>&nbsp;</td>
+</tr>
+
+<tr class="divedetails">
+ <td>{$ocdives} ({$ocdives_per}%)</td>
+ <td>{$scrdives} ({$scrdives_per}%)</td>
+ <td>{$ccrdives} ({$ccrdives_per}%)</td>
+ <td>&nbsp;</td>
+</tr>
+
     {*
     <tr>
       <td colspan="4" class="spacing">&nbsp;</td>

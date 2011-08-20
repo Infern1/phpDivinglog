@@ -4061,6 +4061,21 @@ class Divestats{
             $divestatsother = parse_mysql_query('divestatsother.sql');
             $this->singletankdives = $divestatsother['Count'];
 
+            // Get the number of OC dives
+            $globals['stats'] = "SupplyType = '0'";
+            $divestatsother = parse_mysql_query('divestatsother.sql');
+            $this->ocdives = $divestatsother['Count'];
+
+            // Get the number of SCR dives
+            $globals['stats'] = "SupplyType = '1'";
+            $divestatsother = parse_mysql_query('divestatsother.sql');
+            $this->scrdives = $divestatsother['Count'];
+
+            // Get the number of CCR dives
+            $globals['stats'] = "SupplyType = 2";
+            $divestatsother = parse_mysql_query('divestatsother.sql');
+            $this->ccrdives = $divestatsother['Count'];
+
             // Get dive number for first dive
             $globals['stats'] = "Divedate = '" . $divestats['DivedateMin'] . "'";
             $divestatsnr = parse_mysql_query('divestatsnr.sql');
@@ -4459,6 +4474,18 @@ class Divestats{
         $t->assign('stats_doubletankdives', $_lang['stats_doubletankdives']);
         $t->assign('doubletankdives', $this->doubletankdives);
         $t->assign('doubletankdives_per', round(($this->doubletankdives / $this->end) * 100));
+
+        // Show circuit type details
+        $t->assign('stats_ocdives', $_lang['stats_ocdives'] );
+        $t->assign('stats_scrdives', $_lang['stats_scrdives']);
+        $t->assign('stats_ccrdives', $_lang['stats_ccrdives'] );
+        $t->assign('ocdives', $this->ocdives );
+        $t->assign('ocdives_per', round(($this->ocdives / $this->end) * 100) );
+        $t->assign('scrdives', $this->scrdives);
+        $t->assign('scrdives_per', round(($this->scrdives / $this->end) * 100) );
+        $t->assign('ccrdives', $this->ccrdives);
+        $t->assign('ccrdives_per', round(($this->ccrdives / $this->end) * 100) );
+
     /*}}}*/
     }
 
