@@ -1653,64 +1653,58 @@ class Divelog {
         $gasimage = "gas_air.gif";  // default air
         $gasimagealt = "Air";
         //We have validated values check popular mixtures
-		if ($he == 0){
+		if ($he == 0) {
 			if ($o2 == 32) {
 				$gasimage = "gas_n32.gif";  // N32
 				$gasimagealt = "EAN ".floor($o2);
-			}
-			else if ($o2 == 36) {
+			} else if ($o2 == 36) {
 				$gasimage = "gas_n36.gif";  // N36
 				$gasimagealt = "EAN ".floor($o2);
-			}
-			else if ($o2 == 50) {
+			} else if ($o2 == 50) {
 				//ToDo: Add special image
 				//$gasimage = "gas_n50.gif";  // N50
 				$gasimage = "gas_ean.gif";  // Other EAN
 				$gasimagealt = "EAN ".floor($o2);
-			}
-			else if ($o2 == 100) {
+			} else if ($o2 == 100) {
 				$gasimage = "gas_o2.gif";  // oxygen
 				$gasimagealt = "Oxygen";
-			}
-			else if ($o2 > 21) {
+			} else if ($o2 > 21) {
 				$gasimage = "gas_ean.gif";  // Other EAN
 				$gasimagealt = "EAN ".floor($o2);
 			}
-        }
-		else{
+        } else {
             $gasimage = "gas_tri.gif";  // Trimix
             $gasimagealt = "Trimix";
             if ($o2 != 0) {
               $gasimagealt .= ' '.floor($o2) .'/'. floor($he) .'/'. (100 - (floor($he) + floor($o2)));
             }
         }
-		
-		//passing values to template
         $gastypeimage = '<img src="'.$_config['web_root'].'/images/'.$gasimage.'" alt="'.$gasimagealt.'" title="'.$gasimagealt.'" border="0" width="19" height="20">';
         $t->assign('GasTypeImage', $gastypeimage);
         $t->assign('GasImageAlt', $gasimagealt);
-
+		
+		// Units Check
+		if ($_config['length']) {
+			$scale = 33;
+			$unit = $_lang['unit_length_short_imp'];
+		} else {
+			$scale = 10;
+			$unit = $_lang['unit_length_short'];
+		}
         //	Calculate MOD and EAD
-        if ($he != 0) { //it is posible my OSTC makes it :D
-			//ToDo: look in OSTC source code how it does it
-            $t->assign('MOD','-');
-            $t->assign('EAD','-');
-        } else {
-            if ($_config['length']) {
-                $mod_imperial = 33 * (($maxppo2 / ($o2 / 100)) - 1);
-                $mod = number_format(floor($mod_imperial), 0);
-                $ead_imperial = (($mod + 33) * ((1 - ($o2 / 100)) / .79)) - 33;
-                $ead = number_format(ceil($ead_imperial), 0);
-                $t->assign('MOD', $mod."&nbsp;". $_lang['unit_length_short_imp']);
-                $t->assign('EAD', $ead."&nbsp;". $_lang['unit_length_short_imp']);
-            } else {
-                $mod_metric = 10 * (($maxppo2 / ($o2 / 100)) - 1);
-                $mod = number_format((floor($mod_metric*10)/10), 1);
-                $ead_metric = (($mod + 10) * ((1 - ($o2 / 100)) / .79)) - 10;
-                $ead = number_format((ceil($ead_metric*10)/10), 1);
-                $t->assign('MOD', $mod."&nbsp;". $_lang['unit_length_short']);
-                $t->assign('EAD', $ead."&nbsp;". $_lang['unit_length_short']);
-            }
+		$mod = $scale * (($maxppo2 / ($o2 / 100)) - 1);
+		$modf = number_format(floor($mod), 1);
+		$ead = (($mod + $scale) * ((1 - ($o2 / 100)) / .79)) - $scale;
+		$eadf = number_format(ceil($ead), 1);
+		$t->assign('MOD', $modf."&nbsp;".$unit);
+		$t->assign('EAD', $eadf."&nbsp;".$unit);
+		// Calculate END
+        if ($he != 0) { //END
+			$end = ($mod + $scale) * (1 - ($he / 100)) - $scale;
+			$endf = number_format(ceil($end), 1);
+			$t->assign('END', $eadf."&nbsp;".$unit);
+        } else { //END = MOD
+            $t->assign('END', $modf."&nbsp;".$unit);
         }
 
         if ($this->averagedepth != "") {
