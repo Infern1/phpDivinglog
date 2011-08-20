@@ -2,8 +2,7 @@
 * Display related info from other tables in dive details (i.e. shops, trips etc.)
 * Display of overview and details pages for country and city
 * Extra profile charts (e.g. temperature, gas changes, Asc-/Descend rate, tank pressures, ppO2 etc.)
-* Support web links in all comments [url][/url]
-* Extra dive statistics (e.g. number of twin, single and stage dives)
+* Extra dive statistics (e.g. charts as per Diving Log)
 * Improvements to the photo gallery
 * Show which equipment items are due for service and/or O2 clean
 * Show the user-defined fields
