@@ -1512,16 +1512,16 @@ class Divelog {
     /*}}}*/
     }
 
-
     /**
      * set_tank_details 
      * 
      * @access public
      * @return void
      */ 
+/**
     function set_tank_details($i,$result) {
-        global $t, $_config, $_lang; /*{{{*/
-
+        global $t, $_config, $_lang; */ /*{{{*/
+/**
         // Start with the basic tank details
         if ($result('Tanktype') != "") {
             $arr_number = $result('Tanktype') - 1;
@@ -1600,16 +1600,12 @@ class Divelog {
         }
 
         // Details of the gas mix used
-        if (isset($result['O2']) && $result['O2']  != "") {
-            $t->assign('O2', $result['O2'].'%');
+        if (isset($result['O2']) && $result['O2'] != "") {
             $o2 = $result['O2'];
+            $t->assign(tanks[$i]['O2'], $o2.'%');
         } else {
-            if (isset($result['He']) && $result['He'] != "") {
-                $t->assign(tanks[$i]['O2'],'-');
-            } else {
-                $t->assign(tanks[$i]['O2'], $_config['default_o2'].'%');
-                $o2 = $_config['default_o2'];
-            }
+            $o2 = $_config['default_o2'];
+            $t->assign(tanks[$i]['O2'], $o2.'%');
         }
 
         if (isset($result['He']) && $result['He'] != "") {
@@ -1625,11 +1621,14 @@ class Divelog {
         }
 
         if (isset($result['MaxPPO2']) &&  $result['MaxPPO2'] != "") {
-            $t->assign(tanks[$i]['MaxPPO2'], $result['MaxPPO2']."&nbsp;".$_lang['unit_pressure']);
             $maxppo2 = $result['MaxPPO2'];
+            if ($maxppo2 == 0) {
+                $maxppo2 = $_config['default_maxppo2'];
+            }
+            $t->assign(tanks[$i]['MaxPPO2'], $maxppo2."&nbsp;".$_lang['unit_pressure']);
         } else {
-            $t->assign(tanks[$i]['MaxPPO2'], $_config['default_maxppo2']."&nbsp;".$_lang['unit_pressure']);
             $maxppo2 = $_config['default_maxppo2'];
+            $t->assign(tanks[$i]['MaxPPO2'], $maxppo2."&nbsp;".$_lang['unit_pressure']);
         }
 
         // More details of the gas used
@@ -1746,10 +1745,10 @@ class Divelog {
         } else {
             $t->assign(tanks[$i]['sac'], "" ); 
         } 
-
-    /*}}}*/
+*/
+    /*}}}*/  /*
     }
-
+*/
 
     /**
      * set_breathing_details 
@@ -1786,17 +1785,18 @@ class Divelog {
 
         $t->assign('logbook_gas', $_lang['logbook_gas']);
 
-        set_tank_details(0,$result);
+//        set_tank_details(0,$result);
 
         // See if there are any other tanks used for this dive
         $globals['dive_id'] = $result['ID'];
         $tanks = parse_mysql_query('tanksdivelist.sql');
         $tankscount = rows_mysql_query();
 
+/*
         for ($i=0; $i<$tankscount; $i++) {
             set_tank_details(($i + 1),$tanks[$i]);
         }
-
+*/
         // Start with the basic tank details
         if (isset($result['Tanktype'])) {
             $arr_number = $result['Tanktype'] - 1;
@@ -1872,16 +1872,12 @@ class Divelog {
         }
 
         // Details of the gas mix used
-        if (isset($result['O2']) && $result['O2']  != "") {
-            $t->assign('O2', $result['O2'].'%');
+        if (isset($result['O2']) && $result['O2'] != "") {
             $o2 = $result['O2'];
+            $t->assign('O2', $o2.'%');
         } else {
-            if (isset($result['He']) && $result['He'] != "") {
-                $t->assign('O2','-');
-            } else {
-                $t->assign('O2', $_config['default_o2'].'%');
-                $o2 = $_config['default_o2'];
-            }
+            $o2 = $_config['default_o2'];
+            $t->assign('O2', $o2.'%');
         }
 
         if (isset($result['He']) && $result['He'] != "") {
@@ -1897,11 +1893,14 @@ class Divelog {
         }
 
         if (isset($result['MaxPPO2']) &&  $result['MaxPPO2'] != "") {
-            $t->assign('MaxPPO2', $result['MaxPPO2']."&nbsp;".$_lang['unit_pressure']);
             $maxppo2 = $result['MaxPPO2'];
+            if ($maxppo2 == 0) {
+                $maxppo2 = $_config['default_maxppo2'];
+            }
+            $t->assign('MaxPPO2', $maxppo2."&nbsp;".$_lang['unit_pressure']);
         } else {
-            $t->assign('MaxPPO2', $_config['default_maxppo2']."&nbsp;".$_lang['unit_pressure']);
             $maxppo2 = $_config['default_maxppo2'];
+            $t->assign('MaxPPO2', $maxppo2."&nbsp;".$_lang['unit_pressure']);
         }
 
         // More details of the gas used
