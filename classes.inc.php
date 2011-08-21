@@ -1528,17 +1528,32 @@ class Divelog {
         //	Show tank details
         $t->assign('logbook_tanktype', $_lang['logbook_tanktype']);
         $t->assign('logbook_tanksize', $_lang['logbook_tanksize']);
+        $t->assign('logbook_presw', $_lang['logbook_presw']);
         $t->assign('logbook_supplytype', $_lang['logbook_supplytype']);
-        $t->assign('logbook_gas', $_lang['logbook_gas']);
+
         $t->assign('logbook_o2', $_lang['logbook_o2']);
         $t->assign('logbook_he', $_lang['logbook_he']);
-        $t->assign('logbook_avgdepth', $_lang['logbook_avgdepth']);
-        $t->assign('logbook_presw', $_lang['logbook_presw']);
         $t->assign('logbook_minppo2', $_lang['logbook_minppo2']);
         $t->assign('logbook_maxppo2', $_lang['logbook_maxppo2']);
+
         $t->assign('logbook_mod', $_lang['logbook_mod']);
         $t->assign('logbook_ead', $_lang['logbook_ead']);
+        $t->assign('logbook_avgdepth', $_lang['logbook_avgdepth']);
 
+        $t->assign('logbook_press', $_lang['logbook_press']);
+        $t->assign('logbook_prese', $_lang['logbook_prese']);
+        $t->assign('logbook_presdiff', $_lang['logbook_presdiff']);
+        $t->assign('logbook_sac', $_lang['logbook_sac'] );
+
+        $t->assign('logbook_gas', $_lang['logbook_gas']);
+
+        // See if there are any other tanks used for this dive
+        $globals['dive_id'] = $result['ID'];
+        $tanks = parse_mysql_query('tanksdivelist.sql');
+        $tankscount = rows_mysql_query();
+        // Now need to figure out what to do with it!!!
+
+        // Start with the basic tank details
         if (isset($result['Tanktype'])) {
             $arr_number = $result['Tanktype'] - 1;
             if($arr_number >= 0)
@@ -1612,12 +1627,7 @@ class Divelog {
             $t->assign('SupplyType','-');
         }
 
-        if ($result['Gas'] != "") {
-            $t->assign('Gas', $result['Gas']);
-        } else {
-            $t->assign('Gas','-');	
-        }
-
+        // Details of the gas mix used
         if (isset($result['O2']) && $result['O2']  != "") {
             $t->assign('O2', $result['O2'].'%');
             $o2 = $result['O2'];
@@ -1650,6 +1660,7 @@ class Divelog {
             $maxppo2 = $_config['default_maxppo2'];
         }
 
+        // More details of the gas used
         $gasimage = "gas_air.gif";  // default air
         $gasimagealt = "Air";
         if (($result['O2'] > "21") && ($result['He'] == "") || ($result['He'] == "0")) {
@@ -1723,10 +1734,6 @@ class Divelog {
         }
 
         //	Show pressure details
-        $t->assign('logbook_press', $_lang['logbook_press']);
-        $t->assign('logbook_prese', $_lang['logbook_prese']);
-        $t->assign('logbook_presdiff', $_lang['logbook_presdiff']);
-        $t->assign('logbook_sac', $_lang['logbook_sac'] );
 
         if ($result['PresS'] != "") {
             if ($_config['pressure']) {
@@ -1767,6 +1774,14 @@ class Divelog {
         } else {
             $t->assign('sac', "" ); 
         } 
+
+        // Gas mixture details
+        if ($result['Gas'] != "") {
+            $t->assign('Gas', $result['Gas']);
+        } else {
+            $t->assign('Gas','-');	
+        }
+
     /*}}}*/
     }
     
