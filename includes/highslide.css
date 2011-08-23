@@ -60,7 +60,7 @@
     background: black;
 }
 a.highslide-full-expand {
-   background: url(graphics/fullexpand.gif) no-repeat;
+   background: url(highslide/graphics/fullexpand.gif) no-repeat;
    display: block;
    margin: 0 10px 10px 0;
    width: 34px;
@@ -77,7 +77,7 @@ a.highslide-full-expand {
     border: 1px solid white;
     background-color: white;
     padding-left: 22px;
-	background-image: url(graphics/loader.white.gif);
+	background-image: url(highslide/graphics/loader.white.gif);
     background-repeat: no-repeat;
     background-position: 3px 1px;
 }
@@ -121,7 +121,7 @@ a.highslide-credits:hover i {
 	width: 30px;
 	height: 30px;
 	cursor: pointer;
-	background: url(graphics/close.png);
+	background: url(highslide/graphics/close.png);
 	/* NOTE! For IE6, you also need to update the highslide-ie6.css file. */
 }
 
@@ -180,7 +180,7 @@ html>/**/body .highslide-gallery ul img {
 .highslide-controls {
     width: 195px;
     height: 40px;
-	background: url(graphics/controlbar-white.gif) 0 -90px no-repeat;
+	background: url(highslide/graphics/controlbar-white.gif) 0 -90px no-repeat;
 	margin: 20px 15px 10px 0;
 }
 .highslide-controls ul {
@@ -190,7 +190,7 @@ html>/**/body .highslide-gallery ul img {
     list-style: none;
     margin: 0;
     padding: 0;
-	background: url(graphics/controlbar-white.gif) right -90px no-repeat;
+	background: url(highslide/graphics/controlbar-white.gif) right -90px no-repeat;
 
 }
 .highslide-controls li {
@@ -200,7 +200,7 @@ html>/**/body .highslide-gallery ul img {
 	list-style: none;
 }
 .highslide-controls a {
-	background-image: url(graphics/controlbar-white.gif);
+	background-image: url(highslide/graphics/controlbar-white.gif);
     display: block;
     float: left;
     height: 30px;

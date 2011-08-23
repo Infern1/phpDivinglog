@@ -647,7 +647,7 @@ rel="lightbox[others]" title="{$divepic_linktit}">{$divepic_pt}</a>
 class="highslide" onclick="return hs.expand(this)" 
 title="{$i.img_title}"><img 
 src="{$web_root}/{$i.img_thumb_url}" 
-alt="{$i.img_title}" 
+alt="Highslide JS" 
 title="{$i.img_title}" 
 height="{$thumb_height}" width="{$thumb_width}" ></a>
             {else}
@@ -655,7 +655,7 @@ height="{$thumb_height}" width="{$thumb_width}" ></a>
 class="highslide" onclick="return hs.expand(this)" 
 title="{$i.img_title}"><img
 src="{$web_root}/imagesize.php?w={$thumb_width}&img={$i.img_url}" 
-alt="{$i.img_title}" 
+alt="Highslide JS" 
 title="{$i.img_title}" 
 height="{$thumb_height}" width="{$thumb_width}" ></a>
             {/if}

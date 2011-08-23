@@ -115,7 +115,7 @@
     {if $has_images == '1'}
     {foreach from=$image_link key=id item=i name=images}
             <a id="thumb" href="{$web_root}/{$i.img_url}" class="highslide" onclick="return hs.expand(this)" title="{$i.img_title}">
-            <img src="{$web_root}/{$i.img_url}" alt="{$i.img_title}" title="{$i.img_title}" height="{$thumb_height}" width="{$thumb_width}" ></a>
+            <img src="{$web_root}/{$i.img_url}" alt="Highslide JS" title="{$i.img_title}" height="{$thumb_height}" width="{$thumb_width}" ></a>
            <div class='highslide-caption'>
            {$i.img_title}
            </div>
