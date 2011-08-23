@@ -79,20 +79,19 @@
 
     {*	Show dive location details *}
     <tr class="divetitle">
-      <td>{$logbook_place}</td>
+      <td colspan="2">{$logbook_place}</td>
       <td colspan="2">{$logbook_city}</td>
-      <td>{$logbook_country}</td>
     </tr>
 
     <tr class="divedetails">
     {if isset($dive_site_nr)} 
       {if isset($multiuser_id)}
-      <td><a href="{$app_path}/divesite.php{$sep1}{$multiuser_id}{$sep2}{$dive_site_nr}" title="{$dive_place} {$logbook_place_linktitle}">{$dive_place}</a></td>
+      <td colspan="2"><a href="{$app_path}/divesite.php{$sep1}{$multiuser_id}{$sep2}{$dive_site_nr}" title="{$dive_place} {$logbook_place_linktitle}">{$dive_place}</a></td>
       {else}
-      <td><a href="{$app_path}/divesite.php{$sep2}{$dive_site_nr}" title="{$dive_place} {$logbook_place_linktitle}">{$dive_place}</a></td>
+      <td colspan="2"><a href="{$app_path}/divesite.php{$sep2}{$dive_site_nr}" title="{$dive_place} {$logbook_place_linktitle}">{$dive_place}</a></td>
       {/if}
     {else}
-      <td>-</td>
+      <td colspan="2">-</td>
     {/if} 
 
     {if $dive_city != ''} 
@@ -100,11 +99,25 @@
     {else}
       <td colspan="2">-</td>
     {/if}
+    </tr>
+
+    <tr class="divetitle">
+      <td colspan="2">{$logbook_country}</td>
+      <td colspan="2">{$logbook_divemaster}</td>
+    </tr>
+
+    <tr class="divedetails">
 
     {if $dive_country != ''} 
-      <td>{$dive_country}</td>
+      <td colspan="2">{$dive_country}</td>
     {else}
-      <td>-</td>
+      <td colspan="2">-</td>
+    {/if}
+
+    {if $divemaster != ''} 
+      <td colspan="2">{$divemaster}</td>
+    {else}
+      <td colspan="2">-</td>
     {/if}
     </tr>
     
@@ -138,12 +151,10 @@
     {* Show buddy details *}
     {if $buddy != ''}
     <tr class="divetitle">
-      <td colspan="3">{$logbook_buddy}</td>
-      <td>{$logbook_divemaster}</td>
+      <td colspan="4">{$logbook_buddy}</td>
     </tr>
     <tr class="divedetails">
-      <td colspan="3">{$buddy}</td>
-      <td>{$divemaster}</td>
+      <td colspan="4">{$buddy}</td>
     </tr>
     {/if}
 
