@@ -1189,32 +1189,32 @@ class Divelog {
         $t->assign('logbook_divetime', $_lang['logbook_divetime']);
         $t->assign('logbook_depth', $_lang['logbook_depth']);
 
-        if ($result['Divedate'] == "") {
-            $t->assign('dive_date','-');	
-        } else {
+        if (isset($result['Divedate']) && ($result['Divedate'] != "")) {
             $t->assign('dive_date', date($_lang['logbook_divedate_format'], strtotime($result['Divedate'])));
+        } else {
+            $t->assign('dive_date','-');	
         }
 
-        if ($result['Entrytime'] == "") {
-            $t->assign('entry_time','-');	
-        } else {
+        if (isset($result['Entrytime']) && ($result['Entrytime'] != "")) {
             $t->assign('entry_time',$result['Entrytime']);
+        } else {
+            $t->assign('entry_time','-');	
         }
 
-        if ($result['Divetime'] == "") {
-            $t->assign('dive_time','-');	
-        } else {
+        if (isset($result['Divetime']) && ($result['Divetime'] != "")) {
             $t->assign('dive_time', $result['Divetime'] ."&nbsp;". $_lang['unit_time']);
+        } else {
+            $t->assign('dive_time','-');	
         }
 
-        if ($result['Depth'] == "") {
-            $t->assign('dive_depth','-');	
-        } else {
+        if (isset($result['Depth']) && ($result['Depth'] != "")) {
             if ($_config['length']) {
                 $t->assign('dive_depth', MetreToFeet($result['Depth'], 0) ."&nbsp;". $_lang['unit_length_imp']);
             } else {
                 $t->assign('dive_depth', $result['Depth'] ."&nbsp;". $_lang['unit_length']);
             }
+        } else {
+            $t->assign('dive_depth','-');	
         }
 
         //	Show dive location details
@@ -1429,19 +1429,19 @@ class Divelog {
         $t->assign('logbook_altitude', $_lang['logbook_altitude']);
         $t->assign('logbook_airtemp', $_lang['logbook_airtemp']);
 
-        if ($result['Weather'] != "") {
+        if (isset($result['Weather']) && ($result['Weather'] != "")) {
             $t->assign('Weather', $result['Weather']);
         } else {
             $t->assign('Weather','-');	
         }
 
-        if ($result['Altitude'] != "") {
+        if (isset($result['Altitude']) && ($result['Altitude'] != "")) {
             $t->assign('Altitude', $result['Altitude']);
         } else {
             $t->assign('Altitude','-');	
         }
 
-        if ($result['Airtemp'] != "") {
+        if (isset($result['Airtemp']) && ($result['Airtemp'] != "")) {
             if ($_config['temp']) {
                 $Airtemp = CelsiusToFahrenh($result['Airtemp'], 0) ."&nbsp;". $_lang['unit_temp_imp'] ;
             } else {
@@ -1475,31 +1475,31 @@ class Divelog {
             $t->assign('Visibility','-');	
         }
 
-        if (isset($result['VisHor']) && $result['VisHor'] != "") {
+        if (isset($result['VisHor']) && ($result['VisHor'] != "")) {
             $t->assign('VisHor', htmlentities($result['VisHor']));
         } else {
             $t->assign('VisHor','-');	
         }
 
-        if (isset($result['VisVer']) && $result['VisVer'] != "") {
+        if (isset($result['VisVer']) && ($result['VisVer'] != "")) {
             $t->assign('VisVer', htmlentities($result['VisVer']));
         } else {
             $t->assign('VisVer','-');	
         }
 
-        if ($result['Surface'] != "") {
+        if (isset($result['Surface']) && ($result['Surface'] != "")) {
             $t->assign('Surface',$result['Surface']);
         } else {
             $t->assign('Surface','-');	
         }
 
-        if ($result['UWCurrent'] != "") {
+        if (isset($result['UWCurrent']) && ($result['UWCurrent'] != "")) {
             $t->assign('UWCurrent',$result['UWCurrent']);
         } else {
             $t->assign('UWCurrent','-');	
         }
 
-        if ($result['Watertemp'] != "") {
+        if (isset($result['Watertemp']) && ($result['Watertemp'] != "")) {
             if ($_config['temp']) {
                 $Watertemp = CelsiusToFahrenh($result['Watertemp'], 0) ."&nbsp;". $_lang['unit_temp_imp'] ;
             } else {
@@ -1523,7 +1523,7 @@ class Divelog {
         global $t, $_config, $_lang; */ /*{{{*/
 /**
         // Start with the basic tank details
-        if ($result('Tanktype') != "") {
+        if (isset($result['Tanktype']) && ($result('Tanktype') != "")) {
             $arr_number = $result('Tanktype') - 1;
             if ($arr_number >= 0) {
                 $t->assign(tanks[$i]['Tanktype'], $_lang['tanktype'][$arr_number]);
@@ -1534,7 +1534,7 @@ class Divelog {
             $t->assign(tanks[$i]['Tanktype'], '-');	
         }
 
-        if ($result('Tanksize') != "") {
+        if (isset($result['Tanksize']) && ($result('Tanksize') != "")) {
             if ($_config['volume']) {
                 if (($result('PresW') == "") || ($result('PresW') <= 0)) {
                     $Tanksize = ($result('Tanksize') * 7) ;
@@ -1550,7 +1550,7 @@ class Divelog {
             $t->assign(tanks[$i]['Tanksize'],'-');	
         }
 
-        if (isset($result['DblTank']) && $result['DblTank'] != "") {
+        if (isset($result['DblTank']) && ($result['DblTank'] != "")) {
             if ($result['DblTank'] == 'True') {
                 $tankimagealt = $_lang['dbltank'][1];
                 $tankimagefile = "twin_cylinders.gif";
@@ -1564,7 +1564,7 @@ class Divelog {
             $t->assign(tanks[$i]['DblTankImage'],'');	
         }
 
-        if ($result['PresW'] != "") {
+        if (isset($result['PresW']) && ($result['PresW'] != "")) {
             if ($_config['pressure']) {
                 $PresW = BarToPsi($result['PresW'], -1) ."&nbsp;". $_lang['unit_pressure_imp'] ;
             } else {
@@ -1575,7 +1575,7 @@ class Divelog {
             $t->assign(tanks[$i]['PresW'],'-');	
         }
 
-        if (isset($result['SupplyType']) && $result['SupplyType'] != "") {
+        if (isset($result['SupplyType']) && ($result['SupplyType'] != "")) {
             switch ($result['SupplyType']) {
               case '0':
                 $supplytypefile = "oc.gif";
@@ -1600,7 +1600,7 @@ class Divelog {
         }
 
         // Details of the gas mix used
-        if (isset($result['O2']) && $result['O2'] != "") {
+        if (isset($result['O2']) && ($result['O2'] != "")) {
             $o2 = $result['O2'];
             $t->assign(tanks[$i]['O2'], $o2.'%');
         } else {
@@ -1608,19 +1608,19 @@ class Divelog {
             $t->assign(tanks[$i]['O2'], $o2.'%');
         }
 
-        if (isset($result['He']) && $result['He'] != "") {
+        if (isset($result['He']) && ($result['He'] != "")) {
             $t->assign(tanks[$i]['He'], $result['He'].'%');
         } else {
             $t->assign(tanks[$i]['He'],'-');	
         }
 
-        if (isset($result['MinPPO2']) && $result['MinPPO2'] != "") {
+        if (isset($result['MinPPO2']) && ($result['MinPPO2'] != "")) {
             $t->assign(tanks[$i]['MinPPO2'], $result['MinPPO2']."&nbsp;".$_lang['unit_pressure']);
         } else {
             $t->assign(tanks[$i]['MinPPO2'],'-');	
         }
 
-        if (isset($result['MaxPPO2']) &&  $result['MaxPPO2'] != "") {
+        if (isset($result['MaxPPO2']) &&  ($result['MaxPPO2'] != "")) {
             $maxppo2 = $result['MaxPPO2'];
             if ($maxppo2 == 0) {
                 $maxppo2 = $_config['default_maxppo2'];
@@ -1662,7 +1662,7 @@ class Divelog {
         $t->assign(tanks[$i]['GasImageAlt'], $gasimagealt);
 
         //	Calculate MOD and EAD
-        if ($result['He'] != "") {
+        if (isset($result['He']) && ($result['He'] != "")) {
             $t->assign(tanks[$i]['MOD'],'-');
             $t->assign(tanks[$i]['EAD'],'-');
         } else {
@@ -1706,7 +1706,7 @@ class Divelog {
 
         //	Show pressure details
 
-        if ($result['PresS'] != "") {
+        if (isset($result['PresS']) && ($result['PresS'] != "")) {
             if ($_config['pressure']) {
                 $PresS = BarToPsi($result['PresS'], -1) ."&nbsp;". $_lang['unit_pressure_imp'] ;
             } else {
@@ -1717,7 +1717,7 @@ class Divelog {
             $t->assign(tanks[$i]['PresS'],'-');	
         }
 
-        if ($result['PresE'] != "") {
+        if (isset($result['PresE']) && ($result['PresE'] != "")) {
             if ($_config['pressure']) {
                 $PresE =  BarToPsi($result['PresE'], -1) ."&nbsp;". $_lang['unit_pressure_imp'];
             } else {
@@ -1728,7 +1728,7 @@ class Divelog {
             $t->assign(tanks[$i]['PresE'],'-');	
         }
 
-        if (($result['PresS'] != "") || ($result['PresE'] != "")) {
+        if ((isset($result['PresS']) && ($result['PresS'] != "")) && (isset($result['PresE']) && ($result['PresE'] != ""))) {
             $diff = intval($result['PresS']) - intval($result['PresE']);
             if ($_config['pressure']) {
                 $PresSPresE =  BarToPsi($diff, -1) ."&nbsp;". $_lang['unit_pressure_imp'] ;
@@ -1737,7 +1737,7 @@ class Divelog {
             }
             $t->assign(tanks[$i]['PresSPresE'], $PresSPresE);
         } else {
-            $t->assign(tanks[$i]['PresSPresE'], "");
+            $t->assign(tanks[$i]['PresSPresE'], "-");
         }
 
         if ($this->sac != "") {
@@ -1798,7 +1798,7 @@ class Divelog {
         }
 */
         // Start with the basic tank details
-        if (isset($result['Tanktype'])) {
+        if (isset($result['Tanktype']) && ($result['Tanktype'] != "")) {
             $arr_number = $result['Tanktype'] - 1;
             if($arr_number >= 0)
                 $t->assign('Tanktype', $_lang['tanktype'][$arr_number]);
@@ -1806,7 +1806,7 @@ class Divelog {
             $t->assign('Tanktype','-');	
         }
 
-        if ($result['Tanksize'] != "") {
+        if (isset($result['Tanksize']) && ($result['Tanksize'] != "")) {
             if ($_config['volume']) {
                 if (($result['PresW'] == "") || ($result['PresW'] <= 0)) {
                     $Tanksize = ($result['Tanksize'] * 7) ;
@@ -1822,7 +1822,7 @@ class Divelog {
             $t->assign('Tanksize','-');	
         }
 
-        if (isset($result['DblTank']) && $result['DblTank'] != "") {
+        if (isset($result['DblTank']) && ($result['DblTank'] != "")) {
             if ($result['DblTank'] == 'True') {
                 $tankimagealt = $_lang['dbltank'][1];
                 $tankimagefile = "twin_cylinders.gif";
@@ -1836,7 +1836,7 @@ class Divelog {
             $t->assign('DblTankImage','');	
         }
 
-        if ($result['PresW'] != "") {
+        if (isset($result['PresW']) && ($result['PresW'] != "")) {
             if ($_config['pressure']) {
                 $PresW = BarToPsi($result['PresW'], -1) ."&nbsp;". $_lang['unit_pressure_imp'] ;
             } else {
@@ -1847,7 +1847,7 @@ class Divelog {
             $t->assign('PresW','-');	
         }
 
-        if (isset($result['SupplyType']) && $result['SupplyType'] != "") {
+        if (isset($result['SupplyType']) && ($result['SupplyType'] != "")) {
             switch ($result['SupplyType']) {
               case '0':
                 $supplytypefile = "oc.gif";
@@ -1872,7 +1872,7 @@ class Divelog {
         }
 
         // Details of the gas mix used
-        if (isset($result['O2']) && $result['O2'] != "") {
+        if (isset($result['O2']) && ($result['O2'] != "")) {
             $o2 = $result['O2'];
             $t->assign('O2', $o2.'%');
         } else {
@@ -1880,19 +1880,19 @@ class Divelog {
             $t->assign('O2', $o2.'%');
         }
 
-        if (isset($result['He']) && $result['He'] != "") {
+        if (isset($result['He']) && ($result['He'] != "")) {
             $t->assign('He', $result['He'].'%');
         } else {
             $t->assign('He','-');	
         }
 
-        if (isset($result['MinPPO2']) && $result['MinPPO2'] != "") {
+        if (isset($result['MinPPO2']) && ($result['MinPPO2'] != "")) {
             $t->assign('MinPPO2', $result['MinPPO2']."&nbsp;".$_lang['unit_pressure']);
         } else {
             $t->assign('MinPPO2','-');	
         }
 
-        if (isset($result['MaxPPO2']) &&  $result['MaxPPO2'] != "") {
+        if (isset($result['MaxPPO2']) && ($result['MaxPPO2'] != "")) {
             $maxppo2 = $result['MaxPPO2'];
             if ($maxppo2 == 0) {
                 $maxppo2 = $_config['default_maxppo2'];
@@ -1934,7 +1934,7 @@ class Divelog {
         $t->assign('GasImageAlt', $gasimagealt);
 
         //	Calculate MOD and EAD
-        if ($result['He'] != "") {
+        if (isset($result['He']) && ($result['He'] != "")) {
             $t->assign('MOD','-');
             $t->assign('EAD','-');
         } else {
@@ -1978,7 +1978,7 @@ class Divelog {
 
         //	Show pressure details
 
-        if ($result['PresS'] != "") {
+        if (isset($result['PresS']) && ($result['PresS'] != "")) {
             if ($_config['pressure']) {
                 $PresS = BarToPsi($result['PresS'], -1) ."&nbsp;". $_lang['unit_pressure_imp'] ;
             } else {
@@ -1989,7 +1989,7 @@ class Divelog {
             $t->assign('PresS','-');	
         }
 
-        if ($result['PresE'] != "") {
+        if (isset($result['PresE']) && ($result['PresE'] != "")) {
             if ($_config['pressure']) {
                 $PresE =  BarToPsi($result['PresE'], -1) ."&nbsp;". $_lang['unit_pressure_imp'];
             } else {
@@ -2000,7 +2000,7 @@ class Divelog {
             $t->assign('PresE','-');	
         }
 
-        if (($result['PresS'] != "") || ($result['PresE'] != "")) {
+        if ((isset($result['PresS']) && ($result['PresS'] != "")) && (isset($result['PresE']) && ($result['PresE'] != ""))) {
             $diff = intval($result['PresS']) - intval($result['PresE']);
             if ($_config['pressure']) {
                 $PresSPresE =  BarToPsi($diff, -1) ."&nbsp;". $_lang['unit_pressure_imp'] ;
@@ -2009,17 +2009,17 @@ class Divelog {
             }
             $t->assign('PresSPresE', $PresSPresE);
         } else {
-            $t->assign('PresSPresE', "");
+            $t->assign('PresSPresE', "-");
         }
 
         if ($this->sac != "") {
             $t->assign('sac', $this->sac ); 
         } else {
-            $t->assign('sac', "" ); 
+            $t->assign('sac', "-" ); 
         } 
 
         // Gas mixture details
-        if ($result['Gas'] != "") {
+        if (isset($result['Gas']) && ($result['Gas'] != "")) {
             $t->assign('Gas', $result['Gas']);
         } else {
             $t->assign('Gas','-');	
@@ -2053,19 +2053,19 @@ class Divelog {
             $t->assign('Entry', $_lang['entry'][($result['Entry'] - 1)]);
         }
 
-        if ($result['Boat'] != "") {
+        if (isset($result['Boat']) && ($result['Boat'] != "")) {
             $t->assign('Boat', $result['Boat'] );
         } else {
             $t->assign('Boat','-');	
         }
 
-        if ($result['PGStart'] != "") {
+        if (isset($result['PGStart']) && ($result['PGStart'] != "")) {
             $t->assign('PGStart', $result['PGStart'] );
         } else {
             $t->assign('PGStart','-');	
         }
 
-        if ($result['PGEnd'] != "") {
+        if (isset($result['PGEnd']) && ($result['PGEnd'] != "")) {
             $t->assign('PGEnd', $result['PGEnd']);
         } else {
             $t->assign('PGEnd','-');	
@@ -2074,13 +2074,13 @@ class Divelog {
         $t->assign('Deco', ($result['Deco'] == 'True' ? $_lang['yes'] : $_lang['no']) );
         $t->assign('Rep', ($result['Rep'] == 'True' ? $_lang['yes'] : $_lang['no']) );
 
-        if ($result['Surfint'] != "") {
+        if (isset($result['Surfint']) && ($result['Surfint'] != "")) {
             $t->assign('Surfint', $result['Surfint']);
         } else {
             $t->assign('Surfint','-');
         }
 
-        if (($result['Entrytime'] != "") && ($result['Divetime'] != "")) {
+        if ((isset($result['Entrytime']) && ($result['Entrytime'] != "")) && (isset($result['Divetime']) && ($result['Divetime'] != ""))) {
             $exittime = date('H:i:s', strtotime($result['Entrytime']) + ($result['Divetime'] * 60));
             $t->assign('ExitTime',$exittime);	
         } else {
@@ -2115,7 +2115,7 @@ class Divelog {
         $t->assign('logbook_divesuit', $_lang['logbook_divesuit'] );
         $t->assign('logbook_computer', $_lang['logbook_computer'] );
 
-        if ($result['Weight'] != "") {
+        if (isset($result['Weight']) && ($result['Weight'] != "")) {
             if ($_config['weight']) {
                 $Weight = KgToLbs($result['Weight'], 0) ."&nbsp;". $_lang['unit_weight_imp'] ;
             } else {
@@ -2123,19 +2123,19 @@ class Divelog {
             }$t->assign('Weight' ,$Weight);
         }
 
-        if ($result['Divesuit'] != "") {
+        if (isset($result['Divesuit']) && ($result['Divesuit'] != "")) {
             $t->assign('Divesuit', $result['Divesuit'] );
         } else {
             $t->assign('Divesuit', "" );
         }
 
-        if ($result['Computer'] != "") {
+        if (isset($result['Computer']) && ($result['Computer'] != "")) {
             $t->assign('Computer', $result['Computer'] );
         } else {
             $t->assign('Computer', "") ;
         }
 
-        if ($result['UsedEquip'] != "") {
+        if (isset($result['UsedEquip']) && ($result['UsedEquip'] != "")) {
             $t->assign('UsedEquip',1);
             $t->assign('logbook_usedequip', $_lang['logbook_usedequip'] );
             $globals['gearlist'] = $result['UsedEquip'];
@@ -2539,17 +2539,17 @@ class Divesite{
         $t->assign('place_country', $_lang['place_country']);
         $t->assign('place_maxdepth', $_lang['place_maxdepth'] );
 
-        if ($result['Place'] == "") {
-            $Place = "-";
-        } else {
+        if (isset($result['Place']) && ($result['Place'] != "")) {
             $Place = $result['Place'];
+        } else {
+            $Place = "-";
         }
         $t->assign('Place', $Place);
         $t->assign('city', $this->city );
         $t->assign('country', $this->country);
 
         $t->assign('place_rating', $_lang['place_rating']);
-        if ($result['Rating'] != "") {
+        if (isset($result['Rating']) && ($result['Rating'] != "")) {
             $desc = $_lang['rating'][$result['Rating']];
             $Rating = '<img src="'.$_config['web_root'].'/images/ratings5-'.$result['Rating'].'.gif" alt="'.$desc.'" title="'.$desc.'" border="0" width="84" height="15">';
             $t->assign('Rating', $Rating);
@@ -2557,80 +2557,81 @@ class Divesite{
             $t->assign('Rating','-');	
         }
 
-        if ($result['MaxDepth'] == "") {
-            $MaxDepth = "-";
-        } else {
+        if (isset($result['MaxDepth']) && ($result['MaxDepth'] != "")) {
             if ($_config['length']) {
                 $MaxDepth = MetreToFeet($result['MaxDepth'], 0) ."&nbsp;". $_lang['unit_length_short_imp'] ;
             } else {
                 $MaxDepth = $result['MaxDepth'] ."&nbsp;". $_lang['unit_length_short'];
             }
+        } else {
+            $MaxDepth = "-";
         }
         $t->assign('MaxDepth',$MaxDepth);
 
         //	Show extra site details
         $t->assign('place_lat', $_lang['place_lat']);
         $t->assign('place_lon', $_lang['place_lon']);
-        if ($result['MapPath'] == "") {
-            $MapPath = "&nbsp;";
-        } else {
+        if (isset($result['MapPath']) && ($result['MapPath'] != "")) {
             $MapPath = $_lang['place_map'];
+        } else {
+            $MapPath = "&nbsp;";
         }
         $t->assign('place_map', $MapPath);
 
-        if ($result['Lat'] == "") {
-            $Lat = "-";
-        } else {
+        if (isset($result['Lat']) && ($result['Lat'] != "")) {
             $Lat = latitude_format($result['Lat']);
+        } else {
+            $Lat = "-";
         }
         $t->assign('Lat', $Lat);
         $t->assign('LatDec',$result['Lat']); 
 
-        if ($result['Lon'] == "") {
-            $Lon = "-";
-        } else {
+        if (isset($result['Lon']) && ($result['Lon'] != "")) {
             $Lon = longitude_format($result['Lon']) ;
+        } else {
+            $Lon = "-";
         }
         $t->assign('Lon',$Lon);
         $t->assign('LonDec',$result['Lon']);
-        if (($result['Lat'] != "") || (($result['Lon'] != ""))) {
+        if ((isset($result['Lat']) && ($result['Lat'] != "")) && (isset($result['Lon']) && ($result['Lon'] != ""))) {
             $t->assign('site_google_link', $_lang['site_google_link'] .$result['Place']);
         }
-        if ($result['MapPath'] == "") {
-            $t->assign('maplink_url','&nbsp;');
-        } else {
+
+        if (isset($result['MapPath']) && ($result['MapPath'] != "")) {
             $maplink_url = "<a href=\"".$_config['web_root']."/". $_config['mappath_web'] . $result['MapPath']."\"  rel=\"lightbox[others]\"\n";
             $maplink_url .=  "   title=\"". $_lang['mappic_linktitle']. $result['Place'];
             $maplink_url .=  "\">". $_lang['mappic'] ."</a>\n";
             $t->assign('maplink_url',$maplink_url);
+        } else {
+            $t->assign('maplink_url','&nbsp;');
         }
         $t->assign('google_map', $_lang['google_map']);
         $t->assign('place_datum', $_lang['place_datum']);
         $t->assign('datum', $_lang['datum']);
 
         $t->assign('place_watername', $_lang['place_watername']);
-        if ($result['WaterName'] != "") {
+        if (isset($result['WaterName']) && ($result['WaterName'] != "")) {
             $t->assign('WaterName', $result['WaterName'] );
         } else {
             $t->assign('WaterName','-');	
         }
 
         $t->assign('place_water', $_lang['place_water']);
-        if ( $result['Water'] != 0 && $_lang['water'][($result['Water'] - 1)]) {
+        if ($result['Water'] != 0 && $_lang['water'][($result['Water'] - 1)]) {
             $t->assign('Water', $_lang['water'][($result['Water'] - 1)]);
         } else {
             $t->assign('Water','-');	
         }
 
         $t->assign('place_altitude', $_lang['place_altitude']);
-        if ($result['Altitude'] != "") {
+        if (isset($result['Altitude']) && ($result['Altitude'] != "")) {
             $t->assign('Altitude', $result['Altitude'] );
         } else {
             $t->assign('Altitude','-');	
         }
 
         $t->assign('place_difficulty', $_lang['place_difficulty']);
-        if ($result['Difficulty'] != "") {
+        if (isset($result['Difficulty']) && ($result['Difficulty'] != "")) {
             $t->assign('Difficulty', $result['Difficulty'] );
         } else {
             $t->assign('Difficulty','-');	
@@ -2972,31 +2973,31 @@ class Equipment{
         $t->assign('Manufacturer', $result['Manufacturer']);
 
         //	Show equipment purchase details
-        if ($result['DateP'] != "") {
+        if (isset($result['DateP']) && ($result['DateP'] != "")) {
             $t->assign('DateP', date($_lang['equip_date_format'], strtotime($result['DateP'])));
         } else {
             $t->assign('DateP','-');	
         }
 
-        if ($result['DateR'] != "") {
+        if (isset($result['DateR']) && ($result['DateR'] != "")) {
             $t->assign('DateR', date($_lang['equip_date_format'], strtotime($result['DateR'])) );
         } else {
             $t->assign('DateR','-');	
         }
 
-        if ($result['DateRN'] != "") {
+        if (isset($result['DateRN']) && ($result['DateRN'] != "")) {
             $t->assign('DateRN', date($_lang['equip_date_format'], strtotime($result['DateRN'])) );
         } else {
             $t->assign('DateRN','-');	
         }
 
-        if ($result['O2ServiceDate'] != "") {
+        if (isset($result['O2ServiceDate']) && ($result['O2ServiceDate'] != "")) {
             $t->assign('O2ServiceDate', date($_lang['equip_date_format'], strtotime($result['O2ServiceDate'])) );
         } else {
             $t->assign('O2ServiceDate','-');	
         }
 
-        if ($result['Inactive'] != "") {
+        if (isset($result['Inactive']) && ($result['Inactive'] != "")) {
             if ($result['Inactive']) {
                 $t->assign('Inactive', $_lang['inactive'][0]);
             } else {
@@ -3006,31 +3007,31 @@ class Equipment{
             $t->assign('Inactive','-');	
         }
 
-        if ($result['Serial'] != "") {
+        if (isset($result['Serial']) && ($result['Serial'] != "")) {
             $t->assign('Serial', $result['Serial']);
         } else {
             $t->assign('Serial','-');	
         }
 
-        if ($result['Warranty'] != "") {
+        if (isset($result['Warranty']) && ($result['Warranty'] != "")) {
             $t->assign('Warranty', $result['Warranty'] );
         } else {
             $t->assign('Warranty','-');	
         }
 
-        if ($result['Shop'] != "") {
+        if (isset($result['Shop']) && ($result['Shop'] != "")) {
             $t->assign('Shop', $result['Shop']);
         } else {
             $t->assign('Shop','-');	
         }
 
-        if ($result['Price'] != "") {
+        if (isset($result['Price']) && ($result['Price'] != "")) {
             $t->assign('Price',$_lang['currency_prefix'] .number_format($result['Price'],2) .$_lang['currency_suffix'] );
         } else {
             $t->assign('Price','-');	
         }
 
-        if ($result['Weight'] != "") {
+        if (isset($result['Weight']) && ($result['Weight'] != "")) {
             if ($_config['weight']) {
                 $Weight = KgToLbs($result['Weight'], 0) ."&nbsp;". $_lang['unit_weight_imp'] ;
             } else {
@@ -3040,28 +3041,16 @@ class Equipment{
             $t->assign('Weight','-');	
         }
 
-        //	Show the rest of the details
-        $t->assign('equip_serial', $_lang['equip_serial']);
-        $t->assign('equip_warranty', $_lang['equip_warranty']);
-        $t->assign('equip_dater', $_lang['equip_dater']);
-        if ($result['PhotoPath'] != "") {
+        //	Show the photo
+        if (isset($result['PhotoPath']) && ($result['PhotoPath'] != "")) {
             $t->assign('PhotoPath', $result['PhotoPath'] );
             $t->assign('equip_photo', $_lang['equip_photo'] );
-        }
-
-        $t->assign('Serial', $result['Serial']);
-        $t->assign('Warranty',$result['Warranty']);
-
-        if ($result['DateR'] != "") {
-            $t->assign('DateR', date($_lang['equip_date_format'], strtotime($result['DateR'])) );
-        }
-
-        if ($result['PhotoPath'] != "") {
-          $this->set_equipment_pictures();
-          $t->assign('PhotoPathurl',  $_config['equippath_web'] . $result['PhotoPath']);
+            $this->set_equipment_pictures();
+            $t->assign('PhotoPathurl',  $_config['equippath_web'] . $result['PhotoPath']);
             $t->assign('equip_photo_linktitle', $_lang['equip_photo_linktitle']. $result['Object']);
             $t->assign('equip_photo_link', $_lang['equip_photo_link'] );
         }
+
     /*}}}*/
     }
 
@@ -3385,7 +3374,7 @@ class Diveshop{
         // Show main shop details
         $result = $this->result;
 
-        if ($result['ShopType'] != '') {
+        if (isset($result['ShopType']) && ($result['ShopType'] != '')) {
             $t->assign('pagetitle',$result['ShopType'].' - '.$result['ShopName']);
         } else {
             $t->assign('pagetitle',$_lang['dive_shop_pagetitle'].$result['ShopName']);
@@ -3406,90 +3395,89 @@ class Diveshop{
         $t->assign('shop_email', $_lang['shop_email']);
         $t->assign('shop_url', $_lang['shop_url']);
         $t->assign('shop_location', $_lang['shop_location']);
+        $t->assign('shop_rating', $_lang['shop_rating']);
 
-        if ($result['ShopName'] != "") {
+        if (isset($result['ShopName']) && ($result['ShopName'] != "")) {
             $t->assign('ShopName', $result['ShopName']);
         } else {
             $t->assign('ShopName','-');
         }
 
-        if ($result['ShopType'] != "") {
+        if (isset($result['ShopType']) && ($result['ShopType'] != "")) {
             $t->assign('ShopType', $result['ShopType']);
         } else {
             $t->assign('ShopType','-');
         }
 
-        if ($result['Street'] != "") {
+        if (isset($result['Street']) && ($result['Street'] != "")) {
             $t->assign('Street', $result['Street']);
         } else {
             $t->assign('Street','');
         }
 
-        if ($result['Address2'] != "") {
+        if (isset($result['Address2']) && ($result['Address2'] != "")) {
             $t->assign('Address2', $result['Address2']);
         } else {
             $t->assign('Address2','');
         }
 
-        if ($result['Zip'] != "") {
+        if (isset($result['Zip']) && ($result['Zip'] != "")) {
             $t->assign('Zip', $result['Zip']);
         } else {
             $t->assign('Zip','');
         }
 
-        if ($result['City'] != "") {
+        if (isset($result['City']) && ($result['City'] != "")) {
             $t->assign('City', $result['City']);
         } else {
             $t->assign('City','');
         }
 
-        if ($result['State'] != "") {
+        if (isset($result['State']) && ($result['State'] != "")) {
             $t->assign('State', $result['State']);
         } else {
             $t->assign('State','');
         }
 
-        if ($result['Country'] != "") {
+        if (isset($result['Country']) && ($result['Country'] != "")) {
             $t->assign('Country', $result['Country']);
         } else {
             $t->assign('Country','');
         }
 
-        if ($result['Phone'] != "") {
+        if (isset($result['Phone']) && ($result['Phone'] != "")) {
             $t->assign('Phone', $result['Phone']);
         } else {
             $t->assign('Phone', '-');
         }
 
-
-        if ($result['Mobile'] != "") {
+        if (isset($result['Mobile']) && ($result['Mobile'] != "")) {
             $t->assign('Mobile', $result['Mobile']);
         } else {
             $t->assign('Mobile', '-');
         }
 
-        if ($result['Fax'] != "") {
+        if (isset($result['Fax']) && ($result['Fax'] != "")) {
             $t->assign('Fax', $result['Fax']);
         } else {
             $t->assign('Fax', '-');
         }
 
-        if ($result['Email'] != "") {
+        if (isset($result['Email']) && ($result['Email'] != "")) {
             $email = '<a href="mailto:'.$result['Email'].'" target="_blank">'.$result['Email'].'</a>';
             $t->assign('Email', $email);
         } else {
             $t->assign('Email', '-');
         }
 
-        if ($result['URL'] != "") {
+        if (isset($result['URL']) && ($result['URL'] != "")) {
             $url = '<a href="'.$result['URL'].'" target="_blank">'.$result['URL'].'</a>';
             $t->assign('URL', $url);
         } else {
             $t->assign('URL', '-');
         }
 
-        $t->assign('shop_rating', $_lang['shop_rating']);
-        if ($result['Rating'] != "") {
+        if (isset($result['Rating']) && ($result['Rating'] != "")) {
             $desc = $_lang['rating'][$result['Rating']];
             $Rating = '<img src="'.$_config['web_root'].'/images/ratings5-'.$result['Rating'].'.gif" alt="'.$desc.'" title="'.$desc.'" border="0" width="84" height="15">';
             $t->assign('Rating', $Rating);
@@ -3842,15 +3830,15 @@ class Divetrip{
         $t->assign('trip_country', $_lang['trip_country']);
         $t->assign('trip_startdate', $_lang['trip_startdate']);
         $t->assign('trip_enddate', $_lang['trip_enddate']);
+        $t->assign('trip_rating', $_lang['trip_rating']);
 
-        if ($result['TripName'] != "") {
+        if (isset($result['TripName']) && ($result['TripName'] != "")) {
             $t->assign('TripName', $result['TripName']);
         } else {
             $t->assign('TripName','-');
         }
 
-        $t->assign('trip_rating', $_lang['trip_rating']);
-        if ($result['Rating'] != "") {
+        if (isset($result['Rating']) && ($result['Rating'] != "")) {
             $desc = $_lang['rating'][$result['Rating']];
             $Rating = '<img src="'.$_config['web_root'].'/images/ratings5-'.$result['Rating'].'.gif" alt="'.$desc.'" title="'.$desc.'" border="0" width="84" height="15">';
             $t->assign('Rating', $Rating);
@@ -3858,7 +3846,7 @@ class Divetrip{
             $t->assign('Rating','-');	
         }
 
-        if ($result['ShopName'] != "") {
+        if (isset($result['ShopName']) && ($result['ShopName'] != "")) {
             $t->assign('dive_shop_nr', $result['ShopID']);
             $t->assign('dive_shop_name', $result['ShopName']);
             $t->assign('logbook_shop_linktitle', $_lang['logbook_shop_linktitle']);
@@ -3870,19 +3858,19 @@ class Divetrip{
             $t->assign('dive_shop_name','-');	
         }
 
-        if ($result['Country'] != "") {
+        if (isset($result['Country']) && ($result['Country'] != "")) {
             $t->assign('Country', $result['Country']);
         } else {
             $t->assign('Country','-');
         }
 
-        if ($result['StartDate'] != "") {
+        if (isset($result['StartDate']) && ($result['StartDate'] != "")) {
             $t->assign('StartDate', date($_lang['logbook_divedate_format'], strtotime($result['StartDate'])));
         } else {
             $t->assign('StartDate','-');	
         }
 
-        if ($result['EndDate'] != "") {
+        if (isset($result['EndDate']) && ($result['EndDate'] != "")) {
             $t->assign('EndDate', date($_lang['logbook_divedate_format'], strtotime($result['EndDate'])));
         } else {
             $t->assign('EndDate','-');	
