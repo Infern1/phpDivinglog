@@ -42,27 +42,21 @@
       <td colspan="2">{$EndDate}</td>
     </tr>
 
-    {if isset($pics2)}
-    {* Show pics *}
+    {if $has_images == '1'}
     <tr class="divetitle">
-      <td colspan="4">{$trip_photo}</td>
+	<td colspan="4">{$trip_photo}</td>
     </tr>
 
     <tr class="divedetails">
-      <td colspan="4">
+	<td colspan="4">
     {foreach from=$image_link key=id item=i name=images}
-        <a id="thumb" href="{$web_root}/{$i.img_url}" 
-class="highslide" onclick="return hs.expand(this)" 
-title="{$i.img_title}"><img 
-src="{$web_root}/{$i.img_url}" 
-alt="Highslide JS" 
-title="{$i.img_title}" 
-height="{$thumb_height}" width="{$thumb_width}"></a>
-        <div class='highslide-caption'>
-        {$i.img_title}
-        </div>
-   {/foreach}
-      </td>
+            <a id="thumb" href="{$web_root}/{$i.img_url}" class="highslide" onclick="return hs.expand(this)" title="{$i.img_title}">
+            <img src="{$web_root}/{$i.img_url}" alt="Highslide JS" title="{$i.img_title}" height="{$thumb_height}" width="{$thumb_width}" ></a>
+           <div class='highslide-caption'>
+           {$i.img_title}
+           </div>
+    {/foreach}
+    </td>
     </tr>
     {/if}
 

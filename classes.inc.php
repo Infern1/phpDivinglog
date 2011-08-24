@@ -3370,7 +3370,6 @@ class Diveshop{
      */
     function set_main_diveshop_details(){
         global $globals, $_config, $t, $_lang; /*{{{*/
-        //$this->get_diveshop_location_details(); 
         // Show main shop details
         $result = $this->result;
 
@@ -3485,6 +3484,16 @@ class Diveshop{
             $t->assign('Rating','-');	
         }
 
+        //	Show the photo
+        if (isset($result['PhotoPath']) && ($result['PhotoPath'] != "")) {
+            $t->assign('PhotoPath', $result['PhotoPath']);
+            $t->assign('shop_photo', $_lang['shop_photo']);
+            $this->set_diveshop_pictures();
+            $t->assign('PhotoPathurl', $_config['shoppath_web'] . $result['PhotoPath']);
+            $t->assign('shop_photo_linktitle', $_lang['shop_photo_linktitle']. $result['ShopName']. ' '.$result['ShopType']);
+            $t->assign('shop_photo_link', $_lang['shop_photo_link'] );
+        }
+
     /*}}}*/
     }
 
@@ -3498,19 +3507,22 @@ class Diveshop{
         global $_config, $t, $_lang, $globals; /*{{{*/
         $pic_class = new DivePictures;
         $pic_class->set_divegallery_info_direct($this->user_id);
-        $pic_class->get_divegallery_info(0,$this->diveshop_nr,0,0,0);
+        $pic_class->get_divegallery_info(0,0,0,$this->diveshop_nr,0);
         $divepics = $pic_class->get_image_link();
         $pics = count($divepics);
-        if ($pics != 0) {
-            if(isset($_config['divepics_preview'])){
-                $t->assign('pics2' , '1');
-                $t->assign('shop_photo', $_lang['shop_photo']);
+        if ($pics > 0) {
+            if (isset($_config['divepics_preview'])) {
+                $t->assign('pics2', '1');
+                $t->assign('has_images', '1');
                 $t->assign('image_link', $divepics);
             } else {
                 /**
                  *  
                  */
+                 $t->assign('has_images', '0');
             }
+        } else {
+                 $t->assign('has_images', '0');
         }
     /*}}}*/
     }
@@ -3876,6 +3888,16 @@ class Divetrip{
             $t->assign('EndDate','-');	
         }
 
+        //	Show the photo
+        if (isset($result['PhotoPath']) && ($result['PhotoPath'] != "")) {
+            $t->assign('PhotoPath', $result['PhotoPath']);
+            $t->assign('trip_photo', $_lang['trip_photo']);
+            $this->set_divetrip_pictures();
+            $t->assign('PhotoPathurl', $_config['trippath_web'] . $result['PhotoPath']);
+            $t->assign('trip_photo_linktitle', $_lang['trip_photo_linktitle']. $result['TripName']);
+            $t->assign('trip_photo_link', $_lang['trip_photo_link'] );
+        }
+
     /*}}}*/
     }
 
@@ -3889,19 +3911,22 @@ class Divetrip{
         global $_config, $t, $_lang, $globals; /*{{{*/
         $pic_class = new DivePictures;
         $pic_class->set_divegallery_info_direct($this->user_id);
-        $pic_class->get_divegallery_info(0,$this->divetrip_nr,0,0,0);
+        $pic_class->get_divegallery_info(0,0,0,0,$this->divetrip_nr);
         $divepics = $pic_class->get_image_link();
         $pics = count($divepics);
-        if ($pics != 0) {
-            if(isset($_config['divepics_preview'])){
-                $t->assign('pics2' , '1');
-                $t->assign('trip_photo', $_lang['trip_photo']);
+        if ($pics > 0) {
+            if (isset($_config['divepics_preview'])) {
+                $t->assign('pics2', '1');
+                $t->assign('has_images', '1');
                 $t->assign('image_link', $divepics);
             } else {
                 /**
                  *  
                  */
+                 $t->assign('has_images', '0');
             }
+        } else {
+                 $t->assign('has_images', '0');
         }
     /*}}}*/
     }
@@ -4965,12 +4990,21 @@ class DivePictures{
             } elseif ($shop_id !=0) {
                 $globals['id'] = $shop_id;
                 $base_path = $_config['shoppath_web'];
-                $divepics = parse_mysql_query('divepics_shop.sql');
+                $divepics_temp = parse_mysql_query('divepics_shop.sql');
+                if (count($divepics_temp) == 2) {
+                    $divepics[0] = $divepics_temp;
+                } else {
+                    $divepics = $divepics_temp;
+                }
             } elseif ($trip_id !=0) {
                 $globals['id'] = $trip_id;
                 $base_path = $_config['trippath_web'];
-                $divepics = parse_mysql_query('divepics_trip.sql');
-                
+                $divepics_temp = parse_mysql_query('divepics_trip.sql');
+                if (count($divepics_temp) == 2) {
+                    $divepics[0] = $divepics_temp;
+                } else {
+                    $divepics = $divepics_temp;
+                }
             }
             
             $pics = count($divepics);

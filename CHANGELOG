@@ -1,5 +1,5 @@
 phpDivingLog v3.0-alpha3 - 2011-08-20 - Lloyd Borrett and Rob Lensen
-    * Added tabs for dive details and dive statistics pages 
+    * Added tabs to dive details and dive statistics pages 
     * Modified the calculation of imperial cylinder size to use working pressure if available
     * Added Active to equipment overview listing
     * Fixed formatting issues
