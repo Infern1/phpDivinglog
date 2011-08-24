@@ -433,6 +433,19 @@ title="{$i.divegear} {$logbook_place_linktitle}">{$i.divegear}</a>&nbsp;
       <td colspan="4">{$dive_sect_breathing}</td>
     </tr>
     *}
+
+    {foreach from=$tanksfordive key=id item=i name=tanks}
+
+    {if $i.tanksfordive['Set'] != '1'}
+    <tr class="divedetails">
+      <td colspan="4"><hr></td>
+    </tr>
+    {/if}
+
+    <tr class="divetdetails">
+      <td colspan="4">Cylinder Set {$i.tanksfordive['Set']}</td>
+    </tr>
+
     {* Show tank details *}
     <tr class="divetitle">
       <td>{$logbook_tanktype}</td>
@@ -442,26 +455,26 @@ title="{$i.divegear} {$logbook_place_linktitle}">{$i.divegear}</a>&nbsp;
     </tr>
 
     <tr class="divedetails">
-    {if $Tanktype != ''}
-      <td>{$Tanktype}</td>
+    {if $i.tanksfordive['Tanktype'] != ''}
+      <td>{$i.tanksfordive['Tanktype']}</td>
     {else}
       <td>-</td>
     {/if}
 
-    {if $Tanksize != ''}
-      <td>{$DblTankImage}{$Tanksize}</td>
+    {if $i.tanksfordive['Tanksize'] != ''}
+      <td>{$i.tanksfordive['DblTankImage']}{$i.tanksfordive['Tanksize']}</td>
     {else}
       <td>-</td>
     {/if}
 
-    {if $PresW != ''}
-      <td>{$PresW}</td>
+    {if $i.tanksfordive['PresW'] != ''}
+      <td>{$i.tanksfordive['PresW']}</td>
     {else}
       <td>-</td>
     {/if}
 
-    {if $SupplyType != ''}
-      <td>{$SupplyTypeImage}{$SupplyType}</td>
+    {if $i.tanksfordive['SupplyType'] != ''}
+      <td>{$i.tanksfordive['SupplyTypeImage']}{$i.tanksfordive['SupplyType']}</td>
     {else}
       <td>-</td>
     {/if}
@@ -475,53 +488,53 @@ title="{$i.divegear} {$logbook_place_linktitle}">{$i.divegear}</a>&nbsp;
     </tr>
 
     <tr class="divedetails">
-    {if $O2 != ''}
-      <td>{$O2}</td>
+    {if $i.tanksfordive['O2'] != ''}
+      <td>{$i.tanksfordive['O2']}</td>
     {else}
       <td>-</td>
     {/if}
 
-    {if $He != ''}
-      <td>{$He}</td>
+    {if $i.tanksfordive['He'] != ''}
+      <td>{$i.tanksfordive['He']}</td>
     {else}
       <td>-</td>
     {/if}
 
-    {if $MinPPO2 != ''}
-      <td>{$MinPPO2}</td>
+    {if $i.tanksfordive['MinPPO2'] != ''}
+      <td>{$i.tanksfordive['MinPPO2']}</td>
     {else}
       <td>-</td>
     {/if}
 
-    {if $MaxPPO2 != ''}
-      <td>{$MaxPPO2}</td>
+    {if $i.tanksfordive['MaxPPO2'] != ''}
+      <td>{$i.tanksfordive['MaxPPO2']}</td>
     {else}
       <td>-</td>
     {/if}
     </tr>
  
     <tr class="divetitle">
-      <td rowspan="2">{$GasTypeImage} {$GasImageAlt}</td>
+      <td rowspan="2">{$i.tanksfordive['GasTypeImage']} {$i.tanksfordive['GasImageAlt']}</td>
       <td>{$logbook_mod}</td>
       <td>{$logbook_ead}</td>
       <td>{$logbook_avgdepth}</td>
     </tr>
 
     <tr class="divedetails">
-    {if $MOD != ''}
-      <td>{$MOD}</td>
+    {if $i.tanksfordive['MOD'] != ''}
+      <td>{$i.tanksfordive['MOD']}</td>
     {else}
       <td>-</td>
     {/if}
 
-    {if $EAD != ''}
-      <td>{$EAD}</td>
+    {if $i.tanksfordive['EAD'] != ''}
+      <td>{$i.tanksfordive['EAD']}</td>
     {else}
       <td>-</td>
     {/if}
 
-    {if $averagedepth != ''}
-      <td>{$averagedepth} {$unit_length_short}</td>
+    {if $i.tanksfordive['averagedepth'] != ''}
+      <td>{$i.tanksfordive['averagedepth']} {$i.tanksfordive['unit_length_short']}</td>
     {else}
       <td>-</td>
     {/if}
@@ -536,31 +549,37 @@ title="{$i.divegear} {$logbook_place_linktitle}">{$i.divegear}</a>&nbsp;
     </tr>
 
 	<tr class="divedetails">
-    {if $PresS != ''}
-      <td>{$PresS}</td>
+    {if $i.tanksfordive['PresS'] != ''}
+      <td>{$i.tanksfordive['PresS']}</td>
     {else}
       <td>-</td>
     {/if}
 
-    {if $PresE != ''}
-      <td>{$PresE}</td>
+    {if $i.tanksfordive['PresE'] != ''}
+      <td>{$i.tanksfordive['PresE']}</td>
     {else }
       <td>-</td>
     {/if}
 	
-    {if $PresSPresE != ''}
-      <td>{$PresSPresE}</td>
+    {if $i.tanksfordive['PresSPresE'] != ''}
+      <td>{$i.tanksfordive['PresSPresE']}</td>
     {else }
       <td>-</td>
     {/if}
 
-    {if $sac != ''}
-      <td>{$sac}</td>
+    {if $i.tanksfordive['sac'] != ''}
+      <td>{$i.tanksfordive['sac']}</td>
     {else}
       <td>-</td>
     {/if}
     </tr>
  
+    {/foreach}
+
+    <tr class="divedetails">
+      <td colspan="4"><hr></td>
+    </tr>
+
     <tr class="divetitle">
       <td colspan="4">{$logbook_gas}</td>
     </tr>
