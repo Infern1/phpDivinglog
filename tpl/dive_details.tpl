@@ -442,8 +442,8 @@ title="{$i.divegear} {$logbook_place_linktitle}">{$i.divegear}</a>&nbsp;
     </tr>
     {/if}
 
-    <tr class="divetdetails">
-      <td colspan="4">Cylinder Set {$i.tanksfordive['Set']}</td>
+    <tr class="divedetails">
+      <td colspan="4">{$logbook_tankset}{$i.tanksfordive['Set']}</td>
     </tr>
 
     {* Show tank details *}
@@ -517,7 +517,7 @@ title="{$i.divegear} {$logbook_place_linktitle}">{$i.divegear}</a>&nbsp;
       <td rowspan="2">{$i.tanksfordive['GasTypeImage']} {$i.tanksfordive['GasImageAlt']}</td>
       <td>{$logbook_mod}</td>
       <td>{$logbook_ead}</td>
-      <td>{$logbook_avgdepth}</td>
+      <td>{$logbook_end}</td>
     </tr>
 
     <tr class="divedetails">
@@ -533,8 +533,8 @@ title="{$i.divegear} {$logbook_place_linktitle}">{$i.divegear}</a>&nbsp;
       <td>-</td>
     {/if}
 
-    {if $i.tanksfordive['averagedepth'] != ''}
-      <td>{$i.tanksfordive['averagedepth']} {$i.tanksfordive['unit_length_short']}</td>
+    {if $i.tanksfordive['END'] != ''}
+      <td>{$i.tanksfordive['END']}</td>
     {else}
       <td>-</td>
     {/if}
@@ -545,10 +545,10 @@ title="{$i.divegear} {$logbook_place_linktitle}">{$i.divegear}</a>&nbsp;
       <td>{$logbook_press}</td>
       <td>{$logbook_prese}</td>
       <td>{$logbook_presdiff}</td>
-      <td>{$logbook_sac}</td>
+      <td>&nbsp;</td>
     </tr>
 
-	<tr class="divedetails">
+    <tr class="divedetails">
     {if $i.tanksfordive['PresS'] != ''}
       <td>{$i.tanksfordive['PresS']}</td>
     {else}
@@ -567,17 +567,61 @@ title="{$i.divegear} {$logbook_place_linktitle}">{$i.divegear}</a>&nbsp;
       <td>-</td>
     {/if}
 
+      <td>&nbsp;</td>
+    </tr>
+
+    {* Show avg depth and sac details for tank set *}
+    <tr class="divetitle">
+      <td>{$logbook_avgdepth}</td>
+      <td>{$logbook_sac}</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+    </tr>
+
+    <tr class="divedetails">
+    {if $i.tanksfordive['averagedepth'] != ''}
+      <td>{$i.tanksfordive['averagedepth']} {$i.tanksfordive['unit_length_short']}</td>
+    {else}
+      <td>-</td>
+    {/if}
+
     {if $i.tanksfordive['sac'] != ''}
       <td>{$i.tanksfordive['sac']}</td>
     {else}
       <td>-</td>
     {/if}
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
     </tr>
  
     {/foreach}
 
     <tr class="divedetails">
       <td colspan="4"><hr></td>
+    </tr>
+
+    <tr class="divetitle">
+      <td>{$logbook_avgdepth}</td>
+      <td>{$logbook_sac}</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+    </tr>
+
+    <tr class="divedetails">
+    {if $averagedepth != ''}
+      <td>{$averagedepth} {$unit_length_short}</td>
+    {else}
+      <td>-</td>
+    {/if}
+
+    {if $sac != ''}
+      <td>{$sac}</td>
+    {else}
+      <td>-</td>
+    {/if}
+
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
     </tr>
 
     <tr class="divetitle">

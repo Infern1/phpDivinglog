@@ -1673,27 +1673,43 @@ class Divelog {
         $tanks[$i]['GasTypeImage'] = $gastypeimage;
         $tanks[$i]['GasImageAlt'] = $gasimagealt;
 
-        //	Calculate MOD and EAD
-        if (isset($result['He']) && ($result['He'] != "")) {
-            $tanks[$i]['MOD'] = '-';
-            $tanks[$i]['EAD'] = '-';
+        //	Calculate MOD
+        if ($_config['length']) {
+            $mod_imperial = 33 * (($maxppo2 / ($o2 / 100)) - 1);
+            $mod = number_format(floor($mod_imperial), 0);
+            $tanks[$i]['MOD'] = $mod."&nbsp;". $_lang['unit_length_short_imp'];
         } else {
-            if ($_config['length']) {
-                $mod_imperial = 33 * (($maxppo2 / ($o2 / 100)) - 1);
-                $mod = number_format(floor($mod_imperial), 0);
-                $ead_imperial = (($mod + 33) * ((1 - ($o2 / 100)) / .79)) - 33;
-                $ead = number_format(ceil($ead_imperial), 0);
-                $tanks[$i]['MOD'] = $mod."&nbsp;". $_lang['unit_length_short_imp'];
-                $tanks[$i]['EAD'] = $ead."&nbsp;". $_lang['unit_length_short_imp'];
-            } else {
-                $mod_metric = 10 * (($maxppo2 / ($o2 / 100)) - 1);
-                $mod = number_format((floor($mod_metric*10)/10), 1);
-                $ead_metric = (($mod + 10) * ((1 - ($o2 / 100)) / .79)) - 10;
-                $ead = number_format((ceil($ead_metric*10)/10), 1);
-                $tanks[$i]['MOD'] = $mod."&nbsp;". $_lang['unit_length_short'];
-                $tanks[$i]['EAD'] = $ead."&nbsp;". $_lang['unit_length_short'];
-            }
+            $mod_metric = 10 * (($maxppo2 / ($o2 / 100)) - 1);
+            $mod = number_format((floor($mod_metric*10)/10), 1);
+            $tanks[$i]['MOD'] = $mod."&nbsp;". $_lang['unit_length_short'];
         }
+
+        //	Calculate EAD
+        if ($_config['length']) {
+            $ead_imperial = (($mod + 33) * ((1 - ($o2 / 100)) / .79)) - 33;
+            $ead = number_format(ceil($ead_imperial), 0);
+            $tanks[$i]['EAD'] = $ead."&nbsp;". $_lang['unit_length_short_imp'];
+        } else {
+            $ead_metric = (($mod + 10) * ((1 - ($o2 / 100)) / .79)) - 10;
+            $ead = number_format((ceil($ead_metric*10)/10), 1);
+            $tanks[$i]['EAD'] = $ead."&nbsp;". $_lang['unit_length_short'];
+        }
+
+        //	Calculate END
+        if (isset($result['He']) && ($result['He'] != "")) {
+            if ($_config['length']) {
+                $end_imperial = (($mod + 33) * (1 - ($result['He'] / 100))) - 33;
+                $end = number_format(ceil($end_imperial), 0);
+                $tanks[$i]['END'] = $end."&nbsp;". $_lang['unit_length_short_imp'];
+            } else {
+                $end_metric = (($mod + 10) * (1 - ($result['He'] / 100))) - 10;
+                $end = number_format((ceil($end_metric*10)/10), 1);
+                $tanks[$i]['END'] = $end."&nbsp;". $_lang['unit_length_short'];
+            }
+        } else {
+            $tanks[$i]['END'] = '-';
+        }
+
 /*
         if (isset($this->averagedepth) && ($this->averagedepth != "")) {
             if ($_config['length']) {
@@ -1770,6 +1786,7 @@ class Divelog {
         $t->assign('dive_sect_breathing', $_lang['dive_sect_breathing']);
 
         //	Show tank details
+        $t->assign('logbook_tankset', $_lang['logbook_tankset']);
         $t->assign('logbook_tanktype', $_lang['logbook_tanktype']);
         $t->assign('logbook_tanksize', $_lang['logbook_tanksize']);
         $t->assign('logbook_presw', $_lang['logbook_presw']);
@@ -1782,11 +1799,13 @@ class Divelog {
 
         $t->assign('logbook_mod', $_lang['logbook_mod']);
         $t->assign('logbook_ead', $_lang['logbook_ead']);
-        $t->assign('logbook_avgdepth', $_lang['logbook_avgdepth']);
+        $t->assign('logbook_end', $_lang['logbook_end']);
 
         $t->assign('logbook_press', $_lang['logbook_press']);
         $t->assign('logbook_prese', $_lang['logbook_prese']);
         $t->assign('logbook_presdiff', $_lang['logbook_presdiff']);
+
+        $t->assign('logbook_avgdepth', $_lang['logbook_avgdepth']);
         $t->assign('logbook_sac', $_lang['logbook_sac'] );
 
         $t->assign('logbook_gas', $_lang['logbook_gas']);
