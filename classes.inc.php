@@ -1157,7 +1157,7 @@ class Divelog {
             }   
         } else {
             /**
-             * If the request type is not already set(by divers choice), set it to overview  
+             * If the request type is not already set (by divers choice), set it to overview  
              */
             if($this->request_type != 3){
                 $this->request_type = 0;
@@ -1401,7 +1401,7 @@ class Divelog {
      * @access public
      * @return void
      */
-    function set_dive_profile(){
+    function set_dive_profile() {
         global $t, $_lang, $globals, $_config; /*{{{*/
         $result = $this->result; 
         $profile = $result['Profile'];
@@ -1512,42 +1512,52 @@ class Divelog {
     /*}}}*/
     }
 
+
+    /**
+     * set_breathing_details 
+     * 
+     * @access public
+     * @return void
+     */ 
+    function set_breathing_details() {
+        global $tanks, $t, $_config, $_lang, $globals; /*{{{*/
+        $result = $this->result;
+
     /**
      * set_tank_details 
      * 
      * @access public
      * @return void
      */ 
-/**
-    function set_tank_details($i,$result) {
-        global $t, $_config, $_lang; */ /*{{{*/
-/**
+    function set_tank_details($i, $result) {
+        global $tanks, $t, $_config, $_lang; /*{{{*/
+
         // Start with the basic tank details
-        if (isset($result['Tanktype']) && ($result('Tanktype') != "")) {
-            $arr_number = $result('Tanktype') - 1;
+        if (isset($result['Tanktype']) && ($result['Tanktype'] != "")) {
+            $arr_number = $result['Tanktype'] - 1;
             if ($arr_number >= 0) {
-                $t->assign(tanks[$i]['Tanktype'], $_lang['tanktype'][$arr_number]);
+                $tanks[$i]['Tanktype'] = $_lang['tanktype'][$arr_number];
             } else {
-                $t->assign(tanks[$i]['Tanktype'], '-');	
+                $tanks[$i]['Tanktype'] = '-';	
             }
         } else {
-            $t->assign(tanks[$i]['Tanktype'], '-');	
+            $tanks[$i]['Tanktype'] = '-';	
         }
 
-        if (isset($result['Tanksize']) && ($result('Tanksize') != "")) {
+        if (isset($result['Tanksize']) && ($result['Tanksize'] != "")) {
             if ($_config['volume']) {
-                if (($result('PresW') == "") || ($result('PresW') <= 0)) {
-                    $Tanksize = ($result('Tanksize') * 7) ;
+                if (($result['PresW'] == "") || ($result['PresW'] <= 0)) {
+                    $Tanksize = $result['Tanksize'] * 7 ;
                 } else {
-                    $Tanksize = LitreToCuft(($result('Tanksize') * $result('PresW')), 0) ;
+                    $Tanksize = LitreToCuft(($result['Tanksize'] * $result['PresW']), 0) ;
                 }
                 $Tanksize .= "&nbsp;". $_lang['unit_volume_imp'] ;
             } else {
                 $Tanksize = $result['Tanksize'] ."&nbsp;". $_lang['unit_volume'] ;
             }
-            $t->assign(tanks[$i]['Tanksize'],$Tanksize);
+            $tanks[$i]['Tanksize'] = $Tanksize;
         } else {
-            $t->assign(tanks[$i]['Tanksize'],'-');	
+            $tanks[$i]['Tanksize'] = '-';	
         }
 
         if (isset($result['DblTank']) && ($result['DblTank'] != "")) {
@@ -1559,9 +1569,9 @@ class Divelog {
                 $tankimagefile = "single_cylinder.gif";
             }
             $tankimage = '<img src="'.$_config['web_root'].'/images/'.$tankimagefile.'" alt="'.$tankimagealt.'" title="'.$tankimagealt.'" border="0" width="19" height="20"> ';
-            $t->assign(tanks[$i]['DblTankImage'],$tankimage);	
+            $tanks[$i]['DblTankImage'] = $tankimage;	
         } else {
-            $t->assign(tanks[$i]['DblTankImage'],'');	
+            $tanks[$i]['DblTankImage'] = '';	
         }
 
         if (isset($result['PresW']) && ($result['PresW'] != "")) {
@@ -1570,9 +1580,9 @@ class Divelog {
             } else {
                 $PresW = $result['PresW'] ."&nbsp;". $_lang['unit_pressure'] ;
             }
-            $t->assign(tanks[$i]['PresW'], $PresW);
+            $tanks[$i]['PresW'] = $PresW;
         } else {
-            $t->assign(tanks[$i]['PresW'],'-');	
+            $tanks[$i]['PresW'] = '-';	
         }
 
         if (isset($result['SupplyType']) && ($result['SupplyType'] != "")) {
@@ -1592,32 +1602,32 @@ class Divelog {
             }
             $supplytype = $_lang['supplytype'][$result['SupplyType']];
             $supplytypeimage = '<img src="'.$_config['web_root'].'/images/'.$supplytypefile.'" alt="'.$supplytype.'" title="'.$supplytype.'" border="0" width="19" height="20"> ';
-            $t->assign(tanks[$i]['SupplyTypeImage'], $supplytypeimage);
-            $t->assign(tanks[$i]['SupplyType'], $supplytype);
+            $tanks[$i]['SupplyTypeImage'] = $supplytypeimage;
+            $tanks[$i]['SupplyType'] = $supplytype;
         } else {
-            $t->assign(tanks[$i]['SupplyTypeImage'],'');
-            $t->assign(tanks[$i]['SupplyType'],'-');
+            $tanks[$i]['SupplyTypeImage'] = '';
+            $tanks[$i]['SupplyType'] = '-';
         }
 
         // Details of the gas mix used
         if (isset($result['O2']) && ($result['O2'] != "")) {
             $o2 = $result['O2'];
-            $t->assign(tanks[$i]['O2'], $o2.'%');
+            $tanks[$i]['O2'] = $o2.'%';
         } else {
             $o2 = $_config['default_o2'];
-            $t->assign(tanks[$i]['O2'], $o2.'%');
+            $tanks[$i]['O2'] = $o2.'%';
         }
 
         if (isset($result['He']) && ($result['He'] != "")) {
-            $t->assign(tanks[$i]['He'], $result['He'].'%');
+            $tanks[$i]['He'] = $result['He'].'%';
         } else {
-            $t->assign(tanks[$i]['He'],'-');	
+            $tanks[$i]['He'] = '-';	
         }
 
         if (isset($result['MinPPO2']) && ($result['MinPPO2'] != "")) {
-            $t->assign(tanks[$i]['MinPPO2'], $result['MinPPO2']."&nbsp;".$_lang['unit_pressure']);
+            $tanks[$i]['MinPPO2'] = $result['MinPPO2']."&nbsp;".$_lang['unit_pressure'];
         } else {
-            $t->assign(tanks[$i]['MinPPO2'],'-');	
+            $tanks[$i]['MinPPO2'] = '-';	
         }
 
         if (isset($result['MaxPPO2']) &&  ($result['MaxPPO2'] != "")) {
@@ -1625,10 +1635,10 @@ class Divelog {
             if ($maxppo2 == 0) {
                 $maxppo2 = $_config['default_maxppo2'];
             }
-            $t->assign(tanks[$i]['MaxPPO2'], $maxppo2."&nbsp;".$_lang['unit_pressure']);
+            $tanks[$i]['MaxPPO2'] = $maxppo2."&nbsp;".$_lang['unit_pressure'];
         } else {
             $maxppo2 = $_config['default_maxppo2'];
-            $t->assign(tanks[$i]['MaxPPO2'], $maxppo2."&nbsp;".$_lang['unit_pressure']);
+            $tanks[$i]['MaxPPO2'] = $maxppo2."&nbsp;".$_lang['unit_pressure'];
         }
 
         // More details of the gas used
@@ -1658,51 +1668,53 @@ class Divelog {
             $gasimagealt = "Oxygen";
         }
         $gastypeimage = '<img src="'.$_config['web_root'].'/images/'.$gasimage.'" alt="'.$gasimagealt.'" title="'.$gasimagealt.'" border="0" width="19" height="20">';
-        $t->assign(tanks[$i]['GasTypeImage'], $gastypeimage);
-        $t->assign(tanks[$i]['GasImageAlt'], $gasimagealt);
+        $tanks[$i]['GasTypeImage'] = $gastypeimage;
+        $tanks[$i]['GasImageAlt'] = $gasimagealt;
 
         //	Calculate MOD and EAD
         if (isset($result['He']) && ($result['He'] != "")) {
-            $t->assign(tanks[$i]['MOD'],'-');
-            $t->assign(tanks[$i]['EAD'],'-');
+            $tanks[$i]['MOD'] = '-';
+            $tanks[$i]['EAD'] = '-';
         } else {
             if ($_config['length']) {
                 $mod_imperial = 33 * (($maxppo2 / ($o2 / 100)) - 1);
                 $mod = number_format(floor($mod_imperial), 0);
                 $ead_imperial = (($mod + 33) * ((1 - ($o2 / 100)) / .79)) - 33;
                 $ead = number_format(ceil($ead_imperial), 0);
-                $t->assign(tanks[$i]['MOD'], $mod."&nbsp;". $_lang['unit_length_short_imp']);
-                $t->assign(tanks[$i]['EAD'], $ead."&nbsp;". $_lang['unit_length_short_imp']);
+                $tanks[$i]['MOD'] = $mod."&nbsp;". $_lang['unit_length_short_imp'];
+                $tanks[$i]['EAD'] = $ead."&nbsp;". $_lang['unit_length_short_imp'];
             } else {
                 $mod_metric = 10 * (($maxppo2 / ($o2 / 100)) - 1);
                 $mod = number_format((floor($mod_metric*10)/10), 1);
                 $ead_metric = (($mod + 10) * ((1 - ($o2 / 100)) / .79)) - 10;
                 $ead = number_format((ceil($ead_metric*10)/10), 1);
-                $t->assign(tanks[$i]['MOD'], $mod."&nbsp;". $_lang['unit_length_short']);
-                $t->assign(tanks[$i]['EAD'], $ead."&nbsp;". $_lang['unit_length_short']);
+                $tanks[$i]['MOD'] = $mod."&nbsp;". $_lang['unit_length_short'];
+                $tanks[$i]['EAD'] = $ead."&nbsp;". $_lang['unit_length_short'];
             }
         }
-
-        if ($this->averagedepth != "") {
+/*
+        if (isset($this->averagedepth) && ($this->averagedepth != "")) {
             if ($_config['length']) {
                 $avg_depth = MetreToFeet($this->averagedepth);
                 if ($avg_depth != '-') {
-                    $t->assign(tanks[$i]['unit_length_short'], $_lang['unit_length_short_imp']);
+                    $tanks[$i]['unit_length_short'] = $_lang['unit_length_short_imp'];
                 } else {
-                    $t->assign(tanks[$i]['unit_length_short'], "");
+                    $tanks[$i]['unit_length_short'] = "";
                 }
             } else {
                 $avg_depth = $this->averagedepth;
                 if($avg_depth != '-'){
-                    $t->assign(tanks[$i]['unit_length_short'], $_lang['unit_length_short']);
+                    $tanks[$i]['unit_length_short'] = $_lang['unit_length_short'];
                 } else {
-                    $t->assign(tanks[$i]['unit_length_short'], "");
+                    $tanks[$i]['unit_length_short'] = "";
                 }
             }
-            $t->assign(tanks[$i]['averagedepth'], $avg_depth ) ;
+            $tanks[$i]['averagedepth'] = $avg_depth;
         } else {
-            $t->assign(tanks[$i]['averagedepth'],'-');	
+            $tanks[$i]['averagedepth'] = '-';	
         }
+*/
+            $tanks[$i]['averagedepth'] = '-';	
 
         //	Show pressure details
 
@@ -1712,9 +1724,9 @@ class Divelog {
             } else {
                 $PresS = $result['PresS'] ."&nbsp;". $_lang['unit_pressure'] ;
             }
-            $t->assign(tanks[$i]['PresS'], $PresS);
+            $tanks[$i]['PresS'] = $PresS;
         } else {
-            $t->assign(tanks[$i]['PresS'],'-');	
+            $tanks[$i]['PresS'] = '-';	
         }
 
         if (isset($result['PresE']) && ($result['PresE'] != "")) {
@@ -1723,9 +1735,9 @@ class Divelog {
             } else {
                 $PresE =  $result['PresE'] ."&nbsp;". $_lang['unit_pressure'] ;
             }
-            $t->assign(tanks[$i]['PresE'],$PresE);
+            $tanks[$i]['PresE'] = $PresE;
         } else {
-            $t->assign(tanks[$i]['PresE'],'-');	
+            $tanks[$i]['PresE'] = '-';	
         }
 
         if ((isset($result['PresS']) && ($result['PresS'] != "")) && (isset($result['PresE']) && ($result['PresE'] != ""))) {
@@ -1735,30 +1747,21 @@ class Divelog {
             } else {
                 $PresSPresE = $diff ."&nbsp;". $_lang['unit_pressure'] ;
             }
-            $t->assign(tanks[$i]['PresSPresE'], $PresSPresE);
+            $tanks[$i]['PresSPresE'] = $PresSPresE;
         } else {
-            $t->assign(tanks[$i]['PresSPresE'], "-");
+            $tanks[$i]['PresSPresE'] = "-";
         }
-
+/*
         if ($this->sac != "") {
-            $t->assign(tanks[$i]['sac'], $this->sac ); 
+            $tanks[$i]['sac'] = $this->sac; 
         } else {
-            $t->assign(tanks[$i]['sac'], "" ); 
-        } 
+            $tanks[$i]['sac'] = ""; 
+        }
 */
-    /*}}}*/  /*
-    }
-*/
+            $tanks[$i]['sac'] = ""; 
 
-    /**
-     * set_breathing_details 
-     * 
-     * @access public
-     * @return void
-     */ 
-    function set_breathing_details(){
-        global $t, $_config, $_lang, $globals; /*{{{*/
-        $result = $this->result;
+    /*}}}*/
+    }
 
         // Breathing
         $t->assign('dive_sect_breathing', $_lang['dive_sect_breathing']);
@@ -1785,18 +1788,22 @@ class Divelog {
 
         $t->assign('logbook_gas', $_lang['logbook_gas']);
 
-//        set_tank_details(0,$result);
+        set_tank_details(0,$result);
 
         // See if there are any other tanks used for this dive
         $globals['dive_id'] = $result['ID'];
-        $tanks = parse_mysql_query('tanksdivelist.sql');
+        $divetanks = parse_mysql_query('tanksdivelist.sql');
         $tankscount = rows_mysql_query();
+echo '<br>Tankcount: '.$tankscount.'<br>';
 
-/*
-        for ($i=0; $i<$tankscount; $i++) {
-            set_tank_details(($i + 1),$tanks[$i]);
+        if ($tankscount == 1) {
+                set_tank_details(1,$divetanks);
+        } else {
+            for ($i=0; $i<$tankscount; $i++) {
+                set_tank_details(($i + 1),$divetanks[$i]);
+            }
         }
-*/
+
         // Start with the basic tank details
         if (isset($result['Tanktype']) && ($result['Tanktype'] != "")) {
             $arr_number = $result['Tanktype'] - 1;
