@@ -92,6 +92,23 @@ class="divelogcrumbs" title="{$previous_trip_linktitle}">{$previous}</a>
     {/if}
     </div>
 
+{elseif isset($country_first)}
+    <div class="divelogcrumbs">
+    {if isset($multiuser_id)}
+    <a href="{$app_path}/divecountry.php{$sep1}{$multiuser_id}{$sep2}{$first_country_id}" 
+class="divelogcrumbs" title="{$first_country_linktitle}">{$first}</a>
+    &nbsp;|&nbsp;
+    <a href="{$app_path}/divecountry.php{$sep1}{$multiuser_id}{$sep2}{$previous_country_id}" 
+class="divelogcrumbs" title="{$previous_country_linktitle}">{$previous}</a>
+    {else}
+    <a href="{$app_path}/divecountry.php{$sep2}{$first_country_id}" 
+class="divelogcrumbs" title="{$first_country_linktitle}">{$first}</a>
+    &nbsp;|&nbsp;
+    <a href="{$app_path}/divecountry.php{$sep2}{$previous_country_id}" 
+class="divelogcrumbs" title="{$previous_country_linktitle}">{$previous}</a>
+    {/if}
+    </div>
+
 {else}
 &nbsp;
 {/if}
@@ -188,6 +205,24 @@ class="divelogcrumbs" title="{$next_trip_linktitle}">{$next}</a>
 class="divelogcrumbs" title="{$last_trip_linktitle}">{$last}</a>
     {/if}
     </div>
+
+{elseif isset($divecountry_not_null)}
+    <div class="divelogcrumbs">
+    {if isset($multiuser_id)}
+    <a href="{$app_path}/divecountry.php{$sep1}{$multiuser_id}{$sep2}{$next_divecountry_nr}"
+class="divelogcrumbs" title="{$next_country_linktitle}">{$next}</a>
+    &nbsp;|&nbsp;
+    <a href="{$app_path}/divecountry.php{$sep1}{$multiuser_id}{$sep2}{$last_divecountry_nr}"
+class="divelogcrumbs" title="{$last_country_linktitle}">{$last}</a>
+    {else}
+    <a href="{$app_path}/divecountry.php{$sep2}{$next_divecountry_nr}" 
+class="divelogcrumbs" title="{$next_country_linktitle}">{$next}</a>
+    &nbsp;|&nbsp;
+    <a href="{$app_path}/divecountry.php{$sep2}{$last_divecountry_nr}"
+class="divelogcrumbs" title="{$last_country_linktitle}">{$last}</a>
+    {/if}
+    </div>
+
 {else}
     &nbsp;
 {/if}

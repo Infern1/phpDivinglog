@@ -52,11 +52,17 @@ $_lang['last_trip_linktitle'] = "Last dive trip/vacation";
 $_lang['previous_trip_linktitle'] = "Previous dive trip/vacation";
 $_lang['next_trip_linktitle'] = "Next dive trip/vacation";
 
+$_lang['first_country_linktitle'] = "First dive country";
+$_lang['last_country_linktitle'] = "Last dive country";
+$_lang['previous_country_linktitle'] = "Previous dive country";
+$_lang['next_country_linktitle'] = "Next dive country";
+
 $_lang['dive_log'] = "Dive Log";
 $_lang['dive_sites'] = "Dive Sites";
 $_lang['dive_equip'] = "Dive Equipment";
 $_lang['dive_shops'] = "Dive Shops";
 $_lang['dive_trips'] = "Dive Trips";
+$_lang['dive_countries'] = "Dive Countries";
 $_lang['dive_stats'] = "Dive Statistics";
 $_lang['dive_gallery'] = "Dive Gallery";
 $_lang['diver_choice_linktitle'] = "Show Diver Overview";
@@ -67,6 +73,7 @@ $_lang['dive_sites_linktitle'] = "List the Dive Sites";
 $_lang['dive_equip_linktitle'] = "List the Dive Equipment";
 $_lang['dive_shops_linktitle'] = "List the Dive Shops/Centres";
 $_lang['dive_trips_linktitle'] = "List the Dive Trips/Vacations";
+$_lang['dive_country_linktitle'] = "List the Dive Countries";
 $_lang['dive_stats_linktitle'] = "Show the Dive Statistics";
 $_lang['dive_gallery_linktitle'] = "Show the Dive Gallery";
 
@@ -450,7 +457,7 @@ $_lang['country_fla_link'] = "View flag";
 
 $_lang['country_none'] = "No countries are currently available.";
 
-$_lang['country_title_object'] = "Country";
+$_lang['country_title_country'] = "Country";
 
 
 // Units

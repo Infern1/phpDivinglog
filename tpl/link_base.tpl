@@ -6,29 +6,33 @@ class="divelogcrumbs" title="{$dive_log_linktitle}">{$dive_log}</a> |
     <a href="{$app_path}/divesite.php{$sep1}{$multiuser_id}{$sep2}list" 
 class="divelogcrumbs" title="{$dive_sites_linktitle}">{$dive_sites}</a> | 
     <a href="{$app_path}/equipment.php{$sep1}{$multiuser_id}{$sep2}list" 
-class="divelogcrumbs" title="{$dive_equip_linktitle}">{$dive_equip}</a><br> 
+class="divelogcrumbs" title="{$dive_equip_linktitle}">{$dive_equip}</a> | 
+    <a href="{$app_path}/divestats.php{$sep1}{$multiuser_id}{$sep2}list" 
+class="divelogcrumbs" title="{$dive_stats_linktitle}">{$dive_stats}</a> |
+    <a href="{$app_path}/divegallery.php{$sep1}{$multiuser_id}{$sep2}list" 
+class="divelogcrumbs" title="{$dive_gallery_linktitle}">{$dive_gallery}</a><br>
     <a href="{$app_path}/diveshop.php{$sep1}{$multiuser_id}{$sep2}list" 
 class="divelogcrumbs" title="{$dive_shops_linktitle}">{$dive_shops}</a> |
     <a href="{$app_path}/divetrip.php{$sep1}{$multiuser_id}{$sep2}list" 
 class="divelogcrumbs" title="{$dive_trips_linktitle}">{$dive_trips}</a> |
-    <a href="{$app_path}/divestats.php{$sep1}{$multiuser_id}{$sep2}list" 
-class="divelogcrumbs" title="{$dive_stats_linktitle}">{$dive_stats}</a> |
-    <a href="{$app_path}/divegallery.php{$sep1}{$multiuser_id}{$sep2}list" 
-class="divelogcrumbs" title="{$dive_gallery_linktitle}">{$dive_gallery}</a>
+    <a href="{$app_path}/divecountry.php{$sep1}{$multiuser_id}{$sep2}list" 
+class="divelogcrumbs" title="{$dive_country_linktitle}">{$dive_countries}</a>
 {else}
     <a href="{$app_path}/index.php{$list}" 
 class="divelogcrumbs" title="{$dive_log_linktitle}">{$dive_log}</a> | 
     <a href="{$app_path}/divesite.php{$list}" 
 class="divelogcrumbs" title="{$dive_sites_linktitle}">{$dive_sites}</a> | 
     <a href="{$app_path}/equipment.php{$list}" 
-class="divelogcrumbs" title="{$dive_equip_linktitle}">{$dive_equip}</a><br> 
+class="divelogcrumbs" title="{$dive_equip_linktitle}">{$dive_equip}</a> |
+    <a href="{$app_path}/divestats.php{$list}" 
+class="divelogcrumbs" title="{$dive_stats_linktitle}">{$dive_stats}</a> |
+    <a href="{$app_path}/divegallery.php{$list}" 
+class="divelogcrumbs" title="{$dive_gallery_linktitle}">{$dive_gallery}</a><br>
     <a href="{$app_path}/diveshop.php{$list}" 
 class="divelogcrumbs" title="{$dive_shops_linktitle}">{$dive_shops}</a> | 
     <a href="{$app_path}/divetrip.php{$list}" 
 class="divelogcrumbs" title="{$dive_trips_linktitle}">{$dive_trips}</a> | 
-    <a href="{$app_path}/divestats.php{$list}" 
-class="divelogcrumbs" title="{$dive_stats_linktitle}">{$dive_stats}</a>
-|    <a href="{$app_path}/divegallery.php{$list}" 
-class="divelogcrumbs" title="{$dive_gallery_linktitle}">{$dive_gallery}</a>
+    <a href="{$app_path}/divecountry.php{$list}" 
+class="divelogcrumbs" title="{$dive_country_linktitle}">{$dive_countries}</a>
 {/if}
 </div>

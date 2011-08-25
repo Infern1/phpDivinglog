@@ -31,6 +31,7 @@ class HandleRequest {
     var $diver_choice;
     var $divetrip_nr;
     var $diveshop_nr;
+    var $country_nr;
 
     /**
      * requested_page contains the requested page of the paginate
@@ -59,6 +60,7 @@ class HandleRequest {
      * 7 = resizer
      * 8 = divetrip
      * 9 = diveshop
+     * 10 = country
      *
      * @var mixed
      * @access public
@@ -159,8 +161,13 @@ class HandleRequest {
     function get_divetrip_nr(){
         return $this->divetrip_nr;
     }
+
     function get_diveshop_nr(){
         return $this->diveshop_nr;
+    }
+
+    function get_country_nr(){
+        return $this->country_nr;
     }
     
 
@@ -175,7 +182,7 @@ class HandleRequest {
     /*{{{*/
         global $_config, $t;
         if($this->multiuser){
-            // The url should contain a least one select person, other wise return to the person chooser
+            // The url should contain a least one select person, otherwise return to the person chooser
             // Get the last two parts of the array
             $split_request = GetRequestVar($this->request_uri, $this->request_file_depth);
             //check if the user is set, otherwise show person chooser
@@ -238,10 +245,10 @@ class HandleRequest {
                         $this->request_type = 8;
                         $this->diver_choice = true;
                         break;
-                    case 'diveshop.php':
+                    case 'divecountry.php':
                         if($this->view_request == 1)
-                            $this->diveshop_nr = check_number($split_request[2]);
-                        $this->request_type = 9;
+                            $this->country_nr = check_number($split_request[2]);
+                        $this->request_type = 10;
                         break;
                     default:
                         $this->diver_choice = true;
@@ -313,6 +320,10 @@ class HandleRequest {
                         break;
                     case 'diveshop.php':
                         $this->diveshop_nr = $id;
+                        $this->request_type = 9;
+                        break;
+                    case 'divecountry.php':
+                        $this->country_nr = $id;
                         $this->request_type = 9;
                         break;
                     default:
@@ -817,6 +828,8 @@ class TopLevelMenu {
         $t->assign('dive_shops',$_lang['dive_shops']);
         $t->assign('dive_trips_linktitle', $_lang['dive_trips_linktitle']);
         $t->assign('dive_trips',$_lang['dive_trips']);
+        $t->assign('dive_country_linktitle', $_lang['dive_country_linktitle']);
+        $t->assign('dive_countries',$_lang['dive_countries']);
         $t->assign('dive_stats_linktitle', $_lang['dive_stats_linktitle']);
         $t->assign('dive_stats', $_lang['dive_stats']);
         $t->assign('dive_gallery_linktitle', $_lang['dive_gallery_linktitle']);
@@ -851,6 +864,8 @@ class TopLevelMenu {
         $t->assign('dive_shops', $_lang['dive_shops'] );
         $t->assign('dive_trips_linktitle', $_lang['dive_trips_linktitle']);
         $t->assign('dive_trips', $_lang['dive_trips'] );
+        $t->assign('dive_country_linktitle', $_lang['dive_country_linktitle']);
+        $t->assign('dive_countries', $_lang['dive_countries'] );
         $t->assign('dive_stats_linktitle', $_lang['dive_stats_linktitle']);
         $t->assign('dive_stats', $_lang['dive_stats'] );
         $t->assign('dive_gallery_linktitle', $_lang['dive_gallery_linktitle']);
@@ -1051,6 +1066,41 @@ class TopLevelMenu {
                 $t->assign('last_shop_linktitle', $_lang['last_shop_linktitle'] );
                 $t->assign('last', $_lang['last'] );
             } 
+
+        } elseif ($request->request_type == 10) {
+            //	First, Previous, Next, Last links and Country #
+            $countrylist = parse_mysql_query('countrylist.sql');
+            $last = count($countrylist) - 1;
+            $position = -1;
+            $countrycount = count($countrylist);
+            for ($i=0; $i<$countrycount; $i++) {
+                if ($countrylist[$i]['ID'] == $globals['countryid']) {
+                    $position = $i;
+                }
+            }
+
+            //	First, Previous
+            if ($position != 0 ) {
+                $t->assign('country_first','1');
+                $t->assign('first_country_id', $countrylist[0]['ID']);
+                $t->assign('first_country_linktitle', $_lang['first_country_linktitle']);
+                $t->assign('first', $_lang['first']);
+                $t->assign('previous_country_id', $countrylist[$position - 1]['ID']);
+                $t->assign('previous_country_linktitle', $_lang['previous_country_linktitle']);
+                $t->assign('previous', $_lang['previous']);
+            }
+
+            //	Next, Last
+            if ($position != $last) {
+                $t->assign('divecountry_not_null','1');
+                $t->assign('next_country_nr', $countrylist[$position + 1]['ID']);
+                $t->assign('next_country_linktitle', $_lang['next_country_linktitle']);
+                $t->assign('next', $_lang['next'] );
+                $t->assign('last_country_nr', $countrylist[$last]['ID']);
+                $t->assign('last_country_linktitle', $_lang['last_country_linktitle'] );
+                $t->assign('last', $_lang['last'] );
+            } 
+
             //End filling the links section
         }
     /*}}}*/
@@ -3970,6 +4020,385 @@ class Divetrip{
         $grid->setColwidth('ShopName',"150");
         $grid->showColumn('Country', $_lang['dtrip_title_country']);
         $grid->setColwidth('Country',"150");
+        $grid->setRowActionFunction("action");
+
+        $grid_ret = $grid->render(TRUE); 
+        $t->assign('grid_display' ,1);
+        $t->assign('grid',$grid_ret );
+    /*}}}*/
+    }
+/*}}}*/
+}
+
+
+
+/**
+ * Divecountry contains all functions for displaying the divecountry information
+ * 
+ * @package phpdivinglog
+ * @version $Rev$
+ * @copyright Copyright (C) 2011 Rob Lensen. All rights reserved.
+ * @author Rob Lensen <rob@bsdfreaks.nl> 
+ * @license LGPL v3 http://www.gnu.org/licenses/lgpl-3.0.txt
+ */
+class Divecountry{
+    var $multiuser; /*{{{*/
+    var $table_prefix;
+    var $user_id;
+    var $divecountry_nr;
+    var $result;
+    var $result_shop;
+    var $result_country;
+    var $country;
+    var $shop;
+    var $dives;
+    var $dive_count;
+    var $triplist;
+    var $divecountry_data;
+    var $request_type; // request_type = 0 overview request_type = 1 details
+
+    /**
+     * Divecountry default constructor sets some defaults for this class
+     * 
+     * @access public
+     * @return void
+     */
+    function __construct() {
+        $a = func_get_args(); 
+        $i = func_num_args(); 
+        if($i == 0){
+            global $_config;
+            $this->multiuser = $_config['multiuser'];
+        } else {
+            if (method_exists($this,$f='__construct'.$i)) { 
+                call_user_func_array(array($this,$f),$a); 
+            } 
+        }
+    }
+
+    /**
+     * __construct1 construct a Divetrip class when divetrip ID is given
+     * 
+     * @param mixed $a1 
+     * @access protected
+     * @return void
+     */
+    function __construct1($a1) 
+    { 
+        global $_config;
+        $this->divecountry_nr = $a1;
+        $this->get_divecountry_info();
+    } 
+
+    function get_request_type(){
+        return $this->request_type;
+    }
+
+    function set_divecountry_info($request){
+        // We need to extract the info from the request
+        /*{{{*/
+        if (!$request->diver_choice) {
+            if ($request->get_view_request() == 1) {
+                $this->request_type = 1;
+                $this->divecountry_nr = $request->get_divecountry_nr();
+            } else {
+                $this->request_type = 0;
+                $this->requested_page = $request->get_requested_page();
+            }
+            if ($this->multiuser) {
+                $this->user_id = $request->get_user_id();
+                $user = new User();
+                $user->set_user_id($this->user_id);
+                $this->table_prefix = $user->get_table_prefix();
+            } else {
+                $user = new User();
+                $this->table_prefix = $user->get_table_prefix();
+                $this->divetrip_nr = $request->get_divetrip_nr();
+            }
+        } else {
+            $this->request_type = 10;
+        }
+    /*}}}*/
+    }
+
+    function get_divecountry_info(){
+        global $globals, $_config; /*{{{*/
+        if (!empty($this->divecountry_nr)) {
+            $this->request_type = 1;
+            $globals['countryid'] = $this->divecountry_nr;
+            $this->result = parse_mysql_query('onecountry.sql');
+        } else {
+            /**
+             * If the request type is not already set (by divers choice), set it to overview  
+             */
+            if ($this->request_type != 3) {
+                $this->request_type = 0;
+            }
+        }
+        return $this->result;
+    /*}}}*/
+    }
+
+    function get_overview_divers(){
+        global $t, $_lang, $globals, $_config; /*{{{*/
+        $users = new Users();
+        $user_list = $users->get_user_data();
+        $t->assign('diver_overview',1);
+        $t->assign('divers', $user_list);
+        $t->assign('file_name','divecountry.php');
+    /*}}}*/
+    }
+
+    /**
+     * get_dives_in_country 
+     * 
+     * @access public
+     * @return void
+     */
+    function get_dives_in_country(){
+        global $globals, $_config; /*{{{*/
+        // Get the dives in this country from database
+        $globals['countryid'] = $this->divecountry_nr;
+        $this->dives = parse_mysql_query('countrydives.sql');
+        $this->dive_count = count($this->dives);
+        // Get the countrycountry list from database
+        $this->countrylist = parse_mysql_query('countrylist.sql');
+    /*}}}*/
+    }
+
+    /**
+     * set_main_divecountry_details 
+     * 
+     * @access public
+     * @return void
+     */
+    function set_main_divecountry_details(){
+        global $globals, $_config, $t, $_lang; /*{{{*/
+        //$this->get_divecountry_location_details(); 
+        // Show main trip details
+        $result = $this->result;
+
+        $t->assign('pagetitle',$_lang['dive_country_pagetitle'].$result['Country']);
+
+        $t->assign('divecountry_id', $this->divecountry_nr);
+        $t->assign('country_name', $_lang['country_name']);
+        $t->assign('country_shop', $_lang['country_shop']);
+        $t->assign('country_country', $_lang['country_country']);
+        $t->assign('country_startdate', $_lang['country_startdate']);
+        $t->assign('country_enddate', $_lang['country_enddate']);
+        $t->assign('country_rating', $_lang['country_rating']);
+
+        if (isset($result['Country']) && ($result['Country'] != "")) {
+            $t->assign('Country', $result['Country']);
+        } else {
+            $t->assign('Country','-');
+        }
+
+        if (isset($result['ShopName']) && ($result['ShopName'] != "")) {
+            $t->assign('dive_shop_nr', $result['ShopID']);
+            $t->assign('dive_shop_name', $result['ShopName']);
+            $t->assign('logbook_shop_linktitle', $_lang['logbook_shop_linktitle']);
+            if ($result['ShopType'] != '') {
+                $t->assign('trip_shop', $result['ShopType'].':');
+            }
+        } else {
+            $t->assign('dive_shop_nr', '');
+            $t->assign('dive_shop_name','-');	
+        }
+
+        if (isset($result['Country']) && ($result['Country'] != "")) {
+            $t->assign('Country', $result['Country']);
+        } else {
+            $t->assign('Country','-');
+        }
+
+        //	Show the photo
+        if (isset($result['PhotoPath']) && ($result['PhotoPath'] != "")) {
+            $t->assign('PhotoPath', $result['PhotoPath']);
+            $t->assign('trip_photo', $_lang['trip_photo']);
+            $this->set_divetrip_pictures();
+            $t->assign('PhotoPathurl', $_config['trippath_web'] . $result['PhotoPath']);
+            $t->assign('trip_photo_linktitle', $_lang['trip_photo_linktitle']. $result['TripName']);
+            $t->assign('trip_photo_link', $_lang['trip_photo_link'] );
+        }
+
+    /*}}}*/
+    }
+
+    /**
+     * set_divetrip_pictures 
+     * 
+     * @access public
+     * @return void
+     */
+    function set_divetrip_pictures(){
+        global $_config, $t, $_lang, $globals; /*{{{*/
+        $pic_class = new DivePictures;
+        $pic_class->set_divegallery_info_direct($this->user_id);
+        $pic_class->get_divegallery_info(0,0,0,0,$this->divetrip_nr);
+        $divepics = $pic_class->get_image_link();
+        $pics = count($divepics);
+        if ($pics > 0) {
+            if (isset($_config['divepics_preview'])) {
+                $t->assign('pics2', '1');
+                $t->assign('has_images', '1');
+                $t->assign('image_link', $divepics);
+            } else {
+                /**
+                 *  
+                 */
+                 $t->assign('has_images', '0');
+            }
+        } else {
+                 $t->assign('has_images', '0');
+        }
+    /*}}}*/
+    }
+
+    /**
+     * set_dives_in_country 
+     * 
+     * @access public
+     * @return void
+     */
+    function set_dives_in_country(){
+        global $globals, $_config, $t, $_lang; /*{{{*/
+        $this->get_dives_in_country();
+        // Show country dives if we have them
+        if(count($this->dives) == 1){
+            $dives[0] = $this->dives;
+        } else {
+            $dives = $this->dives;
+        }
+        if ($this->dive_count != 0) {
+            $t->assign('dive_count', $this->dive_count);
+            if ($this->dive_count == 1) {
+                $t->assign('country_dive_trans', $_lang['country_dive_single']);
+            } else {
+                $t->assign('country_dive_trans', $_lang['country_dive_plural']);
+            }
+            for ($i=0; $i<$this->dive_count; $i++) {
+                $dives[$i] = $dives[$i]['Number'] ; 
+            }
+            $t->assign('dlog_number_title', $_lang['dlog_number_title'] );
+            $t->assign('dives',$dives);
+        } else {
+            $t->assign('dive_count', $this->dive_count);
+            $t->assign('dlog_number_title', "" );
+            $t->assign('dives',"");
+        }
+    /*}}}*/
+    }
+
+    /**
+     * set_divecountry_comments 
+     * 
+     * @access public
+     * @return void
+     */
+    function set_divecountry_comments(){
+        global $globals, $_config, $t, $_lang; /*{{{*/
+        //	Comments
+        $result = $this->result;
+        //	Show them if we have them
+        if ($result['Comments'] != "") {
+            $t->assign('country_sect_comments', $_lang['country_sect_comments']);
+            $r = $result['Comments'];
+
+	    $r = htmlentities($r, ENT_QUOTES, "ISO-8859-1");
+            $r = str_replace("\r\n", "\n", $r);
+            $r = str_replace("\n", "<br>\n", $r);
+
+            // Make any URLs clickable
+            $r = make_clickable($r);
+
+            $t->assign('Comments', $r);
+        }
+    /*}}}*/
+    } 
+
+    /**
+     * get_divecountry_overview 
+     * 
+     * @access public
+     * @return void
+     */
+    function get_divecountry_overview(){
+        global $t, $_lang, $globals, $_config; /*{{{*/
+        $countrytable = $this->table_prefix."Country";
+        $sql = sql_file("countrylist.sql");
+
+        /**
+         * when view_type = 1 display the ajax grid if type = 2 display old fashioned table 
+         */
+        if ($_config['view_type'] == 1) {
+            $this->get_divecountry_overview_grid($sql);
+        }
+        elseif ($_config['view_type'] == 2) {
+            $this->get_divecountry_overview_table($sql);
+        } else{
+            echo 'no view_type defined!';
+        }
+        $t->assign('pagetitle',$_lang['dive_countries']);
+    /*}}}*/
+    }
+
+    /**
+     * get_divecountry_overview_table 
+     * 
+     * @access public
+     * @return void
+     */
+    function get_divecountry_overview_table($sql){
+        global $db, $t, $_lang, $globals, $_config; /*{{{*/
+        //    Get the page header
+        //    Get the details of the trips to be listed
+        $countrylist_query = $sql;
+        $t->assign('dcountry_title_country', $_lang['dcountry_title_country']);
+
+        if ($this->multiuser == 1) {
+            $path = $_config['web_root'].'/divecountry.php/'.$this->user_id.'/list';
+        } else {
+            $path = $_config['web_root'].'/divecountry.php/list';
+        }
+        if (empty($this->requested_page)) {
+            $cpage = 0;
+        } else {
+            $cpage = $this->requested_page;
+        }
+
+        $pager_options = new TablePager($cpage,$path);
+        $paged_data = Pager_Wrapper_MDB2($db, $countrylist_query, $pager_options->options);
+
+        $t->assign('pages', $paged_data['links']);
+        $t->assign('cells', $paged_data['data']);
+    /*}}}*/
+    }
+
+    /**
+     * get_divecountry_overview_grid 
+     * 
+     * @param mixed $sql 
+     * @access public
+     * @return void
+     */
+    function get_divecountry_overview_grid($sql){
+        global $t, $_lang, $globals, $_config; /*{{{*/
+        $data = parse_mysql_query(0,$sql);;
+        $GridClass = new TableGrid($this->user_id,$data);
+        $grid = $GridClass->get_grid_class();
+
+        /**
+         * Define the table according some info 
+         */
+        if ($this->multiuser) {
+            $url = "/divecountry.php".$t->getTemplateVars('sep1').$this->user_id.$t->getTemplateVars('sep2');
+        } else {
+            $url = "/divecountry.php".$t->getTemplateVars('sep2');
+        }
+
+        $grid->showColumn('Country', $_lang['country_title_country']);
+        $grid->setColwidth('Country',"500");
         $grid->setRowActionFunction("action");
 
         $grid_ret = $grid->render(TRUE); 
