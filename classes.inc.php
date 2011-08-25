@@ -31,7 +31,7 @@ class HandleRequest {
     var $diver_choice;
     var $divetrip_nr;
     var $diveshop_nr;
-    var $country_nr;
+    var $divecountry_nr;
 
     /**
      * requested_page contains the requested page of the paginate
@@ -166,8 +166,8 @@ class HandleRequest {
         return $this->diveshop_nr;
     }
 
-    function get_country_nr(){
-        return $this->country_nr;
+    function get_divecountry_nr(){
+        return $this->divecountry_nr;
     }
     
 
@@ -247,7 +247,7 @@ class HandleRequest {
                         break;
                     case 'divecountry.php':
                         if($this->view_request == 1)
-                            $this->country_nr = check_number($split_request[2]);
+                            $this->divecountry_nr = check_number($split_request[2]);
                         $this->request_type = 10;
                         break;
                     default:
@@ -323,7 +323,7 @@ class HandleRequest {
                         $this->request_type = 9;
                         break;
                     case 'divecountry.php':
-                        $this->country_nr = $id;
+                        $this->divecountry_nr = $id;
                         $this->request_type = 9;
                         break;
                     default:
