@@ -427,6 +427,32 @@ $_lang['equip_title_manufacturer'] = "Manufacturer";
 $_lang['equip_title_inactive'] = "Active";
 
 
+// Dive Country related values
+
+$_lang['country_details_pagetitle'] = "Dive Country - ";
+$_lang['country_sect_comments'] = "Comments:";
+
+$_lang['country_name'] = "Country:";
+$_lang['country_currency'] = "Currency:";
+$_lang['country_rate'] = "Exchange Rate:";
+$_lang['country_gmt'] = "GMT Difference:";
+$_lang['country_flag'] = "Flag:";
+$_lang['country_city'] = "Dive Cities / Islands:";
+$_lang['country_divesites'] = "Dive Sites:";
+$_lang['country_shop'] = "Dive Shops:";
+$_lang['country_trip'] = "Dive Trips:";
+$_lang['country_comments'] = "Comments:";
+
+$_lang['country_flag_linktitle'] = "Flag of ";
+$_lang['country_fla_link'] = "View flag";
+
+// Dive Country List related values
+
+$_lang['country_none'] = "No countries are currently available.";
+
+$_lang['country_title_object'] = "Country";
+
+
 // Units
 
 $_lang['unit_length'] = "metres";
