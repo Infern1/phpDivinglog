@@ -3776,9 +3776,12 @@ class Divetrip{
         }
 
         if (isset($result['Country']) && ($result['Country'] != "")) {
-            $t->assign('Country', $result['Country']);
+            $t->assign('dive_country_nr', $result['CountryID']);
+            $t->assign('dive_country_name', $result['Country']);
+            $t->assign('logbook_country_linktitle', $_lang['logbook_country_linktitle']);
         } else {
-            $t->assign('Country','-');
+            $t->assign('dive_shop_nr', '');
+            $t->assign('dive_shop_name','-');	
         }
 
         if (isset($result['StartDate']) && ($result['StartDate'] != "")) {

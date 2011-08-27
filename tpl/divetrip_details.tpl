@@ -30,7 +30,15 @@
     {else}
       <td>-</td>
     {/if} 
-      <td colspan="2">{$Country}</td>
+    {if $dive_country_nr != ""} 
+      {if isset($multiuser_id)}
+      <td colspan="2"><a href="{$app_path}/divecountry.php{$sep1}{$multiuser_id}{$sep2}{$dive_county_nr}" title="{$dive_country_name} {$logbook_country_linktitle}">{$dive_country_name}</a></td>
+      {else}
+      <td colspan="2"><a href="{$app_path}/divecountry.php{$sep2}{$dive_country_nr}" title="{$dive_country_name} {$logbook_country_linktitle}">{$dive_country_name}</a></td>
+      {/if}
+    {else}
+      <td>-</td>
+    {/if} 
     </tr>
 
     <tr class="divetitle">
