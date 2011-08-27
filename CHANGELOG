@@ -8,7 +8,7 @@ phpDivingLog v3.0-alpha3 - 2011-08-24 - Lloyd Borrett and Rob Lensen
     * Changed the parse_mysql query function so if just one result is there don't create an array
     * Added the Divesite name to the gallery
     * Added EXIF information to the dive photos
-    * Added display of dive shops/centres and trips/vacations
+    * Added display of dive shops/centres, trips/vacations and countries
     * Made URLs and email addresses in dive/site/equipment/shop/trip comments clickable
     * Added display of cylinder and supply type statistics
     * Added display of multiple cylinder sets to dive details breathing tab

@@ -1291,7 +1291,9 @@ class Divelog {
         }
 
         if (!empty($result['Country'])){
+            $t->assign('dive_country_nr', $result['CountryID']);
             $t->assign('dive_country',$result['Country']);
+            $t->assign('logbook_country_linktitle', $_lang['logbook_country_linktitle']);
         } else {
             $t->assign('dive_country','-');	
         }

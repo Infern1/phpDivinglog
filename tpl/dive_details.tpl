@@ -108,11 +108,15 @@
 
     <tr class="divedetails">
 
-    {if $dive_country != ''} 
-      <td colspan="2">{$dive_country}</td>
+    {if isset($dive_country_nr)} 
+      {if isset($multiuser_id)}
+      <td colspan="2"><a href="{$app_path}/divecountry.php{$sep1}{$multiuser_id}{$sep2}{$dive_country_nr}" title="{$dive_country} {$logbook_country_linktitle}">{$dive_country}</a></td>
+      {else}
+      <td colspan="2"><a href="{$app_path}/divecountry.php{$sep2}{$dive_country_nr}" title="{$dive_country} {$logbook_country_linktitle}">{$dive_country}</a></td>
+      {/if}
     {else}
       <td colspan="2">-</td>
-    {/if}
+    {/if} 
 
     {if $divemaster != ''} 
       <td colspan="2">{$divemaster}</td>
