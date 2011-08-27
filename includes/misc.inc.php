@@ -67,7 +67,9 @@ function action($value_of_clicked_field, $array_values) {
             return "javascript:open_url(".$array_values["ID"].",'/divetrip.php".$ext."' )";
         } elseif ($request_type == 9) {
             return "javascript:open_url(".$array_values["ID"].",'/diveshop.php".$ext."' )";
-        }
+         } elseif ($request_type == 10) {
+            return "javascript:open_url(".$array_values["ID"].",'/divecountry.php".$ext."' )";
+       }
     } else {
         $request = new HandleRequest();
         $request->set_request_uri($_SERVER['REQUEST_URI']);
@@ -84,6 +86,8 @@ function action($value_of_clicked_field, $array_values) {
             return "javascript:open_url(".$array_values["ID"].",'/divetrip.php".$ext."' )";
         } elseif ($request_type == 9) {
             return "javascript:open_url(".$array_values["ID"].",'/diveshop.php".$ext."' )";
+        } elseif ($request_type == 10) {
+            return "javascript:open_url(".$array_values["ID"].",'/divecountry.php".$ext."' )";
         }
     }
 /*}}}*/

@@ -137,7 +137,6 @@ class HandleRequest {
         return $this->site_nr;
     }
 
-
     function get_equipment_nr(){
         return $this->equipment_nr;
     }
@@ -245,6 +244,11 @@ class HandleRequest {
                         $this->request_type = 8;
                         $this->diver_choice = true;
                         break;
+                    case 'diveshop.php':
+                        if($this->view_request == 1)
+                            $this->diveshop_nr = check_number($split_request[2]);
+                        $this->request_type = 9;
+                        break;
                     case 'divecountry.php':
                         if($this->view_request == 1)
                             $this->divecountry_nr = check_number($split_request[2]);
@@ -324,7 +328,7 @@ class HandleRequest {
                         break;
                     case 'divecountry.php':
                         $this->divecountry_nr = $id;
-                        $this->request_type = 9;
+                        $this->request_type = 10;
                         break;
                     default:
                         //defaults to main page
@@ -4077,7 +4081,7 @@ class Divecountry{
     }
 
     /**
-     * __construct1 construct a Divetrip class when divetrip ID is given
+     * __construct1 construct a Divecountry class when divecountry ID is given
      * 
      * @param mixed $a1 
      * @access protected
@@ -4113,7 +4117,7 @@ class Divecountry{
             } else {
                 $user = new User();
                 $this->table_prefix = $user->get_table_prefix();
-                $this->divetrip_nr = $request->get_divetrip_nr();
+                $this->divetrip_nr = $request->get_divecountry_nr();
             }
         } else {
             $this->request_type = 10;
@@ -4161,7 +4165,7 @@ class Divecountry{
         $globals['countryid'] = $this->divecountry_nr;
         $this->dives = parse_mysql_query('countrydives.sql');
         $this->dive_count = count($this->dives);
-        // Get the countrycountry list from database
+        // Get the divecountry list from database
         $this->countrylist = parse_mysql_query('countrylist.sql');
     /*}}}*/
     }
@@ -4182,11 +4186,10 @@ class Divecountry{
 
         $t->assign('divecountry_id', $this->divecountry_nr);
         $t->assign('country_name', $_lang['country_name']);
-        $t->assign('country_shop', $_lang['country_shop']);
-        $t->assign('country_country', $_lang['country_country']);
-        $t->assign('country_startdate', $_lang['country_startdate']);
-        $t->assign('country_enddate', $_lang['country_enddate']);
-        $t->assign('country_rating', $_lang['country_rating']);
+        $t->assign('country_gmt', $_lang['country_gmt']);
+        $t->assign('country_currency', $_lang['country_currency']);
+        $t->assign('country_rate', $_lang['country_rate']);
+        $t->assign('country_flag', $_lang['country_flag']);
 
         if (isset($result['Country']) && ($result['Country'] != "")) {
             $t->assign('Country', $result['Country']);
@@ -4194,64 +4197,35 @@ class Divecountry{
             $t->assign('Country','-');
         }
 
-        if (isset($result['ShopName']) && ($result['ShopName'] != "")) {
-            $t->assign('dive_shop_nr', $result['ShopID']);
-            $t->assign('dive_shop_name', $result['ShopName']);
-            $t->assign('logbook_shop_linktitle', $_lang['logbook_shop_linktitle']);
-            if ($result['ShopType'] != '') {
-                $t->assign('trip_shop', $result['ShopType'].':');
-            }
+        if (isset($result['Gmt']) && ($result['Gmt'] != "")) {
+            $t->assign('Gmt', $result['Gmt']);
         } else {
-            $t->assign('dive_shop_nr', '');
-            $t->assign('dive_shop_name','-');	
+            $t->assign('Gmt','-');
         }
 
-        if (isset($result['Country']) && ($result['Country'] != "")) {
-            $t->assign('Country', $result['Country']);
+        if (isset($result['Currency']) && ($result['Currency'] != "")) {
+            $t->assign('Currency', $result['Currency']);
         } else {
-            $t->assign('Country','-');
+            $t->assign('Currency','-');
         }
 
-        //	Show the photo
-        if (isset($result['PhotoPath']) && ($result['PhotoPath'] != "")) {
-            $t->assign('PhotoPath', $result['PhotoPath']);
-            $t->assign('trip_photo', $_lang['trip_photo']);
-            $this->set_divetrip_pictures();
-            $t->assign('PhotoPathurl', $_config['trippath_web'] . $result['PhotoPath']);
-            $t->assign('trip_photo_linktitle', $_lang['trip_photo_linktitle']. $result['TripName']);
-            $t->assign('trip_photo_link', $_lang['trip_photo_link'] );
-        }
-
-    /*}}}*/
-    }
-
-    /**
-     * set_divetrip_pictures 
-     * 
-     * @access public
-     * @return void
-     */
-    function set_divetrip_pictures(){
-        global $_config, $t, $_lang, $globals; /*{{{*/
-        $pic_class = new DivePictures;
-        $pic_class->set_divegallery_info_direct($this->user_id);
-        $pic_class->get_divegallery_info(0,0,0,0,$this->divetrip_nr);
-        $divepics = $pic_class->get_image_link();
-        $pics = count($divepics);
-        if ($pics > 0) {
-            if (isset($_config['divepics_preview'])) {
-                $t->assign('pics2', '1');
-                $t->assign('has_images', '1');
-                $t->assign('image_link', $divepics);
-            } else {
-                /**
-                 *  
-                 */
-                 $t->assign('has_images', '0');
-            }
+        if (isset($result['CurFactor']) && ($result['CurFactor'] != "")) {
+            $t->assign('CurFactor', $result['CurFactor']);
         } else {
-                 $t->assign('has_images', '0');
+            $t->assign('CurFactor','-');
         }
+
+        //	Show the flag
+        if (isset($result['FlagPath']) && ($result['FlagPath'] != "")) {
+            $t->assign('FlagPath', $result['FlagPath']);
+            $t->assign('FlagPathurl', $_config['countrypath_web'] . $result['FlagPath']);
+            $t->assign('country_flag_linktitle', $_lang['country_flag_linktitle']. $result['Country']);
+        } else {
+            $t->assign('FlagPath','');
+            $t->assign('FlagPathurl','');
+            $t->assign('country_flag_linktitle','');
+        }
+
     /*}}}*/
     }
 
@@ -5568,7 +5542,7 @@ class Tank{
             $this->result = parse_mysql_query('onetank.sql');
         } else {
            /**
-             * If the request type is not already set(by divers choice), set it to overview  
+             * If the request type is not already set (by divers choice), set it to overview  
              */
             if ($this->request_type != 3) {
                 $this->request_type = 0;
@@ -5589,10 +5563,8 @@ class Tank{
         $globals['dive_nr'] = $this->dive_nr;
         $divetanks = parse_mysql_query('tanksdivelist.sql');
         $num_tanks = count($divetanks);
-        if($num_tanks > 0){
+        if ($num_tanks > 0) {
             //Get the info for each tank
-
-        
         }
     /*}}}*/
     }
