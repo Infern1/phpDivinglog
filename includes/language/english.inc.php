@@ -463,6 +463,7 @@ $_lang['country_fla_link'] = "View flag";
 $_lang['country_none'] = "No countries are currently available.";
 
 $_lang['country_title_country'] = "Country";
+$_lang['country_title_count'] = "Dives";
 
 
 // Units

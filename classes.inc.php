@@ -4384,7 +4384,9 @@ class Divecountry{
         }
 
         $grid->showColumn('Country', $_lang['country_title_country']);
-        $grid->setColwidth('Country',"500");
+        $grid->setColwidth('Country',"450");
+        $grid->showColumn('COUNT(*)', $_lang['country_title_count']);
+        $grid->setColwidth('COUNT(*)',"50");
         $grid->setRowActionFunction("action");
 
         $grid_ret = $grid->render(TRUE); 
