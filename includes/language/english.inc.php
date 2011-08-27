@@ -450,6 +450,11 @@ $_lang['country_shop'] = "Dive Shops:";
 $_lang['country_trip'] = "Dive Trips:";
 $_lang['country_comments'] = "Comments:";
 
+$_lang['country_gmt_show'] = "GMT";
+
+$_lang['country_dive_single'] = " dive in this Country:";
+$_lang['country_dive_plural'] = " dives in this Country:";
+
 $_lang['country_flag_linktitle'] = "Flag of ";
 $_lang['country_fla_link'] = "View flag";
 

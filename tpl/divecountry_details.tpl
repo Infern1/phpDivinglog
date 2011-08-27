@@ -9,61 +9,69 @@
     {* Show main country details *}
     <tr class="divetitle">
       <td colspan="2">{$country_name}</td>
-      <td colspan="2">{$trip_rating}</td>
+      <td colspan="2">{$country_flag}</td>
     </tr>
+
     <tr class="divedetails">
-      <td colspan="2">{$TripName}</td>
-      <td colspan="2">{$Rating}</td>
+    {if $Country != ''}
+      <td colspan="2">{$Country}</td>
+    {else}
+      <td colspan="2">-</td>
+    {/if}
+
+    {if $FlagPathurl != ''}
+      <td colspan="2" rowspan="5"><img src="{$app_path}/{$FlagPathurl}" border="0" title="{$country_flag_linktitle}"></td>
+    {else}
+      <td colspan="2" rowspan="5">-</td>
+    {/if}
     </tr>
 
     <tr class="divetitle">
-      <td colspan="2">{$trip_shop}</td>
-      <td colspan="2">{$trip_country}</td>
+      <td colspan="2">{$country_gmt}</td>
     </tr>
+
     <tr class="divedetails">
-    {if $dive_shop_nr != ""} 
-      {if isset($multiuser_id)}
-      <td colspan="2"><a href="{$app_path}/diveshop.php{$sep1}{$multiuser_id}{$sep2}{$dive_shop_nr}" title="{$dive_shop_name} {$logbook_shop_linktitle}">{$dive_shop_name}</a></td>
-      {else}
-      <td colspan="2"><a href="{$app_path}/diveshop.php{$sep2}{$dive_shop_nr}" title="{$dive_shop_name} {$logbook_shop_linktitle}">{$dive_shop_name}</a></td>
-      {/if}
+    {if $Gmt != ''}
+      <td colspan="2">{$Gmt}</td>
+    {else}
+      <td colspan="2">-</td>
+    {/if} 
+    </tr>
+
+    <tr class="divetitle">
+      <td>{$country_currency}</td>
+      <td>{$country_rate}</td>
+    </tr>
+
+    <tr class="divedetails">
+    {if $Currency != ''}
+      <td>{$Currency}</td>
+    {else}
+      <td>-</td>
+    {/if}
+
+    {if $CurFactor != ''}
+      <td>{$CurFactor}</td>
     {else}
       <td>-</td>
     {/if} 
-      <td colspan="2">{$Country}</td>
     </tr>
 
-    <tr class="divetitle">
-      <td colspan="2">{$trip_startdate}</td>
-      <td colspan="2">{$trip_enddate}</td>
+    {* Comments *}
+    {* Show them if we have them *}
+    {if isset($Comments)}
+    <tr class="divesection">
+      <td colspan="4">{$country_sect_comments}</td>
     </tr>
     <tr class="divedetails">
-      <td colspan="2">{$StartDate}</td>
-      <td colspan="2">{$EndDate}</td>
-    </tr>
-
-    {if $has_images == '1'}
-    <tr class="divetitle">
-	<td colspan="4">{$trip_photo}</td>
-    </tr>
-
-    <tr class="divedetails">
-	<td colspan="4">
-    {foreach from=$image_link key=id item=i name=images}
-            <a id="thumb" href="{$web_root}/{$i.img_url}" class="highslide" onclick="return hs.expand(this)" title="{$i.img_title}">
-            <img src="{$web_root}/{$i.img_url}" alt="Highslide JS" title="{$i.img_title}" height="{$thumb_height}" width="{$thumb_width}" ></a>
-           <div class='highslide-caption'>
-           {$i.img_title}
-           </div>
-    {/foreach}
-    </td>
+      <td colspan="4">{$Comments}</td>
     </tr>
     {/if}
 
-    {* Show trip dives if we have them *}
+    {* Show country dives if we have them *}
     {if $dive_count != 0}
     <tr class="divetitle">
-      <td colspan="4">{$dive_count} {$trip_dive_trans}</td>
+      <td colspan="4">{$dive_count} {$country_dive_trans}</td>
     </tr>
 
     <tr class="divedetails">
@@ -78,27 +86,6 @@ title="{$dlog_number_title}{$dive}">{$dive}</a>
         {/if}
       {/foreach}
       </td>
-    </tr>
-    {/if}
-
-    {* Show buddy details *}
-    {if $buddy != ''}
-    <tr class="divetitle">
-      <td colspan="4">{$trip_buddy}</td>
-    </tr>
-    <tr class="divedetails">
-      <td colspan="4">{$buddy}</td>
-    </tr>
-    {/if}
-
-    {* Comments *}
-    {* Show them if we have them *}
-    {if isset($Comments)}
-    <tr class="divesection">
-      <td colspan="4">{$trip_sect_comments}</td>
-    </tr>
-    <tr class="divedetails">
-      <td colspan="4">{$Comments}</td>
     </tr>
     {/if}
 

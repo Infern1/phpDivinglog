@@ -4182,7 +4182,7 @@ class Divecountry{
         // Show main trip details
         $result = $this->result;
 
-        $t->assign('pagetitle',$_lang['dive_country_pagetitle'].$result['Country']);
+        $t->assign('pagetitle',$_lang['country_details_pagetitle'].$result['Country']);
 
         $t->assign('divecountry_id', $this->divecountry_nr);
         $t->assign('country_name', $_lang['country_name']);
@@ -4198,7 +4198,19 @@ class Divecountry{
         }
 
         if (isset($result['Gmt']) && ($result['Gmt'] != "")) {
-            $t->assign('Gmt', $result['Gmt']);
+            $Gmt = $_lang['country_gmt_show'];
+            if ($result['Gmt'] > 0) {
+                $v = abs($result['Gmt']);
+                $h = floor($v/3600);
+                $m = floor(($v - ($h * 3600)) / 60);
+                $Gmt .= ' +'. sprintf('%02u',$h) . ':' . sprintf('%02u',$m);
+            } elseif ($result['Gmt'] < 0) {
+                $v = abs($result['Gmt']);
+                $h = floor($v/3600);
+                $m = floor(($v - ($h * 3600)) / 60);
+                $Gmt .= ' -'. sprintf('%02u',$h) . ':' . sprintf('%02u',$m);
+            }
+            $t->assign('Gmt', $Gmt);
         } else {
             $t->assign('Gmt','-');
         }
@@ -4218,7 +4230,7 @@ class Divecountry{
         //	Show the flag
         if (isset($result['FlagPath']) && ($result['FlagPath'] != "")) {
             $t->assign('FlagPath', $result['FlagPath']);
-            $t->assign('FlagPathurl', $_config['countrypath_web'] . $result['FlagPath']);
+            $t->assign('FlagPathurl', $_config['flagpath_web'] . $result['FlagPath']);
             $t->assign('country_flag_linktitle', $_lang['country_flag_linktitle']. $result['Country']);
         } else {
             $t->assign('FlagPath','');
