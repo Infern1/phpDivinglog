@@ -2376,13 +2376,15 @@ class Divesite{
         $countrycity = $this->result_countrycity;
         if (count($countrycity) != 0) {
             if ($countrycity['Country'] != "") {
-                //			Get the country details from database
+                // Get the country details from database
                 $globals['countryid'] = $countrycity['CountryID'];
                 $countrydetails = parse_mysql_query('onecountry.sql');
                 if (count($countrydetails) == 0) {
                     $this->country = $countrycity['Country'];
+                    $this->countryid = $countrycity['CountryID'];
                 } else {
                     $this->country = $countrydetails['Country'];
+                    $this->countryid = $countrydetails['ID'];
                 }
             }
 
@@ -2442,7 +2444,14 @@ class Divesite{
         }
         $t->assign('Place', $Place);
         $t->assign('city', $this->city );
-        $t->assign('country', $this->country);
+
+        if (!empty($this->country)){
+            $t->assign('dive_country_nr', $this->countryid);
+            $t->assign('dive_country',$this->country);
+            $t->assign('logbook_country_linktitle', $_lang['logbook_country_linktitle']);
+        } else {
+            $t->assign('dive_country','-');	
+        }
 
         $t->assign('place_rating', $_lang['place_rating']);
         if (isset($result['Rating']) && ($result['Rating'] != "")) {

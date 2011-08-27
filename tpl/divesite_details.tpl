@@ -22,7 +22,15 @@
       <td>{$place_difficulty}</td>
     </tr>
     <tr class="divedetails">
-      <td>{$country}</td>
+    {if isset($dive_country_nr)} 
+      {if isset($multiuser_id)}
+      <td><a href="{$app_path}/divecountry.php{$sep1}{$multiuser_id}{$sep2}{$dive_country_nr}" title="{$dive_country} {$logbook_country_linktitle}">{$dive_country}</a></td>
+      {else}
+      <td><a href="{$app_path}/divecountry.php{$sep2}{$dive_country_nr}" title="{$dive_country} {$logbook_country_linktitle}">{$dive_country}</a></td>
+      {/if}
+    {else}
+      <td>-</td>
+    {/if} 
       <td>{$Rating}</td>
       <td>{$MaxDepth}</td>
       <td>{$Difficulty}</td>
