@@ -204,6 +204,8 @@ $_lang['dlog_title_place'] = "Dive Site";
 $_lang['dlog_title_photo'] = "Pic";
 
 $_lang['dlog_number_title'] = "Details for dive # ";
+$_lang['dtrip_number_title'] = "Details for trip # ";
+$_lang['dcountry_number_title'] = "Details for country # ";
 
 // based on the PHP date() function
 $_lang['dlog_divedate_format'] = "dMY";
@@ -438,6 +440,7 @@ $_lang['equip_title_inactive'] = "Active";
 
 $_lang['country_details_pagetitle'] = "Dive Country - ";
 $_lang['country_sect_comments'] = "Comments:";
+$_lang['country_sect_activity'] = "Diving Activity in ";
 
 $_lang['country_name'] = "Country:";
 $_lang['country_currency'] = "Currency:";
@@ -451,6 +454,9 @@ $_lang['country_trip'] = "Dive Trips:";
 $_lang['country_comments'] = "Comments:";
 
 $_lang['country_gmt_show'] = "GMT";
+
+$_lang['country_trip_single'] = " trip in this Country:";
+$_lang['country_trip_plural'] = " trips in this Country:";
 
 $_lang['country_dive_single'] = " dive in this Country:";
 $_lang['country_dive_plural'] = " dives in this Country:";

@@ -68,6 +68,31 @@
     </tr>
     {/if}
 
+    <tr class="divesection">
+      <td colspan="4">{$country_sect_activity}</td>
+    </tr>
+
+    {* Show country trips if we have them *}
+    {if $trip_count != 0}
+    <tr class="divetitle">
+      <td colspan="4">{$trip_count} {$country_trip_trans}</td>
+    </tr>
+
+    <tr class="divedetails">
+      <td colspan="4">
+      {foreach from=$trips item=trip}
+        {if isset($multiuser_id)}
+        <a href="{$app_path}/divetrip.php{$sep1}{$multiuser_id}{$sep2}{$trip}"
+title="{$dtrip_number_title}{$trip}">{$trip}</a>
+        {else}
+        <a href="{$app_path}/divetrip.php{$sep2}{$trip}"
+title="{$dtrip_number_title}{$trip}">{$trip}</a>
+        {/if}
+      {/foreach}
+      </td>
+    </tr>
+    {/if}
+
     {* Show country dives if we have them *}
     {if $dive_count != 0}
     <tr class="divetitle">

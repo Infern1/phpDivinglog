@@ -4168,6 +4168,40 @@ class Divecountry{
     }
 
     /**
+     * get_trips_in_country 
+     * 
+     * @access public
+     * @return void
+     */
+    function get_trips_in_country(){
+        global $globals, $_config; /*{{{*/
+        // Get the trips in this country from database
+        $globals['countryid'] = $this->divecountry_nr;
+        $this->trips = parse_mysql_query('countrytrips.sql');
+        $this->trip_count = count($this->trips);
+        // Get the divecountry list from database
+        $this->countrylist = parse_mysql_query('countrylist.sql');
+    /*}}}*/
+    }
+
+    /**
+     * get_sites_in_country 
+     * 
+     * @access public
+     * @return void
+     */
+    function get_sites_in_country(){
+        global $globals, $_config; /*{{{*/
+        // Get the sites in this country from database
+        $globals['countryid'] = $this->divecountry_nr;
+        $this->sites = parse_mysql_query('countrydives.sql');
+        $this->site_count = count($this->sites);
+        // Get the divecountry list from database
+        $this->countrylist = parse_mysql_query('countrylist.sql');
+    /*}}}*/
+    }
+
+    /**
      * get_dives_in_country 
      * 
      * @access public
@@ -4204,6 +4238,7 @@ class Divecountry{
         $t->assign('country_currency', $_lang['country_currency']);
         $t->assign('country_rate', $_lang['country_rate']);
         $t->assign('country_flag', $_lang['country_flag']);
+        $t->assign('country_sect_activity', $_lang['country_sect_activity'].$result['Country']);
 
         if (isset($result['Country']) && ($result['Country'] != "")) {
             $t->assign('Country', $result['Country']);
@@ -4252,6 +4287,76 @@ class Divecountry{
             $t->assign('country_flag_linktitle','');
         }
 
+    /*}}}*/
+    }
+
+    /**
+     * set_trips_in_country 
+     * 
+     * @access public
+     * @return void
+     */
+    function set_trips_in_country(){
+        global $globals, $_config, $t, $_lang; /*{{{*/
+        $this->get_trips_in_country();
+        // Show country trips if we have them
+        if (count($this->trips) == 1) {
+            $trips[0] = $this->trips;
+        } else {
+            $trips = $this->trips;
+        }
+        if ($this->trip_count != 0) {
+            $t->assign('trip_count', $this->trip_count);
+            if ($this->trip_count == 1) {
+                $t->assign('country_trip_trans', $_lang['country_trip_single']);
+            } else {
+                $t->assign('country_trip_trans', $_lang['country_trip_plural']);
+            }
+            for ($i=0; $i<$this->trip_count; $i++) {
+                $trips[$i] = $trips[$i]['ID'] ; 
+            }
+            $t->assign('dtrip_number_title', $_lang['dtrip_number_title'] );
+            $t->assign('trips',$trips);
+        } else {
+            $t->assign('trip_count', $this->trip_count);
+            $t->assign('dlog_number_title', "" );
+            $t->assign('trips',"");
+        }
+    /*}}}*/
+    }
+
+    /**
+     * set_sites_in_country 
+     * 
+     * @access public
+     * @return void
+     */
+    function set_sites_in_country(){
+        global $globals, $_config, $t, $_lang; /*{{{*/
+        $this->get_sites_in_country();
+        // Show country sites if we have them
+        if (count($this->sites) == 1) {
+            $sites[0] = $this->sites;
+        } else {
+            $sites = $this->sites;
+        }
+        if ($this->site_count != 0) {
+            $t->assign('site_count', $this->site_count);
+            if ($this->site_count == 1) {
+                $t->assign('country_site_trans', $_lang['country_site_single']);
+            } else {
+                $t->assign('country_site_trans', $_lang['country_site_plural']);
+            }
+            for ($i=0; $i<$this->site_count; $i++) {
+                $sites[$i] = $sites[$i]['Number'] ; 
+            }
+            $t->assign('dlog_number_title', $_lang['dlog_number_title'] );
+            $t->assign('sites',$sites);
+        } else {
+            $t->assign('site_count', $this->site_count);
+            $t->assign('dlog_number_title', "" );
+            $t->assign('sites',"");
+        }
     /*}}}*/
     }
 
