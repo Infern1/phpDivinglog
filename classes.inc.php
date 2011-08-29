@@ -4348,7 +4348,7 @@ class Divecountry{
                 $t->assign('country_site_trans', $_lang['country_site_plural']);
             }
             for ($i=0; $i<$this->site_count; $i++) {
-                $sites[$i] = $sites[$i]['Number'] ; 
+                $sites[$i] = $sites[$i]['PlaceID'] ; 
             }
             $t->assign('dsite_number_title', $_lang['dsite_number_title'] );
             $t->assign('sites',$sites);
