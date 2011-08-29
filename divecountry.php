@@ -46,6 +46,8 @@ if ($divecountry->get_request_type() == 1) {
     $divecountry->set_main_divecountry_details();
     // Country Trips
     $divecountry->set_trips_in_country();
+    // Country Sites
+    // $divecountry->set_sites_in_country();
     // Country Dives
     $divecountry->set_dives_in_country();
     // Comments

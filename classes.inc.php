@@ -4194,7 +4194,7 @@ class Divecountry{
         global $globals, $_config; /*{{{*/
         // Get the sites in this country from database
         $globals['countryid'] = $this->divecountry_nr;
-        $this->sites = parse_mysql_query('countrydives.sql');
+        $this->sites = parse_mysql_query('countrysites.sql');
         $this->site_count = count($this->sites);
         // Get the divecountry list from database
         $this->countrylist = parse_mysql_query('countrylist.sql');
@@ -4350,7 +4350,7 @@ class Divecountry{
             for ($i=0; $i<$this->site_count; $i++) {
                 $sites[$i] = $sites[$i]['Number'] ; 
             }
-            $t->assign('dlog_number_title', $_lang['dlog_number_title'] );
+            $t->assign('dsite_number_title', $_lang['dsite_number_title'] );
             $t->assign('sites',$sites);
         } else {
             $t->assign('site_count', $this->site_count);
