@@ -16,7 +16,9 @@ class="divelogcrumbs" title="{$dive_shops_linktitle}">{$dive_shops}</a> |
     <a href="{$app_path}/divetrip.php{$sep1}{$multiuser_id}{$sep2}list" 
 class="divelogcrumbs" title="{$dive_trips_linktitle}">{$dive_trips}</a> |
     <a href="{$app_path}/divecountry.php{$sep1}{$multiuser_id}{$sep2}list" 
-class="divelogcrumbs" title="{$dive_country_linktitle}">{$dive_countries}</a>
+class="divelogcrumbs" title="{$dive_country_linktitle}">{$dive_countries}</a> |
+    <a href="{$app_path}/divecity.php{$sep1}{$multiuser_id}{$sep2}list" 
+class="divelogcrumbs" title="{$dive_city_linktitle}">{$dive_cities}</a>
 {else}
     <a href="{$app_path}/index.php{$list}" 
 class="divelogcrumbs" title="{$dive_log_linktitle}">{$dive_log}</a> | 
@@ -33,6 +35,8 @@ class="divelogcrumbs" title="{$dive_shops_linktitle}">{$dive_shops}</a> |
     <a href="{$app_path}/divetrip.php{$list}" 
 class="divelogcrumbs" title="{$dive_trips_linktitle}">{$dive_trips}</a> | 
     <a href="{$app_path}/divecountry.php{$list}" 
-class="divelogcrumbs" title="{$dive_country_linktitle}">{$dive_countries}</a>
+class="divelogcrumbs" title="{$dive_country_linktitle}">{$dive_countries}</a> |
+    <a href="{$app_path}/divecity.php{$list}" 
+class="divelogcrumbs" title="{$dive_city_linktitle}">{$dive_cities}</a>
 {/if}
 </div>

@@ -57,12 +57,18 @@ $_lang['last_country_linktitle'] = "Last dive country";
 $_lang['previous_country_linktitle'] = "Previous dive country";
 $_lang['next_country_linktitle'] = "Next dive country";
 
+$_lang['first_city_linktitle'] = "First dive city/island";
+$_lang['last_city_linktitle'] = "Last dive city/island";
+$_lang['previous_city_linktitle'] = "Previous dive city/island";
+$_lang['next_city_linktitle'] = "Next dive city/island";
+
 $_lang['dive_log'] = "Dive Log";
 $_lang['dive_sites'] = "Dive Sites";
 $_lang['dive_equip'] = "Dive Equipment";
 $_lang['dive_shops'] = "Dive Shops";
 $_lang['dive_trips'] = "Dive Trips";
 $_lang['dive_countries'] = "Dive Countries";
+$_lang['dive_cities'] = "Dive Cities";
 $_lang['dive_stats'] = "Dive Statistics";
 $_lang['dive_gallery'] = "Dive Gallery";
 $_lang['diver_choice_linktitle'] = "Show Diver Overview";
@@ -74,6 +80,7 @@ $_lang['dive_equip_linktitle'] = "List the Dive Equipment";
 $_lang['dive_shops_linktitle'] = "List the Dive Shops/Centres";
 $_lang['dive_trips_linktitle'] = "List the Dive Trips/Vacations";
 $_lang['dive_country_linktitle'] = "List the Dive Countries";
+$_lang['dive_city_linktitle'] = "List the Dive Cities/Islands";
 $_lang['dive_stats_linktitle'] = "Show the Dive Statistics";
 $_lang['dive_gallery_linktitle'] = "Show the Dive Gallery";
 
@@ -233,7 +240,6 @@ $_lang['place_datum'] = "Datum:";
 $_lang['datum'] = "WGS84";
 $_lang['google_map'] = "Google Map";
 
-
 $_lang['mappic_linktitle'] = "Map for ";
 $_lang['mappic'] = "View map";
 
@@ -248,7 +254,6 @@ $_lang['display_rows_divesites'] = 'Displaying Dive Sites';
 $_lang['display_rows_equipment'] = 'Displaying Equipment';
 
 $_lang['rating'] = array("not rated", "1 star", "2 star", "3 star", "4 star", "5 star");
-
 
 // Dive Site List related values
 
@@ -289,7 +294,6 @@ $_lang['shop_sect_comments'] = "Comments:";
 $_lang['shop_photo_linktitle'] = "Photo of ";
 $_lang['shop_photo_link'] = "View photo";
 
-
 // Dive Shop List related values
 
 $_lang['dshop_none'] = "No dive shops are currently available.";
@@ -320,7 +324,6 @@ $_lang['trip_sect_comments'] = "Comments:";
 $_lang['trip_photo_linktitle'] = "Photo of ";
 $_lang['trip_photo_link'] = "View photo";
 
-
 // Dive Trip List related values
 
 $_lang['dtrip_none'] = "No dive trips are currently available.";
@@ -328,6 +331,36 @@ $_lang['dtrip_none'] = "No dive trips are currently available.";
 $_lang['dtrip_title_trip'] = "Trips / Vacations";
 $_lang['dtrip_title_shop'] = "Dive Shop";
 $_lang['dtrip_title_country'] = "Country";
+
+
+// Dive City related values
+
+$_lang['city_details_pagetitle'] = "Dive City / Island - ";
+$_lang['city_sect_comments'] = "Comments:";
+$_lang['city_sect_activity'] = "Diving Activity in ";
+
+$_lang['dive_city_pagetitle'] = "City / Island - ";
+
+$_lang['city_name'] = "Name:";
+$_lang['city_type'] = "Type:";
+$_lang['city_country'] = "Country:";
+$_lang['city_map'] = "Map:";
+
+$_lang['city_dive_single'] = " dive at this City / Island:";
+$_lang['city_dive_plural'] = " dives at this City / Island:";
+
+$_lang['city_sect_comments'] = "Comments:";
+
+$_lang['city_map_linktitle'] = "Map of ";
+$_lang['city_map_link'] = "View map";
+
+// Dive City List related values
+
+$_lang['city_none'] = "No dive cities / islands are currently available.";
+
+$_lang['city_title_city'] = "City / Island";
+$_lang['city_title_country'] = "Country";
+$_lang['city_title_count'] = "Dives";
 
 
 // Dive Statistics related values

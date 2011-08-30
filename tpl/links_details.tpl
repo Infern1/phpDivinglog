@@ -109,6 +109,23 @@ class="divelogcrumbs" title="{$previous_country_linktitle}">{$previous}</a>
     {/if}
     </div>
 
+{elseif isset($city_first)}
+    <div class="divelogcrumbs">
+    {if isset($multiuser_id)}
+    <a href="{$app_path}/divecity.php{$sep1}{$multiuser_id}{$sep2}{$first_city_id}" 
+class="divelogcrumbs" title="{$first_city_linktitle}">{$first}</a>
+    &nbsp;|&nbsp;
+    <a href="{$app_path}/divecity.php{$sep1}{$multiuser_id}{$sep2}{$previous_city_id}" 
+class="divelogcrumbs" title="{$previous_city_linktitle}">{$previous}</a>
+    {else}
+    <a href="{$app_path}/divecity.php{$sep2}{$first_city_id}" 
+class="divelogcrumbs" title="{$first_city_linktitle}">{$first}</a>
+    &nbsp;|&nbsp;
+    <a href="{$app_path}/divecity.php{$sep2}{$previous_city_id}" 
+class="divelogcrumbs" title="{$previous_city_linktitle}">{$previous}</a>
+    {/if}
+    </div>
+
 {else}
 &nbsp;
 {/if}
@@ -220,6 +237,23 @@ class="divelogcrumbs" title="{$next_country_linktitle}">{$next}</a>
     &nbsp;|&nbsp;
     <a href="{$app_path}/divecountry.php{$sep2}{$last_country_nr}"
 class="divelogcrumbs" title="{$last_country_linktitle}">{$last}</a>
+    {/if}
+    </div>
+
+{elseif isset($divecityy_not_null)}
+    <div class="divelogcrumbs">
+    {if isset($multiuser_id)}
+    <a href="{$app_path}/divecity.php{$sep1}{$multiuser_id}{$sep2}{$next_city_nr}"
+class="divelogcrumbs" title="{$next_city_linktitle}">{$next}</a>
+    &nbsp;|&nbsp;
+    <a href="{$app_path}/divecity.php{$sep1}{$multiuser_id}{$sep2}{$last_city_nr}"
+class="divelogcrumbs" title="{$last_city_linktitle}">{$last}</a>
+    {else}
+    <a href="{$app_path}/divecity.php{$sep2}{$next_city_nr}" 
+class="divelogcrumbs" title="{$next_city_linktitle}">{$next}</a>
+    &nbsp;|&nbsp;
+    <a href="{$app_path}/divecity.php{$sep2}{$last_city_nr}"
+class="divelogcrumbs" title="{$last_city_linktitle}">{$last}</a>
     {/if}
     </div>
 

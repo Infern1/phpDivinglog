@@ -32,6 +32,7 @@ class HandleRequest {
     var $divetrip_nr;
     var $diveshop_nr;
     var $divecountry_nr;
+    var $divecity_nr;
 
     /**
      * requested_page contains the requested page of the paginate
@@ -58,9 +59,10 @@ class HandleRequest {
      * 5 = dive profile or dive piechart
      * 6 = dive gallery
      * 7 = resizer
-     * 8 = divetrip
-     * 9 = diveshop
+     * 8 = dive trip
+     * 9 = dive shop
      * 10 = country
+     * 11 = city
      *
      * @var mixed
      * @access public
@@ -168,6 +170,10 @@ class HandleRequest {
     function get_divecountry_nr(){
         return $this->divecountry_nr;
     }
+
+    function get_divecity_nr(){
+        return $this->divecity_nr;
+    }
     
 
     /**
@@ -254,6 +260,11 @@ class HandleRequest {
                             $this->divecountry_nr = check_number($split_request[2]);
                         $this->request_type = 10;
                         break;
+                    case 'divecity.php':
+                        if($this->view_request == 1)
+                            $this->divecity_nr = check_number($split_request[2]);
+                        $this->request_type = 11;
+                        break;
                     default:
                         $this->diver_choice = true;
                         $this->request_type = 1;
@@ -329,6 +340,10 @@ class HandleRequest {
                     case 'divecountry.php':
                         $this->divecountry_nr = $id;
                         $this->request_type = 10;
+                        break;
+                    case 'divecity.php':
+                        $this->divecity_nr = $id;
+                        $this->request_type = 11;
                         break;
                     default:
                         //defaults to main page
@@ -834,6 +849,8 @@ class TopLevelMenu {
         $t->assign('dive_trips',$_lang['dive_trips']);
         $t->assign('dive_country_linktitle', $_lang['dive_country_linktitle']);
         $t->assign('dive_countries',$_lang['dive_countries']);
+        $t->assign('dive_city_linktitle', $_lang['dive_city_linktitle']);
+        $t->assign('dive_cities',$_lang['dive_cities']);
         $t->assign('dive_stats_linktitle', $_lang['dive_stats_linktitle']);
         $t->assign('dive_stats', $_lang['dive_stats']);
         $t->assign('dive_gallery_linktitle', $_lang['dive_gallery_linktitle']);
@@ -870,6 +887,8 @@ class TopLevelMenu {
         $t->assign('dive_trips', $_lang['dive_trips'] );
         $t->assign('dive_country_linktitle', $_lang['dive_country_linktitle']);
         $t->assign('dive_countries', $_lang['dive_countries'] );
+        $t->assign('dive_city_linktitle', $_lang['dive_city_linktitle']);
+        $t->assign('dive_cities', $_lang['dive_cities'] );
         $t->assign('dive_stats_linktitle', $_lang['dive_stats_linktitle']);
         $t->assign('dive_stats', $_lang['dive_stats'] );
         $t->assign('dive_gallery_linktitle', $_lang['dive_gallery_linktitle']);
@@ -1102,6 +1121,40 @@ class TopLevelMenu {
                 $t->assign('next', $_lang['next'] );
                 $t->assign('last_country_nr', $countrylist[$last]['ID']);
                 $t->assign('last_country_linktitle', $_lang['last_country_linktitle'] );
+                $t->assign('last', $_lang['last'] );
+            } 
+
+        } elseif ($request->request_type == 11) {
+            //	First, Previous, Next, Last links and City #
+            $citylist = parse_mysql_query('citylist.sql');
+            $last = count($citylist) - 1;
+            $position = -1;
+            $citycount = count($citylist);
+            for ($i=0; $i<$citycount; $i++) {
+                if ($citylist[$i]['ID'] == $globals['cityid']) {
+                    $position = $i;
+                }
+            }
+
+            //	First, Previous
+            if ($position != 0 ) {
+                $t->assign('city_first','1');
+                $t->assign('first_city_id', $citylist[0]['ID']);
+                $t->assign('first_city_linktitle', $_lang['first_city_linktitle']);
+                $t->assign('first', $_lang['first']);
+                $t->assign('previous_city_id', $citylist[$position - 1]['ID']);
+                $t->assign('previous_city_linktitle', $_lang['previous_city_linktitle']);
+                $t->assign('previous', $_lang['previous']);
+            }
+
+            //	Next, Last
+            if ($position != $last) {
+                $t->assign('divecity_not_null','1');
+                $t->assign('next_city_nr', $citylist[$position + 1]['ID']);
+                $t->assign('next_city_linktitle', $_lang['next_city_linktitle']);
+                $t->assign('next', $_lang['next'] );
+                $t->assign('last_city_nr', $citylist[$last]['ID']);
+                $t->assign('last_city_linktitle', $_lang['last_city_linktitle'] );
                 $t->assign('last', $_lang['last'] );
             } 
 
@@ -2389,7 +2442,7 @@ class Divesite{
             }
 
             if ($countrycity['City'] != "") {
-                //			Get the city details from database
+                // Get the city details from database
                 $globals['cityid'] = $countrycity['CityID'];
                 $citydetails = parse_mysql_query('onecity.sql');
                 if (count($citydetails) == 0) {
@@ -4049,7 +4102,6 @@ class Divetrip{
 }
 
 
-
 /**
  * Divecountry contains all functions for displaying the divecountry information
  * 
@@ -4505,6 +4557,410 @@ class Divecountry{
         $grid->showColumn('Country', $_lang['country_title_country']);
         $grid->setColwidth('Country',"450");
         $grid->showColumn('COUNT(*)', $_lang['country_title_count']);
+        $grid->setColwidth('COUNT(*)',"50");
+        $grid->setRowActionFunction("action");
+
+        $grid_ret = $grid->render(TRUE); 
+        $t->assign('grid_display' ,1);
+        $t->assign('grid',$grid_ret );
+    /*}}}*/
+    }
+/*}}}*/
+}
+
+
+
+
+/**
+ * Divecity contains all functions for displaying the divecity information
+ * 
+ * @package phpdivinglog
+ * @version $Rev$
+ * @copyright Copyright (C) 2011 Rob Lensen. All rights reserved.
+ * @author Rob Lensen <rob@bsdfreaks.nl> 
+ * @license LGPL v3 http://www.gnu.org/licenses/lgpl-3.0.txt
+ */
+class Divecity{
+    var $multiuser; /*{{{*/
+    var $table_prefix;
+    var $user_id;
+    var $divecity_nr;
+    var $result;
+    var $result_shop;
+    var $result_city;
+    var $city;
+    var $shop;
+    var $dives;
+    var $city_count;
+    var $triplist;
+    var $divecity_data;
+    var $request_type; // request_type = 0 overview request_type = 1 details
+
+    /**
+     * Divecity default constructor sets some defaults for this class
+     * 
+     * @access public
+     * @return void
+     */
+    function __construct() {
+        $a = func_get_args(); 
+        $i = func_num_args(); 
+        if($i == 0){
+            global $_config;
+            $this->multiuser = $_config['multiuser'];
+        } else {
+            if (method_exists($this,$f='__construct'.$i)) { 
+                call_user_func_array(array($this,$f),$a); 
+            } 
+        }
+    }
+
+    /**
+     * __construct1 construct a Divecity class when divecity ID is given
+     * 
+     * @param mixed $a1 
+     * @access protected
+     * @return void
+     */
+    function __construct1($a1) 
+    { 
+        global $_config;
+        $this->divecity_nr = $a1;
+        $this->get_divecity_info();
+    } 
+
+    function get_request_type(){
+        return $this->request_type;
+    }
+
+    function set_divecity_info($request){
+        // We need to extract the info from the request
+        /*{{{*/
+        if (!$request->diver_choice) {
+            if ($request->get_view_request() == 1) {
+                $this->request_type = 1;
+                $this->divecity_nr = $request->get_divecity_nr();
+            } else {
+                $this->request_type = 0;
+                $this->requested_page = $request->get_requested_page();
+            }
+            if ($this->multiuser) {
+                $this->user_id = $request->get_user_id();
+                $user = new User();
+                $user->set_user_id($this->user_id);
+                $this->table_prefix = $user->get_table_prefix();
+            } else {
+                $user = new User();
+                $this->table_prefix = $user->get_table_prefix();
+                $this->divecity_nr = $request->get_divecity_nr();
+            }
+        } else {
+            $this->request_type = 11;
+        }
+    /*}}}*/
+    }
+
+    function get_divecity_info(){
+        global $globals, $_config; /*{{{*/
+        if (!empty($this->divecity_nr)) {
+            $this->request_type = 1;
+            $globals['cityid'] = $this->divecity_nr;
+            $this->result = parse_mysql_query('onecity.sql');
+        } else {
+            /**
+             * If the request type is not already set (by divers choice), set it to overview  
+             */
+            if ($this->request_type != 3) {
+                $this->request_type = 0;
+            }
+        }
+        return $this->result;
+    /*}}}*/
+    }
+
+    function get_overview_divers(){
+        global $t, $_lang, $globals, $_config; /*{{{*/
+        $users = new Users();
+        $user_list = $users->get_user_data();
+        $t->assign('diver_overview',1);
+        $t->assign('divers', $user_list);
+        $t->assign('file_name','divecity.php');
+    /*}}}*/
+    }
+
+
+    /**
+     * get_sites_in_city 
+     * 
+     * @access public
+     * @return void
+     */
+    function get_sites_in_city(){
+        global $globals, $_config; /*{{{*/
+        // Get the sites in this city from database
+        $globals['cityid'] = $this->divecity_nr;
+        $this->sites = parse_mysql_query('citysites.sql');
+        $this->site_count = count($this->sites);
+        // Get the divecity list from database
+        $this->citylist = parse_mysql_query('citylist.sql');
+    /*}}}*/
+    }
+
+    /**
+     * get_dives_in_city 
+     * 
+     * @access public
+     * @return void
+     */
+    function get_dives_in_city(){
+        global $globals, $_config; /*{{{*/
+        // Get the dives in this city from database
+        $globals['cityid'] = $this->divecity_nr;
+        $this->dives = parse_mysql_query('citydives.sql');
+        $this->dive_count = count($this->dives);
+        // Get the divecity list from database
+        $this->citylist = parse_mysql_query('citylist.sql');
+    /*}}}*/
+    }
+
+    /**
+     * set_main_divecity_details 
+     * 
+     * @access public
+     * @return void
+     */
+    function set_main_divecity_details(){
+        global $globals, $_config, $t, $_lang; /*{{{*/
+        //$this->get_divecity_location_details(); 
+        // Show main city details
+        $result = $this->result;
+
+        $t->assign('pagetitle',$_lang['city_details_pagetitle'].$result['City']);
+
+        $t->assign('divecity_id', $this->divecity_nr);
+        $t->assign('city_name', $_lang['city_name']);
+        $t->assign('city_type', $_lang['city_type']);
+        $t->assign('city_country', $_lang['city_country']);
+        $t->assign('city_map', $_lang['city_map']);
+        $t->assign('city_sect_activity', $_lang['city_sect_activity'].$result['City']);
+
+        if (isset($result['City']) && ($result['City'] != "")) {
+            $t->assign('City', $result['City']);
+        } else {
+            $t->assign('City','-');
+        }
+
+        if (isset($result['Type']) && ($result['Type'] != "")) {
+            $Type = $result['Type'];
+            $t->assign('Type', $Type);
+        } else {
+            $t->assign('Type','-');
+        }
+
+        if (isset($result['Country']) && ($result['Country'] != "")) {
+            $t->assign('Country', $result['Country']);
+        } else {
+            $t->assign('Country','-');
+        }
+
+        //	Show the map
+        if (isset($result['MapPath']) && ($result['MapPath'] != "")) {
+            $t->assign('MapPath', $result['MapPath']);
+            $t->assign('MapPathurl', $_config['mappath_web'] . $result['MapPath']);
+            $t->assign('city_map_linktitle', $_lang['city_map_linktitle']. $result['City']);
+        } else {
+            $t->assign('MapPath','');
+            $t->assign('MapPathurl','');
+            $t->assign('city_map_linktitle','');
+        }
+
+    /*}}}*/
+    }
+
+    /**
+     * set_sites_in_city 
+     * 
+     * @access public
+     * @return void
+     */
+    function set_sites_in_city(){
+        global $globals, $_config, $t, $_lang; /*{{{*/
+        $this->get_sites_in_city();
+        // Show city sites if we have them
+        if (count($this->sites) == 1) {
+            $sites[0] = $this->sites;
+        } else {
+            $sites = $this->sites;
+        }
+        if ($this->site_count != 0) {
+            $t->assign('site_count', $this->site_count);
+            if ($this->site_count == 1) {
+                $t->assign('city_site_trans', $_lang['city_site_single']);
+            } else {
+                $t->assign('city_site_trans', $_lang['city_site_plural']);
+            }
+            for ($i=0; $i<$this->site_count; $i++) {
+                $sites[$i] = $sites[$i]['ID'] ; 
+            }
+            $t->assign('dcity_number_title', $_lang['dcity_number_title'] );
+            $t->assign('sites',$sites);
+        } else {
+            $t->assign('site_count', $this->site_count);
+            $t->assign('dlog_number_title', "" );
+            $t->assign('sites',"");
+        }
+    /*}}}*/
+    }
+
+    /**
+     * set_dives_in_city 
+     * 
+     * @access public
+     * @return void
+     */
+    function set_dives_in_city(){
+        global $globals, $_config, $t, $_lang; /*{{{*/
+        $this->get_dives_in_citry();
+        // Show city dives if we have them
+        if(count($this->dives) == 1){
+            $dives[0] = $this->dives;
+        } else {
+            $dives = $this->dives;
+        }
+        if ($this->dive_count != 0) {
+            $t->assign('dive_count', $this->dive_count);
+            if ($this->dive_count == 1) {
+                $t->assign('city_dive_trans', $_lang['city_dive_single']);
+            } else {
+                $t->assign('city_dive_trans', $_lang['city_dive_plural']);
+            }
+            for ($i=0; $i<$this->dive_count; $i++) {
+                $dives[$i] = $dives[$i]['Number'] ; 
+            }
+            $t->assign('dlog_number_title', $_lang['dlog_number_title'] );
+            $t->assign('dives',$dives);
+        } else {
+            $t->assign('dive_count', $this->dive_count);
+            $t->assign('dlog_number_title', "" );
+            $t->assign('dives',"");
+        }
+    /*}}}*/
+    }
+
+    /**
+     * set_divecity_comments 
+     * 
+     * @access public
+     * @return void
+     */
+    function set_divecity_comments(){
+        global $globals, $_config, $t, $_lang; /*{{{*/
+        //	Comments
+        $result = $this->result;
+        //	Show them if we have them
+        if ($result['Comments'] != "") {
+            $t->assign('city_sect_comments', $_lang['city_sect_comments']);
+            $r = $result['Comments'];
+
+	    $r = htmlentities($r, ENT_QUOTES, "ISO-8859-1");
+            $r = str_replace("\r\n", "\n", $r);
+            $r = str_replace("\n", "<br>\n", $r);
+
+            // Make any URLs clickable
+            $r = make_clickable($r);
+
+            $t->assign('Comments', $r);
+        }
+    /*}}}*/
+    } 
+
+    /**
+     * get_divecity_overview 
+     * 
+     * @access public
+     * @return void
+     */
+    function get_divecity_overview(){
+        global $t, $_lang, $globals, $_config; /*{{{*/
+        $citytable = $this->table_prefix."City";
+        $sql = sql_file("citylist.sql");
+
+        /**
+         * when view_type = 1 display the ajax grid if type = 2 display old fashioned table 
+         */
+        if ($_config['view_type'] == 1) {
+            $this->get_divecity_overview_grid($sql);
+        }
+        elseif ($_config['view_type'] == 2) {
+            $this->get_divecity_overview_table($sql);
+        } else{
+            echo 'no view_type defined!';
+        }
+        $t->assign('pagetitle',$_lang['dive_cities']);
+    /*}}}*/
+    }
+
+    /**
+     * get_divecity_overview_table 
+     * 
+     * @access public
+     * @return void
+     */
+    function get_divecity_overview_table($sql){
+        global $db, $t, $_lang, $globals, $_config; /*{{{*/
+        //    Get the page header
+        //    Get the details of the trips to be listed
+        $citylist_query = $sql;
+        $t->assign('city_title_city', $_lang['city_title_city']);
+        $t->assign('city_title_country', $_lang['city_title_country']);
+        $t->assign('city_title_dives', $_lang['city_title_count']);
+
+        if ($this->multiuser == 1) {
+            $path = $_config['web_root'].'/divecity.php/'.$this->user_id.'/list';
+        } else {
+            $path = $_config['web_root'].'/divecity.php/list';
+        }
+        if (empty($this->requested_page)) {
+            $cpage = 0;
+        } else {
+            $cpage = $this->requested_page;
+        }
+
+        $pager_options = new TablePager($cpage,$path);
+        $paged_data = Pager_Wrapper_MDB2($db, $citylist_query, $pager_options->options);
+
+        $t->assign('pages', $paged_data['links']);
+        $t->assign('cells', $paged_data['data']);
+    /*}}}*/
+    }
+
+    /**
+     * get_divecity_overview_grid 
+     * 
+     * @param mixed $sql 
+     * @access public
+     * @return void
+     */
+    function get_divecity_overview_grid($sql){
+        global $t, $_lang, $globals, $_config; /*{{{*/
+        $data = parse_mysql_query(0,$sql);;
+        $GridClass = new TableGrid($this->user_id,$data);
+        $grid = $GridClass->get_grid_class();
+
+        /**
+         * Define the table according some info 
+         */
+        if ($this->multiuser) {
+            $url = "/divecity.php".$t->getTemplateVars('sep1').$this->user_id.$t->getTemplateVars('sep2');
+        } else {
+            $url = "/divecity.php".$t->getTemplateVars('sep2');
+        }
+
+        $grid->showColumn('City', $_lang['city_title_city']);
+        $grid->setColwidth('City',"250");
+        $grid->showColumn('Country', $_lang['city_title_country']);
+        $grid->setColwidth('Country',"200");
+        $grid->showColumn('COUNT(*)', $_lang['city_title_count']);
         $grid->setColwidth('COUNT(*)',"50");
         $grid->setRowActionFunction("action");
 
