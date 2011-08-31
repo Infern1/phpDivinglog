@@ -186,7 +186,7 @@ class HandleRequest {
     function handle_url(){
     /*{{{*/
         global $_config, $t;
-        if($this->multiuser){
+        if ($this->multiuser) {
             // The url should contain a least one select person, otherwise return to the person chooser
             // Get the last two parts of the array
             $split_request = GetRequestVar($this->request_uri, $this->request_file_depth);
@@ -208,17 +208,17 @@ class HandleRequest {
                 }
                 switch ($file_req) {
                     case "index.php":
-                        if($this->view_request == 1)
+                        if ($this->view_request == 1)
                             $this->dive_nr = check_number($split_request[2]);
                         $this->request_type = 1;
                         break;
                     case 'divesite.php':
-                        if($this->view_request == 1)
+                        if ($this->view_request == 1)
                             $this->site_nr = check_number($split_request[2]);
                         $this->request_type = 2;
                         break;
                     case 'equipment.php':
-                        if($this->view_request == 1)
+                        if ($this->view_request == 1)
                             $this->equipment_nr = check_number($split_request[2]);
                         $this->request_type = 3;
                         break;
@@ -233,7 +233,7 @@ class HandleRequest {
                         break;
                      case 'drawprofile.php':
                         $this->request_type = 5;
-                        if($this->view_request == 1)
+                        if ($this->view_request == 1)
                             $this->dive_nr = check_number($split_request[2]);
                         break;
                     case 'drawpiechart.php':
@@ -245,23 +245,23 @@ class HandleRequest {
                         $this->diver_choice = false;
                         break;
                     case 'divetrip.php':
-                        if($this->view_request == 1)
+                        if ($this->view_request == 1)
                             $this->divetrip_nr = check_number($split_request[2]);
                         $this->request_type = 8;
                         $this->diver_choice = true;
                         break;
                     case 'diveshop.php':
-                        if($this->view_request == 1)
+                        if ($this->view_request == 1)
                             $this->diveshop_nr = check_number($split_request[2]);
                         $this->request_type = 9;
                         break;
                     case 'divecountry.php':
-                        if($this->view_request == 1)
+                        if ($this->view_request == 1)
                             $this->divecountry_nr = check_number($split_request[2]);
                         $this->request_type = 10;
                         break;
                     case 'divecity.php':
-                        if($this->view_request == 1)
+                        if ($this->view_request == 1)
                             $this->divecity_nr = check_number($split_request[2]);
                         $this->request_type = 11;
                         break;
@@ -856,7 +856,7 @@ class TopLevelMenu {
         $t->assign('dive_gallery_linktitle', $_lang['dive_gallery_linktitle']);
         $t->assign('dive_gallery', $_lang['dive_gallery']);
 
-        if($this->multiuser){
+        if ($this->multiuser) {
             $t->assign('multiuser_id', $this->user_id);
         }
     /*}}}*/
@@ -880,17 +880,17 @@ class TopLevelMenu {
         $t->assign('dive_sites_linktitle', $_lang['dive_sites_linktitle']);
         $t->assign('dive_sites', $_lang['dive_sites'] );
         $t->assign('dive_equip_linktitle', $_lang['dive_equip_linktitle']);
-        $t->assign('dive_equip', $_lang['dive_equip'] );
+        $t->assign('dive_equip', $_lang['dive_equip']);
         $t->assign('dive_shops_linktitle', $_lang['dive_shops_linktitle']);
-        $t->assign('dive_shops', $_lang['dive_shops'] );
+        $t->assign('dive_shops', $_lang['dive_shops']);
         $t->assign('dive_trips_linktitle', $_lang['dive_trips_linktitle']);
-        $t->assign('dive_trips', $_lang['dive_trips'] );
+        $t->assign('dive_trips', $_lang['dive_trips']);
         $t->assign('dive_country_linktitle', $_lang['dive_country_linktitle']);
-        $t->assign('dive_countries', $_lang['dive_countries'] );
+        $t->assign('dive_countries', $_lang['dive_countries']);
         $t->assign('dive_city_linktitle', $_lang['dive_city_linktitle']);
-        $t->assign('dive_cities', $_lang['dive_cities'] );
+        $t->assign('dive_cities', $_lang['dive_cities']);
         $t->assign('dive_stats_linktitle', $_lang['dive_stats_linktitle']);
-        $t->assign('dive_stats', $_lang['dive_stats'] );
+        $t->assign('dive_stats', $_lang['dive_stats']);
         $t->assign('dive_gallery_linktitle', $_lang['dive_gallery_linktitle']);
         $t->assign('dive_gallery', $_lang['dive_gallery']);
 
@@ -1266,7 +1266,7 @@ class Divelog {
             /**
              * If the request type is not already set (by divers choice), set it to overview  
              */
-            if($this->request_type != 3){
+            if ($this->request_type != 3) {
                 $this->request_type = 0;
             }
         }
@@ -1830,7 +1830,7 @@ class Divelog {
                 }
             } else {
                 $avg_depth = $this->averagedepth;
-                if($avg_depth != '-'){
+                if ($avg_depth != '-') {
                     $tanks[$i]['unit_length_short'] = $_lang['unit_length_short'];
                 } else {
                     $tanks[$i]['unit_length_short'] = "";
@@ -1950,7 +1950,7 @@ class Divelog {
                 }
             } else {
                 $avg_depth = $this->averagedepth;
-                if($avg_depth != '-'){
+                if ($avg_depth != '-') {
                     $t->assign('unit_length_short', $_lang['unit_length_short']);
                 } else {
                     $t->assign('unit_length_short', "");
@@ -2334,7 +2334,7 @@ class Divesite{
     function __construct() {
         $a = func_get_args(); 
         $i = func_num_args(); 
-        if($i == 0){
+        if ($i == 0) {
             global $_config;
             $this->multiuser = $_config['multiuser'];
         } else {
@@ -2611,7 +2611,7 @@ class Divesite{
         $divepics = $pic_class->get_image_link();
         $pics = count($divepics);
         if ($pics != 0) {
-            if(isset($_config['divepics_preview'])){
+            if (isset($_config['divepics_preview'])) {
                 $t->assign('pics2' , '1');
                 $t->assign('image_link', $divepics);
             } else {
@@ -2633,7 +2633,7 @@ class Divesite{
         global $globals, $_config, $t, $_lang; /*{{{*/
         $this->get_dives_at_location();
         // Show site dives if we have them
-        if(count($this->dives) == 1){
+        if (count($this->dives) == 1) {
             $dives[0] = $this->dives;
         } else {
             $dives = $this->dives;
@@ -3220,7 +3220,7 @@ class Diveshop{
     function __construct() {
         $a = func_get_args(); 
         $i = func_num_args(); 
-        if($i == 0){
+        if ($i == 0) {
             global $_config;
             $this->multiuser = $_config['multiuser'];
         } else {
@@ -3495,7 +3495,7 @@ class Diveshop{
         global $globals, $_config, $t, $_lang; /*{{{*/
         $this->get_dives_with_shop();
         // Show shop dives if we have them
-        if(count($this->dives) == 1){
+        if (count($this->dives) == 1) {
             $dives[0] = $this->dives;
         } else {
             $dives = $this->dives;
@@ -3680,7 +3680,7 @@ class Divetrip{
     function __construct() {
         $a = func_get_args(); 
         $i = func_num_args(); 
-        if($i == 0){
+        if ($i == 0) {
             global $_config;
             $this->multiuser = $_config['multiuser'];
         } else {
@@ -3902,7 +3902,7 @@ class Divetrip{
         global $globals, $_config, $t, $_lang; /*{{{*/
         $this->get_dives_on_trip();
         // Show trip dives if we have them
-        if(count($this->dives) == 1){
+        if (count($this->dives) == 1) {
             $dives[0] = $this->dives;
         } else {
             $dives = $this->dives;
@@ -4136,7 +4136,7 @@ class Divecountry{
     function __construct() {
         $a = func_get_args(); 
         $i = func_num_args(); 
-        if($i == 0){
+        if ($i == 0) {
             global $_config;
             $this->multiuser = $_config['multiuser'];
         } else {
@@ -4422,7 +4422,7 @@ class Divecountry{
         global $globals, $_config, $t, $_lang; /*{{{*/
         $this->get_dives_in_country();
         // Show country dives if we have them
-        if(count($this->dives) == 1){
+        if (count($this->dives) == 1) {
             $dives[0] = $this->dives;
         } else {
             $dives = $this->dives;
@@ -4572,7 +4572,7 @@ class Divecountry{
 
 
 /**
- * Divecity contains all functions for displaying the divecity information
+ * Divecity contains all functions for displaying the dive city information
  * 
  * @package phpdivinglog
  * @version $Rev$
@@ -4605,7 +4605,7 @@ class Divecity{
     function __construct() {
         $a = func_get_args(); 
         $i = func_num_args(); 
-        if($i == 0){
+        if ($i == 0) {
             global $_config;
             $this->multiuser = $_config['multiuser'];
         } else {
@@ -4687,7 +4687,6 @@ class Divecity{
         $t->assign('file_name','divecity.php');
     /*}}}*/
     }
-
 
     /**
      * get_sites_in_city 
@@ -4822,7 +4821,7 @@ class Divecity{
         global $globals, $_config, $t, $_lang; /*{{{*/
         $this->get_dives_in_citry();
         // Show city dives if we have them
-        if(count($this->dives) == 1){
+        if (count($this->dives) == 1) {
             $dives[0] = $this->dives;
         } else {
             $dives = $this->dives;
@@ -4943,10 +4942,9 @@ class Divecity{
      */
     function get_divecity_overview_grid($sql){
         global $t, $_lang, $globals, $_config; /*{{{*/
-        $data = parse_mysql_query(0,$sql);;
+        $data = parse_mysql_query(0,$sql);
         $GridClass = new TableGrid($this->user_id,$data);
         $grid = $GridClass->get_grid_class();
-
         /**
          * Define the table according some info 
          */
@@ -5183,7 +5181,7 @@ class Divestats{
             $globals['stats'] = "Divedate = '" . $divestats['DivedateMin'] . "'";
             $divestatsnr = parse_mysql_query('divestatsnr.sql');
             //Check the number of dives on the first day of diving, if more than 1 get the first
-            if(count($divestatsnr) > 1){
+            if (count($divestatsnr) > 1) {
                 $this->DivedateMinNr = $divestatsnr[0]['Number'];
             } else {
                 $this->DivedateMinNr = $divestatsnr['Number'];
@@ -5193,7 +5191,7 @@ class Divestats{
             $globals['stats'] = "Divedate = '" . $divestats['DivedateMax'] . "'";
             $divestatsnr = parse_mysql_query('divestatsnr.sql');
             //Some principle as first dive
-            if(count($divestatsnr) > 1){
+            if (count($divestatsnr) > 1) {
                 $this->DivedateMaxNr = $divestatsnr[count($divestatsnr)-1]['Number'];
             } else {
                 $this->DivedateMaxNr = $divestatsnr['Number'];
@@ -5202,7 +5200,7 @@ class Divestats{
             // Get dive number for sortest dive
             $globals['stats'] = "Divetime = '" . $divestats['DivetimeMin'] . "'";
             $divestatsnr = parse_mysql_query('divestatsnr.sql');
-            if(count($divestatsnr) > 1){
+            if (count($divestatsnr) > 1) {
                 $this->DivetimeMinNr = $divestatsnr[0]['Number'];
             } else {
                 $this->DivetimeMinNr = $divestatsnr['Number'];
@@ -5210,7 +5208,7 @@ class Divestats{
             // Get dive number for deepest dive
             $globals['stats'] = "Divetime = '" . $divestats['DivetimeMax'] . "'";
             $divestatsnr = parse_mysql_query('divestatsnr.sql');
-            if(count($divestatsnr) > 1){
+            if (count($divestatsnr) > 1) {
                 $this->DivetimeMaxNr = $divestatsnr[0]['Number'];
             } else {
                 $this->DivetimeMaxNr = $divestatsnr['Number'];
@@ -5218,7 +5216,7 @@ class Divestats{
             // Get dive number for shallowest dive
             $globals['stats'] = "Depth = '" . $divestats['DepthMin'] . "'";
             $divestatsnr = parse_mysql_query('divestatsnr.sql');
-            if(count($divestatsnr) > 1){
+            if (count($divestatsnr) > 1) {
                 $this->DepthMinNr = $divestatsnr[0]['Number'];
             } else {
                 $this->DepthMinNr = $divestatsnr['Number'];
@@ -5226,7 +5224,7 @@ class Divestats{
             // Get dive number for deepest dive
             $globals['stats'] = "Depth = '" . $divestats['DepthMax'] . "'";
             $divestatsnr = parse_mysql_query('divestatsnr.sql');
-            if(count($divestatsnr) > 1){
+            if (count($divestatsnr) > 1) {
                 $this->DepthMaxNr = $divestatsnr[0]['Number'];
             } else {
                 $this->DepthMaxNr = $divestatsnr['Number'];
@@ -5234,7 +5232,7 @@ class Divestats{
             // Get dive number for coldest water dive
             $globals['stats'] = "Watertemp = '" . $divestats['WatertempMin'] . "'";
             $divestatsnr = parse_mysql_query('divestatsnr.sql');
-            if(count($divestatsnr) > 1){
+            if (count($divestatsnr) > 1) {
                 $this->WatertempMinNr = $divestatsnr[0]['Number'];
             } else {
                 $this->WatertempMinNr = $divestatsnr['Number'];
@@ -5242,7 +5240,7 @@ class Divestats{
             // Get dive number for warmest water dive
             $globals['stats'] = "Watertemp = '" . $divestats['WatertempMax'] . "'";
             $divestatsnr = parse_mysql_query('divestatsnr.sql');
-            if(count($divestatsnr) > 1){
+            if (count($divestatsnr) > 1) {
                 $this->WatertempMaxNr = $divestatsnr[0]['Number'];
             } else {
                 $this->WatertempMaxNr = $divestatsnr['Number'];
@@ -5250,7 +5248,7 @@ class Divestats{
             // Get dive number for coldest air dive
             $globals['stats'] = "Airtemp = '" . $divestats['AirtempMin'] . "'";
             $divestatsnr = parse_mysql_query('divestatsnr.sql');
-            if(count($divestatsnr) > 1){
+            if (count($divestatsnr) > 1) {
                 $this->AirtempMinNr = $divestatsnr[0]['Number'];
             } else {
                 $this->AirtempMinNr = $divestatsnr['Number'];
@@ -5258,7 +5256,7 @@ class Divestats{
             // Get dive number for warmest air dive
             $globals['stats'] = "Airtemp = '" . $divestats['AirtempMax'] . "'";
             $divestatsnr = parse_mysql_query('divestatsnr.sql');
-            if(count($divestatsnr) > 1){
+            if (count($divestatsnr) > 1) {
                 $this->AirtempMaxNr = $divestatsnr[0]['Number'];
             } else {
                 $this->AirtempMaxNr = $divestatsnr['Number'];
@@ -5863,7 +5861,7 @@ class DivePictures{
                         if (isset($divepics[$i]['PlaceID'])) {
                             $site_nr = $divepics[$i]['PlaceID'];
                             $divesite = new Divesite($site_nr);
-                            if(isset($divesite->result['Place'])){
+                            if (isset($divesite->result['Place'])) {
                                 $divesite_name = $divesite->result['Place'];
                             } else {
                                 $divesite_name = '';
@@ -6025,7 +6023,7 @@ class DivePictures{
 
     function get_exif_data($file){
         global $_config, $t, $_lang, $globals;/*{{{*/
-        if(isset($_config["get_exif_data"]) && function_exists('exif_read_data')){
+        if (isset($_config["get_exif_data"]) && function_exists('exif_read_data')) {
             $exif_date = exif_read_data ( $file ,'IFD0'  ); 
             $edate = $exif_date['DateTime']; 
         } else {
@@ -6101,11 +6099,11 @@ class Tank{
      * @return void
      */
     function __construct($tank_id = 0 , $dive_nr = 0) {
-        if($tank_id !=0){
+        if ($tank_id !=0) {
             // Class is called to get info about a tank
             $this->get_divetank_info();
 
-        } elseif($dive_nr != 0){
+        } elseif ($dive_nr != 0) {
             //Class is called to get all tanks from a dive
         } else {
             //Class is called without arguments
@@ -6195,7 +6193,7 @@ class AppInfo{ /*{{{*/
             $this->table_prefix = $user->get_table_prefix();
         } else {
             // if prefix is set get it.
-            if(isset($_config['table_prefix']))
+            if (isset($_config['table_prefix']))
                 $this->table_prefix = $_config['table_prefix'];
         }
         $this->phpDivelogVersion = $_config['app_version'];
