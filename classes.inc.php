@@ -225,12 +225,6 @@ class HandleRequest {
                     case 'divestats.php':
                         $this->request_type = 4;
                         break;
-                    case 'divegallery.php':
-                        $this->request_type = 6;
-                        break;
-                     case 'resize.php':
-                        $this->request_type = 7;
-                        break;
                      case 'drawprofile.php':
                         $this->request_type = 5;
                         if ($this->view_request == 1)
@@ -243,6 +237,12 @@ class HandleRequest {
                     case 'divesummary.php':
                         $this->request_type = 5;
                         $this->diver_choice = false;
+                        break;
+                    case 'divegallery.php':
+                        $this->request_type = 6;
+                        break;
+                     case 'resize.php':
+                        $this->request_type = 7;
                         break;
                     case 'divetrip.php':
                         if ($this->view_request == 1)
@@ -313,6 +313,14 @@ class HandleRequest {
                         $this->user_id = $id;
                         $this->request_type = 4;
                         break;
+                    case 'divesummary.php':
+                        $this->user_id = $id;
+                        $this->request_type = 4;
+                        break;
+                    case 'drawprofile.php':
+                        $this->dive_nr = $id;
+                        $this->request_type = 5;
+                        break;
                     case 'divegallery.php':
                         $this->user_id = $id;
                         $this->request_type = 6;
@@ -320,14 +328,6 @@ class HandleRequest {
                     case 'resize.php':
                         $this->user_id = $id;
                         $this->request_type = 7;
-                        break;
-                    case 'drawprofile.php':
-                        $this->dive_nr = $id;
-                        $this->request_type = 5;
-                        break;
-                    case 'divesummary.php':
-                        $this->user_id = $id;
-                        $this->request_type = 4;
                         break;
                     case 'divetrip.php':
                         $this->request_type = 8;
@@ -1184,7 +1184,7 @@ class Divelog {
     var $averagedepth;
     var $requested_page;
     var $sac;
-    var $request_type; // request_type = 0 overview request_type = 1 details
+    var $request_type; // request_type = 0 overview, request_type = 1 details
    
     /**
      * Divelog default constructor sets some defaults for this class
@@ -2323,7 +2323,7 @@ class Divesite{
     var $dive_count;
     var $sitelist;
     var $divesite_data;
-    var $request_type; // request_type = 0 overview request_type = 1 details
+    var $request_type; // request_type = 0 overview, request_type = 1 details
 
     /**
      * Divesite default constructor sets some defaults for this class
@@ -2818,7 +2818,7 @@ class Equipment{
     var $result;
     var $table_prefix;
     var $result_gearlist;
-    var $request_type; // request_type = 0 overview request_type = 1 details
+    var $request_type; // request_type = 0 overview, request_type = 1 details
    
     function Equipment(){
         global $_config;
@@ -3209,7 +3209,7 @@ class Diveshop{
     var $dive_count;
     var $shoplist;
     var $diveshop_data;
-    var $request_type; // request_type = 0 overview request_type = 1 details
+    var $request_type; // request_type = 0 overview, request_type = 1 details
 
     /**
      * Diveshop default constructor sets some defaults for this class
@@ -3270,7 +3270,7 @@ class Diveshop{
                 $this->diveshop_nr = $request->get_diveshop_nr();
             }
         } else {
-            $this->request_type = 9;
+            $this->request_type = 3;
         }
     /*}}}*/
     }
@@ -3730,7 +3730,7 @@ class Divetrip{
                 $this->divetrip_nr = $request->get_divetrip_nr();
             }
         } else {
-            $this->request_type = 9;
+            $this->request_type = 3;
         }
     /*}}}*/
     }
@@ -4125,7 +4125,7 @@ class Divecountry{
     var $dive_count;
     var $triplist;
     var $divecountry_data;
-    var $request_type; // request_type = 0 overview request_type = 1 details
+    var $request_type; // request_type = 0 overview, request_type = 1 details
 
     /**
      * Divecountry default constructor sets some defaults for this class
@@ -4186,7 +4186,7 @@ class Divecountry{
                 $this->divetrip_nr = $request->get_divecountry_nr();
             }
         } else {
-            $this->request_type = 10;
+            $this->request_type = 3;
         }
     /*}}}*/
     }
@@ -4594,7 +4594,7 @@ class Divecity{
     var $city_count;
     var $triplist;
     var $divecity_data;
-    var $request_type; // request_type = 0 overview request_type = 1 details
+    var $request_type; // request_type = 0 overview, request_type = 1 details
 
     /**
      * Divecity default constructor sets some defaults for this class
@@ -4655,7 +4655,7 @@ class Divecity{
                 $this->divecity_nr = $request->get_divecity_nr();
             }
         } else {
-            $this->request_type = 11;
+            $this->request_type = 3;
         }
     /*}}}*/
     }
@@ -6090,7 +6090,7 @@ class Tank{
     var $divetank_nr;
     var $dive_nr;
     var $result;
-    var $request_type; // request_type = 0 overview request_type = 1 details
+    var $request_type; // request_type = 0 overview, request_type = 1 details
 
     /**
      * Divesite default constructor sets some defaults for this class

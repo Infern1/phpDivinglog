@@ -43,7 +43,7 @@ if ($divecity->get_request_type() == 1) {
     $links->get_std_links();
     $links->get_nav_links($request);
     // Show main dive country details
-    // $divecity->set_main_divecity_details();
+    $divecity->set_main_divecity_details();
     // City Sites
     $divecity->set_sites_in_city();
     // City Dives
