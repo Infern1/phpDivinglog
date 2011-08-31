@@ -69,6 +69,8 @@ function action($value_of_clicked_field, $array_values) {
             return "javascript:open_url(".$array_values["ID"].",'/diveshop.php".$ext."' )";
          } elseif ($request_type == 10) {
             return "javascript:open_url(".$array_values["ID"].",'/divecountry.php".$ext."' )";
+         } elseif ($request_type == 11) {
+            return "javascript:open_url(".$array_values["ID"].",'/divecity.php".$ext."' )";
        }
     } else {
         $request = new HandleRequest();
@@ -88,6 +90,8 @@ function action($value_of_clicked_field, $array_values) {
             return "javascript:open_url(".$array_values["ID"].",'/diveshop.php".$ext."' )";
         } elseif ($request_type == 10) {
             return "javascript:open_url(".$array_values["ID"].",'/divecountry.php".$ext."' )";
+        } elseif ($request_type == 11) {
+            return "javascript:open_url(".$array_values["ID"].",'/divecity.php".$ext."' )";
         }
     }
 /*}}}*/
@@ -285,7 +289,7 @@ function GetRequestVar($url, $request_file_depth=0){
                     $paginas[] .= $el;
                 }
             } elseif (isset($output['pageID'])) {
-                if($_config['multiuser']){
+                if ($_config['multiuser']) {
                     $paginas[] .= $output['user_id']; 
                 }
                 $paginas[] .= "list";
