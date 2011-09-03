@@ -3090,6 +3090,21 @@ class Equipment{
     }
 
     /**
+     * equip_has_photo 
+     * 
+     * @param mixed $value 
+     * @param mixed $row 
+     * @access public
+     * @return void
+     */
+    function equip_has_photo($value, $row){
+        global $_config;
+        if ($row['PhotoPath'] != '') {
+            return '<img src="'.$_config['web_root'].'/images/photo_icon.gif" border="0" alt="" title="">';
+        }
+    }
+
+    /**
      * get_equipment_overview 
      * 
      * @access public
@@ -3125,6 +3140,7 @@ class Equipment{
         $t->assign('equip_title_object', $_lang['equip_title_object'] );
         $t->assign('equip_title_manufacturer', $_lang['equip_title_manufacturer'] );
         $t->assign('equip_title_inactive', $_lang['equip_title_inactive'] );
+        $t->assign('equip_title_photo', $_lang['equip_title_photo']);
 
         $t->assign('logbook_place_linktitle', $_lang['logbook_place_linktitle'] );
         if (!empty($this->multiuser)) {
@@ -3168,11 +3184,16 @@ class Equipment{
         }
 
         $grid->showColumn('Object', $_lang['equip_title_object']);
-        $grid->setColwidth('Object',"300");
+        $grid->setColwidth('Object',"350");
         $grid->showColumn('Manufacturer', $_lang['equip_title_manufacturer']);
-        $grid->setColwidth('Manufacturer',"260");
+        $grid->setColwidth('Manufacturer',"210");
         $grid->showColumn('Inactive', $_lang['equip_title_inactive']);
         $grid->setColwidth('Inactive',"20");
+        $grid->showCustomColumn("photo", $_lang['equip_title_photo']);
+        $grid->setColwidth('photo',"25");
+
+        $methodVariable = array($this, 'equip_has_photo'); 
+        $grid->setCallbackFunction("photo", $methodVariable);
 
         $methodVariable = array($this, 'equipment_inactive'); 
         $grid->setCallbackFunction("Inactive", $methodVariable);

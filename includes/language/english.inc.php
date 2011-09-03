@@ -462,7 +462,6 @@ $_lang['inactive'] = array("Still in service", "Not in service");
 // based on the PHP date() function
 $_lang['equip_date_format'] = "D, d-M-Y";
 
-
 // Dive Equipment List related values
 
 $_lang['equip_none'] = "No dive equipment is currently available.";
@@ -470,6 +469,7 @@ $_lang['equip_none'] = "No dive equipment is currently available.";
 $_lang['equip_title_object'] = "Product";
 $_lang['equip_title_manufacturer'] = "Manufacturer";
 $_lang['equip_title_inactive'] = "Active";
+$_lang['equip_title_photo'] = "Pic";
 
 
 // Dive Country related values
