@@ -2114,7 +2114,7 @@ class Divelog {
         global $t, $_lang, $globals; /*{{{*/
         $result = $this->result;
         // Show them if we have them
-        if ($result['Comments'] != "") {
+        if (isset($result['Comments']) && ($result['Comments'] != "")) {
             $t->assign('dive_sect_comments', $_lang['dive_sect_comments']);
             $r = $result['Comments'];
 
@@ -2427,7 +2427,7 @@ class Divesite{
         global $globals, $_config; /*{{{*/
         $countrycity = $this->result_countrycity;
         if (count($countrycity) != 0) {
-            if ($countrycity['Country'] != "") {
+            if (isset($countrycity['Country']) && ($countrycity['Country'] != "")) {
                 // Get the country details from database
                 $globals['countryid'] = $countrycity['CountryID'];
                 $countrydetails = parse_mysql_query('onecountry.sql');
@@ -2440,7 +2440,7 @@ class Divesite{
                 }
             }
 
-            if ($countrycity['City'] != "") {
+            if (isset($countrycity['City']) && ($countrycity['City'] != "")) {
                 // Get the city details from database
                 $globals['cityid'] = $countrycity['CityID'];
                 $citydetails = parse_mysql_query('onecity.sql');
@@ -2667,7 +2667,7 @@ class Divesite{
         //	Comments
         $result = $this->result;
         //	Show them if we have them
-        if ($result['Comments'] != "") {
+        if (isset($result['Comments']) && ($result['Comments'] != "")) {
             $t->assign('site_sect_comments', $_lang['site_sect_comments']);
             $r = $result['Comments'];
 
@@ -3054,7 +3054,7 @@ class Equipment{
         $result =  $this->result; 
         //	Show them if we have them
         //	Show them if we have them
-        if ($result['Comments'] != "") {
+        if (isset($result['Comments']) && ($result['Comments'] != "")) {
             $t->assign('equip_sect_comments', $_lang['equip_sect_comments'] );
 
             $r = $result['Comments'];
@@ -3551,7 +3551,7 @@ class Diveshop{
         //	Comments
         $result = $this->result;
         //	Show them if we have them
-        if ($result['Comments'] != "") {
+        if (isset($result['Comments']) && ($result['Comments'] != "")) {
             $t->assign('shop_sect_comments', $_lang['shop_sect_comments']);
             $r = $result['Comments'];
 
@@ -3979,7 +3979,7 @@ class Divetrip{
         $result = $this->result;
         $t->assign('trip_buddy', $_lang['trip_buddy']);
 
-        if ($result['BuddyIDs'] != "") {
+        if (isset($result['BuddyIDs']) && ($result['BuddyIDs'] != "")) {
             // Get the names of the buddies on this trip
             $globals['buddies'] = $result['BuddyIDs'];
             $buddy = parse_mysql_query('buddies.sql');
@@ -4028,7 +4028,7 @@ class Divetrip{
         //	Comments
         $result = $this->result;
         //	Show them if we have them
-        if ($result['Comments'] != "") {
+        if (isset($result['Comments']) && ($result['Comments'] != "")) {
             $t->assign('trip_sect_comments', $_lang['trip_sect_comments']);
             $r = $result['Comments'];
 
@@ -4520,7 +4520,7 @@ class Divecountry{
         //	Comments
         $result = $this->result;
         //	Show them if we have them
-        if ($result['Comments'] != "") {
+        if (isset($result['Comments']) && ($result['Comments'] != "")) {
             $t->assign('country_sect_comments', $_lang['country_sect_comments']);
             $r = $result['Comments'];
 
@@ -4919,7 +4919,7 @@ class Divecity{
         //	Comments
         $result = $this->result;
         //	Show them if we have them
-        if ($result['Comments'] != "") {
+        if (isset($result['Comments']) && ($result['Comments'] != "")) {
             $t->assign('city_sect_comments', $_lang['city_sect_comments']);
             $r = $result['Comments'];
 
@@ -5699,32 +5699,32 @@ class Divestats{
             $t->assign('cert_instructor', $_lang['cert_instructor'] );
 
             for ($i=0; $i<count($divecert); $i++) {
-                if ($divecert[$i]['Brevet'] == "") {
+                if (isset($divecert[$i]['Brevet']) && ($divecert[$i]['Brevet'] != "")) {
+                    $Brevet = $divecert[$i]['Brevet'];
+                } else {
                     $Brevet = "-";
-                } else {
-                    $Brevet = $divecert[$i]['Brevet'] ;
                 }
-                if ($divecert[$i]['Org'] == "") {
+                if (isset($divecert[$i]['Org']) && ($divecert[$i]['Org'] != "")) {
+                    $Org = $divecert[$i]['Org'];
+                } else {
                     $Org = "-";
-                } else {
-                    $Org = $divecert[$i]['Org'] ;
                 }
-                if ($divecert[$i]['CertDate'] == "") {
+                if (isset($divecert[$i]['CertDate']) && ($divecert[$i]['CertDate'] != "")) {
+                    $CertDate = date($_lang['logbook_divedate_format'], strtotime($divecert[$i]['CertDate']));
+                } else {
                     $CertDate = "-";
-                } else {
-                    $CertDate = date($_lang['logbook_divedate_format'], strtotime($divecert[$i]['CertDate'])) ;
                 }
-                if ($divecert[$i]['Number'] == "") {
+                if (isset($divecert[$i]['Number']) && ($divecert[$i]['Number'] != "")) {
+                    $Number = $divecert[$i]['Number'];
+                } else {
                     $Number = "-";
-                } else {
-                    $Number = $divecert[$i]['Number'] ;
                 }
-                if ($divecert[$i]['Instructor'] == "") {
+                if (isset($divecert[$i]['Instructor']) && ($divecert[$i]['Instructor'] != "")) {
+                    $Instructor = $divecert[$i]['Instructor'];
+                } else {
                     $Instructor = "-";
-                } else {
-                    $Instructor = $divecert[$i]['Instructor'] ;
                 }
-                if (($divecert[$i]['Scan1Path'] != "") || ($divecert[$i]['Scan2Path'] != "")) {
+                if ((isset($divecert[$i]['Scan1Path']) && ($divecert[$i]['Scan1Path'] != "")) || (isset($divecert[$i]['Scan2Path']) && ($divecert[$i]['Scan2Path'] != ""))) {
                     $title = $divecert[$i]['Org'] . " " .$divecert[$i]['Brevet']; 
                     $userpath_web = $_config['userpath_web'] ;
                     $cert_scan_front = "";
