@@ -2226,7 +2226,6 @@ class Divelog {
     function get_dive_overview_grid(){
         global $db, $t, $_lang, $globals, $_config;
         // Get the details of the dives to be listed
-        //$recentdivelist = parse_mysql_query('recentdivelist.sql');
         if ($_config['length']) {
             $recentdivelist_query = sql_file('recentdivelist-imp.sql');
         } else {
@@ -3548,6 +3547,21 @@ class Diveshop{
     } 
 
     /**
+     * shop_has_photo 
+     * 
+     * @param mixed $value 
+     * @param mixed $row 
+     * @access public
+     * @return void
+     */
+    function shop_has_photo($value, $row){
+        global $_config;
+        if ($row['PhotoPath'] != '') {
+            return '<img src="'.$_config['web_root'].'/images/photo_icon.gif" border="0" alt="" title="">';
+        }
+    }
+
+    /**
      * get_diveshop_overview 
      * 
      * @access public
@@ -3587,6 +3601,7 @@ class Diveshop{
         $t->assign('dshop_title_shop', $_lang['dshop_title_shop']);
         $t->assign('dshop_title_type', $_lang['dshop_title_type']);
         $t->assign('dshop_title_country', $_lang['dshop_title_country']);
+        $t->assign('dshop_title_photo', $_lang['dshop_title_photo']);
 
         if ($this->multiuser == 1) {
             $path = $_config['web_root'].'/diveshop.php/'.$this->user_id.'/list';
@@ -3630,12 +3645,17 @@ class Diveshop{
         }
 
         $grid->showColumn('ShopName', $_lang['dshop_title_shop']);
-        $grid->setColwidth('ShopName',"250");
+        $grid->setColwidth('ShopName',"200");
         $grid->showColumn('ShopType', $_lang['dshop_title_type']);
-        $grid->setColwidth('ShopType',"150");
+        $grid->setColwidth('ShopType',"80");
         $grid->showColumn('Country', $_lang['dshop_title_country']);
-        $grid->setColwidth('Country',"150");
+        $grid->setColwidth('Country',"240");
         $grid->setRowActionFunction("action");
+        $grid->showCustomColumn("photo", $_lang['dshop_title_photo']);
+        $grid->setColwidth('photo',"30");
+
+        $methodVariable = array($this, 'shop_has_photo'); 
+        $grid->setCallbackFunction("photo", $methodVariable);
 
         $grid_ret = $grid->render(TRUE); 
         $t->assign('grid_display' ,1);

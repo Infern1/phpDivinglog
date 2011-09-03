@@ -263,6 +263,7 @@ $_lang['dsite_title_place'] = "Dive Location";
 $_lang['dsite_title_city'] = "City / Island";
 $_lang['dsite_title_country'] = "Country";
 $_lang['dsite_title_maxdepth'] = "Max Depth";
+$_lang['dshop_title_photo'] = "Pic";
 
 
 // Dive Shop related values

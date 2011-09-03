@@ -12,6 +12,7 @@
     	<td valign="bottom">{$dshop_title_shop}</td>
     	<td valign="bottom">{$dshop_title_type}</td>
     	<td valign="bottom">{$dshop_title_country}</td>
+    	<td width="5%" valign="bottom">{$dshop_title_photo}</td>
     </tr>
 </thead>
 <tbody>
@@ -26,6 +27,7 @@
 {/if}
         <td>{$cells[cell_data].type}</td>
         <td>{$cells[cell_data].country}</td>
+        <td>{$cells[cell_data].photo}</td>
     </tr>
 {/section}
 </tbody>

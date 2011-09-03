@@ -17,7 +17,7 @@
     </tr>
   </thead>
   <tbody>
-{section name=cell_data loop=$cells  }
+{section name=cell_data loop=$cells }
     <tr class="divecontent">
         <td>
 {if isset($multiuser_id)}
