@@ -2268,7 +2268,7 @@ class Divelog {
         $grid->showColumn('City', $_lang['dlog_title_location']);
         $grid->setColwidth('City',"150");
         $grid->showCustomColumn("photo", $_lang['dlog_title_photo']);
-        $grid->setColwidth('photo',"30");
+        $grid->setColwidth('photo',"25");
 
         $methodVariable = array($this, 'dive_has_photo'); 
         $grid->setCallbackFunction("photo", $methodVariable);
@@ -3652,7 +3652,7 @@ class Diveshop{
         $grid->setColwidth('Country',"240");
         $grid->setRowActionFunction("action");
         $grid->showCustomColumn("photo", $_lang['dshop_title_photo']);
-        $grid->setColwidth('photo',"30");
+        $grid->setColwidth('photo',"25");
 
         $methodVariable = array($this, 'shop_has_photo'); 
         $grid->setCallbackFunction("photo", $methodVariable);
@@ -4024,6 +4024,21 @@ class Divetrip{
     } 
 
     /**
+     * trip_has_photo 
+     * 
+     * @param mixed $value 
+     * @param mixed $row 
+     * @access public
+     * @return void
+     */
+    function trip_has_photo($value, $row){
+        global $_config;
+        if ($row['PhotoPath'] != '') {
+            return '<img src="'.$_config['web_root'].'/images/photo_icon.gif" border="0" alt="" title="">';
+        }
+    }
+
+    /**
      * get_divetrip_overview 
      * 
      * @access public
@@ -4063,6 +4078,7 @@ class Divetrip{
         $t->assign('dtrip_title_trip', $_lang['dtrip_title_trip']);
         $t->assign('dtrip_title_shop', $_lang['dtrip_title_shop']);
         $t->assign('dtrip_title_country', $_lang['dtrip_title_country']);
+        $t->assign('dtrip_title_photo', $_lang['dtrip_title_photo']);
 
         if ($this->multiuser == 1) {
             $path = $_config['web_root'].'/divetrip.php/'.$this->user_id.'/list';
@@ -4106,12 +4122,17 @@ class Divetrip{
         }
 
         $grid->showColumn('TripName', $_lang['dtrip_title_trip']);
-        $grid->setColwidth('ShopName',"250");
+        $grid->setColwidth('ShopName',"210");
         $grid->showColumn('ShopName', $_lang['dtrip_title_shop']);
-        $grid->setColwidth('ShopName',"150");
+        $grid->setColwidth('ShopName',"180");
         $grid->showColumn('Country', $_lang['dtrip_title_country']);
-        $grid->setColwidth('Country',"150");
+        $grid->setColwidth('Country',"180");
         $grid->setRowActionFunction("action");
+        $grid->showCustomColumn("photo", $_lang['dtrip_title_photo']);
+        $grid->setColwidth('photo',"25");
+
+        $methodVariable = array($this, 'trip_has_photo'); 
+        $grid->setCallbackFunction("photo", $methodVariable);
 
         $grid_ret = $grid->render(TRUE); 
         $t->assign('grid_display' ,1);

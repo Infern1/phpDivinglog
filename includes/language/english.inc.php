@@ -332,6 +332,7 @@ $_lang['dtrip_none'] = "No dive trips are currently available.";
 $_lang['dtrip_title_trip'] = "Trips / Vacations";
 $_lang['dtrip_title_shop'] = "Dive Shop";
 $_lang['dtrip_title_country'] = "Country";
+$_lang['dtrip_title_photo'] = "Pic";
 
 
 // Dive City related values
