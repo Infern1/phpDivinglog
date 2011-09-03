@@ -263,7 +263,7 @@ $_lang['dsite_title_place'] = "Dive Location";
 $_lang['dsite_title_city'] = "City / Island";
 $_lang['dsite_title_country'] = "Country";
 $_lang['dsite_title_maxdepth'] = "Max Depth";
-$_lang['dshop_title_photo'] = "Pic";
+$_lang['dsite_title_photo'] = "Pic";
 
 
 // Dive Shop related values
@@ -302,6 +302,7 @@ $_lang['dshop_none'] = "No dive shops are currently available.";
 $_lang['dshop_title_shop'] = "Shop / Dive Centre";
 $_lang['dshop_title_type'] = "Type";
 $_lang['dshop_title_country'] = "Country";
+$_lang['dshop_title_photo'] = "Pic";
 
 
 // Dive Trip related values
