@@ -3341,6 +3341,23 @@ class Diveshop{
     }
 
     /**
+     * get_trips_with_shop 
+     * 
+     * @access public
+     * @return void
+     */
+    function get_trips_with_shop(){
+        global $globals, $_config; /*{{{*/
+        // Get the trips with this dive shop from database
+        $globals['shopid'] = $this->diveshop_nr;
+        $this->trips = parse_mysql_query('shoptrips.sql');
+        $this->trip_count = count($this->trips);
+        // Get the diveshop list from database
+        $this->shoplist = parse_mysql_query('shoplist.sql');
+    /*}}}*/
+    }
+
+    /**
      * set_main_diveshop_details 
      * 
      * @access public
@@ -3373,6 +3390,7 @@ class Diveshop{
         $t->assign('shop_url', $_lang['shop_url']);
         $t->assign('shop_location', $_lang['shop_location']);
         $t->assign('shop_rating', $_lang['shop_rating']);
+        $t->assign('shop_sect_activity', $_lang['shop_sect_activity'].$result['ShopName']);
 
         if (isset($result['ShopName']) && ($result['ShopName'] != "")) {
             $t->assign('ShopName', $result['ShopName']);
@@ -3536,6 +3554,41 @@ class Diveshop{
             $t->assign('dive_count', $this->dive_count);
             $t->assign('dlog_number_title', "" );
             $t->assign('dives',"");
+        }
+    /*}}}*/
+    }
+
+    /**
+     * set_trips_with_shop 
+     * 
+     * @access public
+     * @return void
+     */
+    function set_trips_with_shop(){
+        global $globals, $_config, $t, $_lang; /*{{{*/
+        $this->get_trips_with_shop();
+        // Show shop trips if we have them
+        if (count($this->trips) == 1) {
+            $trips[0] = $this->trips;
+        } else {
+            $trips = $this->trips;
+        }
+        if ($this->trip_count != 0) {
+            $t->assign('trip_count', $this->trip_count);
+            if ($this->trip_count == 1) {
+                $t->assign('shop_trip_trans', $_lang['shop_trip_single']);
+            } else {
+                $t->assign('shop_trip_trans', $_lang['shop_trip_plural']);
+            }
+            for ($i=0; $i<$this->trip_count; $i++) {
+                $trips[$i] = $trips[$i]['ID'] ; 
+            }
+            $t->assign('dtrip_number_title', $_lang['dtrip_number_title'] );
+            $t->assign('trips',$trips);
+        } else {
+            $t->assign('trip_count', $this->trip_count);
+            $t->assign('dlog_number_title', "" );
+            $t->assign('trips',"");
         }
     /*}}}*/
     }

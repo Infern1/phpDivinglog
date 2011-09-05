@@ -49,7 +49,10 @@ if ($diveshop->get_request_type() == 1) {
     // Show main dive shop details
     $diveshop->set_main_diveshop_details();
     $diveshop->set_diveshop_pictures();
+    // Shop Dives
     $diveshop->set_dives_with_shop();
+    // Shop Trips
+    $diveshop->set_trips_with_shop();
     // Comments
     $diveshop->set_diveshop_comments();
 

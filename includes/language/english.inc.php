@@ -269,6 +269,7 @@ $_lang['dsite_title_photo'] = "Pic";
 // Dive Shop related values
 
 $_lang['dive_shop_pagetitle'] = "Shop / Dive Centre - ";
+$_lang['shop_sect_activity'] = "Diving Activity with ";
 
 $_lang['shop_name'] = "Name:";
 $_lang['shop_type'] = "Type:";
@@ -289,6 +290,8 @@ $_lang['shop_location'] = "Location:";
 
 $_lang['shop_dive_single'] = " dive with this ";
 $_lang['shop_dive_plural'] = " dives with this ";
+$_lang['shop_trip_single'] = " dive trip with this ";
+$_lang['shop_trip_plural'] = " dive trips with this ";
 
 $_lang['shop_sect_comments'] = "Comments:";
 

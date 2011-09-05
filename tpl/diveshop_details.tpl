@@ -78,6 +78,46 @@
     </tr>
     {/if}
 
+    <tr>
+      <td colspan="4" class="spacing">&nbsp;</td>
+    </tr>
+
+    {* Comments *}
+    {* Show them if we have them *}
+    {if isset($Comments)}
+    <tr class="divesection">
+      <td colspan="4">{$shop_sect_comments}</td>
+    </tr>
+    <tr class="divedetails">
+      <td colspan="4">{$Comments}</td>
+    </tr>
+    {/if}
+
+    <tr class="divesection">
+      <td colspan="4">{$shop_sect_activity}</td>
+    </tr>
+
+    {* Show shop trips if we have them *}
+    {if $trip_count != 0}
+    <tr class="divetitle">
+      <td colspan="4">{$trip_count} {$shop_trip_trans} {$ShopType}:</td>
+    </tr>
+
+    <tr class="divedetails">
+      <td colspan="4">
+      {foreach from=$trips item=trip}
+        {if isset($multiuser_id)}
+        <a href="{$app_path}/divetrip.php{$sep1}{$multiuser_id}{$sep2}{$trip}"
+title="{$dtrip_number_title}{$trip}">{$trip}</a>
+        {else}
+        <a href="{$app_path}/divetrip.php{$sep2}{$trip}"
+title="{$dtrip_number_title}{$trip}">{$trip}</a>
+        {/if}
+      {/foreach}
+      </td>
+    </tr>
+    {/if}
+
     {* Show shop dives if we have them *}
     {if $dive_count != 0}
     <tr class="divetitle">
@@ -96,21 +136,6 @@ title="{$dlog_number_title}{$dive}">{$dive}</a>
         {/if}
       {/foreach}
       </td>
-    </tr>
-    {/if}
-
-    <tr>
-      <td colspan="4" class="spacing">&nbsp;</td>
-    </tr>
-
-    {* Comments *}
-    {* Show them if we have them *}
-    {if isset($Comments)}
-    <tr class="divesection">
-      <td colspan="4">{$shop_sect_comments}</td>
-    </tr>
-    <tr class="divedetails">
-      <td colspan="4">{$Comments}</td>
     </tr>
     {/if}
 
