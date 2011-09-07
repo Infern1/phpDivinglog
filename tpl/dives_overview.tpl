@@ -8,9 +8,9 @@
 <table class="divetable" cellspacing="0" cellpadding="0" width="100%">
   <thead>
     <tr class="divelogtitle">
-        <td width="8%" valign="bottom" >{$dlog_title_number}</td>
-        <td width="15%" valign="bottom">{$dlog_title_divedate}</td>
-        <td width="15%" valign="bottom" >{$dlog_title_depth}</td>
+        <td width="7%" valign="bottom" >{$dlog_title_number}</td>
+        <td width="13%" valign="bottom">{$dlog_title_divedate}</td>
+        <td width="10%" valign="bottom" >{$dlog_title_depth}</td>
         <td width="10%" valign="bottom" >{$dlog_title_divetime}</td>
         <td valign="bottom">{$dlog_title_location}</td>
         <td width="5%" valign="bottom">{$dlog_title_photo}</td>
@@ -18,7 +18,7 @@
   </thead>
   <tbody>
 {section name=cell_data loop=$cells }
-    <tr class="divecontent">
+    <tr class="diveoverview">
         <td>
 {if isset($multiuser_id)}
 <a href="{$app_path}/index.php{$sep1}{$multiuser_id}{$sep2}{$cells[cell_data].number}" 

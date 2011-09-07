@@ -1,4 +1,4 @@
-SELECT		c.ID, c.City, l.Country, COUNT(*) 
+SELECT		c.ID, c.City, l.Country, COUNT(*) AS Dives
 FROM 		$_config[table_prefix]City AS c, $_config[table_prefix]Logbook AS l
 WHERE 		c.ID = l.CityID
 GROUP BY 	l.CityID

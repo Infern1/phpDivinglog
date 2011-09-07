@@ -2746,6 +2746,7 @@ class Divesite{
         }
         $pager_options = new TablePager($cpage,$path);
         $paged_data = Pager_Wrapper_MDB2($db, $locationlist_query, $pager_options->options);
+        $t->assign('logbook_place_linktitle', $_lang['logbook_place_linktitle']);
         $t->assign('dsite_title_place', $_lang['dsite_title_place']);
         $t->assign('dsite_title_city', $_lang['dsite_title_city']);
         $t->assign('dsite_title_country', $_lang['dsite_title_country']);
@@ -2785,10 +2786,10 @@ class Divesite{
         }
         $grid->showColumn('Place', $_lang['dsite_title_place']);
         $grid->setColwidth('Place',"220");
-        $grid->showColumn('Country', $_lang['dsite_title_country']);
-        $grid->setColwidth('Country',"100");
         $grid->showColumn('City', $_lang['dsite_title_city']);
         $grid->setColwidth('City',"200");
+        $grid->showColumn('Country', $_lang['dsite_title_country']);
+        $grid->setColwidth('Country',"100");
         $grid->showColumn('MaxDepth', $_lang['dsite_title_maxdepth']);
         $grid->setColwidth('MaxDepth',"55");
         $grid->setRowActionFunction("action");
@@ -3101,6 +3102,8 @@ class Equipment{
         global $_config;
         if ($row['PhotoPath'] != '') {
             return '<img src="'.$_config['web_root'].'/images/photo_icon.gif" border="0" alt="" title="">';
+        } else {
+            return '&nbsp;';
         }
     }
 
@@ -3114,7 +3117,7 @@ class Equipment{
         global $t, $_lang, $globals, $_config; /*{{{*/
 
         /**
-         * When view_type = 1 display the ajax grid if type = 2 display old fashioned table 
+         * When view_type = 1 display the ajax grid, if type = 2 display old fashioned table 
          */
         if ($_config['view_type'] == 1) {
             $this->get_equipment_overview_grid();
@@ -3142,7 +3145,7 @@ class Equipment{
         $t->assign('equip_title_inactive', $_lang['equip_title_inactive'] );
         $t->assign('equip_title_photo', $_lang['equip_title_photo']);
 
-        $t->assign('logbook_place_linktitle', $_lang['logbook_place_linktitle'] );
+        $t->assign('logbook_equip_linktitle', $_lang['logbook_equip_linktitle'] );
         if (!empty($this->multiuser)) {
             $path = $_config['web_root'].'/equipment.php/'.$this->user_id.'/list';
         } else {
@@ -3676,6 +3679,7 @@ class Diveshop{
         $t->assign('dshop_title_type', $_lang['dshop_title_type']);
         $t->assign('dshop_title_country', $_lang['dshop_title_country']);
         $t->assign('dshop_title_photo', $_lang['dshop_title_photo']);
+        $t->assign('logbook_shop_linktitle', $_lang['logbook_shop_linktitle'] );
 
         if ($this->multiuser == 1) {
             $path = $_config['web_root'].'/diveshop.php/'.$this->user_id.'/list';
@@ -4153,6 +4157,7 @@ class Divetrip{
         $t->assign('dtrip_title_shop', $_lang['dtrip_title_shop']);
         $t->assign('dtrip_title_country', $_lang['dtrip_title_country']);
         $t->assign('dtrip_title_photo', $_lang['dtrip_title_photo']);
+        $t->assign('logbook_trip_linktitle', $_lang['logbook_trip_linktitle'] );
 
         if ($this->multiuser == 1) {
             $path = $_config['web_root'].'/divetrip.php/'.$this->user_id.'/list';
@@ -4626,7 +4631,9 @@ class Divecountry{
         //    Get the page header
         //    Get the details of the trips to be listed
         $countrylist_query = $sql;
-        $t->assign('dcountry_title_country', $_lang['dcountry_title_country']);
+        $t->assign('country_title_country', $_lang['country_title_country']);
+        $t->assign('country_title_count', $_lang['country_title_count']);
+        $t->assign('logbook_country_linktitle', $_lang['logbook_country_linktitle'] );
 
         if ($this->multiuser == 1) {
             $path = $_config['web_root'].'/divecountry.php/'.$this->user_id.'/list';
@@ -4671,8 +4678,8 @@ class Divecountry{
 
         $grid->showColumn('Country', $_lang['country_title_country']);
         $grid->setColwidth('Country',"450");
-        $grid->showColumn('COUNT(*)', $_lang['country_title_count']);
-        $grid->setColwidth('COUNT(*)',"50");
+        $grid->showColumn('Dives', $_lang['country_title_count']);
+        $grid->setColwidth('Dives',"50");
         $grid->setRowActionFunction("action");
 
         $grid_ret = $grid->render(TRUE); 
@@ -5028,6 +5035,7 @@ class Divecity{
         $t->assign('city_title_city', $_lang['city_title_city']);
         $t->assign('city_title_country', $_lang['city_title_country']);
         $t->assign('city_title_dives', $_lang['city_title_count']);
+        $t->assign('logbook_city_linktitle', $_lang['logbook_city_linktitle'] );
 
         if ($this->multiuser == 1) {
             $path = $_config['web_root'].'/divecity.php/'.$this->user_id.'/list';
@@ -5073,8 +5081,8 @@ class Divecity{
         $grid->setColwidth('City',"250");
         $grid->showColumn('Country', $_lang['city_title_country']);
         $grid->setColwidth('Country',"200");
-        $grid->showColumn('COUNT(*)', $_lang['city_title_count']);
-        $grid->setColwidth('COUNT(*)',"50");
+        $grid->showColumn('Dives', $_lang['city_title_count']);
+        $grid->setColwidth('Dives',"50");
         $grid->setRowActionFunction("action");
 
         $grid_ret = $grid->render(TRUE); 

@@ -155,9 +155,11 @@ $_lang['supplytype'] = array("Open Circuit (OC)", "Semi Closed Rebreather (SCR)"
 $_lang['entry'] = array("Shore", "Boat");
 
 $_lang['logbook_place_linktitle'] = "details";
+$_lang['logbook_equip_linktitle'] = "details";
 $_lang['logbook_country_linktitle'] = "details";
 $_lang['logbook_shop_linktitle'] = "details";
 $_lang['logbook_trip_linktitle'] = "details";
+$_lang['logbook_city_linktitle'] = "details";
 
 // based on the PHP date() function
 $_lang['logbook_divedate_format'] = "D, d-M-Y";
@@ -211,9 +213,11 @@ $_lang['dlog_title_place'] = "Dive Site";
 $_lang['dlog_title_photo'] = "Pic";
 
 $_lang['dlog_number_title'] = "Details for dive # ";
+$_lang['dsite_number_title'] = "Details for site # ";
 $_lang['dtrip_number_title'] = "Details for dive trip # ";
 $_lang['dsite_number_title'] = "Details for dive site # ";
 $_lang['dcountry_number_title'] = "Details for country # ";
+$_lang['dshop_number_title'] = "Details for dive shop # ";
 
 // based on the PHP date() function
 $_lang['dlog_divedate_format'] = "dMY";

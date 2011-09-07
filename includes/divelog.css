@@ -47,6 +47,16 @@ tr.divecontent td {
     vertical-align:top;
 }
 
+tr.diveoverview td { 
+    font-weight: normal; 
+    color: #000000;
+    font-size: 10pt;
+    line-height: 130%;
+    text-decoration: none;
+    padding-bottom: 5px;
+    vertical-align:top;
+}
+
 tr.divedetails td { 
     font-weight: normal; 
     color: #000000;
@@ -121,6 +131,10 @@ table, th, td {
 }
 
 table.divetable, th, tr.divecontent, td {
+    border: 1px solid #D4E0EE; 
+}
+
+table.divetable, th, tr.diveoverview, td {
     border: 1px solid #D4E0EE; 
 }
 

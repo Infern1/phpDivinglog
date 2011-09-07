@@ -9,21 +9,21 @@
 <table class="divetable" cellspacing="0" cellpadding="0" width="100%">
 <thead>
     <tr class="divelogtitle">
-    	<td valign="bottom">{$dshop_title_country}</td>
+    	<td width="80%" valign="bottom">{$country_title_country}</td>
+    	<td width="20%" valign="bottom">{$country_title_count}</td>
     </tr>
 </thead>
 <tbody>
 {section name=cell_data loop=$cells }
-    <tr class="divecontent">
+    <tr class="diveoverview">
 {if isset($multiuser_id)}
         <td><a href="{$app_path}/{$base_page}{$sep1}{$multiuser_id}{$sep2}{$cells[cell_data].id}" 
-          title="{$cells[cell_data].trip} {$logbook_trip_linktitle}">{$cells[cell_data].trip}</a></td>
+          title="{$cells[cell_data].country} {$logbook_country_linktitle}">{$cells[cell_data].country}</a></td>
 {else}
         <td><a href="{$app_path}/{$base_page}{$sep2}{$cells[cell_data].id}" 
-          title="{$cells[cell_data].shop} {$logbook_trip_linktitle}">{$cells[cell_data].trip}</a></td>
+          title="{$cells[cell_data].country} {$logbook_country_linktitle}">{$cells[cell_data].country}</a></td>
 {/if}
-        <td>{$cells[cell_data].shop}</td>
-        <td>{$cells[cell_data].country}</td>
+        <td>{$cells[cell_data].dives}</td>
     </tr>
 {/section}
 </tbody>

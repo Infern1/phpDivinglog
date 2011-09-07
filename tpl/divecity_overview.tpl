@@ -16,13 +16,13 @@
 </thead>
 <tbody>
 {section name=cell_data loop=$cells }
-    <tr class="divecontent">
+    <tr class="diveoverview">
 {if isset($multiuser_id)}
         <td colspan="2"><a href="{$app_path}/{$base_page}{$sep1}{$multiuser_id}{$sep2}{$cells[cell_data].id}" 
           title="{$cells[cell_data].city} {$logbook_city_linktitle}">{$cells[cell_data].city}</a></td>
 {else}
         <td colspan="2"><a href="{$app_path}/{$base_page}{$sep2}{$cells[cell_data].id}" 
-          title="{$cells[cell_data].shop} {$logbook_city_linktitle}">{$cells[cell_data].city}</a></td>
+          title="{$cells[cell_data].city} {$logbook_city_linktitle}">{$cells[cell_data].city}</a></td>
 {/if}
         <td>{$cells[cell_data].country}</td>
         <td>{$cells[cell_data].dives}</td>
