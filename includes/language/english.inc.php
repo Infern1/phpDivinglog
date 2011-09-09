@@ -161,6 +161,9 @@ $_lang['logbook_shop_linktitle'] = "details";
 $_lang['logbook_trip_linktitle'] = "details";
 $_lang['logbook_city_linktitle'] = "details";
 
+$_lang['logbook_profile'] = "Dive profile available";
+$_lang['logbook_no_profile'] = "No dive profile available";
+
 // based on the PHP date() function
 $_lang['logbook_divedate_format'] = "D, d-M-Y";
 $_lang['logbook_entrytime_format'] = "H:i";

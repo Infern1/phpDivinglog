@@ -3,6 +3,7 @@ SELECT  Number,
         Divetime, 
         ROUND(Depth*3.2808,1) as Depth, 
         Place, 
-        City 
+        City,
+	Profile
 FROM    $_config[table_prefix]Logbook 
 

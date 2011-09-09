@@ -2142,7 +2142,7 @@ class Divelog {
         global $t, $_lang, $globals, $_config; /*{{{*/
 
         /**
-         * When view_type = 1 display the ajax grid if type = 2 display old fashioned table 
+         * When view_type = 1 display the ajax grid, if type = 2 display old fashioned table 
          */
         if ($_config['view_type'] == 1) {
             $this->get_dive_overview_grid();
@@ -2177,6 +2177,9 @@ class Divelog {
         $t->assign('dlog_title_divetime', $_lang['dlog_title_divetime']);
         $t->assign('dlog_title_location', $_lang['dlog_title_location']);
         $t->assign('dlog_title_photo', $_lang['dlog_title_photo']);
+
+        $t->assign('logbook_profile', $_lang['logbook_profile']);
+        $t->assign('logbook_no_profile', $_lang['logbook_no_profile']);
 
         if (!empty($this->multiuser)) {
             $path = $_config['web_root'].'/index.php/'.$this->user_id.'/list';

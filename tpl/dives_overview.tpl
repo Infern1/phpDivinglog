@@ -8,8 +8,8 @@
 <table class="divetable" cellspacing="0" cellpadding="0" width="100%">
   <thead>
     <tr class="divelogtitle">
-        <td width="7%" valign="bottom" >{$dlog_title_number}</td>
-        <td width="13%" valign="bottom">{$dlog_title_divedate}</td>
+        <td width="9%" valign="bottom" >{$dlog_title_number}</td>
+        <td width="11%" valign="bottom">{$dlog_title_divedate}</td>
         <td width="10%" valign="bottom" >{$dlog_title_depth}</td>
         <td width="10%" valign="bottom" >{$dlog_title_divetime}</td>
         <td valign="bottom">{$dlog_title_location}</td>
@@ -21,9 +21,19 @@
     <tr class="diveoverview">
         <td>
 {if isset($multiuser_id)}
+{if $cells[cell_data].profile != ''}
+<img src="{$app_path}/images/profile.gif" border="0" alt="{$logbook_profile}" title="{$logbook_profile}">
+{else}
+<img src="{$app_path}/images/no_profile.gif" border="0" alt="{$logbook_no_profile}" title="{$logbook_no_profile}">
+{/if}
 <a href="{$app_path}/index.php{$sep1}{$multiuser_id}{$sep2}{$cells[cell_data].number}" 
 title="{$dlog_number_title}{$cells[cell_data].number}" >{$cells[cell_data].number}</a></td>
 {else}
+{if $cells[cell_data].profile != ''}
+<img src="{$app_path}/images/profile.gif" border="0" alt="{$logbook_profile}" title="{$logbook_profile}">
+{else}
+<img src="{$app_path}/images/no_profile.gif" border="0" alt="{$logbook_no_profile}" title="{$logbook_no_profile}">
+{/if}
 <a href="{$app_path}/index.php{$sep2}{$cells[cell_data].number}" 
 title="{$dlog_number_title}{$cells[cell_data].number}" >{$cells[cell_data].number}</a></td>
 {/if}
@@ -31,7 +41,8 @@ title="{$dlog_number_title}{$cells[cell_data].number}" >{$cells[cell_data].numbe
         <td>{$cells[cell_data].depth} {$unit_length_short}</td>
         <td>{$cells[cell_data].divetime} {$unit_time_short} </td>
         <td>{$cells[cell_data].place}, {$cells[cell_data].city}</td>
-        <td>{$cells[cell_data].photo}</td>
+<!--         <td>{$cells[cell_data].photos}</td>  -->
+        <td>&nbsp;</td>
     </tr>
 {/section}
   </tbody>
