@@ -4122,9 +4122,9 @@ class Divetrip{
      * @return void
      */
     function trip_has_photo($value, $row){
-        global $_config;
+        global $_config, $_lang;
         if ($row['PhotoPath'] != '') {
-            return '<img src="'.$_config['web_root'].'/images/photo_icon.gif" border="0" alt="" title="">';
+            return '<img src="'.$_config['web_root'].'/images/photo_icon.gif" border="0" alt="'.$_lang['trip_photo_icontitle'].$row['TripName'].'" title="'.$_lang['trip_photo_icontitle'].$row['TripName'].'">';
         }
     }
 
@@ -4170,6 +4170,8 @@ class Divetrip{
         $t->assign('dtrip_title_country', $_lang['dtrip_title_country']);
         $t->assign('dtrip_title_photo', $_lang['dtrip_title_photo']);
         $t->assign('logbook_trip_linktitle', $_lang['logbook_trip_linktitle'] );
+
+        $t->assign('trip_photo_icontitle', $_lang['trip_photo_icontitle'] );
 
         if ($this->multiuser == 1) {
             $path = $_config['web_root'].'/divetrip.php/'.$this->user_id.'/list';

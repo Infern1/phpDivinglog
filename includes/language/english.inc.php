@@ -337,6 +337,7 @@ $_lang['trip_dive_plural'] = " dives on this Trip / Vacation:";
 
 $_lang['trip_sect_comments'] = "Comments:";
 
+$_lang['trip_photo_icontitle'] = "Trip photo of ";
 $_lang['trip_photo_linktitle'] = "Photo of ";
 $_lang['trip_photo_link'] = "View photo";
 
