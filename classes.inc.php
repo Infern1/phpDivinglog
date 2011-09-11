@@ -3103,9 +3103,9 @@ class Equipment{
      * @return void
      */
     function equip_has_photo($value, $row){
-        global $_config;
+        global $_config, $_lang;
         if ($row['PhotoPath'] != '') {
-            return '<img src="'.$_config['web_root'].'/images/photo_icon.gif" border="0" alt="" title="">';
+            return '<img src="'.$_config['web_root'].'/images/photo_icon.gif" border="0" alt="'.$_lang['equip_photo_linktitle'].$row['Object'].'" title="'.$_lang['equip_photo_linktitle'].$row['Object'].'">';
         } else {
             return '&nbsp;';
         }
@@ -3149,10 +3149,11 @@ class Equipment{
         $t->assign('equip_title_inactive', $_lang['equip_title_inactive'] );
         $t->assign('equip_title_photo', $_lang['equip_title_photo']);
 
+        $t->assign('logbook_equip_linktitle', $_lang['logbook_equip_linktitle'] );
+        $t->assign('equip_photo_linktitle', $_lang['equip_photo_linktitle']);
         $t->assign('equip_inactive_active', $_lang['inactive'][0]);
         $t->assign('equip_inactive_inactive', $_lang['inactive'][1]);
 
-        $t->assign('logbook_equip_linktitle', $_lang['logbook_equip_linktitle'] );
         if (!empty($this->multiuser)) {
             $path = $_config['web_root'].'/equipment.php/'.$this->user_id.'/list';
         } else {
