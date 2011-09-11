@@ -28,7 +28,7 @@
         <td>{$cells[cell_data].shoptype}</td>
         <td>{$cells[cell_data].country}</td>
 {if $cells[cell_data].photopath != ''}
-        <td><img src="{$app_path}/images/photo_icon.gif" border="0" alt="" title=""></td>
+        <td><img src="{$app_path}/images/photo_icon.gif" border="0" alt="{$shop_photo_linktitle}{$cells[cell_data].shopname} {$cells[cell_data].shoptype}" title="{$shop_photo_linktitle}{$cells[cell_data].shopname} {$cells[cell_data].shoptype}"></td>
 {else}
         <td>&nbsp;</td>
 {/if}

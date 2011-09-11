@@ -168,9 +168,9 @@ $_lang['logbook_no_profile'] = "No dive profile graph available";
 $_lang['logbook_divedate_format'] = "D, d-M-Y";
 $_lang['logbook_entrytime_format'] = "H:i";
 
+// Dive picture related values
 
-// Dive Profile related values
-
+$_lang['divepic_linktitle'] = "Dive has pictures";
 $_lang['divepic_linktitle_pt1'] = "Picture ";
 $_lang['divepic_linktitle_pt2'] = " of ";
 $_lang['divepic_linktitle_pt3'] = " for Dive # ";
@@ -179,6 +179,8 @@ $_lang['divepic_pt1'] = "Click here to see ";
 $_lang['divepic_pt2s'] = " picture ";
 $_lang['divepic_pt2p'] = " pictures ";
 $_lang['divepic_pt3'] = " from this dive";
+
+// Dive Profile related values
 
 $_lang['dive_profile_title'] = "Dive Profile for Dive # ";
 $_lang['dive_profile_xaxis_title'] = "Time (minutes)";
@@ -190,6 +192,8 @@ $_lang['dive_profile_ascent_legend'] = "Ascent/Descent";
 $_lang['dive_profile_deco_legend'] = "Deco.";
 $_lang['dive_profile_rbt_legend'] = "RBT";
 $_lang['dive_profile_work_legend'] = "Work";
+
+// Dive section and tabs related values
 
 $_lang['dive_sect_conditions'] = "Conditions:";
 $_lang['dive_sect_breathing'] = "Breathing:";

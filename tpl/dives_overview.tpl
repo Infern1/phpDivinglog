@@ -41,7 +41,6 @@ title="{$dlog_number_title}{$cells[cell_data].number}" >{$cells[cell_data].numbe
         <td>{$cells[cell_data].depth} {$unit_length_short}</td>
         <td>{$cells[cell_data].divetime} {$unit_time_short} </td>
         <td>{$cells[cell_data].place}, {$cells[cell_data].city}</td>
-<!--         <td>{$cells[cell_data].photos}</td>  -->
         <td>&nbsp;</td>
     </tr>
 {/section}

@@ -2178,6 +2178,8 @@ class Divelog {
         $t->assign('dlog_title_location', $_lang['dlog_title_location']);
         $t->assign('dlog_title_photo', $_lang['dlog_title_photo']);
 
+        $t->assign('divepic_linktitle', $_lang['divepic_linktitle']);
+
         $t->assign('logbook_profile', $_lang['logbook_profile']);
         $t->assign('logbook_no_profile', $_lang['logbook_no_profile']);
 
@@ -2214,9 +2216,9 @@ class Divelog {
      * @return void
      */
     function dive_has_photo($value, $row){
-        global $_config;
+        global $_config, $_lang;
         if (Divelog::dive_has_pictures($row['Number'])) {
-            return '<img src="'.$_config['web_root'].'/images/photo_icon.gif" border="0" alt="" title="">';
+            return '<img src="'.$_config['web_root'].'/images/photo_icon.gif" border="0" alt="'.$_lang['divepic_linktitle'].'" title="'.$_lang['divepic_linktitle'].'">';
         }
     }
 
@@ -3640,9 +3642,9 @@ class Diveshop{
      * @return void
      */
     function shop_has_photo($value, $row){
-        global $_config;
+        global $_config, $_lang;
         if ($row['PhotoPath'] != '') {
-            return '<img src="'.$_config['web_root'].'/images/photo_icon.gif" border="0" alt="" title="">';
+            return '<img src="'.$_config['web_root'].'/images/photo_icon.gif" border="0" alt="'.$_lang['shop_photo_linktitle'].$row['ShopName'].' '.$row['ShopType'].'" title="'.$_lang['shop_photo_linktitle'].$row['ShopName'].' '.$row['ShopType'].'">';
         }
     }
 
@@ -3688,6 +3690,8 @@ class Diveshop{
         $t->assign('dshop_title_country', $_lang['dshop_title_country']);
         $t->assign('dshop_title_photo', $_lang['dshop_title_photo']);
         $t->assign('logbook_shop_linktitle', $_lang['logbook_shop_linktitle'] );
+
+        $t->assign('shop_photo_linktitle', $_lang['shop_photo_linktitle'] );
 
         if ($this->multiuser == 1) {
             $path = $_config['web_root'].'/diveshop.php/'.$this->user_id.'/list';
