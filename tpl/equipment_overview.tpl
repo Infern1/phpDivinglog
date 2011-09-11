@@ -26,9 +26,9 @@
 {/if}
 <td>{$cells[cell_data].manufacturer}</td>
 {if $cells[cell_data].inactive == 'True'}
-<td>x</td>
+<td><img src="{$app_path}/images/icon_inactive_16.png" border="0" alt="{$equip_inactive_inactive}" title="{$equip_inactive_inactive}"></td>
 {else}
-<td>*</td>
+<td><img src="{$app_path}/images/icon_active_16.png" border="0" alt="{$equip_inactive_active}" title="{$equip_inactive_active}"></td>
 {/if}
 {if $cells[cell_data].photopath != ''}
 <td><img src="{$app_path}/images/photo_icon.gif" border="0" alt="" title=""></td>

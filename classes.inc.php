@@ -2959,10 +2959,10 @@ class Equipment{
         }
 
         if (isset($result['Inactive']) && ($result['Inactive'] != "")) {
-            if ($result['Inactive']) {
-                $t->assign('Inactive', $_lang['inactive'][0]);
+            if ($result['Inactive'] == 'True') {
+                $t->assign('Inactive', '<img src="'.$_config['web_root'].'/images/icon_inactive_16.png" alt="'.$_lang['inactive'][1].'" title="'.$_lang['inactive'][1].'"> '.$_lang['inactive'][1]);
             } else {
-                $t->assign('Inactive', $_lang['inactive'][1]);
+                $t->assign('Inactive', '<img src="'.$_config['web_root'].'/images/icon_active_16.png" alt="'.$_lang['inactive'][0].'" title="'.$_lang['inactive'][0].'"> '.$_lang['inactive'][0]);
             }
         } else {
             $t->assign('Inactive','-');	
@@ -3084,12 +3084,13 @@ class Equipment{
      * @return void
      */
     function equipment_inactive($value, $row){
-        global $_config;
+        global $_config, $_lang;
         if ($value == 'True') {
-//            return '<img src="'.$_config['web_root'].'/images/photo_icon.gif" alt="">';
-            return 'x';
+            return '<img src="'.$_config['web_root'].'/images/icon_inactive_16.png" alt="'.$_lang['inactive'][1].'" title="'.$_lang['inactive'][1].'">';
+//            return 'x';
         } else {
-            return '*';
+            return '<img src="'.$_config['web_root'].'/images/icon_active_16.png" alt="'.$_lang['inactive'][0].'" title="'.$_lang['inactive'][0].'">';
+//            return '*';
         }
     }
 
@@ -3147,6 +3148,9 @@ class Equipment{
         $t->assign('equip_title_manufacturer', $_lang['equip_title_manufacturer'] );
         $t->assign('equip_title_inactive', $_lang['equip_title_inactive'] );
         $t->assign('equip_title_photo', $_lang['equip_title_photo']);
+
+        $t->assign('equip_inactive_active', $_lang['inactive'][0]);
+        $t->assign('equip_inactive_inactive', $_lang['inactive'][1]);
 
         $t->assign('logbook_equip_linktitle', $_lang['logbook_equip_linktitle'] );
         if (!empty($this->multiuser)) {

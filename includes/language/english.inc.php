@@ -161,8 +161,8 @@ $_lang['logbook_shop_linktitle'] = "details";
 $_lang['logbook_trip_linktitle'] = "details";
 $_lang['logbook_city_linktitle'] = "details";
 
-$_lang['logbook_profile'] = "Dive profile available";
-$_lang['logbook_no_profile'] = "No dive profile available";
+$_lang['logbook_profile'] = "Dive profile graph available";
+$_lang['logbook_no_profile'] = "No dive profile graph available";
 
 // based on the PHP date() function
 $_lang['logbook_divedate_format'] = "D, d-M-Y";
@@ -462,7 +462,7 @@ $_lang['equip_shop'] = "Dive Shop:";
 $_lang['equip_price'] = "Price:";
 $_lang['equip_photo'] = "Photo:";
 $_lang['equip_comments'] = "Comments:";
-$_lang['equip_inactive'] = "Inactive:";
+$_lang['equip_inactive'] = "Active:";
 $_lang['equip_weight'] = "Weight:";
 
 $_lang['equip_photo_linktitle'] = "Photo of ";
