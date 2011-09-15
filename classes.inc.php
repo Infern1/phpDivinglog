@@ -2131,6 +2131,21 @@ class Divelog {
         }
     /*}}}*/
     }
+
+    /**
+     * dive_has_photo 
+     * 
+     * @param mixed $value 
+     * @param mixed $row 
+     * @access public
+     * @return void
+     */
+    function dive_has_photo($value, $row){
+        global $_config, $_lang;
+        if (Divelog::dive_has_pictures($row['Number'])) {
+            return '<img src="'.$_config['web_root'].'/images/photo_icon.gif" border="0" alt="'.$_lang['divepic_linktitle'].'" title="'.$_lang['divepic_linktitle'].'">';
+        }
+    }
     
     /**
      * get_dive_overview returns the dive overview according the defined view preference 
@@ -2205,21 +2220,6 @@ class Divelog {
         $t->assign('pages', $paged_data['links']);
         $t->assign('cells', $paged_data['data']);
     /*}}}*/
-    }
-
-    /**
-     * dive_has_photo 
-     * 
-     * @param mixed $value 
-     * @param mixed $row 
-     * @access public
-     * @return void
-     */
-    function dive_has_photo($value, $row){
-        global $_config, $_lang;
-        if (Divelog::dive_has_pictures($row['Number'])) {
-            return '<img src="'.$_config['web_root'].'/images/photo_icon.gif" border="0" alt="'.$_lang['divepic_linktitle'].'" title="'.$_lang['divepic_linktitle'].'">';
-        }
     }
 
     /**
@@ -5761,10 +5761,15 @@ class Divestats{
         $Scan2Path = "";
         $cert_scan_back = "";
 
+        $t->assign('user_show_certs', $_config['user_show_certs'] );
+        $t->assign('cert_none', $_lang['cert_none'] );
+        $t->assign('stats_sect_certs', $this->username."'s ".$_lang['stats_sect_certs'] );
+
+        if ($_config['user_show_certs']) {
         if ($this->number_cert != 0) {
             $divecert = $this->divecert;
             $t->assign('count',$this->number_cert);
-            $t->assign('stats_sect_certs',$this->username. "'s ". $_lang['stats_sect_certs'] );
+            $t->assign('stats_sect_certs', $this->username."'s ".$_lang['stats_sect_certs'] );
 
             // Show dive certification titles
             $t->assign('cert_brevet', $_lang['cert_brevet'] );
@@ -5831,6 +5836,9 @@ class Divestats{
 
             }
             $t->assign('cells',$rowdata);
+        } else {
+            $t->assign('cert_none', $_lang['cert_none'] );
+        }
         }
     /*}}}*/
     }

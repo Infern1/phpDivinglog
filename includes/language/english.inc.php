@@ -440,6 +440,7 @@ $_lang['stats_depth5i'] = "&gt; 180 fsw:";
 
 // Dive Certification related value
 
+$_lang['cert_none'] = "No diving certifications available.";
 $_lang['cert_brevet'] = "Certification:";
 $_lang['cert_org'] = "Organisation:";
 $_lang['cert_certdate'] = "Date:";
@@ -448,7 +449,6 @@ $_lang['cert_instructor'] = "Instructor:";
 $_lang['cert_inst_number'] = "Instructor #:";
 $_lang['cert_scan_front'] = "scan front";
 $_lang['cert_scan_back'] = "scan back";
-
 
 // Dive Equipment related values
 

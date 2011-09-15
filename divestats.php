@@ -32,9 +32,9 @@ $divestats->set_divestats_info($request);
 $result = $divestats->get_divestats_info();
 global $_config;
 
-if($request->get_multiuser()){
+if ($request->get_multiuser()) {
     $user_id = $request->get_user_id();
-    if(!empty($user_id)){
+    if (!empty($user_id)) {
         // Display the Dive List
         $links->get_ovv_links();
         // Get the page header
@@ -67,7 +67,7 @@ if($request->get_multiuser()){
 }
 
 
-if($_config['embed_mode'] == TRUE){
+if ($_config['embed_mode'] == TRUE) {
     // Get the HTML output and send it to the requesting
     include('header.php');
     $t->display('divestats.tpl');

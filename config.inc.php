@@ -112,14 +112,12 @@ $_config['dlog_comments_rtf'] = true;
  * specify what to show in user information
  * @todo make these option work 
  */
-/*
 $_config['user_show'] = true;
 $_config['user_show_general'] = true;
 $_config['user_show_comments'] = true;
 $_config['user_show_photo'] = true;
 $_config['user_show_certs'] = true;
 $_config['user_show_medical'] = true;
-*/
 
 /**
  * Enable thumbs  

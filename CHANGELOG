@@ -1,4 +1,4 @@
-phpDivingLog v3.0-alpha3 - 2011-09-03 - Lloyd Borrett and Rob Lensen
+phpDivingLog v3.0-alpha3 - 2011-09-11 - Lloyd Borrett and Rob Lensen
     * Added tabs to dive details and dive statistics pages 
     * Modified the calculation of imperial cylinder size to use working pressure if available
     * Added Active to equipment overview listing
@@ -14,6 +14,7 @@ phpDivingLog v3.0-alpha3 - 2011-09-03 - Lloyd Borrett and Rob Lensen
     * Added display of multiple cylinder sets to dive details breathing tab
     * Added calculation of END for Trimix dives
     * Added pic indicator to equipment, shop and trip overview listings
+    * Added icons to equipment active/inactive fields
 
 phpDivingLog v3.0-alpha2 - 2011-08-01 - Lloyd Borrett
     * Added ability to display lots of additional values 

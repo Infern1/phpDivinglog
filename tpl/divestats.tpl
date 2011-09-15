@@ -279,17 +279,20 @@ title="{$dlog_number_title}{$DepthMinNr}">{$DepthMinNr}</a></td>
     </colgroup>
 
 {* Dive Certifications *}
-{* Get the certification details *}
-{if isset($count)}
 
 {*
 <tr>
  <td colspan="4" class="spacing">&nbsp;</td>
 </tr>
 *}
+
 <tr class="divesection">
  <td colspan="4">{$stats_sect_certs}</td>
 </tr>
+
+{* Get the certification details *}
+{if isset($count)}
+{if $user_show_certs}
 
 {* Loop through the array *}
 {section name=cell_data loop=$cells }
@@ -334,9 +337,10 @@ title="{$dlog_number_title}{$DepthMinNr}">{$DepthMinNr}</a></td>
  <td colspan="4" class="spacing"><hr></td>
 </tr>
 {/section}
+{/if}
 {else}
     <tr class="divedetails">
-      <td colspan="4">No certifications available.</td>
+      <td colspan="4">{$cert_none}</td>
     </tr>
 {/if}
 </table>
