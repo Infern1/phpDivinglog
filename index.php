@@ -65,13 +65,15 @@ if ($divelog->get_request_type() == 1) {
     $divelog->set_equipment();
     // Comments
     $divelog->set_comments();
+    // Userdefined
+    $divelog->set_userdefined();
     $t->assign('links',$links);/*}}}*/
-}elseif($divelog->get_request_type() == 0){
+} elseif($divelog->get_request_type() == 0) {
     $links->get_ovv_links();
     $divelog->get_dive_overview();
-} elseif($divelog->get_request_type() == 3){
+} elseif($divelog->get_request_type() == 3) {
     $divelog->get_overview_divers();
-} else{
+} else {
     echo "shouldn't come here!";
     exit;
 }

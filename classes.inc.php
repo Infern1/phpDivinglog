@@ -1285,6 +1285,26 @@ class Divelog {
     }
 
     /**
+     * get_userdefined 
+     * 
+     * @access public
+     * @return void
+     */
+    function get_userdefined(){
+        global $globals, $_config; /*{{{*/
+        // Get the userdefined values for this dive, if any
+        $globals['logid'] = $this->result['ID'];
+        $this->userdefined = parse_mysql_query('userdefined.sql');
+        $count = count($this->userdefined);
+        if ($count == '0') {
+            $this->userdefined_count = 0;
+        } else {
+            $this->userdefined_count = 1;
+        }
+    /*}}}*/
+    }
+
+    /**
      * get_main_dive_details 
      * 
      * @access public
@@ -1630,7 +1650,6 @@ class Divelog {
         }
     /*}}}*/
     }
-
 
     /**
      * set_breathing_details 
@@ -2138,6 +2157,25 @@ class Divelog {
             $t->assign('Comments', $r);
         } else {
             $t->assign('Comments', "");
+        }
+    /*}}}*/
+    }
+
+    /**
+     * set_userdefined 
+     * 
+     * @access public
+     * @return void
+     */
+    function set_userdefined(){
+        global $globals, $_config, $t, $_lang; /*{{{*/
+        $this->get_userdefined();
+        // Show userdefined values if we have them
+        $t->assign('userdefined_count', $this->userdefined_count);
+        if ($this->userdefined_count != 0) {
+            $t->assign('userdefined',$this->userdefined);
+        } else {
+            $t->assign('userdefined',"");
         }
     /*}}}*/
     }
