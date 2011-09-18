@@ -26,6 +26,9 @@
 {if isset($profile)}
   <li><a href="#">{$dive_tab_profile}</a></li>
 {/if}
+{if $userdefined_count == '1'}
+  <li><a href="#">{$dive_tab_userdefined}</a></li>
+{/if}
 </ul>
 
 <!-- tab "panes" -->
@@ -791,6 +794,44 @@ title="{$dive_profile_title}">
       <td colspan="4">No profile.</td>
     </tr>
     {/if}
+
+    {*
+    <tr class="divesection">
+      <td colspan="4">&nbsp;</td>
+    </tr>
+    *}
+  </table>
+  </div>
+{/if}
+
+
+<!-- pane 5 -->
+{if $userdefined_count == '1'}
+  <div>
+  <table class="details" cellspacing="0" cellpadding="0" width="100%">
+    <colgroup>
+      <col width="25%">
+      <col width="25%">
+      <col width="25%">
+     <col width="25%">
+    </colgroup>
+
+    {* User-defined fields *}
+    <tr>
+      <td colspan="4" class="spacing">&nbsp;</td>
+    </tr>
+
+    {* Display the fields *}
+    <tr class="divetitle">
+      <td colspan="4">
+        &nbsp;
+      </td>
+    </tr>
+    <tr class="divedetails">
+      <td colspan="4">
+        &nbsp;
+      </td>
+    </tr>
 
     {*
     <tr class="divesection">

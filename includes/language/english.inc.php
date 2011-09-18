@@ -206,6 +206,7 @@ $_lang['dive_tab_breathing'] = "Breathing";
 $_lang['dive_tab_comments'] = "Comments";
 $_lang['dive_tab_photos'] = "Photos";
 $_lang['dive_tab_profile'] = "Profile";
+$_lang['dive_tab_userdefined'] = "User-Defined Fields";
 
 // Dive Log List related values
 

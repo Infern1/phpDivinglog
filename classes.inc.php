@@ -1194,6 +1194,8 @@ class Divelog {
     var $averagedepth;
     var $requested_page;
     var $sac;
+    var $userdefined;
+    var $userdefined_count;
     var $request_type; // request_type = 0 overview, request_type = 1 details
    
     /**
@@ -1319,6 +1321,7 @@ class Divelog {
         $t->assign('dive_tab_comments', $_lang['dive_tab_comments']);
         $t->assign('dive_tab_photos', $_lang['dive_tab_photos']);
         $t->assign('dive_tab_profile', $_lang['dive_tab_profile']);
+        $t->assign('dive_tab_userdefined', $_lang['dive_tab_userdefined']);
        
         $t->assign('pagetitle', $_lang['dive_details_pagetitle'].$result['Number']);
         $t->assign('logbook_divedate', $_lang['logbook_divedate']);
@@ -2170,10 +2173,13 @@ class Divelog {
     function set_userdefined(){
         global $globals, $_config, $t, $_lang; /*{{{*/
         $this->get_userdefined();
+	$userdefined = $this->userdefined; 
+	$userdefined_count = $this->userdefined_count; 
         // Show userdefined values if we have them
-        $t->assign('userdefined_count', $this->userdefined_count);
-        if ($this->userdefined_count != 0) {
-            $t->assign('userdefined',$this->userdefined);
+        $t->assign('userdefined_count', $userdefined_count);
+
+        if ($userdefined_count != 0) {
+            $t->assign('userdefined',$userdefined);
         } else {
             $t->assign('userdefined',"");
         }
