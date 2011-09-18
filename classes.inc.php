@@ -2210,6 +2210,9 @@ class Divelog {
     function get_dive_overview(){
         global $t, $_lang, $globals, $_config; /*{{{*/
 
+// TODO: Count the dives and display a message if none
+        $t->assign('dlog_none', $_lang['dlog_none']);
+
         /**
          * When view_type = 1 display the ajax grid, if type = 2 display old fashioned table 
          */
@@ -2763,6 +2766,9 @@ class Divesite{
             $sql = sql_file("divesite_overview.sql");
         }
 
+// TODO: Count the dive sites and display a message if none
+        $t->assign('dsite_none', $_lang['dsite_none']);
+
         /**
          * when view_type = 1 display the ajax grid if type = 2 display old fashioned table 
          */
@@ -3172,6 +3178,9 @@ class Equipment{
      */
     function get_equipment_overview(){
         global $t, $_lang, $globals, $_config; /*{{{*/
+
+// TODO: Count the equipment and display a message if none
+        $t->assign('equip_none', $_lang['equip_none']);
 
         /**
          * When view_type = 1 display the ajax grid, if type = 2 display old fashioned table 
@@ -3710,6 +3719,9 @@ class Diveshop{
         $shoptable = $this->table_prefix."Shop";
         $sql = sql_file("shoplist.sql");
 
+// TODO: Count the shops and display a message if none
+        $t->assign('dshop_none', $_lang['dshop_none']);
+
         /**
          * when view_type = 1 display the ajax grid if type = 2 display old fashioned table 
          */
@@ -4189,6 +4201,9 @@ class Divetrip{
         global $t, $_lang, $globals, $_config; /*{{{*/
         $triptable = $this->table_prefix."Trip";
         $sql = sql_file("triplist.sql");
+
+// TODO: Count the dive trips and display a message if none
+        $t->assign('dtrip_none', $_lang['dtrip_none']);
 
         /**
          * when view_type = 1 display the ajax grid if type = 2 display old fashioned table 
@@ -4670,6 +4685,9 @@ class Divecountry{
         $countrytable = $this->table_prefix."Country";
         $sql = sql_file("countrylist.sql");
 
+// TODO: Count the countries and display a message if none
+        $t->assign('country_none', $_lang['country_none']);
+
         /**
          * when view_type = 1 display the ajax grid if type = 2 display old fashioned table 
          */
@@ -4698,7 +4716,7 @@ class Divecountry{
         $countrylist_query = $sql;
         $t->assign('country_title_country', $_lang['country_title_country']);
         $t->assign('country_title_count', $_lang['country_title_count']);
-        $t->assign('logbook_country_linktitle', $_lang['logbook_country_linktitle'] );
+        $t->assign('logbook_country_linktitle', $_lang['logbook_country_linktitle']);
 
         if ($this->multiuser == 1) {
             $path = $_config['web_root'].'/divecountry.php/'.$this->user_id.'/list';
@@ -5070,6 +5088,9 @@ class Divecity{
         global $t, $_lang, $globals, $_config; /*{{{*/
         $citytable = $this->table_prefix."City";
         $sql = sql_file("citylist.sql");
+
+// TODO: Count the cities and display a message if none
+        $t->assign('city_none', $_lang['city_none']);
 
         /**
          * when view_type = 1 display the ajax grid if type = 2 display old fashioned table 
