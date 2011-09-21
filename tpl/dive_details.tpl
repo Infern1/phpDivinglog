@@ -806,6 +806,7 @@ title="{$dive_profile_title}">
 
 
 <!-- pane 5 -->
+{* User-defined fields *}
 {if $userdefined_count == '1'}
   <div>
   <table class="details" cellspacing="0" cellpadding="0" width="100%">
@@ -813,25 +814,32 @@ title="{$dive_profile_title}">
       <col width="25%">
       <col width="25%">
       <col width="25%">
-     <col width="25%">
+      <col width="25%">
     </colgroup>
 
-    {* User-defined fields *}
+    {*
     <tr>
       <td colspan="4" class="spacing">&nbsp;</td>
     </tr>
+    *}
 
+    {for $foo=2 to 11} 
     {* Display the fields *}
     <tr class="divetitle">
       <td colspan="4">
-        &nbsp;
+        {$userdefined_keys[$foo]}
       </td>
     </tr>
     <tr class="divedetails">
       <td colspan="4">
-        &nbsp;
+      {if $userdefined_values[$foo] != ''}
+        {$userdefined_values[$foo]}
+      {else}
+        -
+      {/if}
       </td>
     </tr>
+    {/for}
 
     {*
     <tr class="divesection">

@@ -2179,9 +2179,11 @@ class Divelog {
         $t->assign('userdefined_count', $userdefined_count);
 
         if ($userdefined_count != 0) {
-            $t->assign('userdefined',$userdefined);
+            $t->assign('userdefined_keys',array_keys($userdefined));
+            $t->assign('userdefined_values',array_values($userdefined));
         } else {
-            $t->assign('userdefined',"");
+            $t->assign('userdefined_keys',"");
+            $t->assign('userdefined_values',"");
         }
     /*}}}*/
     }
