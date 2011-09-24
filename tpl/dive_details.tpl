@@ -399,10 +399,10 @@
       {foreach from=$equip_link key=id item=i name=equipment}
         {if isset($multiuser_id)}
         <a 
-href="{$app_path}/equipment.php{$sep1}{$multiuser_id}{$sep2}{$i.equipmentnr}" title="{$i.divegear} {$logbook_place_linktitle}">{$i.divegear}</a>&nbsp;
+href="{$app_path}/equipment.php{$sep1}{$multiuser_id}{$sep2}{$i.equipmentnr}" title="{$i.divegear} {$logbook_place_linktitle}">{$i.divegear}</a>{if !$i@last}{if $comma_separated},{else}&nbsp;{/if}{/if}
         {else}
          <a href="{$app_path}/equipment.php{$sep2}{$i.equipmentnr}" 
-title="{$i.divegear} {$logbook_place_linktitle}">{$i.divegear}</a>&nbsp;
+title="{$i.divegear} {$logbook_place_linktitle}">{$i.divegear}</a>{if !$i@last}{if $comma_separated},{else}&nbsp;{/if}{/if}
         {/if}
       {/foreach}
       </td>

@@ -79,10 +79,10 @@
       {foreach from=$dives item=dive}
         {if isset($multiuser_id)}
         <a href="{$app_path}/index.php{$sep1}{$multiuser_id}{$sep2}{$dive}"
-title="{$dlog_number_title}{$dive}">{$dive}</a>
+title="{$dlog_number_title}{$dive}">{$dive}</a>{if !$dive@last}{if $comma_separated},{else}&nbsp;{/if}{/if}
         {else}
         <a href="{$app_path}/index.php{$sep2}{$dive}"
-title="{$dlog_number_title}{$dive}">{$dive}</a>
+title="{$dlog_number_title}{$dive}">{$dive}</a>{if !$dive@last}{if $comma_separated},{else}&nbsp;{/if}{/if}
         {/if}
       {/foreach}
       </td>

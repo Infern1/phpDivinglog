@@ -120,19 +120,26 @@ $_config['user_show_certs'] = true;
 $_config['user_show_medical'] = true;
 
 /**
+ * Comma separated
+ * Specify if lists (like equipment used, dives at site etc.)
+ * should be comma separated.
+ */
+$_config['comma_separated'] = true;
+
+/**
  * Enable thumbs  
  */
 $_config['divepics_preview'] = true;
 
 /**
  * Enable resizing of the uploaded pictures by GD
- * If set to no, full size images will be shown and the
+ * If set to false, full size images will be shown and the
  * thumbnails will be generated each time (cpu usage)
  */
 $_config['enable_resize'] = true;
 
 /**
- * Set the width and height of the thumbnails, which are created automaticly
+ * Set the maximum width and height of the thumbnails, which are created automaticly
  * Usually a 4:3 ratio, e.g. 100:75, 120:100 
  * Width and height are set in px
  */
@@ -140,7 +147,7 @@ $_config['thumb-width'] = 100;
 $_config['thumb-height'] = 75; 
 
 /**
- * Set the width of the pictures in the gallery 
+ * Set the maximum width of the pictures in the gallery 
  * Width is set in px
  */
 $_config['pic-width'] = 800;

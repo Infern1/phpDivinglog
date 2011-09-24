@@ -1329,6 +1329,8 @@ class Divelog {
         $t->assign('logbook_divetime', $_lang['logbook_divetime']);
         $t->assign('logbook_depth', $_lang['logbook_depth']);
 
+        $t->assign('comma_separated', $_config['comma_separated']);
+
         if (isset($result['Divedate']) && ($result['Divedate'] != "")) {
             $t->assign('dive_date', date($_lang['logbook_divedate_format'], strtotime($result['Divedate'])));
         } else {
@@ -2133,6 +2135,7 @@ class Divelog {
             $t->assign('logbook_place_linktitle', $_lang['logbook_place_linktitle']);  
             $t->assign('equip_link', $equip_link);
         } 
+        $t->assign('comma_separated', $_config['comma_separated']);
     /*}}}*/
     }
 
@@ -2717,6 +2720,7 @@ class Divesite{
             $t->assign('dlog_number_title', "" );
             $t->assign('dives',"");
         }
+        $t->assign('comma_separated', $_config['comma_separated']);
     /*}}}*/
     }
 
@@ -3630,6 +3634,7 @@ class Diveshop{
             $t->assign('dlog_number_title', "" );
             $t->assign('dives',"");
         }
+        $t->assign('comma_separated', $_config['comma_separated']);
     /*}}}*/
     }
 
@@ -3665,6 +3670,7 @@ class Diveshop{
             $t->assign('dlog_number_title', "" );
             $t->assign('trips',"");
         }
+        $t->assign('comma_separated', $_config['comma_separated']);
     /*}}}*/
     }
 
@@ -4099,6 +4105,7 @@ class Divetrip{
             $t->assign('dlog_number_title', "" );
             $t->assign('dives',"");
         }
+        $t->assign('comma_separated', $_config['comma_separated']);
     /*}}}*/
     }
 
@@ -4576,6 +4583,7 @@ class Divecountry{
             $t->assign('dlog_number_title', "" );
             $t->assign('trips',"");
         }
+        $t->assign('comma_separated', $_config['comma_separated']);
     /*}}}*/
     }
 
@@ -4611,6 +4619,7 @@ class Divecountry{
             $t->assign('dlog_number_title', "" );
             $t->assign('sites',"");
         }
+        $t->assign('comma_separated', $_config['comma_separated']);
     /*}}}*/
     }
 
@@ -4646,6 +4655,7 @@ class Divecountry{
             $t->assign('dlog_number_title', "" );
             $t->assign('dives',"");
         }
+        $t->assign('comma_separated', $_config['comma_separated']);
     /*}}}*/
     }
 
@@ -5015,6 +5025,7 @@ class Divecity{
             $t->assign('dlog_number_title', "" );
             $t->assign('sites',"");
         }
+        $t->assign('comma_separated', $_config['comma_separated']);
     /*}}}*/
     }
 
@@ -5043,13 +5054,14 @@ class Divecity{
             for ($i=0; $i<$this->dive_count; $i++) {
                 $dives[$i] = $dives[$i]['Number'] ; 
             }
-            $t->assign('dlog_number_title', $_lang['dlog_number_title'] );
+            $t->assign('dlog_number_title', $_lang['dlog_number_title']);
             $t->assign('dives',$dives);
         } else {
             $t->assign('dive_count', $this->dive_count);
-            $t->assign('dlog_number_title', "" );
+            $t->assign('dlog_number_title', "");
             $t->assign('dives',"");
         }
+        $t->assign('comma_separated', $_config['comma_separated']);
     /*}}}*/
     }
 

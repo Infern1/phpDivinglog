@@ -5,7 +5,6 @@
 * Extra dive statistics (e.g. charts as per Diving Log)
 * Improvements to the photo gallery
 * Show which equipment items are due for service and/or O2 clean
-* Show the user-defined fields
 * Protected access to overview and details of buddies
 * Get a better RTF to HTML converter to fully support the RTF markup Diving Log can do
 

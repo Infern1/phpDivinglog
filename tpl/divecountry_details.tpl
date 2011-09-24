@@ -83,10 +83,10 @@
       {foreach from=$trips item=trip}
         {if isset($multiuser_id)}
         <a href="{$app_path}/divetrip.php{$sep1}{$multiuser_id}{$sep2}{$trip}"
-title="{$dtrip_number_title}{$trip}">{$trip}</a>
+title="{$dtrip_number_title}{$trip}">{$trip}</a>{if !$trip@last}{if $comma_separated},{else}&nbsp;{/if}{/if}
         {else}
         <a href="{$app_path}/divetrip.php{$sep2}{$trip}"
-title="{$dtrip_number_title}{$trip}">{$trip}</a>
+title="{$dtrip_number_title}{$trip}">{$trip}</a>{if !$trip@last}{if $comma_separated},{else}&nbsp;{/if}{/if}
         {/if}
       {/foreach}
       </td>
@@ -104,10 +104,10 @@ title="{$dtrip_number_title}{$trip}">{$trip}</a>
       {foreach from=$sites item=site}
         {if isset($multiuser_id)}
         <a href="{$app_path}/divesite.php{$sep1}{$multiuser_id}{$sep2}{$site}"
-title="{$dsite_number_title}{$site}">{$site}</a>
+title="{$dsite_number_title}{$site}">{$site}</a>{if !$site@last}{if $comma_separated},{else}&nbsp;{/if}{/if}
         {else}
         <a href="{$app_path}/divesite.php{$sep2}{$site}"
-title="{$dsite_number_title}{$site}">{$site}</a>
+title="{$dsite_number_title}{$site}">{$site}</a>{if !$site@last}{if $comma_separated},{else}&nbsp;{/if}{/if}
         {/if}
       {/foreach}
       </td>
@@ -125,10 +125,10 @@ title="{$dsite_number_title}{$site}">{$site}</a>
       {foreach from=$dives item=dive}
         {if isset($multiuser_id)}
         <a href="{$app_path}/index.php{$sep1}{$multiuser_id}{$sep2}{$dive}"
-title="{$dlog_number_title}{$dive}">{$dive}</a>
+title="{$dlog_number_title}{$dive}">{$dive}</a>{if !$dive@last}{if $comma_separated},{else}&nbsp;{/if}{/if}
         {else}
         <a href="{$app_path}/index.php{$sep2}{$dive}"
-title="{$dlog_number_title}{$dive}">{$dive}</a>
+title="{$dlog_number_title}{$dive}">{$dive}</a>{if !$dive@last}{if $comma_separated},{else}&nbsp;{/if}{/if}
         {/if}
       {/foreach}
       </td>
