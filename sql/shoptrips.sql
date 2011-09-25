@@ -1,4 +1,4 @@
-SELECT		ID
+SELECT		ID, TripName
 FROM		$_config[table_prefix]Trip
 WHERE		ShopID = '$globals[shopid]'
-ORDER BY	ID ASC
+ORDER BY	TripName ASC

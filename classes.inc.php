@@ -3648,7 +3648,7 @@ class Diveshop{
         global $globals, $_config, $t, $_lang; /*{{{*/
         $this->get_trips_with_shop();
         // Show shop trips if we have them
-        if (count($this->trips) == 1) {
+        if ($this->trip_count == 1) {
             $trips[0] = $this->trips;
         } else {
             $trips = $this->trips;
@@ -3659,9 +3659,6 @@ class Diveshop{
                 $t->assign('shop_trip_trans', $_lang['shop_trip_single']);
             } else {
                 $t->assign('shop_trip_trans', $_lang['shop_trip_plural']);
-            }
-            for ($i=0; $i<$this->trip_count; $i++) {
-                $trips[$i] = $trips[$i]['ID'] ; 
             }
             $t->assign('dtrip_number_title', $_lang['dtrip_number_title'] );
             $t->assign('trips',$trips);
@@ -4083,7 +4080,7 @@ class Divetrip{
         global $globals, $_config, $t, $_lang; /*{{{*/
         $this->get_dives_on_trip();
         // Show trip dives if we have them
-        if (count($this->dives) == 1) {
+        if ($this->dive_count == 1) {
             $dives[0] = $this->dives;
         } else {
             $dives = $this->dives;
@@ -4598,7 +4595,7 @@ class Divecountry{
         global $globals, $_config, $t, $_lang; /*{{{*/
         $this->get_sites_in_country();
         // Show country sites if we have them
-        if (count($this->sites) == 1) {
+        if ($this->site_count == 1) {
             $sites[0] = $this->sites;
         } else {
             $sites = $this->sites;
@@ -4631,7 +4628,7 @@ class Divecountry{
         global $globals, $_config, $t, $_lang; /*{{{*/
         $this->get_dives_in_country();
         // Show country dives if we have them
-        if (count($this->dives) == 1) {
+        if ($this->dive_count == 1) {
             $dives[0] = $this->dives;
         } else {
             $dives = $this->dives;
