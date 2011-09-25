@@ -926,7 +926,7 @@ class TopLevelMenu {
 
         if ($request->request_type == 1) {
             $divelist = parse_mysql_query('divelist.sql');
-            $divecount = count($divelist);
+            $divecount = $globals['sql_num_rows'];
             for ($i=0; $i<$divecount; $i++) {
                 $divelist[$i] = $divelist[$i]['Number'];
             }
@@ -955,9 +955,9 @@ class TopLevelMenu {
         } elseif ($request->request_type == 2) {
             // First, Previous, Next, Last links and Dive #
             $sitelist = parse_mysql_query('sitelist.sql');
-            $last = count($sitelist) - 1;
+            $last = $globals['sql_num_rows'] - 1;
             $position = -1;
-            $sitecount = count($sitelist);
+            $sitecount = $globals['sql_num_rows'];
             for ($i=0; $i<$sitecount; $i++) {
                 if ($sitelist[$i]['ID'] == $globals['placeid']) {
                     $position = $i;
@@ -988,9 +988,9 @@ class TopLevelMenu {
 
         } elseif ($request->request_type == 3) {
             $gearlist = parse_mysql_query('gearlist.sql');
-            $last = count($gearlist) - 1;
+            $last = $globals['sql_num_rows'] - 1;
             $position = -1;
-            $gearcount = count($gearlist);
+            $gearcount = $globals['sql_num_rows'];
             for ($i=0; $i<$gearcount; $i++) {
                 if ($gearlist[$i]['ID'] == $globals['gear']) {
                     $position = $i;
@@ -1035,9 +1035,9 @@ class TopLevelMenu {
         } elseif ($request->request_type == 8) {
             // First, Previous, Next, Last links and Trip #
             $triplist = parse_mysql_query('triplist.sql');
-            $last = count($triplist) - 1;
+            $last = $globals['sql_num_rows'] - 1;
             $position = -1;
-            $tripcount = count($triplist);
+            $tripcount = $globals['sql_num_rows'];
             for ($i=0; $i<$tripcount; $i++) {
                 if ($triplist[$i]['ID'] == $globals['tripid']) {
                     $position = $i;
@@ -1069,9 +1069,9 @@ class TopLevelMenu {
         } elseif ($request->request_type == 9) {
             // First, Previous, Next, Last links and Dive #
             $shoplist = parse_mysql_query('shoplist.sql');
-            $last = count($shoplist) - 1;
+            $last = $globals['sql_num_rows'] - 1;
             $position = -1;
-            $shopcount = count($shoplist);
+            $shopcount = $globals['sql_num_rows'];
             for ($i=0; $i<$shopcount; $i++) {
                 if ($shoplist[$i]['ID'] == $globals['shopid']) {
                     $position = $i;
@@ -1103,9 +1103,9 @@ class TopLevelMenu {
         } elseif ($request->request_type == 10) {
             // First, Previous, Next, Last links and Country #
             $countrylist = parse_mysql_query('countrylist.sql');
-            $last = count($countrylist) - 1;
+            $last = $globals['sql_num_rows'] - 1;
             $position = -1;
-            $countrycount = count($countrylist);
+            $countrycount = $globals['sql_num_rows'];
             for ($i=0; $i<$countrycount; $i++) {
                 if ($countrylist[$i]['ID'] == $globals['countryid']) {
                     $position = $i;
@@ -1137,9 +1137,9 @@ class TopLevelMenu {
         } elseif ($request->request_type == 11) {
             // First, Previous, Next, Last links and City #
             $citylist = parse_mysql_query('citylist.sql');
-            $last = count($citylist) - 1;
+            $last = $globals['sql_num_rows'] - 1;
             $position = -1;
-            $citycount = count($citylist);
+            $citycount = $globals['sql_num_rows'];
             for ($i=0; $i<$citycount; $i++) {
                 if ($citylist[$i]['ID'] == $globals['cityid']) {
                     $position = $i;
@@ -1297,7 +1297,7 @@ class Divelog {
         // Get the userdefined values for this dive, if any
         $globals['logid'] = $this->result['ID'];
         $this->userdefined = parse_mysql_query('userdefined.sql');
-        $count = count($this->userdefined);
+        $count = $globals['sql_num_rows'];
         if ($count == '0') {
             $this->userdefined_count = 0;
         } else {
@@ -2123,7 +2123,7 @@ class Divelog {
             $t->assign('logbook_usedequip', $_lang['logbook_usedequip'] );
             $globals['gearlist'] = $result['UsedEquip'];
             $divegear = parse_mysql_query('divegearlist.sql');
-            $num_equip = count($divegear);
+            $num_equip = $globals['sql_num_rows'];
             $equip_link[] =  array();
 
             for ($i=0; $i<$num_equip; $i++) {
@@ -2498,7 +2498,7 @@ class Divesite{
                 // Get the country details from database
                 $globals['countryid'] = $countrycity['CountryID'];
                 $countrydetails = parse_mysql_query('onecountry.sql');
-                if (count($countrydetails) == 0) {
+                if ($globals['sql_num_rows'] == 0) {
                     $this->country = $countrycity['Country'];
                     $this->countryid = $countrycity['CountryID'];
                 } else {
@@ -2511,7 +2511,7 @@ class Divesite{
                 // Get the city details from database
                 $globals['cityid'] = $countrycity['CityID'];
                 $citydetails = parse_mysql_query('onecity.sql');
-                if (count($citydetails) == 0) {
+                if ($globals['sql_num_rows'] == 0) {
                     $this->city = $countrycity['City'];
                 } else {
                     $this->city = $citydetails['City'];
@@ -2532,7 +2532,7 @@ class Divesite{
         // Get the dives at this site from database
         $globals['placeid'] = $this->divesite_nr;
         $this->dives = parse_mysql_query('divelocations.sql');
-        $this->dive_count = count($this->dives);
+        $this->dive_count = $globals['sql_num_rows'];
         // Get the site list from database
         $this->sitelist = parse_mysql_query('sitelist.sql');
     /*}}}*/
@@ -3413,7 +3413,7 @@ class Diveshop{
         // Get the dives with this shop from database
         $globals['shopid'] = $this->diveshop_nr;
         $this->dives = parse_mysql_query('shopdives.sql');
-        $this->dive_count = count($this->dives);
+        $this->dive_count = $globals['sql_num_rows'];
         // Get the shop list from database
         $this->shoplist = parse_mysql_query('shoplist.sql');
     /*}}}*/
@@ -3430,7 +3430,7 @@ class Diveshop{
         // Get the trips with this dive shop from database
         $globals['shopid'] = $this->diveshop_nr;
         $this->trips = parse_mysql_query('shoptrips.sql');
-        $this->trip_count = count($this->trips);
+        $this->trip_count = $globals['sql_num_rows'];
         // Get the diveshop list from database
         $this->shoplist = parse_mysql_query('shoplist.sql');
     /*}}}*/
@@ -3955,7 +3955,7 @@ class Divetrip{
         // Get the dives on this trip from database
         $globals['tripid'] = $this->divetrip_nr;
         $this->dives = parse_mysql_query('tripdives.sql');
-        $this->dive_count = count($this->dives);
+        $this->dive_count = $globals['sql_num_rows'];
         // Get the trip list from database
         $this->triplist = parse_mysql_query('triplist.sql');
     /*}}}*/
@@ -4332,6 +4332,10 @@ class Divecountry{
     var $shop;
     var $dives;
     var $dive_count;
+    var $trips;
+    var $trip_count;
+    var $sites;
+    var $site_count;
     var $triplist;
     var $divecountry_data;
     var $request_type; // request_type = 0 overview, request_type = 1 details
@@ -4439,7 +4443,7 @@ class Divecountry{
         // Get the trips in this country from database
         $globals['countryid'] = $this->divecountry_nr;
         $this->trips = parse_mysql_query('countrytrips.sql');
-        $this->trip_count = count($this->trips);
+        $this->trip_count = $globals['sql_num_rows'];
         // Get the divecountry list from database
         $this->countrylist = parse_mysql_query('countrylist.sql');
     /*}}}*/
@@ -4456,7 +4460,7 @@ class Divecountry{
         // Get the sites in this country from database
         $globals['countryid'] = $this->divecountry_nr;
         $this->sites = parse_mysql_query('countrysites.sql');
-        $this->site_count = count($this->sites);
+        $this->site_count = $globals['sql_num_rows'];
         // Get the divecountry list from database
         $this->countrylist = parse_mysql_query('countrylist.sql');
     /*}}}*/
@@ -4473,7 +4477,7 @@ class Divecountry{
         // Get the dives in this country from database
         $globals['countryid'] = $this->divecountry_nr;
         $this->dives = parse_mysql_query('countrydives.sql');
-        $this->dive_count = count($this->dives);
+        $this->dive_count = $globals['sql_num_rows'];
         // Get the divecountry list from database
         $this->countrylist = parse_mysql_query('countrylist.sql');
     /*}}}*/
@@ -4561,7 +4565,7 @@ class Divecountry{
         global $globals, $_config, $t, $_lang; /*{{{*/
         $this->get_trips_in_country();
         // Show country trips if we have them
-        if (count($this->trips) == 1) {
+        if ($this->trip_count == 1) {
             $trips[0] = $this->trips;
         } else {
             $trips = $this->trips;
@@ -4572,9 +4576,6 @@ class Divecountry{
                 $t->assign('country_trip_trans', $_lang['country_trip_single']);
             } else {
                 $t->assign('country_trip_trans', $_lang['country_trip_plural']);
-            }
-            for ($i=0; $i<$this->trip_count; $i++) {
-                $trips[$i] = $trips[$i]['ID'] ; 
             }
             $t->assign('dtrip_number_title', $_lang['dtrip_number_title'] );
             $t->assign('trips',$trips);
@@ -4916,7 +4917,7 @@ class Divecity{
         // Get the sites in this city from database
         $globals['cityid'] = $this->divecity_nr;
         $this->sites = parse_mysql_query('citysites.sql');
-        $this->site_count = count($this->sites);
+        $this->site_count = $globals['sql_num_rows'];
         // Get the divecity list from database
         $this->citylist = parse_mysql_query('citylist.sql');
     /*}}}*/
@@ -4933,7 +4934,7 @@ class Divecity{
         // Get the dives in this city from database
         $globals['cityid'] = $this->divecity_nr;
         $this->dives = parse_mysql_query('citydives.sql');
-        $this->dive_count = count($this->dives);
+        $this->dive_count = $globals['sql_num_rows'];
         // Get the divecity list from database
         $this->citylist = parse_mysql_query('citylist.sql');
     /*}}}*/
@@ -5404,7 +5405,7 @@ class Divestats{
             $globals['stats'] = "Divedate = '" . $divestats['DivedateMin'] . "'";
             $divestatsnr = parse_mysql_query('divestatsnr.sql');
             // Check the number of dives on the first day of diving, if more than 1 get the first
-            if (count($divestatsnr) > 1) {
+            if ($globals['sql_num_rows'] > 1) {
                 $this->DivedateMinNr = $divestatsnr[0]['Number'];
             } else {
                 $this->DivedateMinNr = $divestatsnr['Number'];
@@ -5414,7 +5415,7 @@ class Divestats{
             $globals['stats'] = "Divedate = '" . $divestats['DivedateMax'] . "'";
             $divestatsnr = parse_mysql_query('divestatsnr.sql');
             // Some principle as first dive
-            if (count($divestatsnr) > 1) {
+            if ($globals['sql_num_rows'] > 1) {
                 $this->DivedateMaxNr = $divestatsnr[count($divestatsnr)-1]['Number'];
             } else {
                 $this->DivedateMaxNr = $divestatsnr['Number'];
@@ -5423,7 +5424,7 @@ class Divestats{
             // Get dive number for sortest dive
             $globals['stats'] = "Divetime = '" . $divestats['DivetimeMin'] . "'";
             $divestatsnr = parse_mysql_query('divestatsnr.sql');
-            if (count($divestatsnr) > 1) {
+            if ($globals['sql_num_rows'] > 1) {
                 $this->DivetimeMinNr = $divestatsnr[0]['Number'];
             } else {
                 $this->DivetimeMinNr = $divestatsnr['Number'];
@@ -5431,7 +5432,7 @@ class Divestats{
             // Get dive number for deepest dive
             $globals['stats'] = "Divetime = '" . $divestats['DivetimeMax'] . "'";
             $divestatsnr = parse_mysql_query('divestatsnr.sql');
-            if (count($divestatsnr) > 1) {
+            if ($globals['sql_num_rows'] > 1) {
                 $this->DivetimeMaxNr = $divestatsnr[0]['Number'];
             } else {
                 $this->DivetimeMaxNr = $divestatsnr['Number'];
@@ -5439,7 +5440,7 @@ class Divestats{
             // Get dive number for shallowest dive
             $globals['stats'] = "Depth = '" . $divestats['DepthMin'] . "'";
             $divestatsnr = parse_mysql_query('divestatsnr.sql');
-            if (count($divestatsnr) > 1) {
+            if ($globals['sql_num_rows'] > 1) {
                 $this->DepthMinNr = $divestatsnr[0]['Number'];
             } else {
                 $this->DepthMinNr = $divestatsnr['Number'];
@@ -5447,7 +5448,7 @@ class Divestats{
             // Get dive number for deepest dive
             $globals['stats'] = "Depth = '" . $divestats['DepthMax'] . "'";
             $divestatsnr = parse_mysql_query('divestatsnr.sql');
-            if (count($divestatsnr) > 1) {
+            if ($globals['sql_num_rows'] > 1) {
                 $this->DepthMaxNr = $divestatsnr[0]['Number'];
             } else {
                 $this->DepthMaxNr = $divestatsnr['Number'];
@@ -5455,7 +5456,7 @@ class Divestats{
             // Get dive number for coldest water dive
             $globals['stats'] = "Watertemp = '" . $divestats['WatertempMin'] . "'";
             $divestatsnr = parse_mysql_query('divestatsnr.sql');
-            if (count($divestatsnr) > 1) {
+            if ($globals['sql_num_rows'] > 1) {
                 $this->WatertempMinNr = $divestatsnr[0]['Number'];
             } else {
                 $this->WatertempMinNr = $divestatsnr['Number'];
@@ -5463,7 +5464,7 @@ class Divestats{
             // Get dive number for warmest water dive
             $globals['stats'] = "Watertemp = '" . $divestats['WatertempMax'] . "'";
             $divestatsnr = parse_mysql_query('divestatsnr.sql');
-            if (count($divestatsnr) > 1) {
+            if ($globals['sql_num_rows'] > 1) {
                 $this->WatertempMaxNr = $divestatsnr[0]['Number'];
             } else {
                 $this->WatertempMaxNr = $divestatsnr['Number'];
@@ -5471,7 +5472,7 @@ class Divestats{
             // Get dive number for coldest air dive
             $globals['stats'] = "Airtemp = '" . $divestats['AirtempMin'] . "'";
             $divestatsnr = parse_mysql_query('divestatsnr.sql');
-            if (count($divestatsnr) > 1) {
+            if ($globals['sql_num_rows'] > 1) {
                 $this->AirtempMinNr = $divestatsnr[0]['Number'];
             } else {
                 $this->AirtempMinNr = $divestatsnr['Number'];
@@ -5479,7 +5480,7 @@ class Divestats{
             // Get dive number for warmest air dive
             $globals['stats'] = "Airtemp = '" . $divestats['AirtempMax'] . "'";
             $divestatsnr = parse_mysql_query('divestatsnr.sql');
-            if (count($divestatsnr) > 1) {
+            if ($globals['sql_num_rows'] > 1) {
                 $this->AirtempMaxNr = $divestatsnr[0]['Number'];
             } else {
                 $this->AirtempMaxNr = $divestatsnr['Number'];
@@ -5515,7 +5516,7 @@ class Divestats{
             $this->depthrange5_per = round(($this->depthrange[4] / $this->end) * 100);
 
             $this->divecert = parse_mysql_query('brevetlist.sql');
-            $this->number_cert = count($this->divecert);
+            $this->number_cert = $globals['sql_num_rows'];
 
         } else {
             /**
@@ -6380,7 +6381,7 @@ class Tank{
         global $t, $_config, $_lang, $globals; /*{{{*/
         $globals['dive_nr'] = $this->dive_nr;
         $divetanks = parse_mysql_query('tanksdivelist.sql');
-        $num_tanks = count($divetanks);
+        $num_tanks = $globals['sql_num_rows'];
         if ($num_tanks > 0) {
             // Get the info for each tank
         }
