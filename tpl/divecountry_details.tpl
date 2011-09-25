@@ -103,11 +103,11 @@ title="{$dtrip_number_title}{$trip.ID} - {$trip.TripName}">{if $trip.TripName ==
       <td colspan="4">
       {foreach from=$sites item=site}
         {if isset($multiuser_id)}
-        <a href="{$app_path}/divesite.php{$sep1}{$multiuser_id}{$sep2}{$site}"
-title="{$dsite_number_title}{$site}">{$site}</a>{if !$site@last}{if $comma_separated},{else}&nbsp;{/if}{/if}
+        <a href="{$app_path}/divesite.php{$sep1}{$multiuser_id}{$sep2}{$site.PlaceID}"
+title="{$dsite_number_title}{$site.PlaceID}= {$site.Place}">{if $site.Place == ''}{$site.PlaceID}{else}{$site.Place}{/if}</a>{if !$site@last}{if $comma_separated},{else}&nbsp;{/if}{/if}
         {else}
-        <a href="{$app_path}/divesite.php{$sep2}{$site}"
-title="{$dsite_number_title}{$site}">{$site}</a>{if !$site@last}{if $comma_separated},{else}&nbsp;{/if}{/if}
+        <a href="{$app_path}/divesite.php{$sep2}{$site.PlaceID}"
+title="{$dsite_number_title}{$site.PlaceID} - {$site.Place}">{if $site.Place == ''}{$site.PlaceID}{else}{$site.Place}{/if}</a>{if !$site@last}{if $comma_separated},{else}&nbsp;{/if}{/if}
         {/if}
       {/foreach}
       </td>
