@@ -4998,7 +4998,7 @@ class Divecity{
         global $globals, $_config, $t, $_lang; /*{{{*/
         $this->get_sites_in_city();
         // Show city sites if we have them
-        if (count($this->sites) == 1) {
+        if ($this->site_count == 1) {
             $sites[0] = $this->sites;
         } else {
             $sites = $this->sites;
@@ -5009,9 +5009,6 @@ class Divecity{
                 $t->assign('city_site_trans', $_lang['city_site_single']);
             } else {
                 $t->assign('city_site_trans', $_lang['city_site_plural']);
-            }
-            for ($i=0; $i<$this->site_count; $i++) {
-                $sites[$i] = $sites[$i]['ID'] ; 
             }
             $t->assign('dcity_number_title', $_lang['dcity_number_title'] );
             $t->assign('sites',$sites);
@@ -5034,7 +5031,7 @@ class Divecity{
         global $globals, $_config, $t, $_lang; /*{{{*/
         $this->get_dives_in_citry();
         // Show city dives if we have them
-        if (count($this->dives) == 1) {
+        if ($this->dive_count == 1) {
             $dives[0] = $this->dives;
         } else {
             $dives = $this->dives;
