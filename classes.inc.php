@@ -75,7 +75,7 @@ class HandleRequest {
      * @access public
      * @return void
      */
-    function HandleRequest(){
+    function HandleRequest() {
         global $_config, $t;/*{{{*/
         $this->multiuser = $_config['multiuser'];
         $_SESSION['request_type'] = 1;
@@ -105,7 +105,7 @@ class HandleRequest {
      * @access public
      * @return void
      */
-    function set_request_uri($uri){
+    function set_request_uri($uri) {
         $this->request_uri = $uri;
     }
 
@@ -121,57 +121,57 @@ class HandleRequest {
      * @access public
      * @return void
      */
-    function set_file_depth($depth = 0){
+    function set_file_depth($depth = 0) {
         global $_config;
         $app_depth = count_all((preg_split("#/#", $_config['abs_url_path'])));
         $this->request_file_depth = $depth + $app_depth;
     }
 
-    function get_user_id(){
+    function get_user_id() {
         return $this->user_id;
     }
 
-    function get_dive_nr(){
+    function get_dive_nr() {
         return $this->dive_nr;
     }
 
-    function get_site_nr(){
+    function get_site_nr() {
         return $this->site_nr;
     }
 
-    function get_equipment_nr(){
+    function get_equipment_nr() {
         return $this->equipment_nr;
     }
 
-    function get_request_type(){
+    function get_request_type() {
         return $this->get_request_type;
     }
 
-    function get_view_request(){
+    function get_view_request() {
         return $this->view_request;
     }
 
-    function get_requested_page(){
+    function get_requested_page() {
         return $this->requested_page;
     }
 
-    function get_multiuser(){
+    function get_multiuser() {
         return $this->multiuser;
     }
 
-    function get_divetrip_nr(){
+    function get_divetrip_nr() {
         return $this->divetrip_nr;
     }
 
-    function get_diveshop_nr(){
+    function get_diveshop_nr() {
         return $this->diveshop_nr;
     }
 
-    function get_divecountry_nr(){
+    function get_divecountry_nr() {
         return $this->divecountry_nr;
     }
 
-    function get_divecity_nr(){
+    function get_divecity_nr() {
         return $this->divecity_nr;
     }
     
@@ -183,7 +183,7 @@ class HandleRequest {
      * @access public
      * @return void
      */
-    function handle_url(){
+    function handle_url() {
     /*{{{*/
         global $_config, $t;
         if ($this->multiuser) {
@@ -378,7 +378,7 @@ class User {
      * @access public
      * @return void
      */
-    function User(){
+    function User() {
         global $_config;
         $this->multiuser = $_config['multiuser'];
         if (!$this->multiuser) {
@@ -395,7 +395,7 @@ class User {
      * @access public
      * @return void
      */
-    function set_user_id($id){
+    function set_user_id($id) {
         $this->user_id = $id;
         /**
          *  Set table prefix according config file
@@ -410,7 +410,7 @@ class User {
      * @access public
      * @return void
      */
-    function get_username(){
+    function get_username() {
         global $_config, $globals;
         $user_data = parse_mysql_query('personal.sql',0,TRUE);
         $this->username = '';
@@ -434,7 +434,7 @@ class User {
      * @access public
      * @return void
      */
-    function set_table_prefix($id){
+    function set_table_prefix($id) {
         global $_config;
         // Get the prefix from the config file
         if (isset($_config['user_prefix'][$id])) {
@@ -442,7 +442,7 @@ class User {
         }
     }
 
-    function get_table_prefix(){
+    function get_table_prefix() {
         return $this->table_prefix;
     }
 /*}}}*/
@@ -467,7 +467,7 @@ class TableGrid{
      * @access public
      * @return void
      */
-    function TableGrid($user_id = 0,$data){
+    function TableGrid($user_id = 0,$data) {
         global $_config;
         $this->language = $_config['language'];
         $objGrid = new dataGrid($data,$void);
@@ -492,7 +492,7 @@ class TableGrid{
      * @access public
      * @return void
      */
-    function get_grid($objGrid){
+    function get_grid($objGrid) {
         ob_start();
         $objGrid->grid();
         $objGrid -> desconectar(); 
@@ -500,7 +500,7 @@ class TableGrid{
         return $grid;
     }
 
-    function get_grid_class(){
+    function get_grid_class() {
         return $this->gridtable;
     }
 
@@ -511,7 +511,7 @@ class TableGrid{
      * @access public
      * @return void
      */
-    function SetGridLanguage(){
+    function SetGridLanguage() {
         global $_lang, $_config; /*{{{*/
         switch ($this->language) {
             case 'english' :
@@ -602,7 +602,7 @@ class TablePager{
      * @access public
      * @return void
      */
-    function TablePager($cpage, $path){
+    function TablePager($cpage, $path) {
         global $_config;
         if ($_config['query_string']) {
             $pager_options = array( 
@@ -632,7 +632,7 @@ class TablePager{
      * @access public
      * @return void
      */
-    function return_tablepager_options(){
+    function return_tablepager_options() {
         return $this->options;
     }
 
@@ -643,7 +643,7 @@ class TablePager{
      * @access public
      * @return void
      */
-    function set_tablepager_itemdata($itemdata){
+    function set_tablepager_itemdata($itemdata) {
         $this->options['itemData'] = $itemdata;
     }
 
@@ -653,7 +653,7 @@ class TablePager{
      * @access public
      * @return void
      */
-    function create_pager(){
+    function create_pager() {
         $this->pager = & Pager::factory($this->options);
     }
 
@@ -663,16 +663,16 @@ class TablePager{
      * @access public
      * @return void
      */
-    function return_pager_links(){
+    function return_pager_links() {
         $links = $this->pager->links;
         return $links;
     }
 
-    function return_getCurrentPageID(){
+    function return_getCurrentPageID() {
         return $this->pager->getCurrentPageID();
     }
 
-    function return_numPages(){
+    function return_numPages() {
         return $this->pager->numPages();
     }
 
@@ -682,7 +682,7 @@ class TablePager{
      * @access public
      * @return void
      */
-    function return_pager_data(){
+    function return_pager_data() {
         $data = $this->pager->getPageData();
         if (!is_array($data)) {
             $data = array();
@@ -713,7 +713,7 @@ class Users{
      * @access public
      * @return void
      */
-    function Users(){
+    function Users() {
         global $_config, $t;
         // Get the user_ids and put them in a array
         if ($_config['multiuser']) {
@@ -726,7 +726,7 @@ class Users{
      * @access public
      * @return void
      */
-    function get_divers(){
+    function get_divers() {
         global $_config, $t;
         // Get the user_ids and put them in a array
         if ($_config['multiuser']) {
@@ -740,7 +740,7 @@ class Users{
      * @access public
      * @return void
      */
-    function return_divers(){
+    function return_divers() {
         get_divers();
         return $this->user_ids;
     }
@@ -752,7 +752,7 @@ class Users{
      * @access public
      * @return void
      */
-    function is_valid_user($id){
+    function is_valid_user($id) {
         global $_config, $t;
         $user_ids =  array_keys($_config['user_prefix']);
         if (in_array($id, $user_ids)) {
@@ -763,7 +763,7 @@ class Users{
         }
     }
 
-    function get_table_prefix(){
+    function get_table_prefix() {
         global $_config;
         // We have the ids so just get the prefix
         foreach ($this->user_ids as $id) {
@@ -771,7 +771,7 @@ class Users{
         }
     }
 
-    function set_user_data(){
+    function set_user_data() {
         global $_config;
         // Get the personal info of each user from the DB
         foreach ($this->table_prefixes as $prefix) {
@@ -788,7 +788,7 @@ class Users{
         // unset($_config['table_prefix']);
 
     }
-    function get_user_data(){
+    function get_user_data() {
         $this->get_divers();
         $this->get_table_prefix();
         $this->set_user_data();
@@ -817,7 +817,7 @@ class TopLevelMenu {
      * @access public
      * @return void
      */
-    function TopLevelMenu($request = 0 ){
+    function TopLevelMenu($request = 0 ) {
         global $_config, $t;
         // Get the user_ids and put them in a array
         if ($_config['multiuser']) {
@@ -842,7 +842,7 @@ class TopLevelMenu {
      * @access public
      * @return void
      */
-    function get_std_links(){
+    function get_std_links() {
         global $t, $_lang; /*{{{*/
         // Dive Log, Dive Sites, Dive Shops, Dive Trips, Dive Statistics
         $t->assign('diver_choice_linktitle', $_lang['diver_choice_linktitle']);
@@ -878,7 +878,7 @@ class TopLevelMenu {
      * @access public
      * @return void
      */
-    function get_ovv_links(){
+    function get_ovv_links() {
         global $t, $_lang; /*{{{*/
         // Start filling the data in the links_overview.tpl file
         $t->assign('base_page','index.php');
@@ -920,7 +920,7 @@ class TopLevelMenu {
      * @access public
      * @return void
      */
-    function get_nav_links($request){
+    function get_nav_links($request) {
         /*{{{*/
         global $t, $globals, $_lang, $_config;
 
@@ -943,7 +943,7 @@ class TopLevelMenu {
             } 
             // Next, Last
             if (array_search($get_nr, $divelist) != 0 ) {
-                $t->assign('divenr_not_null','1');	
+                $t->assign('divenr_not_null','1');
                 $t->assign('next_dive_nr',$divelist[$thisdive-1]);
                 $t->assign('next_dive_linktitle', $_lang['next_dive_linktitle']);
                 $t->assign('next', $_lang['next']);
@@ -1204,12 +1204,12 @@ class Divelog {
      * @access public
      * @return void
      */
-    function Divelog(){
+    function Divelog() {
         global $_config;
         $this->multiuser = $_config['multiuser'];
     }
     
-    function get_request_type(){
+    function get_request_type() {
         return $this->request_type;
     }
 
@@ -1220,7 +1220,7 @@ class Divelog {
      * @access public
      * @return void
      */
-    function set_divelog_info($request){
+    function set_divelog_info($request) {
         // We need to extract the info from the request
         /*{{{*/
         if (!$request->diver_choice) {
@@ -1254,7 +1254,7 @@ class Divelog {
      * @access public
      * @return void
      */
-    function get_divelog_info(){
+    function get_divelog_info() {
         global $globals, $_config; /*{{{*/
         if (!empty($this->dive_nr)) {
             $this->request_type = 1;
@@ -1292,7 +1292,7 @@ class Divelog {
      * @access public
      * @return void
      */
-    function get_userdefined(){
+    function get_userdefined() {
         global $globals, $_config; /*{{{*/
         // Get the userdefined values for this dive, if any
         $globals['logid'] = $this->result['ID'];
@@ -1312,9 +1312,9 @@ class Divelog {
      * @access public
      * @return void
      */
-    function set_main_dive_details(){
+    function set_main_dive_details() {
         global $t, $_config, $_lang, $globals; /*{{{*/
-	$result = $this->result; 
+        $result = $this->result; 
  
         $t->assign('dive_tab_logbook', $_lang['dive_tab_logbook']);
         $t->assign('dive_tab_breathing', $_lang['dive_tab_breathing']);
@@ -1334,19 +1334,19 @@ class Divelog {
         if (isset($result['Divedate']) && ($result['Divedate'] != "")) {
             $t->assign('dive_date', date($_lang['logbook_divedate_format'], strtotime($result['Divedate'])));
         } else {
-            $t->assign('dive_date','-');	
+            $t->assign('dive_date','-');
         }
 
         if (isset($result['Entrytime']) && ($result['Entrytime'] != "")) {
             $t->assign('entry_time',$result['Entrytime']);
         } else {
-            $t->assign('entry_time','-');	
+            $t->assign('entry_time','-');
         }
 
         if (isset($result['Divetime']) && ($result['Divetime'] != "")) {
             $t->assign('dive_time', $result['Divetime'] ."&nbsp;". $_lang['unit_time']);
         } else {
-            $t->assign('dive_time','-');	
+            $t->assign('dive_time','-');
         }
 
         if (isset($result['Depth']) && ($result['Depth'] != "")) {
@@ -1356,7 +1356,7 @@ class Divelog {
                 $t->assign('dive_depth', $result['Depth'] ."&nbsp;". $_lang['unit_length']);
             }
         } else {
-            $t->assign('dive_depth','-');	
+            $t->assign('dive_depth','-');
         }
 
         // Show dive location details
@@ -1372,21 +1372,21 @@ class Divelog {
             $t->assign('logbook_place_linktitle', $_lang['logbook_place_linktitle']);
         }
 
-        if (!empty($result['City'])){
+        if (!empty($result['City'])) {
             $t->assign('dive_city', $result['City']);
         } else {
-            $t->assign('dive_city','-');	
+            $t->assign('dive_city','-');
         }
 
-        if (!empty($result['Country'])){
+        if (!empty($result['Country'])) {
             $t->assign('dive_country_nr', $result['CountryID']);
             $t->assign('dive_country',$result['Country']);
             $t->assign('logbook_country_linktitle', $_lang['logbook_country_linktitle']);
         } else {
-            $t->assign('dive_country','-');	
+            $t->assign('dive_country','-');
         }
 
-        if (!empty($result['ShopID'])){
+        if (!empty($result['ShopID'])) {
             $globals['shopid'] = $result['ShopID'];
             $diveshop = parse_mysql_query('oneshop.sql');
             $t->assign('dive_shop_nr', $result['ShopID']);
@@ -1397,10 +1397,10 @@ class Divelog {
             }
         } else {
             $t->assign('dive_shop_nr', '');
-            $t->assign('dive_shop_name','-');	
+            $t->assign('dive_shop_name','-');
         }
 
-        if (!empty($result['TripID'])){
+        if (!empty($result['TripID'])) {
             $globals['tripid'] = $result['TripID'];
             $divetrip = parse_mysql_query('onetrip.sql');
             $t->assign('dive_trip_nr', $result['TripID']);
@@ -1408,7 +1408,7 @@ class Divelog {
             $t->assign('logbook_trip_linktitle', $_lang['logbook_trip_linktitle']);
         } else {
             $t->assign('dive_trip_nr', '');
-            $t->assign('dive_trip_name','-');	
+            $t->assign('dive_trip_name','-');
         }
 
     /*}}}*/
@@ -1420,7 +1420,7 @@ class Divelog {
      * @access public
      * @return void
      */
-    function set_buddy_details(){
+    function set_buddy_details() {
         global $t, $_lang; /*{{{*/
         $result = $this->result; 
         $t->assign('logbook_buddy', $_lang['logbook_buddy']);
@@ -1429,18 +1429,18 @@ class Divelog {
         if (isset($result['Buddy']) && $result['Buddy'] != "") {
             $t->assign('buddy', $result['Buddy']);
         } else {
-            $t->assign('buddy','-');	
+            $t->assign('buddy','-');
         }
 
         if (isset($result['Divemaster']) && $result['Divemaster'] != "") {
             $t->assign('divemaster', $result['Divemaster']);
         } else {
-            $t->assign('divemaster','-');	
+            $t->assign('divemaster','-');
         }
     /*}}}*/
     }
 
-    function get_log_id_for_dive_nr($dive_nr){
+    function get_log_id_for_dive_nr($dive_nr) {
         global $_config,$t, $_lang, $globals;
     }
 
@@ -1452,7 +1452,7 @@ class Divelog {
      * @access public
      * @return void
      */
-    function dive_has_pictures($dive_nr){
+    function dive_has_pictures($dive_nr) {
         global $_config, $t, $_lang, $globals; /*{{{*/
         $pic_class = new DivePictures;
         // $pic_class->set_divegallery_info_direct($this->user_id);
@@ -1498,7 +1498,7 @@ class Divelog {
      * @access public
      * @return void
      */
-    function set_dive_pictures(){
+    function set_dive_pictures() {
         global $_config, $t, $_lang, $globals; /*{{{*/
         $result = $this->result; 
         $pic_class = new DivePictures;
@@ -1563,7 +1563,7 @@ class Divelog {
      * @access public
      * @return void
      */
-    function set_dive_conditions(){
+    function set_dive_conditions() {
         global $t, $_config, $_lang, $globals; /*{{{*/
         $result = $this->result; 
         $t->assign('dive_sect_conditions', $_lang['dive_sect_conditions']);
@@ -1576,13 +1576,13 @@ class Divelog {
         if (isset($result['Weather']) && ($result['Weather'] != "")) {
             $t->assign('Weather', $result['Weather']);
         } else {
-            $t->assign('Weather','-');	
+            $t->assign('Weather','-');
         }
 
         if (isset($result['Altitude']) && ($result['Altitude'] != "")) {
             $t->assign('Altitude', $result['Altitude']);
         } else {
-            $t->assign('Altitude','-');	
+            $t->assign('Altitude','-');
         }
 
         if (isset($result['Airtemp']) && ($result['Airtemp'] != "")) {
@@ -1593,7 +1593,7 @@ class Divelog {
             }
             $t->assign('Airtemp',$Airtemp);
         } else {
-            $t->assign('Airtemp','-');	
+            $t->assign('Airtemp','-');
         }
 
         // Show water conditions
@@ -1608,7 +1608,7 @@ class Divelog {
         if ($result['Water'] != 0 && $_lang['water'][($result['Water'] - 1)]) {
             $t->assign('Water', $_lang['water'][($result['Water'] - 1)]);
         } else {
-            $t->assign('Water','-');	
+            $t->assign('Water','-');
         }
 
         if ($result['Visibility'] != 0 && $_lang['visibility'][($result['Visibility'] - 1)]) {
@@ -1616,31 +1616,31 @@ class Divelog {
             $vizimage = '<img src="'.$_config['web_root'].'/images/vis-'.$result['Visibility'].'.gif" alt="'.$viz.'" title="'.$viz.'" border="0" width="50" height="15"> ';
             $t->assign('Visibility', $vizimage.' '.$viz);
         } else {
-            $t->assign('Visibility','-');	
+            $t->assign('Visibility','-');
         }
 
         if (isset($result['VisHor']) && ($result['VisHor'] != "")) {
             $t->assign('VisHor', htmlentities($result['VisHor']));
         } else {
-            $t->assign('VisHor','-');	
+            $t->assign('VisHor','-');
         }
 
         if (isset($result['VisVer']) && ($result['VisVer'] != "")) {
             $t->assign('VisVer', htmlentities($result['VisVer']));
         } else {
-            $t->assign('VisVer','-');	
+            $t->assign('VisVer','-');
         }
 
         if (isset($result['Surface']) && ($result['Surface'] != "")) {
             $t->assign('Surface',$result['Surface']);
         } else {
-            $t->assign('Surface','-');	
+            $t->assign('Surface','-');
         }
 
         if (isset($result['UWCurrent']) && ($result['UWCurrent'] != "")) {
             $t->assign('UWCurrent',$result['UWCurrent']);
         } else {
-            $t->assign('UWCurrent','-');	
+            $t->assign('UWCurrent','-');
         }
 
         if (isset($result['Watertemp']) && ($result['Watertemp'] != "")) {
@@ -1651,7 +1651,7 @@ class Divelog {
             }
             $t->assign('Watertemp', $Watertemp);
         } else {
-            $t->assign('Watertemp','-');	
+            $t->assign('Watertemp','-');
         }
     /*}}}*/
     }
@@ -1683,10 +1683,10 @@ class Divelog {
             if ($arr_number >= 0) {
                 $tanks[$i]['Tanktype'] = $_lang['tanktype'][$arr_number];
             } else {
-                $tanks[$i]['Tanktype'] = '-';	
+                $tanks[$i]['Tanktype'] = '-';
             }
         } else {
-            $tanks[$i]['Tanktype'] = '-';	
+            $tanks[$i]['Tanktype'] = '-';
         }
 
         if (isset($result['Tanksize']) && ($result['Tanksize'] != "")) {
@@ -1702,7 +1702,7 @@ class Divelog {
             }
             $tanks[$i]['Tanksize'] = $Tanksize;
         } else {
-            $tanks[$i]['Tanksize'] = '-';	
+            $tanks[$i]['Tanksize'] = '-';
         }
 
         if (isset($result['DblTank']) && ($result['DblTank'] != "")) {
@@ -1714,9 +1714,9 @@ class Divelog {
                 $tankimagefile = "single_cylinder.gif";
             }
             $tankimage = '<img src="'.$_config['web_root'].'/images/'.$tankimagefile.'" alt="'.$tankimagealt.'" title="'.$tankimagealt.'" border="0" width="19" height="20"> ';
-            $tanks[$i]['DblTankImage'] = $tankimage;	
+            $tanks[$i]['DblTankImage'] = $tankimage;
         } else {
-            $tanks[$i]['DblTankImage'] = '';	
+            $tanks[$i]['DblTankImage'] = '';
         }
 
         if (isset($result['PresW']) && ($result['PresW'] != "")) {
@@ -1727,7 +1727,7 @@ class Divelog {
             }
             $tanks[$i]['PresW'] = $PresW;
         } else {
-            $tanks[$i]['PresW'] = '-';	
+            $tanks[$i]['PresW'] = '-';
         }
 
         if (isset($result['SupplyType']) && ($result['SupplyType'] != "")) {
@@ -1766,13 +1766,13 @@ class Divelog {
         if (isset($result['He']) && ($result['He'] != "")) {
             $tanks[$i]['He'] = $result['He'].'%';
         } else {
-            $tanks[$i]['He'] = '-';	
+            $tanks[$i]['He'] = '-';
         }
 
         if (isset($result['MinPPO2']) && ($result['MinPPO2'] != "")) {
             $tanks[$i]['MinPPO2'] = $result['MinPPO2']."&nbsp;".$_lang['unit_pressure'];
         } else {
-            $tanks[$i]['MinPPO2'] = '-';	
+            $tanks[$i]['MinPPO2'] = '-';
         }
 
         if (isset($result['MaxPPO2']) &&  ($result['MaxPPO2'] != "")) {
@@ -1872,7 +1872,7 @@ class Divelog {
             }
             $tanks[$i]['averagedepth'] = $avg_depth;
         } else {
-            $tanks[$i]['averagedepth'] = '-';	
+            $tanks[$i]['averagedepth'] = '-';
         }
 */
             $tanks[$i]['averagedepth'] = '-';
@@ -1888,7 +1888,7 @@ class Divelog {
             }
             $tanks[$i]['PresS'] = $PresS;
         } else {
-            $tanks[$i]['PresS'] = '-';	
+            $tanks[$i]['PresS'] = '-';
         }
 
         if (isset($result['PresE']) && ($result['PresE'] != "")) {
@@ -1899,7 +1899,7 @@ class Divelog {
             }
             $tanks[$i]['PresE'] = $PresE;
         } else {
-            $tanks[$i]['PresE'] = '-';	
+            $tanks[$i]['PresE'] = '-';
         }
 
         if ((isset($result['PresS']) && ($result['PresS'] != "")) && (isset($result['PresE']) && ($result['PresE'] != ""))) {
@@ -1992,7 +1992,7 @@ class Divelog {
             }
             $t->assign('averagedepth', $avg_depth ) ;
         } else {
-            $t->assign('averagedepth','-');	
+            $t->assign('averagedepth','-');
         }
 
         if ($this->sac != "") {
@@ -2005,7 +2005,7 @@ class Divelog {
         if (isset($result['Gas']) && ($result['Gas'] != "")) {
             $t->assign('Gas', $result['Gas']);
         } else {
-            $t->assign('Gas','-');	
+            $t->assign('Gas','-');
         }
 
     /*}}}*/
@@ -2017,7 +2017,7 @@ class Divelog {
      * @access public
      * @return void
      */
-    function set_dive_details(){
+    function set_dive_details() {
         global $t, $_lang, $globals; /*{{{*/
         $result =  $this->result; 
         // Dive Details
@@ -2039,19 +2039,19 @@ class Divelog {
         if (isset($result['Boat']) && ($result['Boat'] != "")) {
             $t->assign('Boat', $result['Boat'] );
         } else {
-            $t->assign('Boat','-');	
+            $t->assign('Boat','-');
         }
 
         if (isset($result['PGStart']) && ($result['PGStart'] != "")) {
             $t->assign('PGStart', $result['PGStart'] );
         } else {
-            $t->assign('PGStart','-');	
+            $t->assign('PGStart','-');
         }
 
         if (isset($result['PGEnd']) && ($result['PGEnd'] != "")) {
             $t->assign('PGEnd', $result['PGEnd']);
         } else {
-            $t->assign('PGEnd','-');	
+            $t->assign('PGEnd','-');
         }
 
         $t->assign('Deco', ($result['Deco'] == 'True' ? $_lang['yes'] : $_lang['no']) );
@@ -2065,9 +2065,9 @@ class Divelog {
 
         if ((isset($result['Entrytime']) && ($result['Entrytime'] != "")) && (isset($result['Divetime']) && ($result['Divetime'] != ""))) {
             $exittime = date('H:i:s', strtotime($result['Entrytime']) + ($result['Divetime'] * 60));
-            $t->assign('ExitTime',$exittime);	
+            $t->assign('ExitTime',$exittime);
         } else {
-            $t->assign('ExitTime','-');	
+            $t->assign('ExitTime','-');
         }
 
         if ($result['Decostops']) {
@@ -2075,7 +2075,7 @@ class Divelog {
             $t->assign('logbook_decostops', $_lang['logbook_decostops'] );
 
             $r = $result['Decostops'];
-	    $r = htmlentities($r, ENT_QUOTES, "ISO-8859-1");
+            $r = htmlentities($r, ENT_QUOTES, "ISO-8859-1");
             $r = str_replace("\r\n", "\n", $r);
             $r = str_replace("\n", "<br>\n", $r);
 
@@ -2090,7 +2090,7 @@ class Divelog {
      * @access public
      * @return void
      */
-    function set_equipment(){
+    function set_equipment() {
         global $t, $_config, $_lang, $globals; /*{{{*/
         $result =  $this->result; 
         $t->assign('dive_sect_equipment', $_lang['dive_sect_equipment'] );
@@ -2145,7 +2145,7 @@ class Divelog {
      * @access public
      * @return void
      */
-    function set_comments(){
+    function set_comments() {
         global $t, $_lang, $globals; /*{{{*/
         $result = $this->result;
         // Show them if we have them
@@ -2153,7 +2153,7 @@ class Divelog {
             $t->assign('dive_sect_comments', $_lang['dive_sect_comments']);
             $r = $result['Comments'];
 
-	    $r = htmlentities($r, ENT_QUOTES, "ISO-8859-1");
+            $r = htmlentities($r, ENT_QUOTES, "ISO-8859-1");
             $r = str_replace("\r\n", "\n", $r);
             $r = str_replace("\n", "<br>\n", $r);
 
@@ -2173,11 +2173,11 @@ class Divelog {
      * @access public
      * @return void
      */
-    function set_userdefined(){
+    function set_userdefined() {
         global $globals, $_config, $t, $_lang; /*{{{*/
         $this->get_userdefined();
-	$userdefined = $this->userdefined; 
-	$userdefined_count = $this->userdefined_count; 
+        $userdefined = $this->userdefined; 
+        $userdefined_count = $this->userdefined_count; 
         // Show userdefined values if we have them
         $t->assign('userdefined_count', $userdefined_count);
 
@@ -2199,7 +2199,7 @@ class Divelog {
      * @access public
      * @return void
      */
-    function dive_has_photo($value, $row){
+    function dive_has_photo($value, $row) {
         global $_config, $_lang;
         if (Divelog::dive_has_pictures($row['Number'])) {
             return '<img src="'.$_config['web_root'].'/images/photo_icon.gif" border="0" alt="'.$_lang['divepic_linktitle'].'" title="'.$_lang['divepic_linktitle'].'">';
@@ -2212,7 +2212,7 @@ class Divelog {
      * @access public
      * @return void
      */
-    function get_dive_overview(){
+    function get_dive_overview() {
         global $t, $_lang, $globals, $_config; /*{{{*/
 
 // TODO: Count the dives and display a message if none
@@ -2238,7 +2238,7 @@ class Divelog {
      * @access public
      * @return void
      */
-    function get_dive_overview_table(){
+    function get_dive_overview_table() {
         global $db, $t, $_lang, $globals, $_config; /*{{{*/
         // Get the details of the dives to be listed
         // $recentdivelist = parse_mysql_query('recentdivelist.sql');
@@ -2290,7 +2290,7 @@ class Divelog {
      * @access public
      * @return void
      */
-    function get_dive_overview_grid(){
+    function get_dive_overview_grid() {
         global $db, $t, $_lang, $globals, $_config;
         // Get the details of the dives to be listed
         if ($_config['length']) {
@@ -2356,7 +2356,7 @@ class Divelog {
      * @access public
      * @return void
      */
-    function get_overview_divers(){
+    function get_overview_divers() {
         global $t, $_lang, $globals, $_config; /*{{{*/
         $users = new Users();
         $user_list = $users->get_user_data();
@@ -2424,11 +2424,11 @@ class Divesite{
         $this->get_divesite_info();
     } 
 
-    function get_request_type(){
+    function get_request_type() {
         return $this->request_type;
     }
 
-    function set_divesite_info($request){
+    function set_divesite_info($request) {
         // We need to extract the info from the request
         /*{{{*/
         if (!$request->diver_choice) {
@@ -2455,7 +2455,7 @@ class Divesite{
     /*}}}*/
     }
 
-    function get_divesite_info(){
+    function get_divesite_info() {
         global $globals, $_config; /*{{{*/
         if (!empty($this->divesite_nr)) {
             $this->request_type = 1;
@@ -2474,7 +2474,7 @@ class Divesite{
     /*}}}*/
     }
 
-    function get_overview_divers(){
+    function get_overview_divers() {
         global $t, $_lang, $globals, $_config; /*{{{*/
         $users = new Users();
         $user_list = $users->get_user_data();
@@ -2490,7 +2490,7 @@ class Divesite{
      * @access public
      * @return void
      */
-    function get_divesite_location_details(){
+    function get_divesite_location_details() {
         global $globals, $_config; /*{{{*/
         $countrycity = $this->result_countrycity;
         if (count($countrycity) != 0) {
@@ -2527,7 +2527,7 @@ class Divesite{
      * @access public
      * @return void
      */
-    function get_dives_at_location(){
+    function get_dives_at_location() {
         global $globals, $_config; /*{{{*/
         // Get the dives at this site from database
         $globals['placeid'] = $this->divesite_nr;
@@ -2544,7 +2544,7 @@ class Divesite{
      * @access public
      * @return void
      */
-    function set_main_divesite_details(){
+    function set_main_divesite_details() {
         global $globals, $_config, $t, $_lang; /*{{{*/
         $this->get_divesite_location_details(); 
         // Show main site details
@@ -2564,12 +2564,12 @@ class Divesite{
         $t->assign('Place', $Place);
         $t->assign('city', $this->city );
 
-        if (!empty($this->country)){
+        if (!empty($this->country)) {
             $t->assign('dive_country_nr', $this->countryid);
             $t->assign('dive_country',$this->country);
             $t->assign('logbook_country_linktitle', $_lang['logbook_country_linktitle']);
         } else {
-            $t->assign('dive_country','-');	
+            $t->assign('dive_country','-');
         }
 
         $t->assign('place_rating', $_lang['place_rating']);
@@ -2578,7 +2578,7 @@ class Divesite{
             $Rating = '<img src="'.$_config['web_root'].'/images/ratings5-'.$result['Rating'].'.gif" alt="'.$desc.'" title="'.$desc.'" border="0" width="84" height="15">';
             $t->assign('Rating', $Rating);
         } else {
-            $t->assign('Rating','-');	
+            $t->assign('Rating','-');
         }
 
         if (isset($result['MaxDepth']) && ($result['MaxDepth'] != "")) {
@@ -2637,28 +2637,28 @@ class Divesite{
         if (isset($result['WaterName']) && ($result['WaterName'] != "")) {
             $t->assign('WaterName', $result['WaterName'] );
         } else {
-            $t->assign('WaterName','-');	
+            $t->assign('WaterName','-');
         }
 
         $t->assign('place_water', $_lang['place_water']);
         if ($result['Water'] != 0 && $_lang['water'][($result['Water'] - 1)]) {
             $t->assign('Water', $_lang['water'][($result['Water'] - 1)]);
         } else {
-            $t->assign('Water','-');	
+            $t->assign('Water','-');
         }
 
         $t->assign('place_altitude', $_lang['place_altitude']);
         if (isset($result['Altitude']) && ($result['Altitude'] != "")) {
             $t->assign('Altitude', $result['Altitude'] );
         } else {
-            $t->assign('Altitude','-');	
+            $t->assign('Altitude','-');
         }
 
         $t->assign('place_difficulty', $_lang['place_difficulty']);
         if (isset($result['Difficulty']) && ($result['Difficulty'] != "")) {
             $t->assign('Difficulty', $result['Difficulty'] );
         } else {
-            $t->assign('Difficulty','-');	
+            $t->assign('Difficulty','-');
         }
     /*}}}*/
     }
@@ -2669,7 +2669,7 @@ class Divesite{
      * @access public
      * @return void
      */
-    function set_divesite_pictures(){
+    function set_divesite_pictures() {
         global $_config, $t, $_lang, $globals; /*{{{*/
         $pic_class = new DivePictures;
         $pic_class->set_divegallery_info_direct($this->user_id);
@@ -2695,7 +2695,7 @@ class Divesite{
      * @access public
      * @return void
      */
-    function set_dives_at_location(){
+    function set_dives_at_location() {
         global $globals, $_config, $t, $_lang; /*{{{*/
         $this->get_dives_at_location();
         // Show site dives if we have them
@@ -2730,7 +2730,7 @@ class Divesite{
      * @access public
      * @return void
      */
-    function set_divesite_comments(){
+    function set_divesite_comments() {
         global $globals, $_lang, $_config, $t; /*{{{*/
         // Comments
         $result = $this->result;
@@ -2739,7 +2739,7 @@ class Divesite{
             $t->assign('site_sect_comments', $_lang['site_sect_comments']);
             $r = $result['Comments'];
 
-	    $r = htmlentities($r, ENT_QUOTES, "ISO-8859-1");
+            $r = htmlentities($r, ENT_QUOTES, "ISO-8859-1");
             $r = str_replace("\r\n", "\n", $r);
             $r = str_replace("\n", "<br>\n", $r);
 
@@ -2761,7 +2761,7 @@ class Divesite{
      * @access public
      * @return void
      */
-    function get_divesite_overview(){
+    function get_divesite_overview() {
         global $t, $_lang, $globals, $_config; /*{{{*/
         $placetable = $this->table_prefix."Place";
         $logbooktable = $this->table_prefix."Logbook";
@@ -2796,7 +2796,7 @@ class Divesite{
      * @access public
      * @return void
      */
-    function get_divesite_overview_table($sql){
+    function get_divesite_overview_table($sql) {
         global $db, $t, $_lang, $globals, $_config; /*{{{*/
         // Get the page header
         // Get the details of the locations to be listed
@@ -2840,7 +2840,7 @@ class Divesite{
      * @access public
      * @return void
      */
-    function get_divesite_overview_grid($sql){
+    function get_divesite_overview_grid($sql) {
         global $t, $_lang, $globals, $_config; /*{{{*/
         $sql .=  " ORDER BY Place ASC";
         $data = parse_mysql_query(0,$sql);;
@@ -2891,16 +2891,16 @@ class Equipment{
     var $result_gearlist;
     var $request_type; // request_type = 0 overview, request_type = 1 details
    
-    function Equipment(){
+    function Equipment() {
         global $_config;
         $this->multiuser = $_config['multiuser'];
     }
     
-    function get_request_type(){
+    function get_request_type() {
         return $this->request_type;
     }
 
-    function get_equipment_nr(){
+    function get_equipment_nr() {
         return $this->equipment_nr;
     }
     
@@ -2911,7 +2911,7 @@ class Equipment{
      * @access public
      * @return void
      */
-    function set_equipment_info($request){
+    function set_equipment_info($request) {
         // We need to extract the info from the request
         /*{{{*/
         if (!$request->diver_choice) {
@@ -2944,7 +2944,7 @@ class Equipment{
      * @access public
      * @return void
      */
-    function get_equipment_info(){
+    function get_equipment_info() {
         global $_config, $globals; /*{{{*/
         if (!empty($this->equipment_nr)) {
             $this->request_type = 1;
@@ -2969,7 +2969,7 @@ class Equipment{
      * @access public
      * @return void
      */
-    function get_overview_divers(){
+    function get_overview_divers() {
         global $t, $_lang, $globals, $_config; /*{{{*/
         $users = new Users();
         $user_list = $users->get_user_data();
@@ -2979,7 +2979,7 @@ class Equipment{
     /*}}}*/
     }
 
-    function set_main_equipment_details(){
+    function set_main_equipment_details() {
         global $t, $_config, $globals, $_lang; /*{{{*/
         $result = $this->result; 
 
@@ -3005,25 +3005,25 @@ class Equipment{
         if (isset($result['DateP']) && ($result['DateP'] != "")) {
             $t->assign('DateP', date($_lang['equip_date_format'], strtotime($result['DateP'])));
         } else {
-            $t->assign('DateP','-');	
+            $t->assign('DateP','-');
         }
 
         if (isset($result['DateR']) && ($result['DateR'] != "")) {
             $t->assign('DateR', date($_lang['equip_date_format'], strtotime($result['DateR'])) );
         } else {
-            $t->assign('DateR','-');	
+            $t->assign('DateR','-');
         }
 
         if (isset($result['DateRN']) && ($result['DateRN'] != "")) {
             $t->assign('DateRN', date($_lang['equip_date_format'], strtotime($result['DateRN'])) );
         } else {
-            $t->assign('DateRN','-');	
+            $t->assign('DateRN','-');
         }
 
         if (isset($result['O2ServiceDate']) && ($result['O2ServiceDate'] != "")) {
             $t->assign('O2ServiceDate', date($_lang['equip_date_format'], strtotime($result['O2ServiceDate'])) );
         } else {
-            $t->assign('O2ServiceDate','-');	
+            $t->assign('O2ServiceDate','-');
         }
 
         if (isset($result['Inactive']) && ($result['Inactive'] != "")) {
@@ -3033,31 +3033,31 @@ class Equipment{
                 $t->assign('Inactive', '<img src="'.$_config['web_root'].'/images/icon_active_16.png" alt="'.$_lang['inactive'][0].'" title="'.$_lang['inactive'][0].'"> '.$_lang['inactive'][0]);
             }
         } else {
-            $t->assign('Inactive','-');	
+            $t->assign('Inactive','-');
         }
 
         if (isset($result['Serial']) && ($result['Serial'] != "")) {
             $t->assign('Serial', $result['Serial']);
         } else {
-            $t->assign('Serial','-');	
+            $t->assign('Serial','-');
         }
 
         if (isset($result['Warranty']) && ($result['Warranty'] != "")) {
             $t->assign('Warranty', $result['Warranty'] );
         } else {
-            $t->assign('Warranty','-');	
+            $t->assign('Warranty','-');
         }
 
         if (isset($result['Shop']) && ($result['Shop'] != "")) {
             $t->assign('Shop', $result['Shop']);
         } else {
-            $t->assign('Shop','-');	
+            $t->assign('Shop','-');
         }
 
         if (isset($result['Price']) && ($result['Price'] != "")) {
             $t->assign('Price',$_lang['currency_prefix'] .number_format($result['Price'],2) .$_lang['currency_suffix'] );
         } else {
-            $t->assign('Price','-');	
+            $t->assign('Price','-');
         }
 
         if (isset($result['Weight']) && ($result['Weight'] != "")) {
@@ -3067,7 +3067,7 @@ class Equipment{
                 $Weight = $result['Weight'] ."&nbsp;". $_lang['unit_weight'] ;
             }$t->assign('Weight' ,$Weight);
         } else {
-            $t->assign('Weight','-');	
+            $t->assign('Weight','-');
         }
 
         // Show the photo
@@ -3089,7 +3089,7 @@ class Equipment{
      * @access public
      * @return void
      */
-    function set_equipment_pictures(){
+    function set_equipment_pictures() {
         global $_config,$t, $_lang, $globals; /*{{{*/
         $pic_class = new DivePictures;
         $pic_class->set_divegallery_info_direct($this->user_id);
@@ -3121,7 +3121,7 @@ class Equipment{
      * @access public
      * @return void
      */
-    function set_comments(){
+    function set_comments() {
         global $t, $_lang, $globals; /*{{{*/
         $result =  $this->result; 
         // Show them if we have them
@@ -3130,7 +3130,7 @@ class Equipment{
 
             $r = $result['Comments'];
 
-	    $r = htmlentities($r, ENT_QUOTES, "ISO-8859-1");
+            $r = htmlentities($r, ENT_QUOTES, "ISO-8859-1");
             $r = str_replace("\r\n", "\n", $r);
             $r = str_replace("\n", "<br>\n", $r);
 
@@ -3150,7 +3150,7 @@ class Equipment{
      * @access public
      * @return void
      */
-    function equipment_inactive($value, $row){
+    function equipment_inactive($value, $row) {
         global $_config, $_lang;
         if ($value == 'True') {
             return '<img src="'.$_config['web_root'].'/images/icon_inactive_16.png" alt="'.$_lang['inactive'][1].'" title="'.$_lang['inactive'][1].'">';
@@ -3167,7 +3167,7 @@ class Equipment{
      * @access public
      * @return void
      */
-    function equip_has_photo($value, $row){
+    function equip_has_photo($value, $row) {
         global $_config, $_lang;
         if ($row['PhotoPath'] != '') {
             return '<img src="'.$_config['web_root'].'/images/photo_icon.gif" border="0" alt="'.$_lang['equip_photo_linktitle'].$row['Object'].'" title="'.$_lang['equip_photo_linktitle'].$row['Object'].'">';
@@ -3182,7 +3182,7 @@ class Equipment{
      * @access public
      * @return void
      */
-    function get_equipment_overview(){
+    function get_equipment_overview() {
         global $t, $_lang, $globals, $_config; /*{{{*/
 
 // TODO: Count the equipment and display a message if none
@@ -3208,7 +3208,7 @@ class Equipment{
      * @access public
      * @return void
      */
-    function get_equipment_overview_table(){
+    function get_equipment_overview_table() {
         global $db, $t, $_lang, $globals, $_config; /*{{{*/
         $equiplist_query = sql_file('equiplist.sql');
         // $t->assign('equip_none', $_lang['equip_none'] );
@@ -3246,7 +3246,7 @@ class Equipment{
      * @access public
      * @return void
      */
-    function get_equipment_overview_grid(){
+    function get_equipment_overview_grid() {
         global $t, $_lang, $globals, $_config; /*{{{*/
         $sql = sql_file('equiplist.sql');
         $data = parse_mysql_query(0,$sql);;
@@ -3343,11 +3343,11 @@ class Diveshop{
         $this->get_diveshop_info();
     } 
 
-    function get_request_type(){
+    function get_request_type() {
         return $this->request_type;
     }
 
-    function set_diveshop_info($request){
+    function set_diveshop_info($request) {
         // We need to extract the info from the request
         /*{{{*/
         if (!$request->diver_choice) {
@@ -3374,7 +3374,7 @@ class Diveshop{
     /*}}}*/
     }
 
-    function get_diveshop_info(){
+    function get_diveshop_info() {
         global $globals, $_config; /*{{{*/
         if (!empty($this->diveshop_nr)) {
             $this->request_type = 1;
@@ -3392,7 +3392,7 @@ class Diveshop{
     /*}}}*/
     }
 
-    function get_overview_divers(){
+    function get_overview_divers() {
         global $t, $_lang, $globals, $_config; /*{{{*/
         $users = new Users();
         $user_list = $users->get_user_data();
@@ -3408,7 +3408,7 @@ class Diveshop{
      * @access public
      * @return void
      */
-    function get_dives_with_shop(){
+    function get_dives_with_shop() {
         global $globals, $_config; /*{{{*/
         // Get the dives with this shop from database
         $globals['shopid'] = $this->diveshop_nr;
@@ -3425,7 +3425,7 @@ class Diveshop{
      * @access public
      * @return void
      */
-    function get_trips_with_shop(){
+    function get_trips_with_shop() {
         global $globals, $_config; /*{{{*/
         // Get the trips with this dive shop from database
         $globals['shopid'] = $this->diveshop_nr;
@@ -3442,7 +3442,7 @@ class Diveshop{
      * @access public
      * @return void
      */
-    function set_main_diveshop_details(){
+    function set_main_diveshop_details() {
         global $globals, $_config, $t, $_lang; /*{{{*/
         // Show main shop details
         $result = $this->result;
@@ -3556,7 +3556,7 @@ class Diveshop{
             $Rating = '<img src="'.$_config['web_root'].'/images/ratings5-'.$result['Rating'].'.gif" alt="'.$desc.'" title="'.$desc.'" border="0" width="84" height="15">';
             $t->assign('Rating', $Rating);
         } else {
-            $t->assign('Rating','-');	
+            $t->assign('Rating','-');
         }
 
         // Show the photo
@@ -3578,7 +3578,7 @@ class Diveshop{
      * @access public
      * @return void
      */
-    function set_diveshop_pictures(){
+    function set_diveshop_pictures() {
         global $_config, $t, $_lang, $globals; /*{{{*/
         $pic_class = new DivePictures;
         $pic_class->set_divegallery_info_direct($this->user_id);
@@ -3608,7 +3608,7 @@ class Diveshop{
      * @access public
      * @return void
      */
-    function set_dives_with_shop(){
+    function set_dives_with_shop() {
         global $globals, $_config, $t, $_lang; /*{{{*/
         $this->get_dives_with_shop();
         // Show shop dives if we have them
@@ -3644,7 +3644,7 @@ class Diveshop{
      * @access public
      * @return void
      */
-    function set_trips_with_shop(){
+    function set_trips_with_shop() {
         global $globals, $_config, $t, $_lang; /*{{{*/
         $this->get_trips_with_shop();
         // Show shop trips if we have them
@@ -3677,7 +3677,7 @@ class Diveshop{
      * @access public
      * @return void
      */
-    function set_diveshop_comments(){
+    function set_diveshop_comments() {
         global $globals, $_config, $t, $_lang; /*{{{*/
         // Comments
         $result = $this->result;
@@ -3686,7 +3686,7 @@ class Diveshop{
             $t->assign('shop_sect_comments', $_lang['shop_sect_comments']);
             $r = $result['Comments'];
 
-	    $r = htmlentities($r, ENT_QUOTES, "ISO-8859-1");
+            $r = htmlentities($r, ENT_QUOTES, "ISO-8859-1");
             $r = str_replace("\r\n", "\n", $r);
             $r = str_replace("\n", "<br>\n", $r);
 
@@ -3706,7 +3706,7 @@ class Diveshop{
      * @access public
      * @return void
      */
-    function shop_has_photo($value, $row){
+    function shop_has_photo($value, $row) {
         global $_config, $_lang;
         if ($row['PhotoPath'] != '') {
             return '<img src="'.$_config['web_root'].'/images/photo_icon.gif" border="0" alt="'.$_lang['shop_photo_linktitle'].$row['ShopName'].' '.$row['ShopType'].'" title="'.$_lang['shop_photo_linktitle'].$row['ShopName'].' '.$row['ShopType'].'">';
@@ -3719,7 +3719,7 @@ class Diveshop{
      * @access public
      * @return void
      */
-    function get_diveshop_overview(){
+    function get_diveshop_overview() {
         global $t, $_lang, $globals, $_config; /*{{{*/
         $shoptable = $this->table_prefix."Shop";
         $sql = sql_file("shoplist.sql");
@@ -3748,7 +3748,7 @@ class Diveshop{
      * @access public
      * @return void
      */
-    function get_diveshop_overview_table($sql){
+    function get_diveshop_overview_table($sql) {
         global $db, $t, $_lang, $globals, $_config; /*{{{*/
         // Get the page header
         // Get the details of the locations to be listed
@@ -3787,7 +3787,7 @@ class Diveshop{
      * @access public
      * @return void
      */
-    function get_diveshop_overview_grid($sql){
+    function get_diveshop_overview_grid($sql) {
         global $t, $_lang, $globals, $_config; /*{{{*/
         $data = parse_mysql_query(0,$sql);;
         $GridClass = new TableGrid($this->user_id,$data);
@@ -3882,11 +3882,11 @@ class Divetrip{
         $this->get_divetrip_info();
     } 
 
-    function get_request_type(){
+    function get_request_type() {
         return $this->request_type;
     }
 
-    function set_divetrip_info($request){
+    function set_divetrip_info($request) {
         // We need to extract the info from the request
         /*{{{*/
         if (!$request->diver_choice) {
@@ -3913,7 +3913,7 @@ class Divetrip{
     /*}}}*/
     }
 
-    function get_divetrip_info(){
+    function get_divetrip_info() {
         global $globals, $_config; /*{{{*/
         if (!empty($this->divetrip_nr)) {
             $this->request_type = 1;
@@ -3931,7 +3931,7 @@ class Divetrip{
     /*}}}*/
     }
 
-    function get_overview_divers(){
+    function get_overview_divers() {
         global $t, $_lang, $globals, $_config; /*{{{*/
         $users = new Users();
         $user_list = $users->get_user_data();
@@ -3947,7 +3947,7 @@ class Divetrip{
      * @access public
      * @return void
      */
-    function get_dives_on_trip(){
+    function get_dives_on_trip() {
         global $globals, $_config; /*{{{*/
         // Get the dives on this trip from database
         $globals['tripid'] = $this->divetrip_nr;
@@ -3964,7 +3964,7 @@ class Divetrip{
      * @access public
      * @return void
      */
-    function set_main_divetrip_details(){
+    function set_main_divetrip_details() {
         global $globals, $_config, $t, $_lang; /*{{{*/
         // $this->get_divetrip_location_details(); 
         // Show main trip details
@@ -3991,7 +3991,7 @@ class Divetrip{
             $Rating = '<img src="'.$_config['web_root'].'/images/ratings5-'.$result['Rating'].'.gif" alt="'.$desc.'" title="'.$desc.'" border="0" width="84" height="15">';
             $t->assign('Rating', $Rating);
         } else {
-            $t->assign('Rating','-');	
+            $t->assign('Rating','-');
         }
 
         if (isset($result['ShopName']) && ($result['ShopName'] != "")) {
@@ -4003,7 +4003,7 @@ class Divetrip{
             }
         } else {
             $t->assign('dive_shop_nr', '');
-            $t->assign('dive_shop_name','-');	
+            $t->assign('dive_shop_name','-');
         }
 
         if (isset($result['Country']) && ($result['Country'] != "")) {
@@ -4012,19 +4012,19 @@ class Divetrip{
             $t->assign('logbook_country_linktitle', $_lang['logbook_country_linktitle']);
         } else {
             $t->assign('dive_shop_nr', '');
-            $t->assign('dive_shop_name','-');	
+            $t->assign('dive_shop_name','-');
         }
 
         if (isset($result['StartDate']) && ($result['StartDate'] != "")) {
             $t->assign('StartDate', date($_lang['logbook_divedate_format'], strtotime($result['StartDate'])));
         } else {
-            $t->assign('StartDate','-');	
+            $t->assign('StartDate','-');
         }
 
         if (isset($result['EndDate']) && ($result['EndDate'] != "")) {
             $t->assign('EndDate', date($_lang['logbook_divedate_format'], strtotime($result['EndDate'])));
         } else {
-            $t->assign('EndDate','-');	
+            $t->assign('EndDate','-');
         }
 
         // Show the photo
@@ -4046,7 +4046,7 @@ class Divetrip{
      * @access public
      * @return void
      */
-    function set_divetrip_pictures(){
+    function set_divetrip_pictures() {
         global $_config, $t, $_lang, $globals; /*{{{*/
         $pic_class = new DivePictures;
         $pic_class->set_divegallery_info_direct($this->user_id);
@@ -4076,7 +4076,7 @@ class Divetrip{
      * @access public
      * @return void
      */
-    function set_dives_on_trip(){
+    function set_dives_on_trip() {
         global $globals, $_config, $t, $_lang; /*{{{*/
         $this->get_dives_on_trip();
         // Show trip dives if we have them
@@ -4112,7 +4112,7 @@ class Divetrip{
      * @access public
      * @return void
      */
-    function set_buddy_details(){
+    function set_buddy_details() {
         global $t, $_lang, $globals; /*{{{*/
         $result = $this->result;
         $t->assign('trip_buddy', $_lang['trip_buddy']);
@@ -4148,9 +4148,9 @@ class Divetrip{
                     }
                 }
             }
-            $t->assign('buddy', $buddynames);	
+            $t->assign('buddy', $buddynames);
         } else {
-            $t->assign('buddy','-');	
+            $t->assign('buddy','-');
         }
     /*}}}*/
     }
@@ -4161,7 +4161,7 @@ class Divetrip{
      * @access public
      * @return void
      */
-    function set_divetrip_comments(){
+    function set_divetrip_comments() {
         global $globals, $_config, $t, $_lang; /*{{{*/
         // Comments
         $result = $this->result;
@@ -4170,7 +4170,7 @@ class Divetrip{
             $t->assign('trip_sect_comments', $_lang['trip_sect_comments']);
             $r = $result['Comments'];
 
-	    $r = htmlentities($r, ENT_QUOTES, "ISO-8859-1");
+            $r = htmlentities($r, ENT_QUOTES, "ISO-8859-1");
             $r = str_replace("\r\n", "\n", $r);
             $r = str_replace("\n", "<br>\n", $r);
 
@@ -4190,7 +4190,7 @@ class Divetrip{
      * @access public
      * @return void
      */
-    function trip_has_photo($value, $row){
+    function trip_has_photo($value, $row) {
         global $_config, $_lang;
         if ($row['PhotoPath'] != '') {
             return '<img src="'.$_config['web_root'].'/images/photo_icon.gif" border="0" alt="'.$_lang['trip_photo_icontitle'].$row['TripName'].'" title="'.$_lang['trip_photo_icontitle'].$row['TripName'].'">';
@@ -4203,7 +4203,7 @@ class Divetrip{
      * @access public
      * @return void
      */
-    function get_divetrip_overview(){
+    function get_divetrip_overview() {
         global $t, $_lang, $globals, $_config; /*{{{*/
         $triptable = $this->table_prefix."Trip";
         $sql = sql_file("triplist.sql");
@@ -4232,7 +4232,7 @@ class Divetrip{
      * @access public
      * @return void
      */
-    function get_divetrip_overview_table($sql){
+    function get_divetrip_overview_table($sql) {
         global $db, $t, $_lang, $globals, $_config; /*{{{*/
         // Get the page header
         // Get the details of the trips to be listed
@@ -4271,7 +4271,7 @@ class Divetrip{
      * @access public
      * @return void
      */
-    function get_divetrip_overview_grid($sql){
+    function get_divetrip_overview_grid($sql) {
         global $t, $_lang, $globals, $_config; /*{{{*/
         $data = parse_mysql_query(0,$sql);;
         $GridClass = new TableGrid($this->user_id,$data);
@@ -4370,11 +4370,11 @@ class Divecountry{
         $this->get_divecountry_info();
     } 
 
-    function get_request_type(){
+    function get_request_type() {
         return $this->request_type;
     }
 
-    function set_divecountry_info($request){
+    function set_divecountry_info($request) {
         // We need to extract the info from the request
         /*{{{*/
         if (!$request->diver_choice) {
@@ -4401,7 +4401,7 @@ class Divecountry{
     /*}}}*/
     }
 
-    function get_divecountry_info(){
+    function get_divecountry_info() {
         global $globals, $_config; /*{{{*/
         if (!empty($this->divecountry_nr)) {
             $this->request_type = 1;
@@ -4419,7 +4419,7 @@ class Divecountry{
     /*}}}*/
     }
 
-    function get_overview_divers(){
+    function get_overview_divers() {
         global $t, $_lang, $globals, $_config; /*{{{*/
         $users = new Users();
         $user_list = $users->get_user_data();
@@ -4435,7 +4435,7 @@ class Divecountry{
      * @access public
      * @return void
      */
-    function get_trips_in_country(){
+    function get_trips_in_country() {
         global $globals, $_config; /*{{{*/
         // Get the trips in this country from database
         $globals['countryid'] = $this->divecountry_nr;
@@ -4452,7 +4452,7 @@ class Divecountry{
      * @access public
      * @return void
      */
-    function get_sites_in_country(){
+    function get_sites_in_country() {
         global $globals, $_config; /*{{{*/
         // Get the sites in this country from database
         $globals['countryid'] = $this->divecountry_nr;
@@ -4469,7 +4469,7 @@ class Divecountry{
      * @access public
      * @return void
      */
-    function get_dives_in_country(){
+    function get_dives_in_country() {
         global $globals, $_config; /*{{{*/
         // Get the dives in this country from database
         $globals['countryid'] = $this->divecountry_nr;
@@ -4486,7 +4486,7 @@ class Divecountry{
      * @access public
      * @return void
      */
-    function set_main_divecountry_details(){
+    function set_main_divecountry_details() {
         global $globals, $_config, $t, $_lang; /*{{{*/
         // $this->get_divecountry_location_details(); 
         // Show main trip details
@@ -4558,7 +4558,7 @@ class Divecountry{
      * @access public
      * @return void
      */
-    function set_trips_in_country(){
+    function set_trips_in_country() {
         global $globals, $_config, $t, $_lang; /*{{{*/
         $this->get_trips_in_country();
         // Show country trips if we have them
@@ -4591,7 +4591,7 @@ class Divecountry{
      * @access public
      * @return void
      */
-    function set_sites_in_country(){
+    function set_sites_in_country() {
         global $globals, $_config, $t, $_lang; /*{{{*/
         $this->get_sites_in_country();
         // Show country sites if we have them
@@ -4624,7 +4624,7 @@ class Divecountry{
      * @access public
      * @return void
      */
-    function set_dives_in_country(){
+    function set_dives_in_country() {
         global $globals, $_config, $t, $_lang; /*{{{*/
         $this->get_dives_in_country();
         // Show country dives if we have them
@@ -4660,7 +4660,7 @@ class Divecountry{
      * @access public
      * @return void
      */
-    function set_divecountry_comments(){
+    function set_divecountry_comments() {
         global $globals, $_config, $t, $_lang; /*{{{*/
         // Comments
         $result = $this->result;
@@ -4669,7 +4669,7 @@ class Divecountry{
             $t->assign('country_sect_comments', $_lang['country_sect_comments']);
             $r = $result['Comments'];
 
-	    $r = htmlentities($r, ENT_QUOTES, "ISO-8859-1");
+            $r = htmlentities($r, ENT_QUOTES, "ISO-8859-1");
             $r = str_replace("\r\n", "\n", $r);
             $r = str_replace("\n", "<br>\n", $r);
 
@@ -4687,7 +4687,7 @@ class Divecountry{
      * @access public
      * @return void
      */
-    function get_divecountry_overview(){
+    function get_divecountry_overview() {
         global $t, $_lang, $globals, $_config; /*{{{*/
         $countrytable = $this->table_prefix."Country";
         $sql = sql_file("countrylist.sql");
@@ -4716,7 +4716,7 @@ class Divecountry{
      * @access public
      * @return void
      */
-    function get_divecountry_overview_table($sql){
+    function get_divecountry_overview_table($sql) {
         global $db, $t, $_lang, $globals, $_config; /*{{{*/
         // Get the page header
         // Get the details of the trips to be listed
@@ -4751,7 +4751,7 @@ class Divecountry{
      * @access public
      * @return void
      */
-    function get_divecountry_overview_grid($sql){
+    function get_divecountry_overview_grid($sql) {
         global $t, $_lang, $globals, $_config; /*{{{*/
         $data = parse_mysql_query(0,$sql);;
         $GridClass = new TableGrid($this->user_id,$data);
@@ -4841,11 +4841,11 @@ class Divecity{
         $this->get_divecity_info();
     } 
 
-    function get_request_type(){
+    function get_request_type() {
         return $this->request_type;
     }
 
-    function set_divecity_info($request){
+    function set_divecity_info($request) {
         // We need to extract the info from the request
         /*{{{*/
         if (!$request->diver_choice) {
@@ -4872,7 +4872,7 @@ class Divecity{
     /*}}}*/
     }
 
-    function get_divecity_info(){
+    function get_divecity_info() {
         global $globals, $_config; /*{{{*/
         if (!empty($this->divecity_nr)) {
             $this->request_type = 1;
@@ -4890,7 +4890,7 @@ class Divecity{
     /*}}}*/
     }
 
-    function get_overview_divers(){
+    function get_overview_divers() {
         global $t, $_lang, $globals, $_config; /*{{{*/
         $users = new Users();
         $user_list = $users->get_user_data();
@@ -4906,7 +4906,7 @@ class Divecity{
      * @access public
      * @return void
      */
-    function get_sites_in_city(){
+    function get_sites_in_city() {
         global $globals, $_config; /*{{{*/
         // Get the sites in this city from database
         $globals['cityid'] = $this->divecity_nr;
@@ -4923,7 +4923,7 @@ class Divecity{
      * @access public
      * @return void
      */
-    function get_dives_in_city(){
+    function get_dives_in_city() {
         global $globals, $_config; /*{{{*/
         // Get the dives in this city from database
         $globals['cityid'] = $this->divecity_nr;
@@ -4940,7 +4940,7 @@ class Divecity{
      * @access public
      * @return void
      */
-    function set_main_divecity_details(){
+    function set_main_divecity_details() {
         global $globals, $_config, $t, $_lang; /*{{{*/
         // $this->get_divecity_location_details(); 
         // Show main city details
@@ -4994,7 +4994,7 @@ class Divecity{
      * @access public
      * @return void
      */
-    function set_sites_in_city(){
+    function set_sites_in_city() {
         global $globals, $_config, $t, $_lang; /*{{{*/
         $this->get_sites_in_city();
         // Show city sites if we have them
@@ -5027,7 +5027,7 @@ class Divecity{
      * @access public
      * @return void
      */
-    function set_dives_in_city(){
+    function set_dives_in_city() {
         global $globals, $_config, $t, $_lang; /*{{{*/
         $this->get_dives_in_citry();
         // Show city dives if we have them
@@ -5063,7 +5063,7 @@ class Divecity{
      * @access public
      * @return void
      */
-    function set_divecity_comments(){
+    function set_divecity_comments() {
         global $globals, $_config, $t, $_lang; /*{{{*/
         // Comments
         $result = $this->result;
@@ -5072,7 +5072,7 @@ class Divecity{
             $t->assign('city_sect_comments', $_lang['city_sect_comments']);
             $r = $result['Comments'];
 
-	    $r = htmlentities($r, ENT_QUOTES, "ISO-8859-1");
+            $r = htmlentities($r, ENT_QUOTES, "ISO-8859-1");
             $r = str_replace("\r\n", "\n", $r);
             $r = str_replace("\n", "<br>\n", $r);
 
@@ -5090,7 +5090,7 @@ class Divecity{
      * @access public
      * @return void
      */
-    function get_divecity_overview(){
+    function get_divecity_overview() {
         global $t, $_lang, $globals, $_config; /*{{{*/
         $citytable = $this->table_prefix."City";
         $sql = sql_file("citylist.sql");
@@ -5119,7 +5119,7 @@ class Divecity{
      * @access public
      * @return void
      */
-    function get_divecity_overview_table($sql){
+    function get_divecity_overview_table($sql) {
         global $db, $t, $_lang, $globals, $_config; /*{{{*/
         // Get the page header
         // Get the details of the trips to be listed
@@ -5155,7 +5155,7 @@ class Divecity{
      * @access public
      * @return void
      */
-    function get_divecity_overview_grid($sql){
+    function get_divecity_overview_grid($sql) {
         global $t, $_lang, $globals, $_config; /*{{{*/
         $data = parse_mysql_query(0,$sql);
         $GridClass = new TableGrid($this->user_id,$data);
@@ -5250,7 +5250,7 @@ class Divestats{
      * @access public
      * @return void
      */
-    function Divestats(){
+    function Divestats() {
         global $_config;
         $this->multiuser = $_config['multiuser'];
     }
@@ -5262,7 +5262,7 @@ class Divestats{
      * @access public
      * @return void
      */
-    function set_divestats_info($request){
+    function set_divestats_info($request) {
         // We need to extract the info from the request 
         /*{{{*/
         if (!$request->diver_choice) {
@@ -5291,7 +5291,7 @@ class Divestats{
      * @access public
      * @return void
      */
-    function get_divestats_info(){
+    function get_divestats_info() {
         global $globals, $_config; /*{{{*/
         if (($this->multiuser && !empty($this->user_id)) || !$this->multiuser ) {
             // Get number of dives
@@ -5526,7 +5526,7 @@ class Divestats{
      * @access public
      * @return void
      */
-    function get_lastdive_info(){
+    function get_lastdive_info() {
        global $globals, $_config; /*{{{*/
         if (($this->multiuser && !empty($this->user_id)) || !$this->multiuser ) {
             $lastdive = parse_mysql_query('lastdive.sql');
@@ -5544,7 +5544,7 @@ class Divestats{
      * @access public
      * @return void
      */
-    function set_all_statistics(){
+    function set_all_statistics() {
         $this->set_dive_statistics(); /*{{{*/
         $this->set_dive_certifications(); 
     /*}}}*/
@@ -5556,7 +5556,7 @@ class Divestats{
      * @access public
      * @return void
      */
-    function get_overview_divers(){
+    function get_overview_divers() {
         global $t, $_lang, $globals, $_config; /*{{{*/
         $users = new Users();
         $user_list = $users->get_user_data();
@@ -5572,7 +5572,7 @@ class Divestats{
      * @access public
      * @return void
      */
-    function set_dive_statistics(){
+    function set_dive_statistics() {
         global $globals, $_config, $t, $_lang; /*{{{*/
         $divestats = $this->divestats; 
 
@@ -5811,7 +5811,7 @@ class Divestats{
      * @access public
      * @return void
      */
-    function set_lastdive_info(){
+    function set_lastdive_info() {
         global $globals, $_config, $t, $_lang; /*{{{*/
         $t->assign('LastEntryTime', $this->LastEntryTime);
         $t->assign('LastDivePlace',$this->LastDivePlace);
@@ -5827,7 +5827,7 @@ class Divestats{
      * @access public
      * @return void
      */
-    function set_dive_certifications(){
+    function set_dive_certifications() {
         global $globals, $_config, $t, $_lang; /*{{{*/
         /**
          * Declare the variables otherwise an error is displayed
@@ -5951,7 +5951,7 @@ class DivePictures{
      * @access public
      * @return void
      */
-    function DivePictures(){
+    function DivePictures() {
         global $_config;
         $this->multiuser = $_config['multiuser'];
     }
@@ -5963,7 +5963,7 @@ class DivePictures{
      * @access public
      * @return void
      */
-    function set_divegallery_info($request){
+    function set_divegallery_info($request) {
         // We need to extract the info from the request 
         /*{{{*/
         if (!$request->diver_choice) {
@@ -5995,7 +5995,7 @@ class DivePictures{
      * @access public
      * @return void
      */
-    function set_divegallery_info_direct($user_id){
+    function set_divegallery_info_direct($user_id) {
         if ($this->multiuser) {/*{{{*/
             $this->user_id = $user_id;
             $user = new User();
@@ -6017,7 +6017,7 @@ class DivePictures{
      * @access public
      * @return void
      */
-    function get_divegallery_info($dive_id = 0, $site_id = 0, $equipment_nr = 0, $shop_id = 0, $trip_id = 0){
+    function get_divegallery_info($dive_id = 0, $site_id = 0, $equipment_nr = 0, $shop_id = 0, $trip_id = 0) {
         global $globals, $_config, $_lang, $t;/*{{{*/
         if (($this->multiuser && !empty($this->user_id)) || !$this->multiuser ) {
             if ($dive_id == 0 && $site_id == 0 && $equipment_nr == 0 && $shop_id == 0 && $trip_id == 0) {
@@ -6171,7 +6171,7 @@ class DivePictures{
      * @access public
      * @return void
      */
-    function resizer($ref = 0){
+    function resizer($ref = 0) {
         global $_config; /*{{{*/
         // $host  = $_SERVER['HTTP_HOST'];
         // $uri   = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
@@ -6189,7 +6189,7 @@ class DivePictures{
      * @access public
      * @return void
      */
-    function resize_needed(){
+    function resize_needed() {
         if ($this->number_images_resize > 0) { /*{{{*/
             return true;
         } else {
@@ -6204,7 +6204,7 @@ class DivePictures{
      * @access public
      * @return void
      */
-    function return_total_images_for_resizing(){
+    function return_total_images_for_resizing() {
         return $this->number_images_resize;
     }
 
@@ -6214,12 +6214,12 @@ class DivePictures{
      * @access public
      * @return void
      */
-    function return_array_images_for_resize(){
+    function return_array_images_for_resize() {
         $temp = array(); /*{{{*/
-        for($i=0 ; $i < count($this->image_link) ; $i++){
+        for ($i=0 ; $i < count($this->image_link) ; $i++) {
             $temp[] = array_filter($this->image_link[$i]);
         }   
-        for ($a = 0 ; $a < count($temp) ; $a++) {
+        for ($a=0 ; $a < count($temp) ; $a++) {
             if (array_key_exists('thumb',$temp[$a]) || array_key_exists('resize',$temp[$a])) {
                 $this->images_for_resize[] = $temp[$a];
             }
@@ -6234,7 +6234,7 @@ class DivePictures{
      * @access public
      * @return void
      */
-    function get_image_link(){
+    function get_image_link() {
         return $this->image_link;
     }
     /**
@@ -6244,7 +6244,7 @@ class DivePictures{
      * @return array with exif data
      */
 
-    function get_exif_data($file){
+    function get_exif_data($file) {
         global $_config, $t, $_lang, $globals;/*{{{*/
         if (isset($_config["get_exif_data"]) && function_exists('exif_read_data')) {
             $exif_date = exif_read_data ( $file ,'IFD0'  ); 
@@ -6261,7 +6261,7 @@ class DivePictures{
      * @access public
      * @return void
      */
-    function set_all_dive_pictures(){
+    function set_all_dive_pictures() {
     /*{{{*/
         global $_config,$t, $_lang, $globals;
         
@@ -6335,7 +6335,7 @@ class Tank{
     
     }
 
-    function get_request_type(){
+    function get_request_type() {
         return $this->request_type;
     }
     /**
@@ -6344,7 +6344,7 @@ class Tank{
      * @access public
      * @return void
      */
-    function get_divetank_info(){
+    function get_divetank_info() {
         global $_config, $globals; /*{{{*/
         if (!empty($this->divetank_nr)) {
             $this->request_type = 1;
@@ -6368,7 +6368,7 @@ class Tank{
      * @access public
      * @return void
      */
-    function get_tanks_from_dive(){
+    function get_tanks_from_dive() {
         global $t, $_config, $_lang, $globals; /*{{{*/
         $globals['dive_nr'] = $this->dive_nr;
         $divetanks = parse_mysql_query('tanksdivelist.sql');
@@ -6407,7 +6407,7 @@ class AppInfo{ /*{{{*/
      * @access public
      * @return void
      */
-    function AppInfo($request){
+    function AppInfo($request) {
         global $_lang, $_config;
         if ($_config['multiuser']) {
             $this->user_id = $request->get_user_id();
@@ -6437,7 +6437,7 @@ class AppInfo{ /*{{{*/
      * @access public
      * @return void
      */
-    function SetAppInfo(){
+    function SetAppInfo() {
         global $_config, $t, $_lang;
         $t->assign('poweredby', $_lang['poweredby']);
         $t->assign('Divelogname', $this->Divelogname);

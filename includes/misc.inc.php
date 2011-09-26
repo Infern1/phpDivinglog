@@ -101,16 +101,16 @@ function action($value_of_clicked_field, $array_values) {
 
 // use english if it is not set in the configuration file
 if (!isset($_config['language'])) {
-	$_config['language'] = "english"; // if not set, get the english language file.
+    $_config['language'] = "english"; // if not set, get the english language file.
 }
 // first get the default english values
 // so that we'll have values for anything not in the specified language file
 if ($_config['language'] != "english") {
-	if (!file_exists($_config['app_root'] .'includes/language/english.inc.php')) {
-		print "<p>Language file includes/language/english.inc.php not found.</p>";
-		exit;
-	}
-	include_once($_config['app_root'] . 'includes/language/english.inc.php');
+    if (!file_exists($_config['app_root'] .'includes/language/english.inc.php')) {
+        print "<p>Language file includes/language/english.inc.php not found.</p>";
+        exit;
+    }
+    include_once($_config['app_root'] . 'includes/language/english.inc.php');
 }
 
 // include the specified language file
@@ -123,7 +123,7 @@ $_lang = array();
 include_once ($language_filename);
 
 // Convert applicable characters in the language file to entities
-//$_lang = htmlentities_array($_lang);	
+//$_lang = htmlentities_array($_lang);
 
 
 /**
@@ -131,16 +131,16 @@ include_once ($language_filename);
  * the name of the SQL-file to be parsed. Variables defined under 'global'  
  * may be used in the sql-scripts and will be replaced by their values!     
  * The globals term should include all the variables witch are used in the  
- * sql-script, so the variables are parsed correctly			  
+ * sql-script, so the variables are parsed correctly
  *
  * @param mixed $filename 
  * @access public
  * @return void
  */
-function sql_file($filename){
-	global $_config; /*{{{*/
-	$sqlpath = $_config['sqlpath'];
-	global $globals;
+function sql_file($filename) {
+    global $_config; /*{{{*/
+    $sqlpath = $_config['sqlpath'];
+    global $globals;
 
     if ($_config['multiuser'] && isset($_SESSION['user_id'])) {
         $user_id = $_SESSION['user_id'];
@@ -148,29 +148,29 @@ function sql_file($filename){
     } else {
     }
 
-	$location = $sqlpath.$filename;
-	if (!file_exists($location)) {
-		die ("SQL file '". $location ."' not found !");
-	}
+    $location = $sqlpath.$filename;
+    if (!file_exists($location)) {
+        die ("SQL file '". $location ."' not found !");
+    }
 
-	if ($location) {
-		$contents = implode('', file($location));
+    if ($location) {
+        $contents = implode('', file($location));
         eval ("\$contents = \"$contents\";");
-		        //Support the "'" character from a HTTP GET variabele
-		$contents = str_replace ("\'", "'", $contents);	
-	     
-		/* Handles debug-information: if debugging is enabled by setting	*/
-		/* $debug =1 in the script, thiswrites debug output.			*/
-	
-		if ($_config['debug']) {
-			echo "<hr>\n<b>".$location.":</b><br>\n<br>\n";
-			echo nl2br(htmlentities($contents))."<br>\n<hr>\n";
-		}
-	
-		return $contents;
-	} else {
-		return false;
-	} 
+        //Support the "'" character from a HTTP GET variabele
+        $contents = str_replace ("\'", "'", $contents);
+
+        /* Handles debug-information: if debugging is enabled by setting	*/
+        /* $debug =1 in the script, thiswrites debug output.			*/
+
+        if ($_config['debug']) {
+            echo "<hr>\n<b>".$location.":</b><br>\n<br>\n";
+            echo nl2br(htmlentities($contents))."<br>\n<hr>\n";
+        }
+
+        return $contents;
+    } else {
+        return false;
+    } 
 /*}}}*/
 }
 
@@ -182,7 +182,7 @@ function sql_file($filename){
  * @access public
  * @return void
  */
-function parse_mysql_query($filename, $sql_query = 0, $debug = false){
+function parse_mysql_query($filename, $sql_query = 0, $debug = false) {
     global $_config, $globals; /*{{{*/
     $username = $_config['database_username'];
     $password = $_config['database_password'];
@@ -233,7 +233,7 @@ function parse_mysql_query($filename, $sql_query = 0, $debug = false){
  * @access public
  * @return void
  */
-function rows_mysql_query(){
+function rows_mysql_query() {
     global $globals; /*{{{*/
     return $globals['sql_num_rows']; 
     /*}}}*/
@@ -248,20 +248,20 @@ function rows_mysql_query(){
  * @return void  Return nothing otherwise.
  */
 function check_number($number) {
-	if (!$number) { /*{{{*/
-		$get = "";
-	} else {
-		if (preg_match('[^0-9]', $number)) {
-			$get = "";
-		} else {
-			if ($number == 0) {
-				$get = "";
-			} else {
-				$get = $number;
-			}
-		}
-	}
-	return $get;
+    if (!$number) { /*{{{*/
+        $get = "";
+    } else {
+        if (preg_match('[^0-9]', $number)) {
+            $get = "";
+        } else {
+            if ($number == 0) {
+                $get = "";
+            } else {
+                $get = $number;
+            }
+        }
+    }
+    return $get;
 /*}}}*/
 }
 
@@ -273,7 +273,7 @@ function check_number($number) {
  * @access public
  * return void
  */
-function GetRequestVar($url, $request_file_depth=0){ 
+function GetRequestVar($url, $request_file_depth=0) { 
 /*{{{*/
     global $_config, $t,$_POST;
     $paginas = NULL;
@@ -352,48 +352,49 @@ function is__writable($path) {
 }
 
 /**
- * GetProfileData Extract averagedepth and sac  info from the profile data
+ * GetProfileData Extract averagedepth and sac info from the profile data
  * 
  * @param mixed $result 
  * @access public
  * @return void
  */
 function GetProfileData($result) {
-    	global $_config; /*{{{*/
-        global $_lang;
-        $profile = $result['Profile'];
-        $length = ( strlen($profile) / 12 );
-		$profileint = ($result['ProfileInt'] / 60);
-        /**
-         * Divetime calculation changed to Divetime from Divelog table see:
-         * http://www.divinglog.de/phpbb/viewtopic.php?p=3094#3094
-         */
-        $divetime = $profileint * $length;
-        if (isset($result['Divetime'])) {
-            $divetime = $result['Divetime'];
-        } else {
-            $divetime = $profileint * $length;
-        }
-		$start = 0;
-		$ydata = 0;
-		for ($i=0; $i < $length; $i++) {
-        		$ydata = $ydata + (substr(substr($profile,$start,12),0,5) / 100);
-		        $start += 12;
-		}
-		$averagedepth = $ydata / $length;
-		$sac = (($result['PresS'] - $result['PresE']) * $result['Tanksize']) / ($divetime * ($averagedepth / 10 + 1));
+    global $_config; /*{{{*/
+    global $_lang;
+    $profile = $result['Profile'];
+    $length = ( strlen($profile) / 12);
+    $profileint = ($result['ProfileInt'] / 60);
 
-		if ($_config['length']) {
-			$averagedepth = MetreToFeet($averagedepth / 3.2808399, 2) ."&nbsp;";
-		} else {
-			$averagedepth = number_format($averagedepth, 2) ."&nbsp;";
-		}
-		if ($_config['volume']) {
-			$sac = LitreToCuft($sac, 2) ."&nbsp;". $_lang['unit_rate_imp'];
-		} else {
-			$sac = number_format($sac, 2) ."&nbsp;". $_lang['unit_rate'];
-		}
-        return array('averagedepth' => $averagedepth , 'sac' => $sac);
+    /**
+     * Divetime calculation changed to Divetime from Divelog table see:
+     * http://www.divinglog.de/phpbb/viewtopic.php?p=3094#3094
+     */
+    $divetime = $profileint * $length;
+    if (isset($result['Divetime'])) {
+        $divetime = $result['Divetime'];
+    } else {
+        $divetime = $profileint * $length;
+    }
+    $start = 0;
+    $ydata = 0;
+    for ($i=0; $i < $length; $i++) {
+        $ydata = $ydata + (substr(substr($profile,$start,12),0,5) / 100);
+        $start += 12;
+    }
+    $averagedepth = $ydata / $length;
+    $sac = (($result['PresS'] - $result['PresE']) * $result['Tanksize']) / ($divetime * ($averagedepth / 10 + 1));
+
+    if ($_config['length']) {
+        $averagedepth = MetreToFeet($averagedepth / 3.2808399, 2) ."&nbsp;";
+    } else {
+        $averagedepth = number_format($averagedepth, 2) ."&nbsp;";
+    }
+    if ($_config['volume']) {
+        $sac = LitreToCuft($sac, 2) ."&nbsp;". $_lang['unit_rate_imp'];
+    } else {
+        $sac = number_format($sac, 2) ."&nbsp;". $_lang['unit_rate'];
+    }
+    return array('averagedepth' => $averagedepth , 'sac' => $sac);
 /*}}}*/
 }
 
@@ -404,15 +405,15 @@ function MetreToFeet($value, $precision = 2) {
 }
  
 function BarToPsi($value, $precision = 2) {
-	return round(($value * 14.503774), $precision);
+    return round(($value * 14.503774), $precision);
 }
 
 function KgToLbs($value, $precision = 2) {
-	return round(($value * 2.2046226), $precision);
+    return round(($value * 2.2046226), $precision);
 }
 
 function CelsiusToFahrenh($value, $precision = 2) {
-	return round((($value * (9 / 5)) + 32), $precision);
+    return round((($value * (9 / 5)) + 32), $precision);
 }
  
 function LitreToCuft($value, $precision = 2) {
@@ -447,11 +448,11 @@ function backhtmlentities($str_h) {
  * @return void
  */
 function DECtoDMS($dec, $fmt) {
-	if ($dec == "") { /*{{{*/
-		$dms = "";
-	} else {
-		switch ($fmt) {
-		case "dm":
+    if ($dec == "") { /*{{{*/
+        $dms = "";
+    } else {
+        switch ($fmt) {
+        case "dm":
 			// degrees and minutes
 			$vars = explode(".", $dec);
 			$deg = $vars[0];
@@ -560,7 +561,7 @@ function datecheck($date,$format='ymd',$separator='-',$toformat='mdy',$toseparat
         $month=($month <10)? '0' .$month:$month;
         $day=($day <10)? '0' .$day:$day;
         if (($month<1) || ($month>12) || ($day<1) || (($month==2) && ($day>28+(!($year%4))-(!($year%100))+(!($year%400)))) || ($day>30+(($month>7)^($month&1)))) return false; // date out of range 
-        $arrDate= array('y' => $year, 'm' => $month, 'd' => $day, 'iso' => $year.'-'.$month.'-'.$day, 'fromdate'=> $date, 'todate' => '' );
+        $arrDate= array('y' => $year, 'm' => $month, 'd' => $day, 'iso' => $year.'-'.$month.'-'.$day, 'fromdate'=> $date, 'todate' => '');
         $arrDate['todate'] = $arrDate[$toformat[0]].$toseparator.$arrDate[$toformat[1]].$toseparator.$arrDate[$toformat[2]];
         return $arrDate;
 /*}}}*/
@@ -575,7 +576,7 @@ function datecheck($date,$format='ymd',$separator='-',$toformat='mdy',$toseparat
  */
 function add_unit_depth($value) {
     global $_config, $_lang; /*{{{*/
-    if (!empty($value)){
+    if (!empty($value)) {
         if ($_config['length']) {
             $value .=  " ".$_lang['unit_length_short_imp'];
         } else {
@@ -608,7 +609,7 @@ function add_unit_time($value) {
  * @return void
  */
 function latitude_format($coord) {
-//	Change coordinates into a displayable format
+// Change coordinates into a displayable format
 	global $_config; /*{{{*/
 
 	if ($coord == "") {
@@ -635,9 +636,9 @@ function latitude_format($coord) {
  * @access public
  * @return void
  */
-function longitude_format($coord){
-//	Change coordinates into a displayable format
-	global $_config; /*{{{*/
+function longitude_format($coord) {
+// Change coordinates into a displayable format
+    global $_config; /*{{{*/
 
 	if ($coord == "") {
 		$dms = "";
@@ -663,7 +664,7 @@ function longitude_format($coord){
  * @access public
  * @return void
  */
-function set_config_table_prefix($prefix){
+function set_config_table_prefix($prefix) {
     global $_config;
 //    $_config['table_prefix'] = $prefix;
 }
@@ -674,7 +675,7 @@ function set_config_table_prefix($prefix){
  * @access public
  * @return void
  */
-function reset_config_table_prefix(){
+function reset_config_table_prefix() {
     global $_config;
 //    unset($_config['table_prefix']);
 }
@@ -686,7 +687,7 @@ function reset_config_table_prefix(){
  * @access public
  * @return void
  */
-function resize_image($img){
+function resize_image($img) {
     global $_config; /*{{{*/
     $obj = new Thumbnail($img); 
     $obj->size_width($_config['pic-width']);
@@ -746,7 +747,7 @@ function count_all($arg) {
  * - Goes through the given string, and replaces www.xxxx.yyyy[zzzz] with an HTML <a> tag linking
  * 	to http://www.xxxx.yyyy[/zzzz]
  * - Goes through the given string, and replaces xxxx@yyyy with an HTML mailto: tag linking
- *		to that email address
+ *	to that email address
  * - Only matches these 2 patterns either after a space, or at the beginning of a line
  *
  * Notes: the email one might get annoying - it's easy to make it more restrictive, though.. maybe
