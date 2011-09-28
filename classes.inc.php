@@ -540,7 +540,7 @@ class TableGrid{
                 break;
             default:
                 if (!isset($_lang['grid_cancel'])) {
-                    echo "<center><strong>ERROR no language found for the grid (".$_config['language']. ") fix your language file</strong></center><br>";
+                    echo "<center><strong>ERROR: No language found for the grid (".$_config['language']. "). Please fix your language file.</strong></center><br>";
                 } else {
                     $this->gridtable->message['cancel'] = $_lang['grid_cancel'];
                     $this->gridtable->message['close'] = $_lang['grid_close'];
@@ -2227,7 +2227,7 @@ class Divelog {
         } elseif ($_config['view_type'] == 2) {
             $this->get_dive_overview_table();
         } else{
-            echo 'no view_type defined!';
+            echo '<strong>ERROR: No view_type defined!</strong><br>';
         }
         $t->assign('pagetitle',$_lang['dive_log']);
     /*}}}*/
@@ -2785,7 +2785,7 @@ class Divesite{
         elseif ($_config['view_type'] == 2) {
             $this->get_divesite_overview_table($sql);
         } else{
-            echo 'no view_type defined!';
+            echo '<strong>ERROR: No view_type defined!</strong><br>';
         }
         $t->assign('pagetitle',$_lang['dive_sites']);
     /*}}}*/
@@ -3197,7 +3197,7 @@ class Equipment{
         } elseif ($_config['view_type'] == 2) {
             $this->get_equipment_overview_table();
         } else {
-            echo 'no view_type defined!';
+            echo '<strong>ERROR: No view_type defined!</strong><br>';
         }
         $t->assign('pagetitle',$_lang['dive_equip']);
     /*}}}*/
@@ -3737,7 +3737,7 @@ class Diveshop{
         elseif ($_config['view_type'] == 2) {
             $this->get_diveshop_overview_table($sql);
         } else{
-            echo 'no view_type defined!';
+            echo '<strong>ERROR: No view_type defined!</strong><br>';
         }
         $t->assign('pagetitle',$_lang['dive_shops']);
     /*}}}*/
@@ -4221,7 +4221,7 @@ class Divetrip{
         elseif ($_config['view_type'] == 2) {
             $this->get_divetrip_overview_table($sql);
         } else{
-            echo 'no view_type defined!';
+            echo '<strong>ERROR: No view_type defined!</strong><br>';
         }
         $t->assign('pagetitle',$_lang['dive_trips']);
     /*}}}*/
@@ -4705,7 +4705,7 @@ class Divecountry{
         elseif ($_config['view_type'] == 2) {
             $this->get_divecountry_overview_table($sql);
         } else{
-            echo 'no view_type defined!';
+            echo '<strong>ERROR: No view_type defined!</strong><br>';
         }
         $t->assign('pagetitle',$_lang['dive_countries']);
     /*}}}*/
@@ -5108,7 +5108,7 @@ class Divecity{
         elseif ($_config['view_type'] == 2) {
             $this->get_divecity_overview_table($sql);
         } else{
-            echo 'no view_type defined!';
+            echo '<strong>ERROR: No view_type defined!</strong><br>';
         }
         $t->assign('pagetitle',$_lang['dive_cities']);
     /*}}}*/
@@ -6131,7 +6131,7 @@ class DivePictures{
                              * Make an array of the resized images 
                              */
                             if ($size[0] <= $_config['pic-width']) {
-                                // echo "No resize <br>";
+                                // echo "<strong>ERROR: No resize!</strong><br>";
                             } else {
                                 $this->image_link[$i]['resize'] = true;
                                 $this->number_images_resize++;
@@ -6145,7 +6145,7 @@ class DivePictures{
                             } else {
                                 $size_thumb = getimagesize($this->image_link[$i]['img_thumb_url']);
                                 if ($size_thumb[0]<=$_config['thumb-width'] && $size_thumb[1]<=$_config['thumb-width']) {
-                                    // echo "No thumb <br>";
+                                    // echo "<strong>ERROR: No thumb!</strong><br>";
                                 } else {
                                     $this->image_link[$i]['thumb'] = true;
                                     $this->number_images_resize++;
