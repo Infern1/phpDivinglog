@@ -817,7 +817,7 @@ class TopLevelMenu {
      * @access public
      * @return void
      */
-    function TopLevelMenu($request = 0 ) {
+    function TopLevelMenu($request = 0) {
         global $_config, $t;
         // Get the user_ids and put them in a array
         if ($_config['multiuser']) {
@@ -932,22 +932,23 @@ class TopLevelMenu {
             }
             $get_nr = $request->get_dive_nr();
             $thisdive = array_search($get_nr, $divelist);
-            if (array_search($get_nr, $divelist) != count($divelist)-1 ) {
+            // First, Previous
+            if (array_search($get_nr, $divelist) != ($divecount - 1)) {
                 $t->assign('divenr','1');
-                $t->assign('first_dive',$divelist[count($divelist)-1]);
+                $t->assign('first_dive',$divelist[$divecount - 1]);
                 $t->assign('first_dive_linktitle', $_lang['first_dive_linktitle']);
                 $t->assign('first',$_lang['first']);
-                $t->assign('next_dive',$divelist[$thisdive+1]);
+                $t->assign('next_dive',$divelist[$thisdive + 1]);
                 $t->assign('previous_dive_linktitle', $_lang['previous_dive_linktitle']);
                 $t->assign('previous', $_lang['previous']);
             } 
             // Next, Last
-            if (array_search($get_nr, $divelist) != 0 ) {
+            if (array_search($get_nr, $divelist) != 0) {
                 $t->assign('divenr_not_null','1');
-                $t->assign('next_dive_nr',$divelist[$thisdive-1]);
+                $t->assign('next_dive_nr',$divelist[$thisdive - 1]);
                 $t->assign('next_dive_linktitle', $_lang['next_dive_linktitle']);
                 $t->assign('next', $_lang['next']);
-                $t->assign('last_dive_nr',  $divelist);
+                $t->assign('last_dive_nr', $divelist['0']);
                 $t->assign('last_dive_linktitle', $_lang['last_dive_linktitle']);
                 $t->assign('last', $_lang['last'] );
             }
