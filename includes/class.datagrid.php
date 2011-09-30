@@ -6,7 +6,7 @@
  *  Some of the highlights:
  *
  *      -   the class executes a given SQL query and generates a template driven HTML code that displays the query results
- *      -   automatically provides means of navigation trough pages and lets user decide how many rows to be displayed on each page
+ *      -   automatically provides means of navigation through pages and lets user decide how many rows to be displayed on each page
  *      -   automatically let user sort by available columns - or you can restrict this feature for specific columns
  *      -   if requested, it can automatically display a "selector" column - a column to let users mark specific rows
  *          as selected
@@ -133,7 +133,8 @@ class dataGrid
     /**
      *  The data grid uses POST which is not SEO friendly but might suit some of the implementations.
      *
-     *  If you want the data grid to be SEO friendly you should set this property to TRUE and set the {@link URLa} property to a value     *  of your choice, representing the prefix of the page you're currently on, in the data grid. This value will then be appended to the
+     *  If you want the data grid to be SEO friendly you should set this property to TRUE and set the {@link URLa} property to a value
+     *  of your choice, representing the prefix of the page you're currently on, in the data grid. This value will then be appended to the
      *  URL where the data grid is shown.
      *
      *  So if you have your data grid at

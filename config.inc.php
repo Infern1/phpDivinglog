@@ -96,7 +96,7 @@ $_config['user_prefix'][3] = 'diver3';
 /**
  * number of items per page in the lists
  */
-$_config['max_list'] = 15;
+$_config['max_list'] = 20;
 
 /**
  * Set to true if you want to display the profile in the dive detail 
