@@ -48,6 +48,9 @@ if($request->get_multiuser()){
         // User Information
         $user = new User();
         $user->set_user_id($request->get_user_id());
+        // Equipment Service Information
+        $service = new Equipment($request);
+        $service->set_equipment_service_info();
         // Application Information
         $ver = new AppInfo($request);
         $ver->SetAppInfo();
