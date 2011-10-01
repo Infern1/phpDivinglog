@@ -3699,7 +3699,7 @@ class Diveshop{
             $t->assign('trips',$trips);
         } else {
             $t->assign('trip_count', $this->trip_count);
-            $t->assign('dlog_number_title', "" );
+            $t->assign('dtrip_number_title', "" );
             $t->assign('trips',"");
         }
         $t->assign('comma_separated', $_config['comma_separated']);
@@ -4613,7 +4613,7 @@ class Divecountry{
             $t->assign('trips',$trips);
         } else {
             $t->assign('trip_count', $this->trip_count);
-            $t->assign('dlog_number_title', "" );
+            $t->assign('dtrip_number_title', "" );
             $t->assign('trips',"");
         }
         $t->assign('comma_separated', $_config['comma_separated']);
@@ -4646,7 +4646,7 @@ class Divecountry{
             $t->assign('sites',$sites);
         } else {
             $t->assign('site_count', $this->site_count);
-            $t->assign('dlog_number_title', "" );
+            $t->assign('dsite_number_title', "" );
             $t->assign('sites',"");
         }
         $t->assign('comma_separated', $_config['comma_separated']);
@@ -5049,7 +5049,7 @@ class Divecity{
             $t->assign('sites',$sites);
         } else {
             $t->assign('site_count', $this->site_count);
-            $t->assign('dlog_number_title', "" );
+            $t->assign('dcity_number_title', "" );
             $t->assign('sites',"");
         }
         $t->assign('comma_separated', $_config['comma_separated']);
@@ -5569,7 +5569,9 @@ class Divestats{
             $this->LastDivePlace = $lastdive['Place'];
             $this->LastDiveID= $lastdive['PlaceID'];
             $this->LastCity = $lastdive['City'];
+            $this->LastCityID = $lastdive['CityID'];
             $this->LastCountry = $lastdive['Country'];
+            $this->LastCountryID = $lastdive['CountryID'];
         }
     /*}}}*/
     }
@@ -5633,6 +5635,9 @@ class Divestats{
         $t->assign('DivedateMax', date($_lang['logbook_divedate_format'], strtotime($divestats['DivedateMax'])));
         $t->assign('DivedateMaxNr',$this->DivedateMaxNr);
         $t->assign('dlog_number_title',$_lang['dlog_number_title']);
+        $t->assign('dsite_number_title',$_lang['dsite_number_title']);
+        $t->assign('dcountry_number_title',$_lang['dcountry_number_title']);
+        $t->assign('dcity_number_title',$_lang['dcity_number_title']);
         $t->assign('DivedateMin', date($_lang['logbook_divedate_format'], strtotime($divestats['DivedateMin'])));
         $t->assign('DivedateMinNr', $this->DivedateMinNr);
 
@@ -5852,7 +5857,9 @@ class Divestats{
         $t->assign('LastDivePlace',$this->LastDivePlace);
         $t->assign('LastDiveID',$this->LastDiveID);
         $t->assign('LastCity',$this->LastCity);
+        $t->assign('LastCityID',$this->LastCityID);
         $t->assign('LastCountry',$this->LastCountry);
+        $t->assign('LastCountryID',$this->LastCountryID);
     /*}}}*/
     }
 

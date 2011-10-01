@@ -221,11 +221,11 @@ $_lang['dlog_title_place'] = "Dive Site";
 $_lang['dlog_title_photo'] = "Pic";
 
 $_lang['dlog_number_title'] = "Details for dive # ";
-$_lang['dsite_number_title'] = "Details for site # ";
-$_lang['dtrip_number_title'] = "Details for dive trip # ";
 $_lang['dsite_number_title'] = "Details for dive site # ";
-$_lang['dcountry_number_title'] = "Details for country # ";
+$_lang['dcity_number_title'] = "Details for dive city # ";
 $_lang['dshop_number_title'] = "Details for dive shop # ";
+$_lang['dtrip_number_title'] = "Details for dive trip # ";
+$_lang['dcountry_number_title'] = "Details for country # ";
 
 // based on the PHP date() function
 $_lang['dlog_divedate_format'] = "dMY";
