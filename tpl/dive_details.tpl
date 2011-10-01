@@ -165,7 +165,96 @@
     </tr>
     {/if}
 
-    {* Conditions *}
+    {* Dive Details Section *}
+    {*
+    <tr>
+      <td colspan="4" class="spacing">&nbsp;</td>
+    </tr>
+    *}
+    <tr class="divesection">
+      <td colspan="4">{$dive_sect_details}</td>
+    </tr>
+
+    <tr class="divetitle">
+      <td>{$logbook_entry}</td>
+      <td>{$logbook_boat}</td>
+      <td>{$logbook_pgstart}</td>
+      <td>{$logbook_pgend}</td>
+    </tr>
+
+    <tr class="divedetails">
+    {if $Entry != ''}
+      <td>{$Entry}</td>
+    {else}
+      <td>-</td>
+    {/if}
+
+    {if $Boat != ''}
+      <td>{$Boat}</td>
+    {else}
+      <td>-</td>
+    {/if}
+
+    {if $PGStart != ''}
+      <td>{$PGStart}</td>
+    {else}
+      <td>-</td>
+    {/if}
+
+    {if $PGEnd != ''}
+      <td>{$PGEnd}</td>
+    {else}
+      <td>-</td>
+    {/if}
+
+    </tr>
+
+    <tr class="divetitle">
+      <td>{$logbook_deco}</td>
+      <td>{$logbook_rep}</td>
+      <td>{$logbook_surfint}</td>
+      <td>{$logbook_exittime}</td>
+    </tr>
+
+    <tr class="divedetails">
+    {if $Deco != ''}
+      <td>{$Deco}</td>
+    {else}
+      <td>-</td>
+    {/if}
+
+    {if $Rep != ''}
+      <td>{$Rep}</td>
+    {else}
+      <td>-</td>
+    {/if}
+
+    {if $Surfint != ''}
+      <td>{$Surfint}</td>
+    {else }
+      <td>-</td>
+    {/if}
+
+    {if $ExitTime != ''}
+      <td>{$ExitTime}</td>
+    {else }
+      <td>-</td>
+    {/if}
+    </tr>
+
+    {if isset($Decostops) }
+    <tr>
+      <td colspan="4" class="spacing">&nbsp;</td>
+    </tr>
+    <tr class="divesection">
+      <td colspan="4">{$logbook_decostops}</td>
+    </tr>
+    <tr class="divedetails">
+      <td colspan="4">{$stops}</td>
+    </tr>
+    {/if}
+
+    {* Conditions Section *}
     {*
     <tr>
       <td colspan="4" class="spacing">&nbsp;</td>
@@ -266,96 +355,7 @@
       <td>&nbsp;</td>
     </tr>
 
-    {* Dive Details *}
-    {*
-    <tr>
-      <td colspan="4" class="spacing">&nbsp;</td>
-    </tr>
-    *}
-    <tr class="divesection">
-      <td colspan="4">{$dive_sect_details}</td>
-    </tr>
-
-    <tr class="divetitle">
-      <td>{$logbook_entry}</td>
-      <td>{$logbook_boat}</td>
-      <td>{$logbook_pgstart}</td>
-      <td>{$logbook_pgend}</td>
-    </tr>
-
-    <tr class="divedetails">
-    {if $Entry != ''}
-      <td>{$Entry}</td>
-    {else}
-      <td>-</td>
-    {/if}
-
-    {if $Boat != ''}
-      <td>{$Boat}</td>
-    {else}
-      <td>-</td>
-    {/if}
-
-    {if $PGStart != ''}
-      <td>{$PGStart}</td>
-    {else}
-      <td>-</td>
-    {/if}
-
-    {if $PGEnd != ''}
-      <td>{$PGEnd}</td>
-    {else}
-      <td>-</td>
-    {/if}
-
-    </tr>
-
-    <tr class="divetitle">
-      <td>{$logbook_deco}</td>
-      <td>{$logbook_rep}</td>
-      <td>{$logbook_surfint}</td>
-      <td>{$logbook_exittime}</td>
-    </tr>
-
-    <tr class="divedetails">
-    {if $Deco != ''}
-      <td>{$Deco}</td>
-    {else}
-      <td>-</td>
-    {/if}
-
-    {if $Rep != ''}
-      <td>{$Rep}</td>
-    {else}
-      <td>-</td>
-    {/if}
-
-    {if $Surfint != ''}
-      <td>{$Surfint}</td>
-    {else }
-      <td>-</td>
-    {/if}
-
-    {if $ExitTime != ''}
-      <td>{$ExitTime}</td>
-    {else }
-      <td>-</td>
-    {/if}
-    </tr>
-
-    {if isset($Decostops) }
-    <tr>
-      <td colspan="4" class="spacing">&nbsp;</td>
-    </tr>
-    <tr class="divesection">
-      <td colspan="4">{$logbook_decostops}</td>
-    </tr>
-    <tr class="divedetails">
-      <td colspan="4">{$stops}</td>
-    </tr>
-    {/if}
-
-    {* Equipment *}
+    {* Equipment Section *}
     {*
     <tr>
       <td colspan="4" class="spacing">&nbsp;</td>
@@ -431,7 +431,7 @@ title="{$i.divegear} {$logbook_place_linktitle}">{$i.divegear}</a>{if !$i@last}{
      <col width="25%">
     </colgroup>
 
-    {* Breathing *}
+    {* Breathing Section *}
     {*
     <tr>
       <td colspan="4" class="spacing">&nbsp;</td>
