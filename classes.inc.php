@@ -1615,13 +1615,13 @@ class Divelog {
         $t->assign('logbook_vishor', $_lang['logbook_vishor']);
         $t->assign('logbook_visver', $_lang['logbook_visver']);
 
-        if ($result['Water'] != 0 && $_lang['water'][($result['Water'] - 1)]) {
+        if (isset($result['Water']) && ($result['Water'] >= 1) && ($result['Water'] <= 3)) {
             $t->assign('Water', $_lang['water'][($result['Water'] - 1)]);
         } else {
             $t->assign('Water','-');
         }
 
-        if ($result['Visibility'] != 0 && $_lang['visibility'][($result['Visibility'] - 1)]) {
+        if (isset($result['Visibility']) && ($result['Visibility'] >= 1) && ($result['Visibility'] <= 3)) {
             $viz = $_lang['visibility'][($result['Visibility'] - 1)];
             $vizimage = '<img src="'.$_config['web_root'].'/images/vis-'.$result['Visibility'].'.gif" alt="'.$viz.'" title="'.$viz.'" border="0" width="50" height="15"> ';
             $t->assign('Visibility', $vizimage.' '.$viz);
@@ -2042,8 +2042,10 @@ class Divelog {
         $t->assign('logbook_surfint', $_lang['logbook_surfint'] );
         $t->assign('logbook_exittime', $_lang['logbook_exittime'] );
 
-        if (isset($_lang['entry'][($result['Entry'] - 1)])) {
+        if (isset($result['Entry']) && ($result['Entry'] >= 1) && ($result['Entry'] <= 2)) {
             $t->assign('Entry', $_lang['entry'][($result['Entry'] - 1)]);
+        } else {
+            $t->assign('Entry','-');
         }
 
         if (isset($result['Boat']) && ($result['Boat'] != "")) {
