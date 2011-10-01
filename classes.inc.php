@@ -76,7 +76,7 @@ class HandleRequest {
      * @return void
      */
     function HandleRequest() {
-        global $_config, $t;/*{{{*/
+        global $_config, $t; /*{{{*/
         $this->multiuser = $_config['multiuser'];
         $_SESSION['request_type'] = 1;
         $_SESSION['user_id'] = NULL;
@@ -86,16 +86,25 @@ class HandleRequest {
                 $t->assign('sep1','?user_id=');
                 $t->assign('sep2','&id=');
                 $t->assign('list','&view=list');
+                $t->assign('service','&view=service');
+                $t->assign('kml','&view=kml');
+                $t->assign('gpx','&view=gpx');
             } else {
-                // $t->assign('sep1','?user_id=');
                 $t->assign('sep2','?id=');
                 $t->assign('list','?view=list');
+                $t->assign('service','?view=service');
+                $t->assign('kml','?view=kml');
+                $t->assign('gpx','?view=gpx');
             }
         } else {
             $t->assign('sep1',"/");
             $t->assign('sep2',"/");
             $t->assign('list','/list');
-        }            /*}}}*/
+            $t->assign('service','/service');
+            $t->assign('kml','/kml');
+            $t->assign('gpx','/gpx');
+        }
+    /*}}}*/
     }
 
     /**
