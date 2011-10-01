@@ -120,6 +120,14 @@ $_config['user_show_certs'] = true;
 $_config['user_show_medical'] = true;
 
 /**
+ * Specify if equipment service reminders should be shown
+ * and the number of days before the due date to start reminding
+ * @todo make this work 
+ */
+$_config['equipment_service_reminder'] = true;
+$_config['equipment_service_warning'] = 30;
+
+/**
  * Comma separated
  * Specify if lists (like equipment used, dives at site etc.)
  * should be comma separated.
