@@ -2985,9 +2985,34 @@ class Equipment{
         $user_list = $users->get_user_data();
         $t->assign('diver_overview',1);
         $t->assign('divers', $user_list);
-        $t->assign('file_name','equipment.php'); 
+        $t->assign('file_name','equipment.php');
     /*}}}*/
     }
+
+
+
+
+    /**
+     * set_equipment_service_info 
+     * 
+     * @access public
+     * @return void
+     */
+    function set_equipment_service_info() {
+        global $_config, $globals, $t, $_lang; /*{{{*/
+        $this->service = parse_mysql_query('equipservice.sql');
+        $this->equipment_service_count = $globals['sql_num_rows'];
+        $t->assign('equipment_service_count', $this->equipment_service_count);
+        $t->assign('equipment_service_reminder', $_config['equipment_service_reminder']);
+        $t->assign('equipment_service_warning', $_lang['equip_service_warning']);
+    /*}}}*/
+    }
+
+
+
+
+
+
 
     function set_main_equipment_details() {
         global $t, $_config, $globals, $_lang; /*{{{*/
@@ -5617,7 +5642,7 @@ class Divestats{
         $t->assign('stats_divetimemin', $_lang['stats_divetimemin'] );
         $t->assign('stats_divetimeavg', $_lang['stats_divetimeavg'] );
 
-        $total_abt = floor($divestats['BottomTime']/60) .":". ($divestats['BottomTime']%60) ." ". $_lang['stats_totaltime_units'] ;
+        $total_abt = floor($divestats['BottomTime']/60) .":". ($divestats['BottomTime']%60) ." ". $_lang['stats_totaltime_units'];
         $t->assign('total_abt',$total_abt );
         $t->assign('DivetimeMax', $divestats['DivetimeMax']);
         $t->assign('unit_time', $_lang['unit_time']);

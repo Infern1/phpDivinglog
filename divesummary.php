@@ -60,6 +60,9 @@ if($request->get_multiuser()){
     // Dive Statistics
     $divestats->set_all_statistics();
     $divestats->set_lastdive_info();
+    // Equipment Service Information
+    $service = new Equipment($request);
+    $service->set_equipment_service_info();
     // Application Information
     $ver = new AppInfo($request);
     $ver->SetAppInfo();

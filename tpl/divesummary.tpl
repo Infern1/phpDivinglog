@@ -14,7 +14,7 @@ ERROR no user id set!
 <!-- Total bottom time -->
 <p class="rightLIST">
 <span class="small">{$stats_totaltime}</span><br>
-<b>{$total_abt} {$stats_totaltime_units}</b></p>
+<b>{$total_abt}</b></p>
 
 <!-- Last dive -->
 <p class="rightLIST">
@@ -53,7 +53,13 @@ title="{$dlog_number_title}{$DivedateMaxNr}">{$DivedateMaxNr}</a>
 </b></p>
 {/if}
 
+{* Equipment service reminder *}
+{if $equipment_service_reminder and ($equipment_service_count > 0)}
+<p class="rightLIST"><img src="images/equipment_service.png"
+height="50" width="50" border="0"
+alt="{$equipment_service_warning}" title="{$equipment_service_warning}"></p>
+{/if}
+
 {include file='links_sum.tpl'}
 {include file='app_info.tpl'}
 {/if}
-
