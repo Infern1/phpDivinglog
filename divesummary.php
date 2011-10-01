@@ -42,12 +42,13 @@ if($request->get_multiuser()){
     $user_id = $request->get_user_id();
     if(!empty($user_id)){
         $links->get_ovv_links();
-        // Get the page header
         // Dive Statistics
         $divestats->set_all_statistics();
         $divestats->set_lastdive_info();
+        // User Information
         $user = new User();
         $user->set_user_id($request->get_user_id());
+        // Application Information
         $ver = new AppInfo($request);
         $ver->SetAppInfo();
    } else {
@@ -56,10 +57,10 @@ if($request->get_multiuser()){
 } else {
     // Display the Dive List
     $links->get_ovv_links();
-    // Get the page header
     // Dive Statistics
     $divestats->set_all_statistics();
     $divestats->set_lastdive_info();
+    // Application Information
     $ver = new AppInfo($request);
     $ver->SetAppInfo();
 }

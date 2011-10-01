@@ -1,10 +1,12 @@
+{* Show the program deails *}
 <table class="divetable" cellspacing="0" cellpadding="0" width="100%">
-<tr>
-    <td class="spacing">&nbsp;</td>
-</tr>
-<tr class="divetitle">
-    <td>{$poweredby} <a href="http://www.divinglog.de/" target="_blank" title="Diving Log web site">{$Divelogname}</a>
-        {$DivelogVersion} {$and}   <a href="http://sourceforge.net/projects/phpdivinglog" target="_blank" title="phpDivingLog web site">{$Appname}</a>
+<tr class="divedetails"><td class="spacing">&nbsp;</td></tr>
+<tr class="divedetails">
+ <td>{$poweredby} <a href="{$dlog_url}" target="_blank"
+title="{$Divelogname} web site">{$Divelogname}</a> {$dlog_version}
+{$dbversion}{$DivelogVersion}{$and}
+<a href="{$app_url}" target="_blank"
+title="{$Appname} web site">{$Appname}</a>
 {$phpDivelogVersion}</td>
 </tr>
 </table>
