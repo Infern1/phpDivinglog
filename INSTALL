@@ -123,3 +123,10 @@ DEFINE("MBTTF_DIR","includes/jpgraph/fonts/");
 
 11.	Use phpMyAdmin or similar to upload the data into your 
 	MySQL database.
+
+12.     phpDivingLog comes with three favicon.ico files:
+        - one based on the US dive flag
+        - one based on the international A dive flag
+        - the one used on the Diving Log web site
+        Just make the images/favicon.ico file the one you wish to use,
+        or replace it with one of your own.
