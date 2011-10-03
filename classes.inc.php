@@ -2585,7 +2585,7 @@ class Divesite{
         }
 
         $t->assign('place_rating', $_lang['place_rating']);
-        if (isset($result['Rating']) && ($result['Rating'] != "")) {
+        if (isset($result['Rating']) && ($result['Rating'] >= 0) && ($result['Rating'] <= 5)) {
             $desc = $_lang['rating'][$result['Rating']];
             $Rating = '<img src="'.$_config['web_root'].'/images/ratings5-'.$result['Rating'].'.gif" alt="'.$desc.'" title="'.$desc.'" border="0" width="84" height="15">';
             $t->assign('Rating', $Rating);
@@ -3588,7 +3588,7 @@ class Diveshop{
             $t->assign('URL', '-');
         }
 
-        if (isset($result['Rating']) && ($result['Rating'] != "")) {
+        if (isset($result['Rating']) && ($result['Rating'] >= 0) && ($result['Rating'] <= 5)) {
             $desc = $_lang['rating'][$result['Rating']];
             $Rating = '<img src="'.$_config['web_root'].'/images/ratings5-'.$result['Rating'].'.gif" alt="'.$desc.'" title="'.$desc.'" border="0" width="84" height="15">';
             $t->assign('Rating', $Rating);
@@ -4023,7 +4023,7 @@ class Divetrip{
             $t->assign('TripName','-');
         }
 
-        if (isset($result['Rating']) && ($result['Rating'] != "")) {
+        if (isset($result['Rating']) && ($result['Rating'] >= 0) && ($result['Rating'] <= 5)) {
             $desc = $_lang['rating'][$result['Rating']];
             $Rating = '<img src="'.$_config['web_root'].'/images/ratings5-'.$result['Rating'].'.gif" alt="'.$desc.'" title="'.$desc.'" border="0" width="84" height="15">';
             $t->assign('Rating', $Rating);
