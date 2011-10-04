@@ -177,9 +177,8 @@
 
     <tr class="divetitle">
       <td>{$logbook_entry}</td>
-      <td>{$logbook_boat}</td>
-      <td>{$logbook_pgstart}</td>
-      <td>{$logbook_pgend}</td>
+      <td colspan="2">{$logbook_boat}</td>
+      <td>&nbsp;</td>
     </tr>
 
     <tr class="divedetails">
@@ -190,37 +189,59 @@
     {/if}
 
     {if $Boat != ''}
-      <td>{$Boat}</td>
+      <td colspan="2">{$Boat}</td>
     {else}
-      <td>-</td>
+      <td colspan="2">-</td>
     {/if}
 
+      <td>&nbsp;</td>
+    </tr>
+
+    <tr class="divetitle">
+      <td>{$logbook_pgstart}</td>
+      <td>{$logbook_entrytime}</td>
+      <td>{$logbook_exittime}</td>
+      <td>{$logbook_pgend}</td>
+    </tr>
+
+    <tr class="divedetails">
     {if $PGStart != ''}
-      <td>{$PGStart}</td>
+      <td style="border-bottom:thick double #000000;">{$PGStart}</td>
     {else}
+      <td style="border-bottom:thick double #000000;">-</td>
+    {/if}
+
+    {if $entry_time != ''}
+      <td>{$entry_time}</td>
+    {else}
+      <td>-</td>
+    {/if} 
+
+    {if $ExitTime != ''}
+      <td>{$ExitTime}</td>
+    {else }
       <td>-</td>
     {/if}
 
     {if $PGEnd != ''}
-      <td>{$PGEnd}</td>
+      <td style="border-bottom:thick double #000000;">{$PGEnd}</td>
     {else}
-      <td>-</td>
+      <td style="border-bottom:thick double #000000;">-</td>
     {/if}
-
     </tr>
 
     <tr class="divetitle">
-      <td>{$logbook_deco}</td>
+      <td style="border-right:thick double #000000;">{$logbook_altitude}</td>
       <td>{$logbook_rep}</td>
-      <td>{$logbook_surfint}</td>
-      <td>{$logbook_exittime}</td>
+      <td style="border-right:thick double #000000;">{$logbook_surfint}</td>
+      <td>&nbsp;</td>
     </tr>
 
     <tr class="divedetails">
-    {if $Deco != ''}
-      <td>{$Deco}</td>
+    {if $Altitude != ''}
+      <td style="border-right:thick double #000000;">{$Altitude}</td>
     {else}
-      <td>-</td>
+      <td style="border-right:thick double #000000;">-</td>
     {/if}
 
     {if $Rep != ''}
@@ -230,14 +251,57 @@
     {/if}
 
     {if $Surfint != ''}
-      <td>{$Surfint}</td>
+      <td style="border-right:thick double #000000;">{$Surfint}</td>
     {else }
-      <td>-</td>
+      <td style="border-right:thick double #000000;">-</td>
     {/if}
 
-    {if $ExitTime != ''}
-      <td>{$ExitTime}</td>
-    {else }
+      <td>&nbsp;</td>
+    </tr>
+
+    <tr class="divetitle">
+      <td style="border-right:thick double #000000;">{$logbook_depth}</td>
+      <td>&nbsp;</td>
+      <td style="border-right:thick double #000000;">&nbsp;</td>
+      <td>{$logbook_avgdepth}</td>
+    </tr>
+
+    <tr class="divedetails">
+    {if $dive_depth != ''}
+      <td style="border-right:thick double #000000;">{$dive_depth}</td>
+    {else}
+      <td style="border-right:thick double #000000;">-</td>
+    {/if}
+
+      <td style="border-bottom:thick double #000000;">&nbsp;</td>
+
+      <td style="border-bottom:thick double #000000; border-right:thick double #000000;">&nbsp;</td>
+
+    {if $averagedepth != ''}
+      <td>{$averagedepth} {$unit_length_short}</td>
+    {else}
+      <td>-</td>
+    {/if}
+    </tr>
+
+    <tr class="divetitle">
+      <td>&nbsp;</td>
+      <td colspan="2" style="text-align:center;">{$logbook_divetime}</td>
+      <td>{$logbook_deco}</td>
+    </tr>
+
+    <tr class="divedetails">
+      <td>&nbsp;</td>
+
+    {if $dive_time != ''}
+      <td colspan="2" style="text-align:center;">{$dive_time}</td>
+    {else}
+      <td colspan="2" style="text-align:center;">-</td>
+    {/if} 
+
+    {if $Deco != ''}
+      <td>{$Deco}</td>
+    {else}
       <td>-</td>
     {/if}
     </tr>
@@ -267,47 +331,14 @@
     {* Show weather conditions *}
     <tr class="divetitle">
       <td>{$logbook_weather}</td>
-      <td>{$logbook_visibility}</td>
-      <td>{$logbook_vishor}</td>
-      <td>{$logbook_visver}</td>
-    </tr>
-
-    <tr class="divedetails">
-    {if $Weather != ''}
-      <td>{$Weather}</td>
-    {else}
-      <td>-</td>
-    {/if}
-
-    {if $Visibility != ''}
-      <td>{$Visibility}</td>
-    {else}
-      <td>-</td>
-    {/if}
-
-    {if $VisHor != ''}
-      <td>{$VisHor}</td>
-    {else}
-      <td>-</td>
-    {/if}
-
-    {if $VisVer != ''}
-      <td>{$VisVer}</td>
-    {else}
-      <td>-</td>
-    {/if}
-    </tr>
-
-    <tr class="divetitle">
-      <td>{$logbook_altitude}</td>
       <td>{$logbook_airtemp}</td>
       <td>{$logbook_watertemp}</td>
       <td>&nbsp;</td>
     </tr>
 
     <tr class="divedetails">
-    {if $Altitude != ''}
-      <td>{$Altitude}</td>
+    {if $Weather != ''}
+      <td>{$Weather}</td>
     {else}
       <td>-</td>
     {/if}
@@ -349,6 +380,34 @@
 
     {if $UWCurrent != ''}
       <td>{$UWCurrent}</td>
+    {else}
+      <td>-</td>
+    {/if}
+      <td>&nbsp;</td>
+    </tr>
+
+    {* Show water visibility *}
+    <tr class="divetitle">
+      <td>{$logbook_visibility}</td>
+      <td>{$logbook_vishor}</td>
+      <td>{$logbook_visver}</td>
+    </tr>
+
+    <tr class="divedetails">
+    {if $Visibility != ''}
+      <td>{$Visibility}</td>
+    {else}
+      <td>-</td>
+    {/if}
+
+    {if $VisHor != ''}
+      <td>{$VisHor}</td>
+    {else}
+      <td>-</td>
+    {/if}
+
+    {if $VisVer != ''}
+      <td>{$VisVer}</td>
     {else}
       <td>-</td>
     {/if}
