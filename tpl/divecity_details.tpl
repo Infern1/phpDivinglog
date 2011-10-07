@@ -6,36 +6,36 @@
       <td colspan="4">{$pagetitle}</td>
     </tr>
 
-    {* Show main country details *}
+    {* Show main city details *}
     <tr class="divetitle">
       <td colspan="2">{$city_name}</td>
-      <td colspan="2">{$city_map}</td>
+      <td colspan="2">{$city_type}</td>
     </tr>
 
     <tr class="divedetails">
-    {if $Country != ''}
+    {if $City != ''}
       <td colspan="2">{$City}</td>
     {else}
       <td colspan="2">-</td>
     {/if}
 
-    {if $MapPathurl != ''}
-      <td colspan="2" rowspan="5"><img src="{$app_path}/{$MapPathurl}" border="0" title="{$city_flag_linktitle}"></td>
-    {else}
-      <td colspan="2" rowspan="5">-</td>
-    {/if}
-    </tr>
-
-    <tr class="divetitle">
-      <td colspan="2">{$city_type}</td>
-    </tr>
-
-    <tr class="divedetails">
     {if $Type != ''}
       <td colspan="2">{$Type}</td>
     {else}
       <td colspan="2">-</td>
-    {/if} 
+    {/if}
+    </tr>
+
+    <tr class="divetitle">
+      <td colspan="4">{$city_map}</td>
+    </tr>
+
+    <tr class="divedetails">
+    {if $MapPathurl != ''}
+      <td colspan="4"><img src="{$app_path}/{$MapPathurl}" border="0" title="{$city_flag_linktitle}"></td>
+    {else}
+      <td colspan="4">-</td>
+    {/if}
     </tr>
 
     {* Comments *}

@@ -859,17 +859,17 @@ class TopLevelMenu {
         $t->assign('dive_log_linktitle', $_lang['dive_log_linktitle']);
         $t->assign('dive_log', $_lang['dive_log']);
         $t->assign('dive_sites_linktitle', $_lang['dive_sites_linktitle']);
-        $t->assign('dive_sites',$_lang['dive_sites']);
+        $t->assign('dive_sites', $_lang['dive_sites']);
         $t->assign('dive_equip_linktitle', $_lang['dive_equip_linktitle']);
-        $t->assign('dive_equip',$_lang['dive_equip']);
+        $t->assign('dive_equip', $_lang['dive_equip']);
         $t->assign('dive_shops_linktitle', $_lang['dive_shops_linktitle']);
-        $t->assign('dive_shops',$_lang['dive_shops']);
+        $t->assign('dive_shops', $_lang['dive_shops']);
         $t->assign('dive_trips_linktitle', $_lang['dive_trips_linktitle']);
-        $t->assign('dive_trips',$_lang['dive_trips']);
+        $t->assign('dive_trips', $_lang['dive_trips']);
         $t->assign('dive_country_linktitle', $_lang['dive_country_linktitle']);
-        $t->assign('dive_countries',$_lang['dive_countries']);
+        $t->assign('dive_countries', $_lang['dive_countries']);
         $t->assign('dive_city_linktitle', $_lang['dive_city_linktitle']);
-        $t->assign('dive_cities',$_lang['dive_cities']);
+        $t->assign('dive_cities', $_lang['dive_cities']);
         $t->assign('dive_stats_linktitle', $_lang['dive_stats_linktitle']);
         $t->assign('dive_stats', $_lang['dive_stats']);
         $t->assign('dive_gallery_linktitle', $_lang['dive_gallery_linktitle']);
@@ -894,7 +894,7 @@ class TopLevelMenu {
         // Dive Sites, Dive Statistics
         $t->assign('diver_choice_linktitle', $_lang['diver_choice_linktitle']);
         $t->assign('diver_choice', $_lang['diver_choice']);
-        $t->assign('dive_log',$_lang['dive_log']);
+        $t->assign('dive_log', $_lang['dive_log']);
         $t->assign('dive_log_linktitle', $_lang['dive_log_linktitle']);
         $t->assign('dive_sites_linktitle', $_lang['dive_sites_linktitle']);
         $t->assign('dive_sites', $_lang['dive_sites'] );
@@ -4430,7 +4430,7 @@ class Divecountry{
             } else {
                 $user = new User();
                 $this->table_prefix = $user->get_table_prefix();
-                $this->divetrip_nr = $request->get_divecountry_nr();
+                $this->divecountry_nr = $request->get_divecountry_nr();
             }
         } else {
             $this->request_type = 3;
@@ -4526,7 +4526,7 @@ class Divecountry{
     function set_main_divecountry_details() {
         global $globals, $_config, $t, $_lang; /*{{{*/
         // $this->get_divecountry_location_details(); 
-        // Show main trip details
+        // Show main country details
         $result = $this->result;
 
         $t->assign('pagetitle',$_lang['country_details_pagetitle'].$result['Country']);
@@ -4756,7 +4756,7 @@ class Divecountry{
     function get_divecountry_overview_table($sql) {
         global $db, $t, $_lang, $globals, $_config; /*{{{*/
         // Get the page header
-        // Get the details of the trips to be listed
+        // Get the details of the countries to be listed
         $countrylist_query = $sql;
         $t->assign('country_title_country', $_lang['country_title_country']);
         $t->assign('country_title_count', $_lang['country_title_count']);
@@ -4835,6 +4835,8 @@ class Divecity{
     var $user_id;
     var $divecity_nr;
     var $result;
+    var $result_sites;
+    var $result_dives;
     var $city;
     var $city_count;
     var $sites;
@@ -5005,12 +5007,6 @@ class Divecity{
             $t->assign('Type','-');
         }
 
-        if (isset($result['Country']) && ($result['Country'] != "")) {
-            $t->assign('Country', $result['Country']);
-        } else {
-            $t->assign('Country','-');
-        }
-
         // Show the map
         if (isset($result['MapPath']) && ($result['MapPath'] != "")) {
             $t->assign('MapPath', $result['MapPath']);
@@ -5159,10 +5155,9 @@ class Divecity{
     function get_divecity_overview_table($sql) {
         global $db, $t, $_lang, $globals, $_config; /*{{{*/
         // Get the page header
-        // Get the details of the trips to be listed
+        // Get the details of the cities to be listed
         $citylist_query = $sql;
         $t->assign('city_title_city', $_lang['city_title_city']);
-        $t->assign('city_title_country', $_lang['city_title_country']);
         $t->assign('city_title_dives', $_lang['city_title_count']);
         $t->assign('logbook_city_linktitle', $_lang['logbook_city_linktitle'] );
 
@@ -5208,6 +5203,8 @@ class Divecity{
 
         $grid->showColumn('City', $_lang['city_title_city']);
         $grid->setColwidth('City',"250");
+        $grid->showColumn('Type', $_lang['city_title_type']);
+        $grid->setColwidth('Type',"50");
         $grid->showColumn('Country', $_lang['city_title_country']);
         $grid->setColwidth('Country',"200");
         $grid->showColumn('Dives', $_lang['city_title_count']);

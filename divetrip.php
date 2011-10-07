@@ -39,7 +39,7 @@ if ($divetrip->get_request_type() == 1) {
     $t->assign('pagetitle',$pagetitle);
     $t->assign('colspanlinks','4');
     
-    // First, Previous, Next, Last links and Dive #
+    // First, Previous, Next, Last links and Trip #
     $links->get_std_links();
     $links->get_nav_links($request);
     // Show main dive trip details

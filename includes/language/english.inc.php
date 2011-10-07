@@ -373,11 +373,14 @@ $_lang['city_sect_comments'] = "Comments:";
 $_lang['city_map_linktitle'] = "Map of ";
 $_lang['city_map_link'] = "View map";
 
+$_lang['citytype'] = array("City", "Island", "Hotel", "Live Aboard", "Camping", "Day Trip");
+
 // Dive City List related values
 
 $_lang['city_none'] = "No dive cities / islands are currently available.";
 
 $_lang['city_title_city'] = "City / Island";
+$_lang['city_title_type'] = "Type";
 $_lang['city_title_country'] = "Country";
 $_lang['city_title_count'] = "Dives";
 
