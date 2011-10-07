@@ -4835,13 +4835,13 @@ class Divecity{
     var $user_id;
     var $divecity_nr;
     var $result;
-    var $result_shop;
-    var $result_city;
     var $city;
-    var $shop;
-    var $dives;
     var $city_count;
-    var $triplist;
+    var $sites;
+    var $sites_count;
+    var $dives;
+    var $dives_count;
+    var $citylist;
     var $divecity_data;
     var $request_type; // request_type = 0 overview, request_type = 1 details
 
