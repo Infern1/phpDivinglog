@@ -5062,7 +5062,7 @@ class Divecity{
      */
     function set_dives_in_city() {
         global $globals, $_config, $t, $_lang; /*{{{*/
-        $this->get_dives_in_citry();
+        $this->get_dives_in_city();
         // Show city dives if we have them
         if ($this->dive_count == 1) {
             $dives[0] = $this->dives;
