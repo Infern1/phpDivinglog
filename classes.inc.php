@@ -33,6 +33,7 @@ class HandleRequest {
     var $diveshop_nr;
     var $divecountry_nr;
     var $divecity_nr;
+    var $special_req;
 
     /**
      * requested_page contains the requested page of the paginate
@@ -290,10 +291,22 @@ class HandleRequest {
             $split_request = GetRequestVar($this->request_uri, $this->request_file_depth);
             if (!empty($split_request[0])) {
                 if (isset($split_request[1]) && $split_request[1] == 'list' ) {
+                    //var_dump($split_request);
                     $this->view_request = 0;
-                    if (isset($split_request[2])) {
+                    if ($_config['view_type'] == 2 && isset($split_request[2]) && !isset($split_request[3]) ) {
+                        //Get the paginate page only if view is type 2
                         $this->requested_page = $split_request[2];
+                    } elseif($_config['view_type'] == 1 && isset($split_request[2])){
+                        //There some special request so get this info
+                        //Set the special request so the class will be able to check for it
+                        $this->special_req = $split_request[2];
+                    } elseif($_config['view_type'] == 2 && isset($split_request[2]) && isset($split_request[3]) ) {
+                        $this->requested_page = $split_request[3];
+                        //There some special request so get this info
+                        //Set the special request so the class will be able to check for it
+                        $this->special_req = $split_request[2];
                     }
+
                 } elseif (isset($split_request[1])) {
                     $t->assign('dive_detail' ,1);
                     $this->view_request = 1;    
@@ -2901,6 +2914,7 @@ class Equipment{
     var $result;
     var $table_prefix;
     var $result_gearlist;
+    var $show_equip_service; // if this is set show only equipment which needs service
     var $request_type; // request_type = 0 overview, request_type = 1 details
    
     function Equipment() {
@@ -2934,6 +2948,12 @@ class Equipment{
             } else {
                 $this->request_type = 0;
                 $this->requested_page = $request->get_requested_page();
+                //Check if we need to show only the equipment with the service tag
+                if(isset($request->special_req) && $request->special_req == 'service'){
+                    $this->show_equip_service = 1;
+                } else {
+                    $this->show_equip_service = 0;
+                }
             }
             if ($this->multiuser) {
                 $this->user_id = $request->get_user_id();
@@ -3010,12 +3030,12 @@ class Equipment{
     /*}}}*/
     }
 
-
-
-
-
-
-
+    /**
+     * set_main_equipment_details 
+     * 
+     * @access public
+     * @return void
+     */
     function set_main_equipment_details() {
         global $t, $_config, $globals, $_lang; /*{{{*/
         $result = $this->result; 
@@ -3206,7 +3226,7 @@ class Equipment{
      */
     function equip_has_photo($value, $row) {
         global $_config, $_lang;
-        if ($row['PhotoPath'] != '') {
+        if (isset($row['PhotoPath']) && $row['PhotoPath'] != '') {
             return '<img src="'.$_config['web_root'].'/images/photo_icon.gif" border="0" alt="'.$_lang['equip_photo_linktitle'].$row['Object'].'" title="'.$_lang['equip_photo_linktitle'].$row['Object'].'">';
         } else {
             return '&nbsp;';
@@ -3222,7 +3242,7 @@ class Equipment{
     function get_equipment_overview() {
         global $t, $_lang, $globals, $_config; /*{{{*/
 
-// TODO: Count the equipment and display a message if none
+        // TODO: Count the equipment and display a message if none
         $t->assign('equip_none', $_lang['equip_none']);
 
         /**
@@ -3247,7 +3267,11 @@ class Equipment{
      */
     function get_equipment_overview_table() {
         global $db, $t, $_lang, $globals, $_config; /*{{{*/
-        $equiplist_query = sql_file('equiplist.sql');
+        if($this->show_equip_service == 1){
+            $equiplist_query = sql_file('equipservice.sql');
+        } else {
+            $equiplist_query = sql_file('equiplist.sql');
+        }
         // $t->assign('equip_none', $_lang['equip_none'] );
         $t->assign('equip_title_object', $_lang['equip_title_object'] );
         $t->assign('equip_title_manufacturer', $_lang['equip_title_manufacturer'] );
@@ -3285,7 +3309,11 @@ class Equipment{
      */
     function get_equipment_overview_grid() {
         global $t, $_lang, $globals, $_config; /*{{{*/
-        $sql = sql_file('equiplist.sql');
+        if($this->show_equip_service == 1){
+            $sql = sql_file('equipservice.sql');
+        } else {
+            $sql = sql_file('equiplist.sql');
+        }
         $data = parse_mysql_query(0,$sql);;
         $GridClass = new TableGrid($this->user_id,$data);
         $grid = $GridClass->get_grid_class();
