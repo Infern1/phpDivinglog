@@ -20,7 +20,7 @@
     {/if}
 
     {if $FlagPathurl != ''}
-      <td colspan="2" rowspan="5"><img src="{$app_path}/{$FlagPathurl}" border="0" title="{$country_flag_linktitle}"></td>
+      <td colspan="2" rowspan="5"><img src="{$app_path}/{$FlagPathurl}" border="0" alt="{$country_flag_linktitle}" title="{$country_flag_linktitle}"></td>
     {else}
       <td colspan="2" rowspan="5">-</td>
     {/if}
