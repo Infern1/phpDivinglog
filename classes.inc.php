@@ -5146,6 +5146,23 @@ class Divecity{
     } 
 
     /**
+     * city_type_convert 
+     * 
+     * @param mixed $value 
+     * @param mixed $row 
+     * @access public
+     * @return void
+     */
+    function city_type_convert($value, $row) {
+        global $_config, $_lang;
+        if (($row['Type'] != '') && ($row['Type'] >= 0) && ($row['Type'] <= 5)) {
+            return $_lang['citytype'][$row['Type']];
+        } else {
+            return '-';
+        }
+    }
+
+    /**
      * get_divecity_overview 
      * 
      * @access public
@@ -5186,6 +5203,8 @@ class Divecity{
         // Get the details of the cities to be listed
         $citylist_query = $sql;
         $t->assign('city_title_city', $_lang['city_title_city']);
+        $t->assign('city_title_type', $_lang['city_title_type']);
+        $t->assign('city_title_country', $_lang['city_title_country']);
         $t->assign('city_title_dives', $_lang['city_title_count']);
         $t->assign('logbook_city_linktitle', $_lang['logbook_city_linktitle'] );
 
@@ -5231,13 +5250,16 @@ class Divecity{
 
         $grid->showColumn('City', $_lang['city_title_city']);
         $grid->setColwidth('City',"250");
-        $grid->showColumn('Type', $_lang['city_title_type']);
-        $grid->setColwidth('Type',"50");
+        $grid->showCustomColumn("type", $_lang['city_title_type']);
+        $grid->setColwidth('Type',"100");
         $grid->showColumn('Country', $_lang['city_title_country']);
-        $grid->setColwidth('Country',"200");
+        $grid->setColwidth('Country',"175");
         $grid->showColumn('Dives', $_lang['city_title_count']);
-        $grid->setColwidth('Dives',"50");
+        $grid->setColwidth('Dives',"25");
         $grid->setRowActionFunction("action");
+
+        $methodVariable = array($this, 'city_type_convert'); 
+        $grid->setCallbackFunction("type", $methodVariable);
 
         $grid_ret = $grid->render(TRUE); 
         $t->assign('grid_display' ,1);
