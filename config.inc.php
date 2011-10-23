@@ -76,7 +76,7 @@ $_config['embed_mode'] = false;
 /**
  * when view_type = 1 grid with ajax is displayed, view_type = 2 old table mode 
  */
-$_config['view_type'] = 1;
+$_config['view_type'] = 2;
 
 /**
  * When multiuser is set to true, you need to define the table prefixes
