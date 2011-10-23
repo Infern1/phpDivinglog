@@ -32,7 +32,8 @@
 
     <tr class="divedetails">
     {if $MapPathurl != ''}
-      <td colspan="4"><img src="{$app_path}/{$MapPathurl}" border="0" title="{$city_flag_linktitle}"></td>
+      <td colspan="4"><img src="{$app_path}/{$MapPathurl}" border="0" 
+        alt="{$city_map_linktitle}" title="{$city_map_linktitle}"></td>
     {else}
       <td colspan="4">-</td>
     {/if}

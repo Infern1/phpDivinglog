@@ -5028,8 +5028,8 @@ class Divecity{
             $t->assign('City','-');
         }
 
-        if (isset($result['Type']) && ($result['Type'] != "")) {
-            $Type = $result['Type'];
+        if (isset($result['Type']) && ($result['Type'] >= 0) && ($result['Type'] <= 5)) {
+            $Type = $_lang['citytype'][$result['Type']];
             $t->assign('Type', $Type);
         } else {
             $t->assign('Type','-');
@@ -5039,7 +5039,7 @@ class Divecity{
         if (isset($result['MapPath']) && ($result['MapPath'] != "")) {
             $t->assign('MapPath', $result['MapPath']);
             $t->assign('MapPathurl', $_config['mappath_web'] . $result['MapPath']);
-            $t->assign('city_map_linktitle', $_lang['city_map_linktitle']. $result['City']);
+            $t->assign('city_map_linktitle', $_lang['city_map_linktitle'] . $result['City']);
         } else {
             $t->assign('MapPath','');
             $t->assign('MapPathurl','');

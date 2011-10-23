@@ -356,7 +356,7 @@ $_lang['dtrip_title_photo'] = "Pic";
 
 $_lang['city_details_pagetitle'] = "Dive City / Island - ";
 $_lang['city_sect_comments'] = "Comments:";
-$_lang['city_sect_activity'] = "Diving Activity in ";
+$_lang['city_sect_activity'] = "Diving Activity at ";
 
 $_lang['dive_city_pagetitle'] = "City / Island - ";
 
@@ -365,6 +365,8 @@ $_lang['city_type'] = "Type:";
 $_lang['city_country'] = "Country:";
 $_lang['city_map'] = "Map:";
 
+$_lang['city_site_single'] = " dive site at this City / Island:";
+$_lang['city_site_plural'] = " dive sites at this City / Island:";
 $_lang['city_dive_single'] = " dive at this City / Island:";
 $_lang['city_dive_plural'] = " dives at this City / Island:";
 
