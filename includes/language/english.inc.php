@@ -517,6 +517,8 @@ $_lang['country_gmt_show'] = "GMT";
 
 $_lang['country_trip_single'] = " dive trip in this Country:";
 $_lang['country_trip_plural'] = " dive trips in this Country:";
+$_lang['country_cities_single'] = " dive city/island in this Country:";
+$_lang['country_cities_plural'] = " dive cities/islands in this Country:";
 $_lang['country_site_single'] = " dive site in this Country:";
 $_lang['country_site_plural'] = " dive sites in this Country:";
 $_lang['country_dive_single'] = " dive in this Country:";

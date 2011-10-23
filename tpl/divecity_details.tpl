@@ -65,10 +65,10 @@
       {foreach from=$sites item=site}
         {if isset($multiuser_id)}
         <a href="{$app_path}/divesite.php{$sep1}{$multiuser_id}{$sep2}{$site.PlaceID}"
-title="{$dsite_number_title}{$site.PlaceID} - {$site.Place}">{if $site.Place == ''}{$site.PlaceID}{else}{$site.Place}{/if}</a>{if !$site@last}{if $comma_separated},{else}&nbsp;{/if}{/if}
+title="{$dsite_number_title}{$site.PlaceID} - {$site.Place}">{if $site.Place == ''}{$site.PlaceID}{else}{$site.Place}{/if}</a>{if !$site@last}{if $comma_separated}{$comma_separator}{else}&nbsp;{/if}{/if}
         {else}
         <a href="{$app_path}/divesite.php{$sep2}{$site.PlaceID}"
-title="{$dsite_number_title}{$site.PlaceID} - {$site.Place}">{if $site.Place == ''}{$site.PlaceID}{else}{$site.Place}{/if}</a>{if !$site@last}{if $comma_separated},{else}&nbsp;{/if}{/if}
+title="{$dsite_number_title}{$site.PlaceID} - {$site.Place}">{if $site.Place == ''}{$site.PlaceID}{else}{$site.Place}{/if}</a>{if !$site@last}{if $comma_separated}{$comma_separator}{else}&nbsp;{/if}{/if}
         {/if}
       {/foreach}
       </td>
@@ -86,10 +86,10 @@ title="{$dsite_number_title}{$site.PlaceID} - {$site.Place}">{if $site.Place == 
       {foreach from=$dives item=dive}
         {if isset($multiuser_id)}
         <a href="{$app_path}/index.php{$sep1}{$multiuser_id}{$sep2}{$dive}"
-title="{$dlog_number_title}{$dive}">{$dive}</a>{if !$dive@last}{if $comma_separated},{else}&nbsp;{/if}{/if}
+title="{$dlog_number_title}{$dive}">{$dive}</a>{if !$dive@last}{if $comma_separated}{$comma_separator}{else}&nbsp;{/if}{/if}
         {else}
         <a href="{$app_path}/index.php{$sep2}{$dive}"
-title="{$dlog_number_title}{$dive}">{$dive}</a>{if !$dive@last}{if $comma_separated},{else}&nbsp;{/if}{/if}
+title="{$dlog_number_title}{$dive}">{$dive}</a>{if !$dive@last}{if $comma_separated}{$comma_separator}{else}&nbsp;{/if}{/if}
         {/if}
       {/foreach}
       </td>

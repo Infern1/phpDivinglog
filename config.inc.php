@@ -133,6 +133,7 @@ $_config['equipment_service_warning'] = 30;
  * should be comma separated.
  */
 $_config['comma_separated'] = true;
+$_config['comma_separator'] = ' |';
 
 /**
  * Enable thumbs  
