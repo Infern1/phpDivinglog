@@ -2540,8 +2540,10 @@ class Divesite{
                 $citydetails = parse_mysql_query('onecity.sql');
                 if ($globals['sql_num_rows'] == 0) {
                     $this->city = $countrycity['City'];
+                    $this->cityid = $countrycity['CityID'];
                 } else {
                     $this->city = $citydetails['City'];
+                    $this->cityid = $citydetails['ID'];
                 }
             }
         }
@@ -2589,7 +2591,14 @@ class Divesite{
             $Place = "-";
         }
         $t->assign('Place', $Place);
-        $t->assign('city', $this->city );
+
+        if (!empty($this->city)) {
+            $t->assign('dive_city_nr', $this->cityid);
+            $t->assign('dive_city',$this->city);
+            $t->assign('logbook_city_linktitle', $_lang['logbook_city_linktitle']);
+        } else {
+            $t->assign('dive_city','-');
+        }
 
         if (!empty($this->country)) {
             $t->assign('dive_country_nr', $this->countryid);
