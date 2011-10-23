@@ -1396,7 +1396,9 @@ class Divelog {
         }
 
         if (!empty($result['City'])) {
+            $t->assign('dive_city_nr', $result['CityID']);
             $t->assign('dive_city', $result['City']);
+            $t->assign('logbook_city_linktitle', $_lang['logbook_city_linktitle']);
         } else {
             $t->assign('dive_city','-');
         }

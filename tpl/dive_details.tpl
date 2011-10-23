@@ -97,8 +97,12 @@
       <td colspan="2">-</td>
     {/if} 
 
-    {if $dive_city != ''} 
-      <td colspan="2">{$dive_city}</td>
+    {if isset($dive_city_nr)} 
+      {if isset($multiuser_id)}
+      <td colspan="2"><a href="{$app_path}/divecity.php{$sep1}{$multiuser_id}{$sep2}{$dive_city_nr}" title="{$dive_city} {$logbook_city_linktitle}">{$dive_city}</a></td>
+      {else}
+      <td colspan="2"><a href="{$app_path}/divecity.php{$sep2}{$dive_city_nr}" title="{$dive_city} {$logbook_city_linktitle}">{$dive_city}</a></td>
+      {/if}
     {else}
       <td colspan="2">-</td>
     {/if}
