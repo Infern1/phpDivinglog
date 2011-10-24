@@ -14,7 +14,7 @@ lang : {
 	loadingTitle : 'Click to cancel',
 	focusTitle : 'Click to bring to front',
 	fullExpandTitle : 'Expand to actual size (f)',
-	creditsText : 'Powered by <i>Highslide JS</i>',
+	creditsText : '',  // 'Powered by <i>Highslide JS</i>',
 	creditsTitle : 'Go to the Highslide JS homepage',
 	restoreTitle : 'Click to close image, click and drag to move. Use arrow keys for next and previous.'
 },
