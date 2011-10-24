@@ -3254,6 +3254,7 @@ class Equipment{
 
         // TODO: Count the equipment and display a message if none
         $t->assign('equip_none', $_lang['equip_none']);
+        $t->assign('pagetitle', $_lang['dive_equip']);
 
         /**
          * When view_type = 1 display the ajax grid, if type = 2 display old fashioned table 
@@ -3265,7 +3266,6 @@ class Equipment{
         } else {
             echo '<strong>ERROR: No view_type defined!</strong><br>';
         }
-        $t->assign('pagetitle',$_lang['dive_equip']);
     /*}}}*/
     }
 
@@ -3280,6 +3280,7 @@ class Equipment{
         if ($this->show_equip_service == 1) {
             $equiplist_query = sql_file('equipservice.sql');
             $t->assign('equipment_service_warning', $_lang['equip_service_warning']);
+            $t->assign('pagetitle', $_lang['equip_service_warning']);
         } else {
             $equiplist_query = sql_file('equiplist.sql');
         }
@@ -3324,6 +3325,7 @@ class Equipment{
         if ($this->show_equip_service == 1) {
             $sql = sql_file('equipservice.sql');
             $t->assign('equipment_service_warning', $_lang['equip_service_warning']);
+            $t->assign('pagetitle', $_lang['equip_service_warning']);
         } else {
             $sql = sql_file('equiplist.sql');
         }

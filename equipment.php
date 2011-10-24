@@ -33,11 +33,6 @@ global $_config;
 
 if ($equipment->get_request_type() == 1) {
     $t->assign('equipment_id', $equipment->get_equipment_nr());
-    /**
-     * Get the page header 
-     */
-    $pagetitle = $_lang['equip_details_pagetitle'].$result['Object'];
-    $t->assign('pagetitle',$pagetitle);
     $t->assign('colspanlinks','4');
 
     // First, Previous, Next, Last links and Dive #
@@ -52,14 +47,10 @@ if ($equipment->get_request_type() == 1) {
 } elseif ($equipment->get_request_type() == 0) {
     $links->get_ovv_links();
     $equipment->get_equipment_overview();
-    /**
-     * Get the page header 
-     */
-    $pagetitle = $_lang['dive_equip'];
-    $t->assign('pagetitle',$pagetitle);
 
 } elseif ($equipment->get_request_type() == 3) {
     $equipment->get_overview_divers();
+
 } else {
     echo "strange...";
 }
