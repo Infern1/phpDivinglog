@@ -296,11 +296,11 @@ class HandleRequest {
                     if ($_config['view_type'] == 2 && isset($split_request[2]) && !isset($split_request[3]) ) {
                         //Get the paginate page only if view is type 2
                         $this->requested_page = $split_request[2];
-                    } elseif($_config['view_type'] == 1 && isset($split_request[2])){
+                    } elseif ($_config['view_type'] == 1 && isset($split_request[2])) {
                         //There some special request so get this info
                         //Set the special request so the class will be able to check for it
                         $this->special_req = $split_request[2];
-                    } elseif($_config['view_type'] == 2 && isset($split_request[2]) && isset($split_request[3]) ) {
+                    } elseif ($_config['view_type'] == 2 && isset($split_request[2]) && isset($split_request[3]) ) {
                         $this->requested_page = $split_request[3];
                         //There some special request so get this info
                         //Set the special request so the class will be able to check for it
@@ -2962,7 +2962,7 @@ class Equipment{
                 $this->request_type = 0;
                 $this->requested_page = $request->get_requested_page();
                 //Check if we need to show only the equipment with the service tag
-                if(isset($request->special_req) && $request->special_req == 'service'){
+                if (isset($request->special_req) && $request->special_req == 'service') {
                     $this->show_equip_service = 1;
                 } else {
                     $this->show_equip_service = 0;
@@ -3528,7 +3528,7 @@ class Diveshop{
         $result = $this->result;
 
         if (isset($result['ShopType']) && ($result['ShopType'] != '')) {
-            $t->assign('pagetitle',$result['ShopType'].' - '.$result['ShopName']);
+            $t->assign('pagetitle',$result['ShopName'].' - '.$result['ShopType']);
         } else {
             $t->assign('pagetitle',$_lang['dive_shop_pagetitle'].$result['ShopName']);
         }
@@ -5087,8 +5087,6 @@ class Divecity{
         // Show main city details
         $result = $this->result;
 
-        $t->assign('pagetitle',$_lang['city_details_pagetitle'].$result['City']);
-
         $t->assign('divecity_id', $this->divecity_nr);
         $t->assign('city_name', $_lang['city_name']);
         $t->assign('city_type', $_lang['city_type']);
@@ -5105,8 +5103,10 @@ class Divecity{
         if (isset($result['Type']) && ($result['Type'] >= 0) && ($result['Type'] <= 5)) {
             $Type = $_lang['citytype'][$result['Type']];
             $t->assign('Type', $Type);
+            $t->assign('pagetitle',$result['City'].' - '.$Type);
         } else {
             $t->assign('Type','-');
+            $t->assign('pagetitle',$_lang['city_details_pagetitle'].$result['City']);
         }
 
         // Show the map
