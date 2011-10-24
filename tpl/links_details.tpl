@@ -240,7 +240,7 @@ class="divelogcrumbs" title="{$last_country_linktitle}">{$last}</a>
     {/if}
     </div>
 
-{elseif isset($divecityy_not_null)}
+{elseif isset($divecity_not_null)}
     <div class="divelogcrumbs">
     {if isset($multiuser_id)}
     <a href="{$app_path}/divecity.php{$sep1}{$multiuser_id}{$sep2}{$next_city_nr}"

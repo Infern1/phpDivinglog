@@ -1190,7 +1190,6 @@ class TopLevelMenu {
                 $t->assign('last_city_linktitle', $_lang['last_city_linktitle'] );
                 $t->assign('last', $_lang['last'] );
             } 
-
             // End filling the links section
         }
     /*}}}*/
