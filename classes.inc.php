@@ -3025,9 +3025,6 @@ class Equipment{
     /*}}}*/
     }
 
-
-
-
     /**
      * set_equipment_service_info 
      * 
@@ -3281,11 +3278,13 @@ class Equipment{
      */
     function get_equipment_overview_table() {
         global $db, $t, $_lang, $globals, $_config; /*{{{*/
-        if($this->show_equip_service == 1){
+        if ($this->show_equip_service == 1) {
             $equiplist_query = sql_file('equipservice.sql');
+            $t->assign('equipment_service_warning', $_lang['equip_service_warning']);
         } else {
             $equiplist_query = sql_file('equiplist.sql');
         }
+        $t->assign('show_equip_service', $this->show_equip_service);
         // $t->assign('equip_none', $_lang['equip_none'] );
         $t->assign('equip_title_object', $_lang['equip_title_object'] );
         $t->assign('equip_title_manufacturer', $_lang['equip_title_manufacturer'] );
@@ -3323,11 +3322,14 @@ class Equipment{
      */
     function get_equipment_overview_grid() {
         global $t, $_lang, $globals, $_config; /*{{{*/
-        if($this->show_equip_service == 1){
+        if ($this->show_equip_service == 1) {
             $sql = sql_file('equipservice.sql');
+            $t->assign('equipment_service_warning', $_lang['equip_service_warning']);
         } else {
             $sql = sql_file('equiplist.sql');
         }
+        $t->assign('show_equip_service', $this->show_equip_service);
+
         $data = parse_mysql_query(0,$sql);;
         $GridClass = new TableGrid($this->user_id,$data);
         $grid = $GridClass->get_grid_class();

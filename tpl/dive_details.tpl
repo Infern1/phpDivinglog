@@ -1,3 +1,4 @@
+<h1>{$pagetitle}</h1>
 <!-- Include links_details -->
 {include file='links_details.tpl'}
 <!-- End include links_details -->

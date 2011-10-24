@@ -10,9 +10,9 @@
 {elseif isset($diver_overview)}
 {include file='diver_overview.tpl'}
 {else}
-<!-- Include divecite_overview -->
+<!-- Include divecity_overview -->
 {include file='divecity_overview.tpl'}
-<!-- End include divesite_overview -->
+<!-- End include divecity_overview -->
 
 {/if}
 </div>

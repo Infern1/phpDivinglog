@@ -1,2 +1,2 @@
-  <title>phpDivingLog - {$pagetitle} </title>
+  <title>{$pagetitle} - phpDivingLog</title>
 

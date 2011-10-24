@@ -87,7 +87,7 @@ $_lang['dive_gallery_linktitle'] = "Show the Dive Gallery";
 
 // Dive Entry / Logbook related values
 
-$_lang['dive_details_pagetitle'] = "Dive # ";
+$_lang['dive_details_pagetitle'] = "Logbook Entry for Dive # ";
 
 $_lang['logbook_divedate'] = "Date:";
 $_lang['logbook_entrytime'] = "Entry Time:";
@@ -280,7 +280,7 @@ $_lang['dsite_title_photo'] = "Pic";
 
 // Dive Shop related values
 
-$_lang['dive_shop_pagetitle'] = "Shop / Dive Centre - ";
+$_lang['dive_shop_pagetitle'] = "Dive Shop / Centre - ";
 $_lang['shop_sect_activity'] = "Diving Activity with ";
 
 $_lang['shop_name'] = "Name:";
@@ -322,7 +322,7 @@ $_lang['dshop_title_photo'] = "Pic";
 
 // Dive Trip related values
 
-$_lang['dive_trip_pagetitle'] = "Trip / Vacation - ";
+$_lang['dive_trip_pagetitle'] = "Dive Trip / Vacation - ";
 
 $_lang['trip_name'] = "Name:";
 $_lang['trip_shop'] = "Shop:";
@@ -455,6 +455,7 @@ $_lang['cert_instructor'] = "Instructor:";
 $_lang['cert_inst_number'] = "Instructor #:";
 $_lang['cert_scan_front'] = "scan front";
 $_lang['cert_scan_back'] = "scan back";
+
 
 // Dive Equipment related values
 

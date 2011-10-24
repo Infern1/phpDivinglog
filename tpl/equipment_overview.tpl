@@ -1,3 +1,11 @@
+{if $show_equip_service == 1}
+<h1><img src="{$app_path}/images/equipment_service.png"
+height="50" width="50" border="0"
+alt="{$equipment_service_warning}" title="{$equipment_service_warning}">
+{$equipment_service_warning}</h1>
+{else}
+<h1>{$pagetitle}</h1>
+{/if}
 <!-- Include links_overview -->
 {include file='links_overview.tpl'}
 <!-- End include links_overview -->

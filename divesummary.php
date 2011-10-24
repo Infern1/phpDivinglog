@@ -73,5 +73,4 @@ if($request->get_multiuser()){
 
 $t->display('divesummary.tpl');
 
-
 ?>
