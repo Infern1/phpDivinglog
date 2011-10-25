@@ -205,7 +205,7 @@ class HandleRequest {
                 $file_req = $split_request[0];
                 $this->user_id = check_number($split_request[1]);
                 $_SESSION['user_id'] = $this->user_id;
-                if (isset($split_request[2]) && $split_request[2] == 'list') {
+                if (isset($split_request[2]) && ($split_request[2] == 'list')) {
                     $this->view_request = 0;
                     if (isset($split_request[3])) {
                         $this->requested_page = $split_request[3];
@@ -241,12 +241,12 @@ class HandleRequest {
                             $this->dive_nr = check_number($split_request[2]);
                         break;
                     case 'drawpiechart.php':
-                        $this->request_type = 5;
                         $this->diver_choice = false;
+                        $this->request_type = 5;
                         break;                   
                     case 'divesummary.php':
-                        $this->request_type = 5;
                         $this->diver_choice = false;
+                        $this->request_type = 5;
                         break;
                     case 'divegallery.php':
                         $this->request_type = 6;
@@ -257,8 +257,8 @@ class HandleRequest {
                     case 'divetrip.php':
                         if ($this->view_request == 1)
                             $this->divetrip_nr = check_number($split_request[2]);
-                        $this->request_type = 8;
                         $this->diver_choice = true;
+                        $this->request_type = 8;
                         break;
                     case 'diveshop.php':
                         if ($this->view_request == 1)
@@ -290,17 +290,17 @@ class HandleRequest {
             // Find what the client wants to see and if a record is requested set it
             $split_request = GetRequestVar($this->request_uri, $this->request_file_depth);
             if (!empty($split_request[0])) {
-                if (isset($split_request[1]) && $split_request[1] == 'list' ) {
+                if (isset($split_request[1]) && ($split_request[1] == 'list')) {
                     //var_dump($split_request);
                     $this->view_request = 0;
-                    if ($_config['view_type'] == 2 && isset($split_request[2]) && !isset($split_request[3]) ) {
+                    if (($_config['view_type'] == 2) && isset($split_request[2]) && !isset($split_request[3]) ) {
                         //Get the paginate page only if view is type 2
                         $this->requested_page = $split_request[2];
                     } elseif ($_config['view_type'] == 1 && isset($split_request[2])) {
                         //There some special request so get this info
                         //Set the special request so the class will be able to check for it
                         $this->special_req = $split_request[2];
-                    } elseif ($_config['view_type'] == 2 && isset($split_request[2]) && isset($split_request[3]) ) {
+                    } elseif (($_config['view_type'] == 2) && isset($split_request[2]) && isset($split_request[3])) {
                         $this->requested_page = $split_request[3];
                         //There some special request so get this info
                         //Set the special request so the class will be able to check for it
@@ -352,8 +352,8 @@ class HandleRequest {
                         $this->request_type = 7;
                         break;
                     case 'divetrip.php':
-                        $this->request_type = 8;
                         $this->divetrip_nr = $id;
+                        $this->request_type = 8;
                         break;
                     case 'diveshop.php':
                         $this->diveshop_nr = $id;
