@@ -8,6 +8,11 @@
 {* Loop through the array *}
 <table class="divetable" cellspacing="0" cellpadding="0" width="100%">
   <thead>
+{if $pages != ''}
+    <tr>
+      <td colspan="6">{$pages}</td>
+    </tr>
+{/if}
     <tr class="divelogtitle">
         <td width="9%" valign="bottom" >{$dlog_title_number}</td>
         <td width="11%" valign="bottom">{$dlog_title_divedate}</td>
@@ -17,6 +22,13 @@
         <td width="5%" valign="bottom">{$dlog_title_photo}</td>
     </tr>
   </thead>
+{if $pages != ''}
+  <tfoot>
+    <tr>
+      <td colspan="6">{$pages}</td>
+    </tr>
+  </tfoot>
+{/if}
   <tbody>
 {section name=cell_data loop=$cells }
     <tr class="diveoverview">
@@ -47,7 +59,6 @@ title="{$dlog_number_title}{$cells[cell_data].number}" >{$cells[cell_data].numbe
 {/section}
   </tbody>
 </table>
-{$pages}
 {/if}
     {* Show the links *}
 	<!-- Include links_overview -->

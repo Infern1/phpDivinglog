@@ -14,6 +14,11 @@ alt="{$equipment_service_warning}" title="{$equipment_service_warning}">
 {else}
 <table class="divetable" cellspacing="0" cellpadding="0" width="100%">
 <thead>
+{if $pages != ''}
+    <tr>
+      <td colspan="4">{$pages}</td>
+    </tr>
+{/if}
     <tr class="divelogtitle">
         <td width="55%" valign="bottom">{$equip_title_object}</td>
         <td width="35%" valign="bottom">{$equip_title_manufacturer}</td>
@@ -21,6 +26,13 @@ alt="{$equipment_service_warning}" title="{$equipment_service_warning}">
         <td width="5%" valign="bottom">{$equip_title_photo}</td>
     </tr>
 </thead>
+{if $pages != ''}
+  <tfoot>
+    <tr>
+      <td colspan="4">{$pages}</td>
+    </tr>
+  </tfoot>
+{/if}
 <tbody>
 {* Loop through the array *}
 {section name=cell_data loop=$cells }
@@ -47,7 +59,6 @@ alt="{$equipment_service_warning}" title="{$equipment_service_warning}">
 {/section}
 </tbody>
 </table>
-{$pages}
 {/if}
 {*	Show the links *}
 	<!-- Include links_overview -->
