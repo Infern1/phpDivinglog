@@ -118,9 +118,11 @@ title="{$dlog_number_title}{$DepthMinNr}">{$DepthMinNr}</a></td>
 <tr class="divedetails">
  <td colspan="4" align="center">
  {if isset($multiuser_id)}
-  <img src="{$app_path}/drawpiechart.php{$sep1}{$multiuser_id}{$sep2}{$get_nr}" border="0" alt="" title="">
+   <p align="center"><img src="{$app_path}/drawpiechart.php{$sep1}{$multiuser_id}{$sep2}{$get_nr}" 
+   border="0" alt="" title=""></p>
  {else}
-  <img src="{$app_path}/drawpiechart.php" align="center" border="0" alt="" title="">
+   <p align="center"><img src="{$app_path}/drawpiechart.php" 
+   border="0" alt="" title=""></p>
  {/if}
  </td>
 </tr>

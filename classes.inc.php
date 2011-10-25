@@ -4054,8 +4054,6 @@ class Divetrip{
         // Show main trip details
         $result = $this->result;
 
-        $t->assign('pagetitle',$_lang['dive_trip_pagetitle'].$result['TripName']);
-
         $t->assign('divetrip_id', $this->divetrip_nr);
         $t->assign('trip_name', $_lang['trip_name']);
         $t->assign('trip_shop', $_lang['trip_shop']);
@@ -4066,8 +4064,10 @@ class Divetrip{
 
         if (isset($result['TripName']) && ($result['TripName'] != "")) {
             $t->assign('TripName', $result['TripName']);
+            $t->assign('pagetitle', $result['TripName'].$_lang['dive_trip_pagetitle']);
         } else {
             $t->assign('TripName','-');
+            $t->assign('pagetitle', $this->divetrip_nr.$_lang['dive_trip_pagetitle']);
         }
 
         if (isset($result['Rating']) && ($result['Rating'] >= 0) && ($result['Rating'] <= 5)) {

@@ -322,7 +322,7 @@ $_lang['dshop_title_photo'] = "Pic";
 
 // Dive Trip related values
 
-$_lang['dive_trip_pagetitle'] = "Dive Trip / Vacation - ";
+$_lang['dive_trip_pagetitle'] = " - Dive Trip / Vacation";
 
 $_lang['trip_name'] = "Name:";
 $_lang['trip_shop'] = "Shop:";
