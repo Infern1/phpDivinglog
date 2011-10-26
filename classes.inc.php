@@ -3063,6 +3063,7 @@ class Equipment{
         $t->assign('equip_price', $_lang['equip_price']);
         $t->assign('equip_weight', $_lang['equip_weight'] );
         $t->assign('equip_inactive', $_lang['equip_inactive'] );
+        $t->assign('equip_service_warning', $_lang['equip_service_warning'] );
 
         // Show main equipment details
         $t->assign('Object',$result['Object'] );
@@ -3081,14 +3082,22 @@ class Equipment{
             $t->assign('DateR','-');
         }
 
+        $t->assign('equip_datern_warning',false);
         if (isset($result['DateRN']) && ($result['DateRN'] != "")) {
             $t->assign('DateRN', date($_lang['equip_date_format'], strtotime($result['DateRN'])) );
+            if (strtotime("now") > (strtotime($result['DateRN']) - ($_config['equipment_service_warning'] * 86400))) {
+                $t->assign('equip_datern_warning',true);
+            }
         } else {
             $t->assign('DateRN','-');
         }
 
+        $t->assign('equip_o2servicedate_warning',false);
         if (isset($result['O2ServiceDate']) && ($result['O2ServiceDate'] != "")) {
             $t->assign('O2ServiceDate', date($_lang['equip_date_format'], strtotime($result['O2ServiceDate'])) );
+            if (strtotime("now") > (strtotime($result['O2ServiceDate']) - ($_config['equipment_service_warning'] * 86400))) {
+                $t->assign('equip_o2servicedate_warning',true);
+            }
         } else {
             $t->assign('O2ServiceDate','-');
         }
