@@ -15,8 +15,8 @@
     </tr>
 {/if}
     <tr class="divelogtitle">
-    	<td width="80%" valign="bottom">{$country_title_country}</td>
-    	<td width="20%" valign="bottom">{$country_title_count}</td>
+    	<td width="575" valign="bottom">{$country_title_country}</td>
+    	<td width="50" valign="bottom">{$country_title_count}</td>
     </tr>
 </thead>
 {if $pages != ''}

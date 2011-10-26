@@ -2269,7 +2269,6 @@ class Divelog {
     function get_dive_overview_table() {
         global $db, $t, $_lang, $globals, $_config; /*{{{*/
         // Get the details of the dives to be listed
-        // $recentdivelist = parse_mysql_query('recentdivelist.sql');
         if ($_config['length']) {
             $recentdivelist_query = sql_file('recentdivelist-imp.sql');
         } else {
@@ -2282,7 +2281,6 @@ class Divelog {
         $t->assign('dlog_title_divetime', $_lang['dlog_title_divetime']);
         $t->assign('dlog_title_location', $_lang['dlog_title_location']);
         $t->assign('dlog_title_photo', $_lang['dlog_title_photo']);
-
         $t->assign('divepic_linktitle', $_lang['divepic_linktitle']);
 
         $t->assign('logbook_profile', $_lang['logbook_profile']);

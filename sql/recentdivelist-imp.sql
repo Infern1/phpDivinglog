@@ -4,6 +4,6 @@ SELECT  Number,
         ROUND(Depth*3.2808,1) as Depth, 
         Place, 
         City,
-	Profile
+	Profile <> '' AS Profile
 FROM    $_config[table_prefix]Logbook 
 

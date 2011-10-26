@@ -15,10 +15,10 @@
     </tr>
 {/if}
     <tr class="divelogtitle">
-    	<td width="50%" valign="bottom">{$dshop_title_shop}</td>
-    	<td width="15%" valign="bottom">{$dshop_title_type}</td>
-    	<td width="30%" valign="bottom">{$dshop_title_country}</td>
-    	<td width="5%" valign="bottom">{$dshop_title_photo}</td>
+    	<td width="300" valign="bottom">{$dshop_title_shop}</td>
+    	<td width="100" valign="bottom">{$dshop_title_type}</td>
+    	<td width="200" valign="bottom">{$dshop_title_country}</td>
+    	<td width="25" valign="bottom">{$dshop_title_photo}</td>
     </tr>
 </thead>
 {if $pages != ''}

@@ -15,10 +15,10 @@
     </tr>
 {/if}
     <tr class="divelogtitle">
-    	<td valign="bottom" width="250">{$city_title_city}</td>
-        <td valign="bottom" width="100">{$city_title_type}</td>
-        <td valign="bottom" width="200">{$city_title_country}</td>
-        <td valign="bottom" width="50">{$city_title_dives}</td>
+    	<td valign="bottom" width="300">{$city_title_city}</td>
+        <td valign="bottom" width="80">{$city_title_type}</td>
+        <td valign="bottom" width="205">{$city_title_country}</td>
+        <td valign="bottom" width="40">{$city_title_dives}</td>
     </tr>
 </thead>
 {if $pages != ''}
@@ -43,8 +43,6 @@
 {else}
         <td>-</td>
 {/if}
-
-
         <td>{$cells[cell_data].country}</td>
         <td>{$cells[cell_data].dives}</td>
     </tr>

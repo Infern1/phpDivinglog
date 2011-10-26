@@ -4,7 +4,8 @@ SELECT  Number,
         Depth, 
         Place, 
         City,
-	Profile
-FROM    $_config[table_prefix]Logbook 
+	Profile <> '' AS Profile
+FROM    $_config[table_prefix]Logbook
+
 
 

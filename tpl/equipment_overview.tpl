@@ -20,10 +20,10 @@ alt="{$equipment_service_warning}" title="{$equipment_service_warning}">
     </tr>
 {/if}
     <tr class="divelogtitle">
-        <td width="55%" valign="bottom">{$equip_title_object}</td>
-        <td width="35%" valign="bottom">{$equip_title_manufacturer}</td>
-        <td width="5%" valign="bottom">{$equip_title_inactive}</td>
-        <td width="5%" valign="bottom">{$equip_title_photo}</td>
+        <td width="350" valign="bottom">{$equip_title_object}</td>
+        <td width="220" valign="bottom">{$equip_title_manufacturer}</td>
+        <td width="30" valign="bottom">{$equip_title_inactive}</td>
+        <td width="25" valign="bottom">{$equip_title_photo}</td>
     </tr>
 </thead>
 {if $pages != ''}

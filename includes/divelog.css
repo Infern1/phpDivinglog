@@ -6,9 +6,13 @@ body, table, td, th, input, textarea, select {
 /*    text-align: center; */
 }
 
+h1 {
+    font-size: 16px;
+}
+
 div#content {
     text-align: left;
-    width: 700px;
+    width: 625px;
 /*    width: 80%;*/
     margin-right: auto;
     margin-left: auto;
