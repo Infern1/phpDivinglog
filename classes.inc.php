@@ -5302,6 +5302,7 @@ class Divecity{
 
         $t->assign('pages', $paged_data['links']);
         $t->assign('cells', $paged_data['data']);
+        $t->assign('citytypes', $_lang['citytype']);
     /*}}}*/
     }
 

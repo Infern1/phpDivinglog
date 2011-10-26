@@ -17,8 +17,8 @@
     <tr class="divelogtitle">
     	<td valign="bottom" width="250">{$city_title_city}</td>
         <td valign="bottom" width="100">{$city_title_type}</td>
-        <td valign="bottom" width="175">{$city_title_country}</td>
-        <td valign="bottom" width="25">{$city_title_dives}</td>
+        <td valign="bottom" width="200">{$city_title_country}</td>
+        <td valign="bottom" width="50">{$city_title_dives}</td>
     </tr>
 </thead>
 {if $pages != ''}
@@ -38,7 +38,13 @@
         <td><a href="{$app_path}/{$base_page}{$sep2}{$cells[cell_data].id}" 
           title="{$cells[cell_data].city} {$logbook_city_linktitle}">{$cells[cell_data].city}</a></td>
 {/if}
-        <td>{$cells[cell_data].type}</td>
+{if ($cells[cell_data].type >= 0) && ($cells[cell_data].type <= 5)}
+        <td>{$citytypes[$cells[cell_data].type]}</td>
+{else}
+        <td>-</td>
+{/if}
+
+
         <td>{$cells[cell_data].country}</td>
         <td>{$cells[cell_data].dives}</td>
     </tr>
