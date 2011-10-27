@@ -16,20 +16,21 @@ alt="{$equipment_service_warning}" title="{$equipment_service_warning}">
 <thead>
 {if $pages != ''}
     <tr>
-      <td colspan="4">{$pages}</td>
+      <td colspan="5">{$pages}</td>
     </tr>
 {/if}
     <tr class="divelogtitle">
         <td width="350" valign="bottom">{$equip_title_object}</td>
-        <td width="220" valign="bottom">{$equip_title_manufacturer}</td>
+        <td width="180" valign="bottom">{$equip_title_manufacturer}</td>
         <td width="30" valign="bottom">{$equip_title_inactive}</td>
         <td width="25" valign="bottom">{$equip_title_photo}</td>
+        <td width="40" valign="bottom">{$equip_title_service}</td>
     </tr>
 </thead>
 {if $pages != ''}
   <tfoot>
     <tr>
-      <td colspan="4">{$pages}</td>
+      <td colspan="5">{$pages}</td>
     </tr>
   </tfoot>
 {/if}
@@ -52,6 +53,13 @@ alt="{$equipment_service_warning}" title="{$equipment_service_warning}">
 {/if}
 {if $cells[cell_data].photopath != ''}
 <td><img src="{$app_path}/images/photo_icon.gif" border="0" alt="{$equip_photo_linktitle}{$cells[cell_data].object}" title="{$equip_photo_linktitle}{$cells[cell_data].object}"></td>
+{else}
+<td>&nbsp;</td>
+{/if}
+{if $cells[cell_data].service == '1'}
+<td><img src="{$app_path}/images/icon_warning_16.png" 
+border="0" width="16" height="16"
+alt="{$equip_service_warning}" title="{$equip_service_warning}"></td>
 {else}
 <td>&nbsp;</td>
 {/if}

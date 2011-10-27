@@ -3183,7 +3183,7 @@ class Equipment{
               // $t->assign('image_link', '');
             }
         } else {
-                    $t->assign('has_images', '0');
+            $t->assign('has_images', '0');
         // $t->assign('image_link', '');
         }
     /*}}}*/
@@ -3251,6 +3251,25 @@ class Equipment{
     }
 
     /**
+     * equip_sevice_warning 
+     * 
+     * @param mixed $value 
+     * @param mixed $row 
+     * @access public
+     * @return void
+     */
+    function equip_service_warning($value, $row) {
+        global $_config, $_lang;
+        if (isset($row['Service']) && ($row['Service'] == "1")) {
+            return '<img src="'.$_config['web_root'].'/images/icon_warning_16.png" 
+border="0" width="16" height="16"
+alt="'.$_lang['equip_service_warning'].'" title="'.$_lang['equip_service_warning'].'">';
+        } else {
+            return '&nbsp;';
+        }
+    }
+
+    /**
      * get_equipment_overview 
      * 
      * @access public
@@ -3297,6 +3316,7 @@ class Equipment{
         $t->assign('equip_title_manufacturer', $_lang['equip_title_manufacturer'] );
         $t->assign('equip_title_inactive', $_lang['equip_title_inactive'] );
         $t->assign('equip_title_photo', $_lang['equip_title_photo']);
+        $t->assign('equip_title_service', $_lang['equip_title_service']);
 
         $t->assign('logbook_equip_linktitle', $_lang['logbook_equip_linktitle'] );
         $t->assign('equip_photo_linktitle', $_lang['equip_photo_linktitle']);
@@ -3354,17 +3374,22 @@ class Equipment{
         $grid->showColumn('Object', $_lang['equip_title_object']);
         $grid->setColwidth('Object',"350");
         $grid->showColumn('Manufacturer', $_lang['equip_title_manufacturer']);
-        $grid->setColwidth('Manufacturer',"210");
+        $grid->setColwidth('Manufacturer',"180");
         $grid->showColumn('Inactive', $_lang['equip_title_inactive']);
-        $grid->setColwidth('Inactive',"20");
+        $grid->setColwidth('Inactive',"30");
         $grid->showCustomColumn("photo", $_lang['equip_title_photo']);
         $grid->setColwidth('photo',"25");
+        $grid->showCustomColumn("service", $_lang['equip_title_service']);
+        $grid->setColwidth('service',"40");
 
         $methodVariable = array($this, 'equip_has_photo'); 
         $grid->setCallbackFunction("photo", $methodVariable);
 
         $methodVariable = array($this, 'equipment_inactive'); 
         $grid->setCallbackFunction("Inactive", $methodVariable);
+
+        $methodVariable = array($this, 'equip_service_warning'); 
+        $grid->setCallbackFunction("service", $methodVariable);
 
         $grid->setRowActionFunction("action");
         $grid_ret = $grid->render(TRUE); 

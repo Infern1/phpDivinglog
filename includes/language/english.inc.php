@@ -493,6 +493,7 @@ $_lang['equip_title_object'] = "Product";
 $_lang['equip_title_manufacturer'] = "Manufacturer";
 $_lang['equip_title_inactive'] = "Active";
 $_lang['equip_title_photo'] = "Pic";
+$_lang['equip_title_service'] = "Service";
 
 $_lang['equip_service_warning'] = "Dive Equipment due for service";
 
