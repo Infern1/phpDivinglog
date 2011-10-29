@@ -1,8 +1,8 @@
 <table cellspacing="0" cellpadding="0" width="100%">
   <colgroup>
-    <col width="17%">
-    <col width="66%">
-    <col width="17%">
+    <col width="20%">
+    <col width="60%">
+    <col width="20%">
   </colgroup>
   <tr>
     <td align="left">
