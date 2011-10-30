@@ -2351,17 +2351,17 @@ class Divelog {
         $grid->showColumn('Number', $_lang['dlog_title_number']);
         $grid->setColwidth('Number',"35");
         $grid->showColumn('Divedate', $_lang['dlog_title_divedate']);
-        $grid->setColwidth('Divedate',"65");
+        $grid->setColwidth('Divedate',"80");
         $grid->showColumn('Depth', $_lang['dlog_title_depth']);
-        $grid->setColwidth('Depth',"55");
+        $grid->setColwidth('Depth',"60");
         $grid->showColumn('Divetime', $_lang['dlog_title_divetime']);
-        $grid->setColwidth('Divetime',"50");
+        $grid->setColwidth('Divetime',"60");
         $grid->showColumn('Place', $_lang['dlog_title_place']);
         $grid->setColwidth('Place',"200");
         $grid->showColumn('City', $_lang['dlog_title_location']);
-        $grid->setColwidth('City',"150");
+        $grid->setColwidth('City',"160");
         $grid->showCustomColumn("photo", $_lang['dlog_title_photo']);
-        $grid->setColwidth('photo',"25");
+        $grid->setColwidth('photo',"30");
 
         $methodVariable = array($this, 'dive_has_photo'); 
         $grid->setCallbackFunction("photo", $methodVariable);
@@ -2892,11 +2892,11 @@ class Divesite{
             $url = "/divesite.php".$t->getTemplateVars('sep2');
         }
         $grid->showColumn('Place', $_lang['dsite_title_place']);
-        $grid->setColwidth('Place',"220");
+        $grid->setColwidth('Place',"250");
         $grid->showColumn('City', $_lang['dsite_title_city']);
         $grid->setColwidth('City',"200");
         $grid->showColumn('Country', $_lang['dsite_title_country']);
-        $grid->setColwidth('Country',"100");
+        $grid->setColwidth('Country',"120");
         $grid->showColumn('MaxDepth', $_lang['dsite_title_maxdepth']);
         $grid->setColwidth('MaxDepth',"55");
         $grid->setRowActionFunction("action");
@@ -6540,6 +6540,7 @@ class Tank{
     function get_request_type() {
         return $this->request_type;
     }
+
     /**
      * get_equipment_info 
      * 
@@ -6580,7 +6581,6 @@ class Tank{
         }
     /*}}}*/
     }
-
 
 
 /*}}}*/
