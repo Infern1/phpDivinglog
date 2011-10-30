@@ -199,8 +199,13 @@ table a:hover {
     text-decoration: underline !important;
 }
 
+/*
 tfoot th, tfoot td, thead td {
-    font-size: 85%;
+    font-size: 9px;
+}
+
+td.divelog-navigation {
+    font-size: 9px;
 }
 
 .clear {

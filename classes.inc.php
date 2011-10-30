@@ -3919,11 +3919,11 @@ class Diveshop{
         }
 
         $grid->showColumn('ShopName', $_lang['dshop_title_shop']);
-        $grid->setColwidth('ShopName',"200");
+        $grid->setColwidth('ShopName',"300");
         $grid->showColumn('ShopType', $_lang['dshop_title_type']);
-        $grid->setColwidth('ShopType',"80");
+        $grid->setColwidth('ShopType',"100");
         $grid->showColumn('Country', $_lang['dshop_title_country']);
-        $grid->setColwidth('Country',"240");
+        $grid->setColwidth('Country',"200");
         $grid->setRowActionFunction("action");
         $grid->showCustomColumn("photo", $_lang['dshop_title_photo']);
         $grid->setColwidth('photo',"25");
@@ -4404,11 +4404,11 @@ class Divetrip{
         }
 
         $grid->showColumn('TripName', $_lang['dtrip_title_trip']);
-        $grid->setColwidth('ShopName',"210");
+        $grid->setColwidth('ShopName',"250");
         $grid->showColumn('ShopName', $_lang['dtrip_title_shop']);
-        $grid->setColwidth('ShopName',"180");
+        $grid->setColwidth('ShopName',"225");
         $grid->showColumn('Country', $_lang['dtrip_title_country']);
-        $grid->setColwidth('Country',"180");
+        $grid->setColwidth('Country',"125");
         $grid->setRowActionFunction("action");
         $grid->showCustomColumn("photo", $_lang['dtrip_title_photo']);
         $grid->setColwidth('photo',"25");
@@ -4940,7 +4940,7 @@ class Divecountry{
         }
 
         $grid->showColumn('Country', $_lang['country_title_country']);
-        $grid->setColwidth('Country',"450");
+        $grid->setColwidth('Country',"575");
         $grid->showColumn('Dives', $_lang['country_title_count']);
         $grid->setColwidth('Dives',"50");
         $grid->setRowActionFunction("action");
@@ -5360,13 +5360,13 @@ class Divecity{
         }
 
         $grid->showColumn('City', $_lang['city_title_city']);
-        $grid->setColwidth('City',"250");
+        $grid->setColwidth('City',"290");
         $grid->showCustomColumn("type", $_lang['city_title_type']);
         $grid->setColwidth('Type',"100");
         $grid->showColumn('Country', $_lang['city_title_country']);
-        $grid->setColwidth('Country',"175");
+        $grid->setColwidth('Country',"195");
         $grid->showColumn('Dives', $_lang['city_title_count']);
-        $grid->setColwidth('Dives',"25");
+        $grid->setColwidth('Dives',"40");
         $grid->setRowActionFunction("action");
 
         $methodVariable = array($this, 'city_type_convert'); 

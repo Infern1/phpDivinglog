@@ -11,7 +11,7 @@
 <thead>
 {if $pages != ''}
     <tr>
-      <td colspan="4">{$pages}</td>
+      <td colspan="4" class="divelog-navigation">{$pages}</td>
     </tr>
 {/if}
     <tr class="divelogtitle">
@@ -24,7 +24,7 @@
 {if $pages != ''}
   <tfoot>
     <tr>
-      <td colspan="4">{$pages}</td>
+      <td colspan="4" class="divelog-navigation">{$pages}</td>
     </tr>
   </tfoot>
 {/if}

@@ -2,7 +2,7 @@
 {
 /*    font-family: tahoma, verdana, arial, sans;*/
     font-size: 12px;
-    width: 700px;
+    width: 625px;
     border: 1px solid #000000;
 }
 .grid-column-sorted-asc
@@ -53,7 +53,7 @@
     /*background-color: #bcbcbc;*/
     padding: 2px;
     width: 100%;
-    font-size: 11px;
+    font-size: 9px;
 }
 .grid-navigation-item
 {
