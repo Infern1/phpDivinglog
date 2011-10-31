@@ -6491,7 +6491,10 @@ class DivePictures{
                         )
                    );
         $t->assign('num_images_from_dive', $this->num_images_from_dive);
+        $t->assign('divepic_dive_linktitle', $_lang['logbook_dive_linktitle'] );
+        $t->assign('divepic_place_linktitle', $_lang['logbook_place_linktitle'] );
         $t->assign('logbook_place', $_lang['logbook_place'] );
+        $t->assign('divepic_dive_number', $_lang['divepic_dive_number'] );
         $t->assign('dive_details_pagetitle', $_lang['dive_details_pagetitle'] );/*}}}*/
     }
     

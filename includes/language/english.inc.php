@@ -154,6 +154,7 @@ $_lang['dbltank'] = array("Single Cylinder", "Twin Cylinders");
 $_lang['supplytype'] = array("Open Circuit (OC)", "Semi Closed Rebreather (SCR)", "Closed Circuit Rebreather (CCR)");
 $_lang['entry'] = array("Shore", "Boat");
 
+$_lang['logbook_dive_linktitle'] = "details";
 $_lang['logbook_place_linktitle'] = "details";
 $_lang['logbook_equip_linktitle'] = "details";
 $_lang['logbook_country_linktitle'] = "details";
@@ -169,6 +170,8 @@ $_lang['logbook_divedate_format'] = "D, d-M-Y";
 $_lang['logbook_entrytime_format'] = "H:i";
 
 // Dive picture related values
+
+$_lang['divepic_dive_number'] = "Dive # ";
 
 $_lang['divepic_linktitle'] = "Dive has pictures";
 $_lang['divepic_linktitle_pt1'] = "Picture ";

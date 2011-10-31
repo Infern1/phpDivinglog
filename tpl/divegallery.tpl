@@ -12,6 +12,15 @@
         <td colspan="4">{$pagetitle}&nbsp;</td>
     </tr>
 </table>
+
+{if $page_numbers.total > 1}
+<table style="clear: both;" width="100%" cellspacing="0" cellpadding="0">
+    <tr>
+        <td colspan="5" align="center"  class="divelog-navigation">{$pager_links}</td>
+    </tr>
+</table>
+{/if}
+
 {* Show photos per dive *}
 <div id="center_images">
 
@@ -25,18 +34,18 @@
         <img src="{$web_root}/imagesize.php?w={$thumb_width}&img={$i.img_url}" alt="Highslide JS" title="{$i.img_title}" height="{$thumb_height}" width="{$thumb_width}" ></a>
     {/if}
     <div class='highslide-caption'>
-        {$dive_details_pagetitle} 
+        {$divepic_dive_number} 
         {if isset($multiuser_id)}
-            <a href="{$app_path}/index.php{$sep1}{$multiuser_id}{$sep2}{$i.dive_nr}" title="{$dlog_number_title}{$i.dive_nr}">{$i.dive_nr}</a>
+            <a href="{$app_path}/index.php{$sep1}{$multiuser_id}{$sep2}{$i.dive_nr}" title="{$divepic_dive_number} {$i.dive_nr} {$divepic_dive_linktitle}">{$i.dive_nr}</a>
         {else}
-            <a href="{$app_path}/index.php{$sep2}{$i.dive_nr}" title="{$dlog_number_title}{$i.dive_nr}">{$i.dive_nr}</a>
+            <a href="{$app_path}/index.php{$sep2}{$i.dive_nr}" title="{$divepic_dive_number} {$i.dive_nr} {$divepic_dive_linktitle}">{$i.dive_nr}</a>
         {/if}
         <br>
         {$logbook_place}  
         {if isset($multiuser_id)}
-            <a href="{$app_path}/divesite.php{$sep1}{$multiuser_id}{$sep2}{$i.site_nr}" title="{$dlog_number_title}{$i.site_nr}">{$i.site_name}</a>
+            <a href="{$app_path}/divesite.php{$sep1}{$multiuser_id}{$sep2}{$i.site_nr}" title="{$i.site_name} {$divepic_place_linktitle}">{$i.site_name}</a>
         {else}
-            <a href="{$app_path}/divesite.php{$sep2}{$i.site_nr}" title="{$dlog_number_title}{$i.site_nr}">{$i.site_name}</a>
+            <a href="{$app_path}/divesite.php{$sep2}{$i.site_nr}" title="{$i.site_name} {$divepic_place_linktitle}">{$i.site_name}</a>
         {/if}
         <br>
         {$i.img_title} 
@@ -47,18 +56,18 @@
     </div>
     <div class="thumbtext">
     <p>
-    {$dive_details_pagetitle} 
+    {$divepic_dive_number} 
     {if isset($multiuser_id)}
-        <a href="{$app_path}/index.php{$sep1}{$multiuser_id}{$sep2}{$i.dive_nr}" title="{$dlog_number_title}{$i.dive_nr}">{$i.dive_nr}</a>
+        <a href="{$app_path}/index.php{$sep1}{$multiuser_id}{$sep2}{$i.dive_nr}" title="{$divepic_dive_number} {$i.dive_nr} {$divepic_dive_linktitle}">{$i.dive_nr}</a>
     {else}
-        <a href="{$app_path}/index.php{$sep2}{$i.dive_nr}" title="{$dlog_number_title}{$i.dive_nr}">{$i.dive_nr}</a>
+        <a href="{$app_path}/index.php{$sep2}{$i.dive_nr}" title="{$divepic_dive_number} {$i.dive_nr} {$divepic_dive_linktitle}">{$i.dive_nr}</a>
     {/if}
     <br>
     {$logbook_place}<br>  
     {if isset($multiuser_id)}
-        <a href="{$app_path}/divesite.php{$sep1}{$multiuser_id}{$sep2}{$i.site_nr}" title="{$dlog_number_title}{$i.site_nr}">{$i.site_name}</a>
+        <a href="{$app_path}/divesite.php{$sep1}{$multiuser_id}{$sep2}{$i.site_nr}" title="{$i.site_name} {$divepic_place_linktitle}">{$i.site_name}</a>
     {else}
-        <a href="{$app_path}/divesite.php{$sep2}{$i.site_nr}" title="{$dlog_number_title}{$i.site_nr}">{$i.site_name}</a>
+        <a href="{$app_path}/divesite.php{$sep2}{$i.site_nr}" title="{$i.site_name} {$divepic_place_linktitle}">{$i.site_name}</a>
     {/if}
     {if $i.img_date != ''}
         <br>
@@ -74,10 +83,9 @@
 {if $page_numbers.total > 1}
 <table style="clear: both;" width="100%" cellspacing="0" cellpadding="0">
     <tr>
-        <td colspan="5" align="center">{$pager_links}</td>
+        <td colspan="5" align="center"  class="divelog-navigation">{$pager_links}</td>
     </tr>
 </table>
-<br>
 {/if}
 
 <table width="100%" cellspacing="0" cellpadding="0">
