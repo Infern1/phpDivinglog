@@ -1703,13 +1703,12 @@ class Divelog {
         $tanks[$i]['Set'] = $i + 1;
 
         // Start with the basic tank details
-        if (isset($result['Tanktype']) && ($result['Tanktype'] != "")) {
-            $arr_number = $result['Tanktype'] - 1;
-            if ($arr_number >= 0) {
-                $tanks[$i]['Tanktype'] = $_lang['tanktype'][$arr_number];
-            } else {
-                $tanks[$i]['Tanktype'] = '-';
-            }
+        //if (isset($result['Tanktype']) && ($result['Tanktype'] != "")) {
+        //    $arr_number = $result['Tanktype'] - 1;
+        //     if ($arr_number >= 0) {
+        if (isset($result['Tanktype']) && $result['Tanktype'] != "" && isset($_lang['tanktype'][$result['Tanktype'] - 1])) {
+            $t->assign('Tanktype', $_lang['tanktype'][$result['Tanktype'] - 1]);
+            $tanks[$i]['Tanktype'] = $_lang['tanktype'][$arr_number];
         } else {
             $tanks[$i]['Tanktype'] = '-';
         }
@@ -1783,14 +1782,24 @@ class Divelog {
         if (isset($result['O2']) && ($result['O2'] != "")) {
             $o2 = $result['O2'];
             $tanks[$i]['O2'] = $o2.'%';
+            $t->assign('O2', $result['O2'].'%');
         } else {
-            $o2 = $_config['default_o2'];
-            $tanks[$i]['O2'] = $o2.'%';
+            if (isset($result['He']) && $result['He'] != "") {
+                $t->assign('O2','-');
+            } else {
+                $t->assign('O2', $_config['default_o2'].'%');
+                $o2 = $_config['default_o2'];
+                $tanks[$i]['O2'] = $o2.'%';
+            }
         }
 
         if (isset($result['He']) && ($result['He'] != "")) {
+            $t->assign('He', $result['He'].'%');
+            $he = $result['He'];
             $tanks[$i]['He'] = $result['He'].'%';
         } else {
+            $t->assign('He','-');
+            $he = 0;
             $tanks[$i]['He'] = '-';
         }
 
@@ -1814,55 +1823,63 @@ class Divelog {
         // More details of the gas used
         $gasimage = "gas_air.gif";  // default air
         $gasimagealt = "Air";
-        if (($result['O2'] > "21") && ($result['He'] == "") || ($result['He'] == "0")) {
-            $gasimage = "gas_ean.gif";  // EAN
-            $gasimagealt = "EAN ".floor($result['O2']);
-        }
-        if (($result['O2'] == "32") && ($result['He'] == "") || ($result['He'] == "0")) {
-            $gasimage = "gas_n32.gif";  // N32
-            $gasimagealt = "EAN ".floor($result['O2']);
-        }
-        if (($result['O2'] == "36") && ($result['He'] == "") || ($result['He'] == "0")) {
-            $gasimage = "gas_n36.gif";  // N36
-            $gasimagealt = "EAN ".floor($result['O2']);
-        }
-        if (($result['He'] != "") && ($result['He'] != "0")) {
+        //We have validated values check popular mixtures
+		if ($he == 0) {
+			if ($o2 == 32) {
+				$gasimage = "gas_n32.gif";  // N32
+				$gasimagealt = "EAN ".floor($o2);
+			} else if ($o2 == 36) {
+				$gasimage = "gas_n36.gif";  // N36
+				$gasimagealt = "EAN ".floor($o2);
+			} else if ($o2 == 50) {
+				//ToDo: Add special image
+				//$gasimage = "gas_n50.gif";  // N50
+				$gasimage = "gas_ean.gif";  // Other EAN
+				$gasimagealt = "EAN ".floor($o2);
+			} else if ($o2 == 100) {
+				$gasimage = "gas_o2.gif";  // oxygen
+				$gasimagealt = "Oxygen";
+			} else if ($o2 > 21) {
+				$gasimage = "gas_ean.gif";  // Other EAN
+				$gasimagealt = "EAN ".floor($o2);
+			}
+        } else {
             $gasimage = "gas_tri.gif";  // Trimix
             $gasimagealt = "Trimix";
-            if (($result['O2'] != "") && ($result['O2'] != "0")) {
-              $gasimagealt .= ' '.floor($result['O2']) .'/'. floor($result['He']) .'/'. (100 - (floor($result['He']) + floor($result['O2'])));
+            if ($o2 != 0) {
+              $gasimagealt .= ' '.floor($o2) .'/'. floor($he) .'/'. (100 - (floor($he) + floor($o2)));
             }
-        }
-        if (($result['O2'] == "100")) {
-            $gasimage = "gas_o2.gif";  // oxygen
-            $gasimagealt = "Oxygen";
         }
         $gastypeimage = '<img src="'.$_config['web_root'].'/images/'.$gasimage.'" alt="'.$gasimagealt.'" title="'.$gasimagealt.'" border="0" width="19" height="20">';
         $tanks[$i]['GasTypeImage'] = $gastypeimage;
         $tanks[$i]['GasImageAlt'] = $gasimagealt;
 
-        // Calculate MOD
-        if ($_config['length']) {
-            $mod_imperial = 33 * (($maxppo2 / ($o2 / 100)) - 1);
-            $mod = number_format(floor($mod_imperial), 0);
-            $tanks[$i]['MOD'] = $mod."&nbsp;". $_lang['unit_length_short_imp'];
+        //  Calculate MOD and EAD
+        if ($he != 0) { //it is posible my OSTC makes it :D
+            //ToDo: look in OSTC source code how it does it
+            $t->assign('MOD','-');
+            $t->assign('EAD','-');
         } else {
-            $mod_metric = 10 * (($maxppo2 / ($o2 / 100)) - 1);
-            $mod = number_format((floor($mod_metric*10)/10), 1);
-            $tanks[$i]['MOD'] = $mod."&nbsp;". $_lang['unit_length_short'];
+            if ($_config['length']) {
+                $mod_imperial = 33 * (($maxppo2 / ($o2 / 100)) - 1);
+                $mod = number_format(floor($mod_imperial), 0);
+                $ead_imperial = (($mod + 33) * ((1 - ($o2 / 100)) / .79)) - 33;
+                $ead = number_format(ceil($ead_imperial), 0);
+                $t->assign('MOD', $mod."&nbsp;". $_lang['unit_length_short_imp']);
+                $t->assign('EAD', $ead."&nbsp;". $_lang['unit_length_short_imp']);
+                $tanks[$i]['MOD'] = $mod."&nbsp;". $_lang['unit_length_short_imp'];
+                $tanks[$i]['EAD'] = $ead."&nbsp;". $_lang['unit_length_short_imp'];
+            } else {
+                $mod_metric = 10 * (($maxppo2 / ($o2 / 100)) - 1);
+                $mod = number_format((floor($mod_metric*10)/10), 1);
+                $ead_metric = (($mod + 10) * ((1 - ($o2 / 100)) / .79)) - 10;
+                $ead = number_format((ceil($ead_metric*10)/10), 1);
+                $t->assign('MOD', $mod."&nbsp;". $_lang['unit_length_short']);
+                $t->assign('EAD', $ead."&nbsp;". $_lang['unit_length_short']);
+                $tanks[$i]['MOD'] = $mod."&nbsp;". $_lang['unit_length_short'];
+                $tanks[$i]['EAD'] = $ead."&nbsp;". $_lang['unit_length_short'];
+            }
         }
-
-        // Calculate EAD
-        if ($_config['length']) {
-            $ead_imperial = (($mod + 33) * ((1 - ($o2 / 100)) / .79)) - 33;
-            $ead = number_format(ceil($ead_imperial), 0);
-            $tanks[$i]['EAD'] = $ead."&nbsp;". $_lang['unit_length_short_imp'];
-        } else {
-            $ead_metric = (($mod + 10) * ((1 - ($o2 / 100)) / .79)) - 10;
-            $ead = number_format((ceil($ead_metric*10)/10), 1);
-            $tanks[$i]['EAD'] = $ead."&nbsp;". $_lang['unit_length_short'];
-        }
-
         // Calculate END
         if (isset($result['He']) && ($result['He'] != "")) {
             if ($_config['length']) {
@@ -1877,6 +1894,7 @@ class Divelog {
         } else {
             $tanks[$i]['END'] = '-';
         }
+
 
 /*
         if (isset($this->averagedepth) && ($this->averagedepth != "")) {
@@ -2057,7 +2075,7 @@ class Divelog {
         $t->assign('logbook_surfint', $_lang['logbook_surfint'] );
         $t->assign('logbook_exittime', $_lang['logbook_exittime'] );
 
-        if (isset($result['Entry']) && ($result['Entry'] >= 1) && ($result['Entry'] <= 2)) {
+        if (isset($result['Entry']) && $result['Entry'] != "" && isset($_lang['entry'][($result['Entry'] - 1)])) {
             $t->assign('Entry', $_lang['entry'][($result['Entry'] - 1)]);
         } else {
             $t->assign('Entry','-');
@@ -2124,14 +2142,17 @@ class Divelog {
         $t->assign('logbook_weight', $_lang['logbook_weight'] );
         $t->assign('logbook_divesuit', $_lang['logbook_divesuit'] );
         $t->assign('logbook_computer', $_lang['logbook_computer'] );
-
-        if (isset($result['Weight']) && ($result['Weight'] != "")) {
+	
+		$Weight = '-';
+        if (isset($result['Weight']) && $result['Weight'] != "") {
             if ($_config['weight']) {
                 $Weight = KgToLbs($result['Weight'], 0) ."&nbsp;". $_lang['unit_weight_imp'] ;
             } else {
                 $Weight = $result['Weight'] ."&nbsp;". $_lang['unit_weight'] ;
-            }$t->assign('Weight' ,$Weight);
+            }
         }
+		$t->assign('Weight', $Weight);
+
 
         if (isset($result['Divesuit']) && ($result['Divesuit'] != "")) {
             $t->assign('Divesuit', $result['Divesuit'] );
