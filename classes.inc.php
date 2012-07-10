@@ -1708,6 +1708,7 @@ class Divelog {
         //     if ($arr_number >= 0) {
         if (isset($result['Tanktype']) && $result['Tanktype'] != "" && isset($_lang['tanktype'][$result['Tanktype'] - 1])) {
             $t->assign('Tanktype', $_lang['tanktype'][$result['Tanktype'] - 1]);
+            $arr_number = $result['Tanktype'] - 1;
             $tanks[$i]['Tanktype'] = $_lang['tanktype'][$arr_number];
         } else {
             $tanks[$i]['Tanktype'] = '-';
