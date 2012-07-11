@@ -229,6 +229,13 @@ $_config['temp'] = false;
 $_config['volume'] = false;
 
 /**
+ * default O2 % 
+ */
+$_config['default_o2'] = 20.9;
+$_config['default_maxppo2'] = 1.6;
+
+
+/**
  * Lattitue and Longitude format
  * Valid values are:
  * d - degrees - ddd.dddddd
@@ -249,6 +256,11 @@ $_config['default_o2'] = "21";
  */
 define('ABSPATH_DIVELOG', dirname(__FILE__).DIRECTORY_SEPARATOR);
 $_config['app_root']        = ABSPATH_DIVELOG;  
+
+/**
+ * For debug purpose 
+ */
+$_config['enable_debug'] = false;
 
 require_once(ABSPATH_DIVELOG . "settings.php");
 

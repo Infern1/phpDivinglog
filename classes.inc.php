@@ -1480,7 +1480,6 @@ class Divelog {
     function dive_has_pictures($dive_nr) {
         global $_config, $t, $_lang, $globals; /*{{{*/
         $pic_class = new DivePictures;
-        // $pic_class->set_divegallery_info_direct($this->user_id);
         /**
          * We need to get the LogID for this dive 
          */
@@ -1507,6 +1506,7 @@ class Divelog {
         $globals['divenr'] = $dive_nr; 
         $id = parse_mysql_query('divelogid.sql'); 
         $pic_class->get_divegallery_info($id['ID'],0,0,0,0);
+
         $divepics = $pic_class->get_image_link();
         $pics = count($divepics);
         if ($pics > 0) {
@@ -6243,7 +6243,7 @@ class DivePictures{
      */
     function get_divegallery_info($dive_id = 0, $site_id = 0, $equipment_nr = 0, $shop_id = 0, $trip_id = 0) {
         global $globals, $_config, $_lang, $t;/*{{{*/
-        if (($this->multiuser && !empty($this->user_id)) || !$this->multiuser ) {
+        //if (($this->multiuser && !empty($this->user_id)) || !$this->multiuser ) {
             if ($dive_id == 0 && $site_id == 0 && $equipment_nr == 0 && $shop_id == 0 && $trip_id == 0) {
                 $divepics = parse_mysql_query('divepicsall.sql');
                 $base_path = $_config['picpath_web'];
@@ -6379,14 +6379,15 @@ class DivePictures{
 
                 }
             }
-        } else {
-            /**
-             * if the request type is not already set(by divers choice), set it to overview  
-             */
-            if ($this->request_type != 3) {
-                $this->request_type = 0;
-            }
-        }/*}}}*/
+//        } else {
+//            /**
+//             * if the request type is not already set(by divers choice), set it to overview  
+//             */
+//            if ($this->request_type != 3) {
+//                $this->request_type = 0;
+//            }
+//        }
+        /*}}}*/
     }
 
     /**

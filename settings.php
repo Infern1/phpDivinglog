@@ -35,17 +35,17 @@ $_config['pear_path']       = $_config['app_root'] .  'includes/pear';
 /**
  * logbook pics
  */
-$_config['picpath_web']     = "../divelog/images/pictures/"; 
+$_config['picpath_web']     = "images/pictures/"; 
 
 /**
  * place maps
  */
-$_config['mappath_web'] = "../divelog/images/maps/";
+$_config['mappath_web'] = "images/maps/";
 
 /**
  * equipment pics
  */
-$_config['equippath_web'] = "../images/interests/";
+$_config['equippath_web'] = "images/interests/";
 
 /**
  *  country flags
@@ -55,22 +55,22 @@ $_config['flagpath_web'] = "images/flags/";
 /**
  *  user photo and certificate scans
  */
-$_config['userpath_web'] = "../divelog/images/userinfo/"; 
+$_config['userpath_web'] = "images/userinfo/"; 
 
 /**
  *  buddy photos
  */
-$_config['buddypath_web'] = "../divelog/images/buddies/"; 
+$_config['buddypath_web'] = "images/buddies/"; 
 
 /**
  *  shop photos
  */
-$_config['shoppath_web'] = "../divelog/images/shops/"; 
+$_config['shoppath_web'] = "images/shops/"; 
 
 /**
  *  trip photos
  */
-$_config['trippath_web'] = "../divelog/images/trips/"; 
+$_config['trippath_web'] = "images/trips/"; 
 
 /**
  * path to sql select statements 
@@ -134,6 +134,9 @@ require_once 'Pager/Pager.php';
 require_once 'Pager_Wrapper.php';
 require_once 'MDB2.php';
 
+if($_config['enable_debug']){
+    include_once(ABSPATH_DIVELOG . 'includes/dBug.php');
+}
 
 /**
  * Smarty part shouldn't need a change 
