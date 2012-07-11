@@ -27,7 +27,7 @@ DEPENDENCIES:
       Used to overlay dive pictures on the current page.
     - PEAR packages: MDB2 v1.318, Pager v1.26
     - phpMyDatagrid v2007a (http://www.gurusistemas.com/indexdatagrid.php)
-    - SmartyHost v3.1rc1 (http://www.smarty.net/)
+    - SmartyHost v3.1.11 (http://www.smarty.net/)
     - phpMyDatagrid v2007a (http://www.gurusistemas.com/_guru/indexdatagrid.php)
 
 USAGE:

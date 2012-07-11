@@ -94,11 +94,11 @@ class Smarty_Internal_SmartyTemplateCompiler extends Smarty_Internal_TemplateCom
         // init the lexer/parser to compile the template
         $this->lex = new $this->lexer_class($_content, $this);
         $this->parser = new $this->parser_class($this->lex, $this);
-        if (isset($this->smarty->_parserdebug))
+        if ($this->smarty->_parserdebug)
             $this->parser->PrintTrace();
         // get tokens from lexer and parse them
         while ($this->lex->yylex() && !$this->abort_and_recompile) {
-            if (isset($this->smarty->_parserdebug)) {
+            if ($this->smarty->_parserdebug) {
                 echo "<pre>Line {$this->lex->line} Parsing  {$this->parser->yyTokenName[$this->lex->token]} Token " .
                     htmlentities($this->lex->value) . "</pre>";
             }

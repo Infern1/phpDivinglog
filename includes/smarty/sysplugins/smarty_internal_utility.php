@@ -2,7 +2,7 @@
 /**
  * Project:     Smarty: the PHP compiling template engine
  * File:        smarty_internal_utility.php
- * SVN:         $Id$
+ * SVN:         $Id: $
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -87,6 +87,7 @@ class Smarty_Internal_Utility {
                     $_tpl = $smarty->createTemplate($_template_file,null,null,null,false);
                     if ($_tpl->mustCompile()) {
                         $_tpl->compileTemplateSource();
+                        $_count++;
                         echo ' compiled in  ', microtime(true) - $_start_time, ' seconds';
                         flush();
                     } else {
@@ -150,6 +151,7 @@ class Smarty_Internal_Utility {
                     $_config = new Smarty_Internal_Config($_config_file, $smarty);
                     if ($_config->mustCompile()) {
                         $_config->compileConfigSource();
+                        $_count++;
                         echo ' compiled in  ', microtime(true) - $_start_time, ' seconds';
                         flush();
                     } else {
@@ -185,10 +187,32 @@ class Smarty_Internal_Utility {
         $_compile_id = isset($compile_id) ? preg_replace('![^\w\|]+!', '_', $compile_id) : null;
         $_dir_sep = $smarty->use_sub_dirs ? DS : '^';
         if (isset($resource_name)) {
-            $_resource_part_1 = $resource_name . '.php';
-            $_resource_part_2 = $resource_name . '.cache' . '.php';
-        } else {
-            $_resource_part = '';
+            $_save_stat = $smarty->caching;
+            $smarty->caching = false;
+            $tpl = new $smarty->template_class($resource_name, $smarty);
+            $smarty->caching = $_save_stat;
+
+            // remove from template cache
+            $tpl->source; // have the template registered before unset()
+            if ($smarty->allow_ambiguous_resources) {
+                $_templateId = $tpl->source->unique_resource . $tpl->cache_id . $tpl->compile_id;
+            } else {
+                $_templateId = $smarty->joined_template_dir . '#' . $resource_name . $tpl->cache_id . $tpl->compile_id;
+            }
+            if (isset($_templateId[150])) {
+                $_templateId = sha1($_templateId);
+            }
+            unset($smarty->template_objects[$_templateId]);
+
+            if ($tpl->source->exists) {
+                 $_resource_part_1 = basename(str_replace('^', '/', $tpl->compiled->filepath));
+                 $_resource_part_1_length = strlen($_resource_part_1);
+            } else {
+                return 0;
+            }
+
+            $_resource_part_2 = str_replace('.php','.cache.php',$_resource_part_1);
+            $_resource_part_2_length = strlen($_resource_part_2);
         }
         $_dir = $_compile_dir;
         if ($smarty->use_sub_dirs && isset($_compile_id)) {
@@ -196,32 +220,52 @@ class Smarty_Internal_Utility {
         }
         if (isset($_compile_id)) {
             $_compile_id_part = $_compile_dir . $_compile_id . $_dir_sep;
+            $_compile_id_part_length = strlen($_compile_id_part);
         }
         $_count = 0;
-        $_compileDirs = new RecursiveDirectoryIterator($_dir);
+        try {
+            $_compileDirs = new RecursiveDirectoryIterator($_dir);
+        // NOTE: UnexpectedValueException thrown for PHP >= 5.3
+        } catch (Exception $e) {
+            return 0;
+        }
         $_compile = new RecursiveIteratorIterator($_compileDirs, RecursiveIteratorIterator::CHILD_FIRST);
         foreach ($_compile as $_file) {
             if (substr($_file->getBasename(), 0, 1) == '.' || strpos($_file, '.svn') !== false)
                 continue;
+
+            $_filepath = (string) $_file;
+
             if ($_file->isDir()) {
                 if (!$_compile->isDot()) {
                     // delete folder if empty
                     @rmdir($_file->getPathname());
                 }
             } else {
-                if ((!isset($_compile_id) || (strlen((string) $_file) > strlen($_compile_id_part) && substr_compare((string) $_file, $_compile_id_part, 0, strlen($_compile_id_part)) == 0)) &&
-                        (!isset($resource_name) || (strlen((string) $_file) > strlen($_resource_part_1) && substr_compare((string) $_file, $_resource_part_1, - strlen($_resource_part_1), strlen($_resource_part_1)) == 0) ||
-                        (strlen((string) $_file) > strlen($_resource_part_2) && substr_compare((string) $_file, $_resource_part_2, - strlen($_resource_part_2), strlen($_resource_part_2)) == 0))) {
+                $unlink = false;
+                if ((!isset($_compile_id) || (isset($_filepath[$_compile_id_part_length]) && !strncmp($_filepath, $_compile_id_part, $_compile_id_part_length)))
+                    && (!isset($resource_name)
+                        || (isset($_filepath[$_resource_part_1_length])
+                            && substr_compare($_filepath, $_resource_part_1, -$_resource_part_1_length, $_resource_part_1_length) == 0)
+                        || (isset($_filepath[$_resource_part_2_length])
+                            && substr_compare($_filepath, $_resource_part_2, -$_resource_part_2_length, $_resource_part_2_length) == 0))) {
                     if (isset($exp_time)) {
-                        if (time() - @filemtime($_file) >= $exp_time) {
-                            $_count += @ unlink((string) $_file) ? 1 : 0;
+                        if (time() - @filemtime($_filepath) >= $exp_time) {
+                            $unlink = true;
                         }
                     } else {
-                        $_count += @ unlink((string) $_file) ? 1 : 0;
+                        $unlink = true;
                     }
+                }
+
+                if ($unlink && @unlink($_filepath)) {
+                    $_count++;
                 }
             }
         }
+        // clear compiled cache
+        Smarty_Resource::$sources = array();
+        Smarty_Resource::$compileds = array();
         return $_count;
     }
 
@@ -238,7 +282,7 @@ class Smarty_Internal_Utility {
         return $template->used_tags;
     }
 
-    
+
     /**
      * diagnose Smarty setup
      *
@@ -251,15 +295,59 @@ class Smarty_Internal_Utility {
     public static function testInstall(Smarty $smarty, &$errors=null)
     {
         $status = true;
-        
+
         if ($errors === null) {
             echo "<PRE>\n";
             echo "Smarty Installation test...\n";
             echo "Testing template directory...\n";
         }
-        
+
+        $_stream_resolve_include_path = function_exists('stream_resolve_include_path');
+
         // test if all registered template_dir are accessible
         foreach($smarty->getTemplateDir() as $template_dir) {
+            $_template_dir = $template_dir;
+            $template_dir = realpath($template_dir);
+            // resolve include_path or fail existance
+            if (!$template_dir) {
+                if ($smarty->use_include_path && !preg_match('/^([\/\\\\]|[a-zA-Z]:[\/\\\\])/', $_template_dir)) {
+                    // try PHP include_path
+                    if ($_stream_resolve_include_path) {
+                        $template_dir = stream_resolve_include_path($_template_dir);
+                    } else {
+                        $template_dir = Smarty_Internal_Get_Include_Path::getIncludePath($_template_dir);
+                    }
+
+                    if ($template_dir !== false) {
+                        if ($errors === null) {
+                            echo "$template_dir is OK.\n";
+                        }
+
+                        continue;
+                    } else {
+                        $status = false;
+                        $message = "FAILED: $_template_dir does not exist (and couldn't be found in include_path either)";
+                        if ($errors === null) {
+                            echo $message . ".\n";
+                        } else {
+                            $errors['template_dir'] = $message;
+                        }
+
+                        continue;
+                    }
+                } else {
+                    $status = false;
+                    $message = "FAILED: $_template_dir does not exist";
+                    if ($errors === null) {
+                        echo $message . ".\n";
+                    } else {
+                        $errors['template_dir'] = $message;
+                    }
+
+                    continue;
+                }
+            }
+
             if (!is_dir($template_dir)) {
                 $status = false;
                 $message = "FAILED: $template_dir is not a directory";
@@ -282,15 +370,24 @@ class Smarty_Internal_Utility {
                 }
             }
         }
-        
-        
+
+
         if ($errors === null) {
             echo "Testing compile directory...\n";
         }
-        
+
         // test if registered compile_dir is accessible
-        $_compile_dir = $smarty->getCompileDir();
-        if (!is_dir($_compile_dir)) {
+        $__compile_dir = $smarty->getCompileDir();
+        $_compile_dir = realpath($__compile_dir);
+        if (!$_compile_dir) {
+            $status = false;
+            $message = "FAILED: {$__compile_dir} does not exist";
+            if ($errors === null) {
+                echo $message . ".\n";
+            } else {
+                $errors['compile_dir'] = $message;
+            }
+        } elseif (!is_dir($_compile_dir)) {
             $status = false;
             $message = "FAILED: {$_compile_dir} is not a directory";
             if ($errors === null) {
@@ -319,17 +416,59 @@ class Smarty_Internal_Utility {
                 echo "{$_compile_dir} is OK.\n";
             }
         }
-        
-        
+
+
         if ($errors === null) {
             echo "Testing plugins directory...\n";
         }
-        
+
         // test if all registered plugins_dir are accessible
         // and if core plugins directory is still registered
         $_core_plugins_dir = realpath(dirname(__FILE__) .'/../plugins');
         $_core_plugins_available = false;
         foreach($smarty->getPluginsDir() as $plugin_dir) {
+            $_plugin_dir = $plugin_dir;
+            $plugin_dir = realpath($plugin_dir);
+            // resolve include_path or fail existance
+            if (!$plugin_dir) {
+                if ($smarty->use_include_path && !preg_match('/^([\/\\\\]|[a-zA-Z]:[\/\\\\])/', $_plugin_dir)) {
+                    // try PHP include_path
+                    if ($_stream_resolve_include_path) {
+                        $plugin_dir = stream_resolve_include_path($_plugin_dir);
+                    } else {
+                        $plugin_dir = Smarty_Internal_Get_Include_Path::getIncludePath($_plugin_dir);
+                    }
+
+                    if ($plugin_dir !== false) {
+                        if ($errors === null) {
+                            echo "$plugin_dir is OK.\n";
+                        }
+
+                        continue;
+                    } else {
+                        $status = false;
+                        $message = "FAILED: $_plugin_dir does not exist (and couldn't be found in include_path either)";
+                        if ($errors === null) {
+                            echo $message . ".\n";
+                        } else {
+                            $errors['plugins_dir'] = $message;
+                        }
+
+                        continue;
+                    }
+                } else {
+                    $status = false;
+                    $message = "FAILED: $_plugin_dir does not exist";
+                    if ($errors === null) {
+                        echo $message . ".\n";
+                    } else {
+                        $errors['plugins_dir'] = $message;
+                    }
+
+                    continue;
+                }
+            }
+
             if (!is_dir($plugin_dir)) {
                 $status = false;
                 $message = "FAILED: $plugin_dir is not a directory";
@@ -348,6 +487,9 @@ class Smarty_Internal_Utility {
                 }
             } elseif ($_core_plugins_dir && $_core_plugins_dir == realpath($plugin_dir)) {
                 $_core_plugins_available = true;
+                if ($errors === null) {
+                    echo "$plugin_dir is OK.\n";
+                }
             } else {
                 if ($errors === null) {
                     echo "$plugin_dir is OK.\n";
@@ -363,15 +505,24 @@ class Smarty_Internal_Utility {
                 $errors['plugins_dir'] = $message;
             }
         }
-        
+
         if ($errors === null) {
             echo "Testing cache directory...\n";
         }
 
-        $_cache_dir = $smarty->getCacheDir();
 
         // test if all registered cache_dir is accessible
-        if (!is_dir($_cache_dir)) {
+        $__cache_dir = $smarty->getCacheDir();
+        $_cache_dir = realpath($__cache_dir);
+        if (!$_cache_dir) {
+            $status = false;
+            $message = "FAILED: {$__cache_dir} does not exist";
+            if ($errors === null) {
+                echo $message . ".\n";
+            } else {
+                $errors['cache_dir'] = $message;
+            }
+        } elseif (!is_dir($_cache_dir)) {
             $status = false;
             $message = "FAILED: {$_cache_dir} is not a directory";
             if ($errors === null) {
@@ -400,14 +551,56 @@ class Smarty_Internal_Utility {
                 echo "{$_cache_dir} is OK.\n";
             }
         }
-        
-        
+
+
         if ($errors === null) {
             echo "Testing configs directory...\n";
         }
 
         // test if all registered config_dir are accessible
         foreach($smarty->getConfigDir() as $config_dir) {
+            $_config_dir = $config_dir;
+            $config_dir = realpath($config_dir);
+            // resolve include_path or fail existance
+            if (!$config_dir) {
+                if ($smarty->use_include_path && !preg_match('/^([\/\\\\]|[a-zA-Z]:[\/\\\\])/', $_config_dir)) {
+                    // try PHP include_path
+                    if ($_stream_resolve_include_path) {
+                        $config_dir = stream_resolve_include_path($_config_dir);
+                    } else {
+                        $config_dir = Smarty_Internal_Get_Include_Path::getIncludePath($_config_dir);
+                    }
+
+                    if ($config_dir !== false) {
+                        if ($errors === null) {
+                            echo "$config_dir is OK.\n";
+                        }
+
+                        continue;
+                    } else {
+                        $status = false;
+                        $message = "FAILED: $_config_dir does not exist (and couldn't be found in include_path either)";
+                        if ($errors === null) {
+                            echo $message . ".\n";
+                        } else {
+                            $errors['config_dir'] = $message;
+                        }
+
+                        continue;
+                    }
+                } else {
+                    $status = false;
+                    $message = "FAILED: $_config_dir does not exist";
+                    if ($errors === null) {
+                        echo $message . ".\n";
+                    } else {
+                        $errors['config_dir'] = $message;
+                    }
+
+                    continue;
+                }
+            }
+
             if (!is_dir($config_dir)) {
                 $status = false;
                 $message = "FAILED: $config_dir is not a directory";
@@ -430,8 +623,8 @@ class Smarty_Internal_Utility {
                 }
             }
         }
-        
-        
+
+
         if ($errors === null) {
             echo "Testing sysplugin files...\n";
         }
@@ -623,12 +816,12 @@ class Smarty_Internal_Utility {
                 $errors['plugins_dir_constant'] = $message;
             }
         }
-        
+
         if ($errors === null) {
             echo "Tests complete.\n";
             echo "</PRE>\n";
         }
-    
+
         return $status;
     }
 

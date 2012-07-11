@@ -26,9 +26,10 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data {
      * @param object $parent            next higher level of Smarty variables
      * @param bool   $display           true: display, false: fetch
      * @param bool   $merge_tpl_vars    if true parent template variables merged in to local scope
+     * @param bool   $no_output_filter  if true do not run output filter
      * @return string rendered template output
      */
-    public function fetch($template = null, $cache_id = null, $compile_id = null, $parent = null, $display = false, $merge_tpl_vars = true)
+    public function fetch($template = null, $cache_id = null, $compile_id = null, $parent = null, $display = false, $merge_tpl_vars = true, $no_output_filter = false)
     {
         if ($template === null && $this instanceof $this->template_class) {
             $template = $this;
@@ -37,14 +38,22 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data {
             $parent = $cache_id;
             $cache_id = null;
         }
-        if ($parent === null && $this instanceof Smarty) {
-            // get default Smarty data object
+        if ($parent === null && ($this instanceof Smarty || is_string($template))) {
             $parent = $this;
         }
         // create template object if necessary
-        $_template = ($template instanceof $this->template_class) ? $template :
-            $this->createTemplate($template, $cache_id, $compile_id, $parent, false);
+        $_template = ($template instanceof $this->template_class)
+        ? $template
+        : $this->smarty->createTemplate($template, $cache_id, $compile_id, $parent, false);
+        // if called by Smarty object make sure we use current caching status
+        if ($this instanceof Smarty) {
+            $_template->caching = $this->caching;
+        }
+        // merge all variable scopes into template
         if ($merge_tpl_vars) {
+            // save local variables
+            $save_tpl_vars = $_template->tpl_vars;
+            $save_config_vars = $_template->config_vars;
             $ptr_array = array($_template);
             $ptr = $_template;
             while (isset($ptr->parent)) {
@@ -70,7 +79,7 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data {
         }
         // dummy local smarty variable
         if (!isset($_template->tpl_vars['smarty'])) {
-        $_template->tpl_vars['smarty'] = new Smarty_Variable;
+            $_template->tpl_vars['smarty'] = new Smarty_Variable;
         }
         if (isset($this->smarty->error_reporting)) {
             $_smarty_old_error_level = error_reporting($this->smarty->error_reporting);
@@ -101,6 +110,8 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data {
                 }
             }
         }
+        // must reset merge template date
+        $_template->smarty->merged_templates_func = array();
         // get rendered template
         // disable caching for evaluated code
         if ($_template->source->recompiled) {
@@ -108,7 +119,12 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data {
         }
         // checks if template exists
         if (!$_template->source->exists) {
-            throw new SmartyException("Unable to load template {$_template->source->type} '{$_template->source->name}'");
+            if ($_template->parent instanceof Smarty_Internal_Template) {
+                $parent_resource = " in '{$_template->parent->template_resource}'";
+            } else {
+                $parent_resource = '';
+            }
+            throw new SmartyException("Unable to load template {$_template->source->type} '{$_template->source->name}'{$parent_resource}");
         }
         // read from cache or render
         if (!($_template->caching == Smarty::CACHING_LIFETIME_CURRENT || $_template->caching == Smarty::CACHING_LIFETIME_SAVED) || !$_template->cached->valid) {
@@ -126,9 +142,14 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data {
                     if ($this->smarty->debugging) {
                         Smarty_Internal_Debug::start_render($_template);
                     }
-                    ob_start();
-                    eval("?>" . $code);
-                    unset($code);
+                    try {
+                        ob_start();
+                        eval("?>" . $code);
+                        unset($code);
+                    } catch (Exception $e) {
+                        ob_get_clean();
+                        throw $e;
+                    }
                 } else {
                     if (!$_template->compiled->exists || ($_template->smarty->force_compile && !$_template->compiled->isCompiled)) {
                         $_template->compileTemplateSource();
@@ -144,19 +165,43 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data {
                             include($_template->compiled->filepath);
                         }
                         $_template->compiled->loaded = true;
+                    } else {
+                        $_template->decodeProperties($_template->compiled->_properties, false);
                     }
-                    ob_start();
-                    $_template->properties['unifunc']($_template);
+                    try {
+                        ob_start();
+                        if (empty($_template->properties['unifunc']) || !is_callable($_template->properties['unifunc'])) {
+                            throw new SmartyException("Invalid compiled template for '{$_template->template_resource}'");
+                        }
+                        array_unshift($_template->_capture_stack,array());
+                        //
+                        // render compiled template
+                        //
+                        $_template->properties['unifunc']($_template);
+                        // any unclosed {capture} tags ?
+                        if (isset($_template->_capture_stack[0][0])) {
+                            $_template->capture_error();
+                        }
+                        array_shift($_template->_capture_stack);
+                    } catch (Exception $e) {
+                        ob_get_clean();
+                        throw $e;
+                    }
                 }
             } else {
                 if ($_template->source->uncompiled) {
                     if ($this->smarty->debugging) {
                         Smarty_Internal_Debug::start_render($_template);
                     }
-                    ob_start();
-                    $_template->source->renderUncompiled($_template);
+                    try {
+                        ob_start();
+                        $_template->source->renderUncompiled($_template);
+                    } catch (Exception $e) {
+                        ob_get_clean();
+                        throw $e;
+                    }
                 } else {
-                    throw new SmartyException("Resource '$_template->source->type' must have 'renderUncompiled' methode");
+                    throw new SmartyException("Resource '$_template->source->type' must have 'renderUncompiled' method");
                 }
             }
             $_output = ob_get_clean();
@@ -197,45 +242,58 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data {
                         $output .= preg_replace("!/\*/?%%SmartyNocache:{$_template->properties['nocache_hash']}%%\*/!", '', $cache_parts[0][$curr_idx]);
                     }
                 }
-                if (isset($this->smarty->autoload_filters['output']) || isset($this->smarty->registered_filters['output'])) {
+                if (!$no_output_filter && !$_template->has_nocache_code && (isset($this->smarty->autoload_filters['output']) || isset($this->smarty->registered_filters['output']))) {
                     $output = Smarty_Internal_Filter_Handler::runFilter('output', $output, $_template);
                 }
                 // rendering (must be done before writing cache file because of {function} nocache handling)
                 $_smarty_tpl = $_template;
-                ob_start();
-                eval("?>" . $output);
-                $_output = ob_get_clean();
+                try {
+                    ob_start();
+                    eval("?>" . $output);
+                    $_output = ob_get_clean();
+                } catch (Exception $e) {
+                    ob_get_clean();
+                    throw $e;
+                }
                 // write cache file content
                 $_template->writeCachedContent($output);
-                $_template->cached->valid = true;
                 if ($this->smarty->debugging) {
                     Smarty_Internal_Debug::end_cache($_template);
                 }
             } else {
                 // var_dump('renderTemplate', $_template->has_nocache_code, $_template->template_resource, $_template->properties['nocache_hash'], $_template->parent->properties['nocache_hash'], $_output);
-                if ($_template->has_nocache_code && !empty($_template->properties['nocache_hash']) && !empty($_template->parent->properties['nocache_hash'])) {
+                if (!empty($_template->properties['nocache_hash']) && !empty($_template->parent->properties['nocache_hash'])) {
                     // replace nocache_hash
-                    $_output = preg_replace("/{$_template->properties['nocache_hash']}/", $_template->parent->properties['nocache_hash'], $_output);
-                    $_template->parent->has_nocache_code = $_template->has_nocache_code;
+                    $_output = str_replace("{$_template->properties['nocache_hash']}", $_template->parent->properties['nocache_hash'], $_output);
+                    $_template->parent->has_nocache_code = $_template->parent->has_nocache_code || $_template->has_nocache_code;
                 }
             }
         } else {
             if ($this->smarty->debugging) {
                 Smarty_Internal_Debug::start_cache($_template);
             }
-            // cache could have been update on a previous call but not yet processed
-            if (!$_template->cached->processed) {
-                $_template->cached->handler->process($_template);
-                $_template->cached->processed = true;
+            try {
+                ob_start();
+                array_unshift($_template->_capture_stack,array());
+                //
+                // render cached template
+                //
+                $_template->properties['unifunc']($_template);
+                // any unclosed {capture} tags ?
+                if (isset($_template->_capture_stack[0][0])) {
+                    $_template->capture_error();
+                }
+                array_shift($_template->_capture_stack);
+                $_output = ob_get_clean();
+            } catch (Exception $e) {
+                ob_get_clean();
+                throw $e;
             }
-            ob_start();
-            $_template->properties['unifunc']($_template);
-            $_output = ob_get_clean();
             if ($this->smarty->debugging) {
                 Smarty_Internal_Debug::end_cache($_template);
             }
         }
-        if ((!$this->caching || $_template->source->recompiled) && (isset($this->smarty->autoload_filters['output']) || isset($this->smarty->registered_filters['output']))) {
+        if ((!$this->caching || $_template->has_nocache_code || $_template->source->recompiled) && !$no_output_filter && (isset($this->smarty->autoload_filters['output']) || isset($this->smarty->registered_filters['output']))) {
             $_output = Smarty_Internal_Filter_Handler::runFilter('output', $_output, $_template);
         }
         if (isset($this->error_reporting)) {
@@ -251,30 +309,30 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data {
                         case 'cgi':         // php-cgi < 5.3
                         case 'cgi-fcgi':    // php-cgi >= 5.3
                         case 'fpm-fcgi':    // php-fpm >= 5.3.3
-                            header('Status: 304 Not Modified');
-                            break;
+                        header('Status: 304 Not Modified');
+                        break;
 
                         case 'cli':
-                            if (/* ^phpunit */!empty($_SERVER['SMARTY_PHPUNIT_DISABLE_HEADERS'])/* phpunit$ */) {
-                                $_SERVER['SMARTY_PHPUNIT_HEADERS'][] = '304 Not Modified';
-                            }
-                            break;
+                        if (/* ^phpunit */!empty($_SERVER['SMARTY_PHPUNIT_DISABLE_HEADERS'])/* phpunit$ */) {
+                            $_SERVER['SMARTY_PHPUNIT_HEADERS'][] = '304 Not Modified';
+                        }
+                        break;
 
                         default:
-                            header('HTTP/1.1 304 Not Modified');
-                            break;
+                        header($_SERVER['SERVER_PROTOCOL'].' 304 Not Modified');
+                        break;
                     }
                 } else {
                     switch (PHP_SAPI) {
                         case 'cli':
-                            if (/* ^phpunit */!empty($_SERVER['SMARTY_PHPUNIT_DISABLE_HEADERS'])/* phpunit$ */) {
-                                $_SERVER['SMARTY_PHPUNIT_HEADERS'][] = 'Last-Modified: ' . gmdate('D, d M Y H:i:s', $_template->cached->timestamp) . ' GMT';
-                            }
-                            break;
+                        if (/* ^phpunit */!empty($_SERVER['SMARTY_PHPUNIT_DISABLE_HEADERS'])/* phpunit$ */) {
+                            $_SERVER['SMARTY_PHPUNIT_HEADERS'][] = 'Last-Modified: ' . gmdate('D, d M Y H:i:s', $_template->cached->timestamp) . ' GMT';
+                        }
+                        break;
 
                         default:
-                            header('Last-Modified: ' . gmdate('D, d M Y H:i:s', $_template->cached->timestamp) . ' GMT');
-                            break;
+                        header('Last-Modified: ' . gmdate('D, d M Y H:i:s', $_template->cached->timestamp) . ' GMT');
+                        break;
                     }
                     echo $_output;
                 }
@@ -285,8 +343,18 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data {
             if ($this->smarty->debugging) {
                 Smarty_Internal_Debug::display_debug($this);
             }
+            if ($merge_tpl_vars) {
+                // restore local variables
+                $_template->tpl_vars = $save_tpl_vars;
+                $_template->config_vars =  $save_config_vars;
+            }
             return;
         } else {
+            if ($merge_tpl_vars) {
+                // restore local variables
+                $_template->tpl_vars = $save_tpl_vars;
+                $_template->config_vars =  $save_config_vars;
+            }
             // return fetched content
             return $_output;
         }
@@ -349,6 +417,7 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data {
      * @param callback $callback   PHP callback to register
      * @param boolean  $cacheable  if true (default) this fuction is cachable
      * @param array    $cache_attr caching attributes if any
+     * @return Smarty_Internal_Templatebase current Smarty_Internal_Templatebase (or Smarty or Smarty_Internal_Template) instance for chaining
      * @throws SmartyException when the plugin tag is invalid
      */
     public function registerPlugin($type, $tag, $callback, $cacheable = true, $cache_attr = null)
@@ -360,6 +429,8 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data {
         } else {
             $this->smarty->registered_plugins[$type][$tag] = array($callback, (bool) $cacheable, (array) $cache_attr);
         }
+
+        return $this;
     }
 
     /**
@@ -367,12 +438,15 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data {
      *
      * @param string $type of plugin
      * @param string $tag name of plugin
+     * @return Smarty_Internal_Templatebase current Smarty_Internal_Templatebase (or Smarty or Smarty_Internal_Template) instance for chaining
      */
     public function unregisterPlugin($type, $tag)
     {
         if (isset($this->smarty->registered_plugins[$type][$tag])) {
             unset($this->smarty->registered_plugins[$type][$tag]);
         }
+
+        return $this;
     }
 
     /**
@@ -380,22 +454,27 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data {
      *
      * @param string $type name of resource type
      * @param Smarty_Resource|array $callback or instance of Smarty_Resource, or array of callbacks to handle resource (deprecated)
+     * @return Smarty_Internal_Templatebase current Smarty_Internal_Templatebase (or Smarty or Smarty_Internal_Template) instance for chaining
      */
     public function registerResource($type, $callback)
     {
         $this->smarty->registered_resources[$type] = $callback instanceof Smarty_Resource ? $callback : array($callback, false);
+        return $this;
     }
 
     /**
      * Unregisters a resource
      *
      * @param string $type name of resource type
+     * @return Smarty_Internal_Templatebase current Smarty_Internal_Templatebase (or Smarty or Smarty_Internal_Template) instance for chaining
      */
     public function unregisterResource($type)
     {
         if (isset($this->smarty->registered_resources[$type])) {
             unset($this->smarty->registered_resources[$type]);
         }
+
+        return $this;
     }
 
     /**
@@ -403,22 +482,27 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data {
      *
      * @param string               $type     name of cache resource type
      * @param Smarty_CacheResource $callback instance of Smarty_CacheResource to handle output caching
+     * @return Smarty_Internal_Templatebase current Smarty_Internal_Templatebase (or Smarty or Smarty_Internal_Template) instance for chaining
      */
     public function registerCacheResource($type, Smarty_CacheResource $callback)
     {
         $this->smarty->registered_cache_resources[$type] = $callback;
+        return $this;
     }
 
     /**
      * Unregisters a cache resource
      *
      * @param string $type name of cache resource type
+     * @return Smarty_Internal_Templatebase current Smarty_Internal_Templatebase (or Smarty or Smarty_Internal_Template) instance for chaining
      */
     public function unregisterCacheResource($type)
     {
         if (isset($this->smarty->registered_cache_resources[$type])) {
             unset($this->smarty->registered_cache_resources[$type]);
         }
+
+        return $this;
     }
 
     /**
@@ -430,6 +514,7 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data {
      * @param boolean $smarty_args   smarty argument format, else traditional
      * @param array   $block_methods list of block-methods
      * @param array $block_functs list of methods that are block format
+     * @return Smarty_Internal_Templatebase current Smarty_Internal_Templatebase (or Smarty or Smarty_Internal_Template) instance for chaining
      * @throws SmartyException if any of the methods in $allowed or $block_methods are invalid
      */
     public function registerObject($object_name, $object_impl, $allowed = array(), $smarty_args = true, $block_methods = array())
@@ -452,7 +537,8 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data {
         }
         // register the object
         $this->smarty->registered_objects[$object_name] =
-            array($object_impl, (array) $allowed, (boolean) $smarty_args, (array) $block_methods);
+        array($object_impl, (array) $allowed, (boolean) $smarty_args, (array) $block_methods);
+        return $this;
     }
 
     /**
@@ -474,10 +560,26 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data {
     }
 
     /**
+     * unregister an object
+     *
+     * @param string $name object name
+     * @return Smarty_Internal_Templatebase current Smarty_Internal_Templatebase (or Smarty or Smarty_Internal_Template) instance for chaining
+     */
+    public function unregisterObject($name)
+    {
+        if (isset($this->smarty->registered_objects[$name])) {
+            unset($this->smarty->registered_objects[$name]);
+        }
+
+        return $this;
+    }
+
+    /**
      * Registers static classes to be used in templates
      *
      * @param string $class name of template class
      * @param string $class_impl the referenced PHP class to register
+     * @return Smarty_Internal_Templatebase current Smarty_Internal_Templatebase (or Smarty or Smarty_Internal_Template) instance for chaining
      * @throws SmartyException if $class_impl does not refer to an existing class
      */
     public function registerClass($class_name, $class_impl)
@@ -488,12 +590,14 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data {
         }
         // register the class
         $this->smarty->registered_classes[$class_name] = $class_impl;
+        return $this;
     }
 
     /**
      * Registers a default plugin handler
      *
      * @param callable $callback class/method name
+     * @return Smarty_Internal_Templatebase current Smarty_Internal_Templatebase (or Smarty or Smarty_Internal_Template) instance for chaining
      * @throws SmartyException if $callback is not callable
      */
     public function registerDefaultPluginHandler($callback)
@@ -503,12 +607,15 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data {
         } else {
             throw new SmartyException("Default plugin handler '$callback' not callable");
         }
+
+        return $this;
     }
 
     /**
      * Registers a default template handler
      *
      * @param callable $callback class/method name
+     * @return Smarty_Internal_Templatebase current Smarty_Internal_Templatebase (or Smarty or Smarty_Internal_Template) instance for chaining
      * @throws SmartyException if $callback is not callable
      */
     public function registerDefaultTemplateHandler($callback)
@@ -518,12 +625,15 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data {
         } else {
             throw new SmartyException("Default template handler '$callback' not callable");
         }
+
+        return $this;
     }
 
     /**
      * Registers a default template handler
      *
      * @param callable $callback class/method name
+     * @return Smarty_Internal_Templatebase current Smarty_Internal_Templatebase (or Smarty or Smarty_Internal_Template) instance for chaining
      * @throws SmartyException if $callback is not callable
      */
     public function registerDefaultConfigHandler($callback)
@@ -533,6 +643,8 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data {
         } else {
             throw new SmartyException("Default config handler '$callback' not callable");
         }
+
+        return $this;
     }
 
     /**
@@ -540,10 +652,12 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data {
      *
      * @param string $type filter type
      * @param callback $callback
+     * @return Smarty_Internal_Templatebase current Smarty_Internal_Templatebase (or Smarty or Smarty_Internal_Template) instance for chaining
      */
     public function registerFilter($type, $callback)
     {
         $this->smarty->registered_filters[$type][$this->_get_filter_name($callback)] = $callback;
+        return $this;
     }
 
     /**
@@ -551,6 +665,7 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data {
      *
      * @param string $type filter type
      * @param callback $callback
+     * @return Smarty_Internal_Templatebase current Smarty_Internal_Templatebase (or Smarty or Smarty_Internal_Template) instance for chaining
      */
     public function unregisterFilter($type, $callback)
     {
@@ -558,18 +673,21 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data {
         if (isset($this->smarty->registered_filters[$type][$name])) {
             unset($this->smarty->registered_filters[$type][$name]);
         }
+
+        return $this;
     }
 
     /**
      * Return internal filter name
      *
      * @param callback $function_name
+     * @return string internal filter name
      */
     public function _get_filter_name($function_name)
     {
         if (is_array($function_name)) {
             $_class_name = (is_object($function_name[0]) ?
-                            get_class($function_name[0]) : $function_name[0]);
+            get_class($function_name[0]) : $function_name[0]);
             return $_class_name . '_' . $function_name[1];
         } else {
             return $function_name;
@@ -581,7 +699,7 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data {
      *
      * @param string $type filter type
      * @param string $name filter name
-     * @return bool
+     * @throws SmartyException if filter could not be loaded
      */
     public function loadFilter($type, $name)
     {
@@ -592,11 +710,38 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data {
                 $_plugin = array($_plugin, 'execute');
             }
             if (is_callable($_plugin)) {
-                return $this->smarty->registered_filters[$type][$_filter_name] = $_plugin;
+                $this->smarty->registered_filters[$type][$_filter_name] = $_plugin;
+                return true;
             }
         }
         throw new SmartyException("{$type}filter \"{$name}\" not callable");
-        return false;
+    }
+
+    /**
+     * unload a filter of specified type and name
+     *
+     * @param string $type filter type
+     * @param string $name filter name
+     * @return Smarty_Internal_Templatebase current Smarty_Internal_Templatebase (or Smarty or Smarty_Internal_Template) instance for chaining
+     */
+    public function unloadFilter($type, $name)
+    {
+        $_filter_name = "smarty_{$type}filter_{$name}";
+        if (isset($this->smarty->registered_filters[$type][$_filter_name])) {
+            unset ($this->smarty->registered_filters[$type][$_filter_name]);
+        }
+
+        return $this;
+    }
+
+    /**
+     * preg_replace callback to convert camelcase getter/setter to underscore property names
+     *
+     * @param string $match match string
+     * @return string replacemant
+     */
+    private function replaceCamelcase($match) {
+        return "_" . strtolower($match[1]);
     }
 
     /**
@@ -607,32 +752,58 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data {
      */
     public function __call($name, $args)
     {
-        static $camel_func;
-        if (!isset($camel_func))
-            $camel_func = create_function('$c', 'return "_" . strtolower($c[1]);');
+        static $_prefixes = array('set' => true, 'get' => true);
+        static $_resolved_property_name = array();
+        static $_resolved_property_source = array();
+
+        // method of Smarty object?
+        if (method_exists($this->smarty, $name)) {
+            return call_user_func_array(array($this->smarty, $name), $args);
+        }
         // see if this is a set/get for a property
         $first3 = strtolower(substr($name, 0, 3));
-        if (in_array($first3, array('set', 'get')) && substr($name, 3, 1) !== '_') {
-            // try to keep case correct for future PHP 6.0 case-sensitive class methods
-            // lcfirst() not available < PHP 5.3.0, so improvise
-            $property_name = strtolower(substr($name, 3, 1)) . substr($name, 4);
-            // convert camel case to underscored name
-            $property_name = preg_replace_callback('/([A-Z])/', $camel_func, $property_name);
-            if (!property_exists($this, $property_name)) {
+        if (isset($_prefixes[$first3]) && isset($name[3]) && $name[3] !== '_') {
+            if (isset($_resolved_property_name[$name])) {
+                $property_name = $_resolved_property_name[$name];
+            } else {
+                // try to keep case correct for future PHP 6.0 case-sensitive class methods
+                // lcfirst() not available < PHP 5.3.0, so improvise
+                $property_name = strtolower(substr($name, 3, 1)) . substr($name, 4);
+                // convert camel case to underscored name
+                $property_name = preg_replace_callback('/([A-Z])/', array($this,'replaceCamelcase'), $property_name);
+                $_resolved_property_name[$name] = $property_name;
+            }
+            if (isset($_resolved_property_source[$property_name])) {
+                $_is_this = $_resolved_property_source[$property_name];
+            } else {
+                $_is_this = null;
+                if (property_exists($this, $property_name)) {
+                    $_is_this = true;
+                } else if (property_exists($this->smarty, $property_name)) {
+                    $_is_this = false;
+                }
+                $_resolved_property_source[$property_name] = $_is_this;
+            }
+            if ($_is_this) {
+                if ($first3 == 'get')
+                return $this->$property_name;
+                else
+                return $this->$property_name = $args[0];
+            } else if ($_is_this === false) {
+                if ($first3 == 'get')
+                return $this->smarty->$property_name;
+                else
+                return $this->smarty->$property_name = $args[0];
+            } else {
                 throw new SmartyException("property '$property_name' does not exist.");
                 return false;
             }
-            if ($first3 == 'get')
-                return $this->$property_name;
-            else
-                return $this->$property_name = $args[0];
         }
-        // pass call to Smarty object
-        if (method_exists($this->smarty, $name)) {
-            return call_user_func_array(array($this->smarty, $name), $args);
-        } else {
-            throw new SmartyException("Call of unknown function '$name'.");
+        if ($name == 'Smarty') {
+            throw new SmartyException("PHP5 requires you to call __construct() instead of Smarty()");
         }
+        // must be unknown
+        throw new SmartyException("Call of unknown method '$name'.");
     }
 
 }

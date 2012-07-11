@@ -50,6 +50,16 @@ class Smarty_Internal_CacheResource_File extends Smarty_CacheResource {
             $_compile_id = '';
         }
         $_cache_dir = $_template->smarty->getCacheDir();
+        if ($_template->smarty->cache_locking) {
+            // create locking file name
+            // relative file name?
+            if (!preg_match('/^([\/\\\\]|[a-zA-Z]:[\/\\\\])/', $_cache_dir)) {
+                $_lock_dir = rtrim(getcwd(), '/\\') . DS . $_cache_dir;
+            } else {
+                $_lock_dir = $_cache_dir;
+            }
+            $cached->lock_id = $_lock_dir.sha1($_cache_id.$_compile_id.$_template->source->uid).'.lock';
+        }
         $cached->filepath = $_cache_dir . $_cache_id . $_compile_id . $_filepath . '.' . basename($_source_file_path) . '.php';
         $cached->timestamp = @filemtime($cached->filepath);
         $cached->exists = !!$cached->timestamp;
@@ -71,11 +81,13 @@ class Smarty_Internal_CacheResource_File extends Smarty_CacheResource {
      * Read the cached template and process its header
      *
      * @param Smarty_Internal_Template $_template template object
+     * @param Smarty_Template_Cached $cached cached object
+     * @return booelan true or false if the cached content does not exist
      */
-    public function process(Smarty_Internal_Template $_template)
+    public function process(Smarty_Internal_Template $_template, Smarty_Template_Cached $cached=null)
     {
         $_smarty_tpl = $_template;
-        include $_template->cached->filepath;
+        return @include $_template->cached->filepath;
     }
 
     /**
@@ -88,9 +100,11 @@ class Smarty_Internal_CacheResource_File extends Smarty_CacheResource {
     public function writeCachedContent(Smarty_Internal_Template $_template, $content)
     {
         if (Smarty_Internal_Write_File::writeFile($_template->cached->filepath, $content, $_template->smarty) === true) {
-            $_template->cached->timestamp = filemtime($_template->cached->filepath);
+            $_template->cached->timestamp = @filemtime($_template->cached->filepath);
             $_template->cached->exists = !!$_template->cached->timestamp;
-            return true;
+            if ($_template->cached->exists) {
+                return true;
+            }
         }
         return false;
     }
@@ -139,13 +153,22 @@ class Smarty_Internal_CacheResource_File extends Smarty_CacheResource {
             $smarty->caching = true;
             $tpl = new $smarty->template_class($resource_name, $smarty);
             $smarty->caching = $_save_stat;
+
+            // remove from template cache
+            $tpl->source; // have the template registered before unset()
+            if ($smarty->allow_ambiguous_resources) {
+                $_templateId = $tpl->source->unique_resource . $tpl->cache_id . $tpl->compile_id;
+            } else {
+                $_templateId = $smarty->joined_template_dir . '#' . $resource_name . $tpl->cache_id . $tpl->compile_id;
+            }
+            if (isset($_templateId[150])) {
+                $_templateId = sha1($_templateId);
+            }
+            unset($smarty->template_objects[$_templateId]);
+
             if ($tpl->source->exists) {
                 $_resourcename_parts = basename(str_replace('^', '/', $tpl->cached->filepath));
-                // remove from template cache
-                unset($smarty->template_objects[sha1($tpl->template_resource . $tpl->cache_id . $tpl->compile_id)]);
             } else {
-                // remove from template cache
-                unset($smarty->template_objects[sha1($tpl->template_resource . $tpl->cache_id . $tpl->compile_id)]);
                 return 0;
             }
         }
@@ -197,6 +220,47 @@ class Smarty_Internal_CacheResource_File extends Smarty_CacheResource {
         return $_count;
     }
 
+    /**
+     * Check is cache is locked for this template
+     *
+     * @param Smarty $smarty Smarty object
+     * @param Smarty_Template_Cached $cached cached object
+     * @return booelan true or false if cache is locked
+     */
+    public function hasLock(Smarty $smarty, Smarty_Template_Cached $cached)
+    {
+        if (version_compare(PHP_VERSION, '5.3.0', '>=')) {
+            clearstatcache(true, $cached->lock_id);
+        } else {
+            clearstatcache();
+        }
+        $t = @filemtime($cached->lock_id);
+        return $t && (time() - $t < $smarty->locking_timeout);
+    }
+
+    /**
+     * Lock cache for this template
+     *
+     * @param Smarty $smarty Smarty object
+     * @param Smarty_Template_Cached $cached cached object
+     */
+    public function acquireLock(Smarty $smarty, Smarty_Template_Cached $cached)
+    {
+        $cached->is_locked = true;
+        touch($cached->lock_id);
+    }
+
+    /**
+     * Unlock cache for this template
+     *
+     * @param Smarty $smarty Smarty object
+     * @param Smarty_Template_Cached $cached cached object
+     */
+    public function releaseLock(Smarty $smarty, Smarty_Template_Cached $cached)
+    {
+        $cached->is_locked = false;
+        @unlink($cached->lock_id);
+    }
 }
 
 ?>
