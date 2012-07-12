@@ -6347,7 +6347,7 @@ class DivePictures{
                         /**
                          *  Check normal image
                          */
-                        if (filesize($this->image_link[$i]['img_url']) < 1812000 ) {
+                        if (filesize($this->image_link[$i]['img_url']) < $_config['max_resize_size'] ) {
                             $size = array();
                             $size =getimagesize($this->image_link[$i]['img_url']);
                             /**
@@ -6374,6 +6374,16 @@ class DivePictures{
                                     $this->number_images_resize++;
                                 }
                             }
+                        } else {
+                            /**
+                             * Display message image not resized since to big 
+                             */
+                            //if($_config['enable_debug']) {
+                                echo "This image is to big to resize: ". $this->image_link[$i]['img_url'] ." please decrease the filesize to less then:
+                                ". formatBytes($_config['max_resize_size']) . " or increase max_resize_size in the config <br>";
+                               
+                            //}                               
+
                         }
                     }
 
@@ -6473,7 +6483,11 @@ class DivePictures{
         global $_config, $t, $_lang, $globals;/*{{{*/
         if (isset($_config["get_exif_data"]) && function_exists('exif_read_data')) {
             $exif_date = exif_read_data ( $file ,'IFD0'  ); 
-            $edate = $exif_date['DateTime']; 
+            if(isset($exif_date['DateTime'])){
+                    $edate = $exif_date['DateTime']; 
+            } else {
+                $edate = "";
+            }
         } else {
             $edate = "";
         }

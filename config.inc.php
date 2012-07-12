@@ -148,6 +148,12 @@ $_config['divepics_preview'] = true;
 $_config['enable_resize'] = true;
 
 /**
+ * Max filesize of images which are resized, this setting is depending on your server
+ * and php settings
+ */
+$_config['max_resize_size'] = 1812000;
+
+/**
  * Set the maximum width and height of the thumbnails, which are created automaticly
  * Usually a 4:3 ratio, e.g. 100:75, 120:100 
  * Width and height are set in px

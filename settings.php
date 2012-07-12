@@ -45,7 +45,7 @@ $_config['mappath_web'] = "images/maps/";
 /**
  * equipment pics
  */
-$_config['equippath_web'] = "images/interests/";
+$_config['equippath_web'] = "images/equipment/";
 
 /**
  *  country flags
