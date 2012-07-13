@@ -300,6 +300,10 @@ class HandleRequest {
                         //There some special request so get this info
                         //Set the special request so the class will be able to check for it
                         $this->special_req = $split_request[2];
+                        //Special case for the divegallery
+                        if($split_request[0] == 'divegallery.php'){
+                            $this->requested_page = $split_request[2];
+                        }
                     } elseif (($_config['view_type'] == 2) && isset($split_request[2]) && isset($split_request[3])) {
                         $this->requested_page = $split_request[3];
                         //There some special request so get this info
@@ -2904,7 +2908,6 @@ class Divesite{
         $data = parse_mysql_query(0,$sql);;
         $GridClass = new TableGrid($this->user_id,$data);
         $grid = $GridClass->get_grid_class();
-
         /**
          * Define the table according some info 
          */
@@ -6111,7 +6114,9 @@ class Divestats{
                     $userpath_web = $_config['userpath_web'] ;
                     $cert_scan_front = "";
                     $cert_scan_back = "";
-                    if (!empty($divecert[$i]['Scan1Path'])) {
+                    $front_img  = $_config['app_root'] ."/" . $_config['userpath_web'] . $divecert[$i]['Scan1Path'];
+                    $back_img   = $_config['app_root'] ."/" . $_config['userpath_web'] . $divecert[$i]['Scan2Path'];
+                    if (!empty($divecert[$i]['Scan1Path']) && file_exists($front_img)) {
                         $Scan1Path = array();
                         $Scan1Path = $divecert[$i]['Scan1Path'];
                         $cert_scan_front = $_lang['cert_scan_front'];
@@ -6120,7 +6125,7 @@ class Divestats{
                         $Scan1Path = '';
                         $cert_scan_front = '';
                     }
-                    if (!empty($divecert[$i]['Scan2Path'])) {
+                    if (!empty($divecert[$i]['Scan2Path'])&& file_exists($back_img)) {
                         $Scan2Path = array();
                         $Scan2Path = $divecert[$i]['Scan2Path'] ;
                         $cert_scan_back = $_lang['cert_scan_back'];
