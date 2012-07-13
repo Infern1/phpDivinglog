@@ -5670,7 +5670,11 @@ class Divestats{
             if ($globals['sql_num_rows'] > 1) {
                 $this->WatertempMinNr = $divestatsnr[0]['Number'];
             } else {
-                $this->WatertempMinNr = $divestatsnr['Number'];
+                if(isset($divestatsnr['Number'])){
+                        $this->WatertempMinNr = $divestatsnr['Number'];
+                } else {
+                        $this->WatertempMinNr = NULL;
+                 }
             }
             // Get dive number for warmest water dive
             $globals['stats'] = "Watertemp = '" . $divestats['WatertempMax'] . "'";
@@ -5678,7 +5682,11 @@ class Divestats{
             if ($globals['sql_num_rows'] > 1) {
                 $this->WatertempMaxNr = $divestatsnr[0]['Number'];
             } else {
-                $this->WatertempMaxNr = $divestatsnr['Number'];
+                if(isset($divestatsnr['Number'])){
+                    $this->WatertempMaxNr = $divestatsnr['Number'];
+                } else {
+                    $this->WatertempMaxNr = NULL;
+                }
             }
             // Get dive number for coldest air dive
             $globals['stats'] = "Airtemp = '" . $divestats['AirtempMin'] . "'";
