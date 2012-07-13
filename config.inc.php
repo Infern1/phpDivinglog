@@ -148,6 +148,12 @@ $_config['divepics_preview'] = true;
 $_config['enable_resize'] = true;
 
 /**
+ * Set this to true to use the new resize class from http://www.verot.net/php_class_upload.htm
+ * Not fully tested, so this option is here temporarly
+ */
+$_config['new_resize_class'] = true;
+
+/**
  * Max filesize of images which are resized, this setting is depending on your server
  * and php settings
  */

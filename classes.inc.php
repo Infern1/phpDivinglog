@@ -6292,7 +6292,8 @@ class DivePictures{
                 for ($i=0; $i<$pics; $i++) {
                     $img_url =  $base_path . $divepics[$i]['Path'];
                     if (file_exists($img_url)) {
-                        $img_thumb_url = $base_path .'thumb_' . $divepics[$i]['Path'];
+                         $img_thumb_url = $base_path .'thumb_' . $divepics[$i]['Path'];
+                         $img_thumb_url = preg_replace('/\s+/', '_', $img_thumb_url);
                         // $img_title = $_lang['divepic_linktitle_pt1']. ($a). $_lang['divepic_linktitle_pt2']. $pics;
                         // $img_title .= $_lang['divepic_linktitle_pt3']  ;
                         $img_title = $divepics[$i]['Description'];
@@ -6362,11 +6363,16 @@ class DivePictures{
                             /**
                              * Make array of the beresized thumbs
                              */
-                            if (!file_exists($this->image_link[$i]['img_thumb_url'])) {
+                            $file = $this->image_link[$i]['img_thumb_url'];
+                            $file = preg_replace('/\s+/', '_', $file);
+                            if (!file_exists($file)) {
                                 $this->image_link[$i]['thumb'] = true;
                                 $this->number_images_resize++;
+                                //new dBug($i); 
+                                //new dBug($file);
+                                //new dBug($this);
                             } else {
-                                $size_thumb = getimagesize($this->image_link[$i]['img_thumb_url']);
+                                $size_thumb = getimagesize($file);
                                 if ($size_thumb[0]<=$_config['thumb-width'] && $size_thumb[1]<=$_config['thumb-width']) {
                                     // echo "<strong>ERROR: No thumb!</strong><br>";
                                 } else {

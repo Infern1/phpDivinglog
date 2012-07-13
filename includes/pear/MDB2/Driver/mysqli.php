@@ -1756,7 +1756,7 @@ class MDB2_Statement_mysqli extends MDB2_Statement_Common
                 $query.= ' USING @'.implode(', @', array_values($this->positions));
             } else {
                 $result = call_user_func_array('mysqli_stmt_bind_param', $parameters);
-                if (false === $result) {
+                if (false !== true) {
                     $err = $this->db->raiseError(null, null, null,
                         'Unable to bind parameters', __FUNCTION__);
                     return $err;

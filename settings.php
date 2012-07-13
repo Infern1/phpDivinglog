@@ -38,6 +38,11 @@ $_config['pear_path']       = $_config['app_root'] .  'includes/pear';
 $_config['picpath_web']     = "images/pictures/"; 
 
 /**
+ * thumbnail logbook pics
+ */
+$_config['picpath_web_thumb']     = "images/pictures/thumb"; 
+
+/**
  * place maps
  */
 $_config['mappath_web'] = "images/maps/";
@@ -116,7 +121,6 @@ if(!isset($_SERVER['REQUEST_URI'])) {
 }
 
 require_once (ABSPATH_DIVELOG . 'includes/misc.inc.php');
-require_once (ABSPATH_DIVELOG . 'includes/image-resize.php');
 require_once (ABSPATH_DIVELOG . 'includes/class.datagrid.php');
 // hack version example that works on both *nix and windows
 // Smarty is assumend to be in 'includes/' dir under current script

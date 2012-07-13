@@ -2,7 +2,7 @@
 /**
  * Mailer no timeout pattern with HTML_Progress2.
  *
- * @version    $Id$
+ * @version    $Id: mailer1.php,v 1.5 2006/05/24 08:40:35 farell Exp $
  * @author     Laurent Laville <pear@laurent-laville.org>
  * @package    HTML_Progress2
  * @subpackage Examples
@@ -16,7 +16,8 @@
 $config_file = "./config.inc.php";
 require_once ($config_file);
 require_once 'HTML/Progress2.php';
-
+require_once (ABSPATH_DIVELOG . 'includes/image-resize.php');
+require_once (ABSPATH_DIVELOG . 'includes/class-upload/class.upload.php');
 
 $post = ($_SERVER['REQUEST_METHOD'] == 'POST');
 if (!$post) {
@@ -27,7 +28,7 @@ if (!$post) {
     $request->handle_url();
 
     /**
-     * Create a new class Divestats with info from the HandleRequest class 
+     * Create a new class Divegallery with info from the HandleRequest class 
      */
     $divegallery = new DivePictures();
     $divegallery->set_divegallery_info($request);
@@ -103,11 +104,18 @@ if ($total_subscribers >= $start_with)
     $pb->sleep(1000);          // process simulation
     if(isset($images_for_resize[$start_with]['thumb'])){
         //echo "thumb";
-        make_thumb($images_for_resize[$start_with]['img_url'],$images_for_resize[$start_with]['img_thumb_url']);
+        if(isset($_config['new_resize_class']) && $_config['new_resize_class']){
+            make_thumb_new($images_for_resize[$start_with]['img_url'],$images_for_resize[$start_with]['img_thumb_url']);
+        } else {
+            make_thumb($images_for_resize[$start_with]['img_url'],$images_for_resize[$start_with]['img_thumb_url']);
+        }
     }
     if(isset($images_for_resize[$start_with]['resize'])){
-        //echo "resize";
-        resize_image($images_for_resize[$start_with]['img_url']);
+        if(isset($_config['new_resize_class']) && $_config['new_resize_class']){
+            resize_image_new($images_for_resize[$start_with]['img_url']);
+        } else {
+            resize_image($images_for_resize[$start_with]['img_url']);
+        }
     }
     // if new data are available, then ...
     $sent = $maximum_send;

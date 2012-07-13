@@ -712,7 +712,39 @@ function resize_image($img) {
 }
 
 /**
- * make_thumb 
+ * resize_image_new uses new resize class 
+ * 
+ * @param mixed $img 
+ * @access public
+ * @return void
+ */
+function resize_image_new($img){
+    global $_config, $t; /*{{{*/
+    $img = $_config['app_root'] . $img;
+
+    $handle = new Upload($img);
+    $handle->file_overwrite        = true;
+    $handle->image_resize          = true;
+    $handle->image_ratio           = true;
+    $handle->image_x               = $_config['pic-width'];
+    
+    $handle->Process($_config['app_root']. $_config['picpath_web'] );
+    if ($handle->processed) {
+        //echo 'image resized';
+        //$handle->clean();
+    } else {
+        echo $handle->log;
+        echo 'error : ' . $handle->error;
+    }
+    $t->assign('resize',1);
+    $t->assign('img',$img);
+    set_time_limit(30);
+/*}}}*/
+
+
+}
+/**
+ * make_thumb generates thumb with the Thumbnail class
  * 
  * @param mixed $img 
  * @param mixed $thumb 
@@ -732,6 +764,45 @@ function make_thumb($img,$thumb, $i = 0 ) {
     //    echo "Error". $obj->error_msg;
 /*}}}*/
 }
+
+/**
+ * make_thumb_new generates thumbnail with the class.upload class which is newer
+ * 
+ * @param mixed $img 
+ * @param mixed $thumb 
+ * @param int $i 
+ * @access public
+ * @return void
+ */
+function make_thumb_new ($img, $thumb, $i = 0){
+    global $_config, $t; /*{{{*/
+    $img = $_config['app_root'] . $img;
+
+    $handle = new Upload($img);
+    $handle->file_name_body_pre = 'thumb_';
+    $handle->file_auto_rename     = false;
+    //$handle->file_new_name_body    = $thumb;
+    //$handle->file_dst_path         = $_config['app_root'] . $_config['picpath_web_thumb'];
+    $handle->image_resize          = true;
+    $handle->image_ratio           = true;
+    $handle->image_y               = $_config['thumb-height'];
+    $handle->image_x               = $_config['thumb-width'];
+    
+    $handle->Process($_config['app_root']. $_config['picpath_web'] );
+    if ($handle->processed) {
+        //echo 'image resized';
+        //$handle->clean();
+    } else {
+        echo $handle->log;
+        echo 'error : ' . $handle->error;
+    }
+    $t->assign('resize',1);
+    $t->assign('img',$img);
+    set_time_limit(30);
+/*}}}*/
+
+}
+
 
 /**
  * count_all count non-empty elements in an array of any dimension
