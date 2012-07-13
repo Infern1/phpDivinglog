@@ -54,6 +54,9 @@
 class MDB2_Iterator implements Iterator
 {
     protected $fetchmode;
+    /**
+     * @var MDB2_Result_Common
+     */
     protected $result;
     protected $row;
 
@@ -62,7 +65,7 @@ class MDB2_Iterator implements Iterator
     /**
      * Constructor
      */
-    public function __construct($result, $fetchmode = MDB2_FETCHMODE_DEFAULT)
+    public function __construct(MDB2_Result_Common $result, $fetchmode = MDB2_FETCHMODE_DEFAULT)
     {
         $this->result = $result;
         $this->fetchmode = $fetchmode;

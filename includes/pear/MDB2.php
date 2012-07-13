@@ -536,7 +536,7 @@ class MDB2
      */
     function apiVersion()
     {
-        return '2.5.0b3';
+        return '@package_version@';
     }
 
     // }}}
@@ -690,7 +690,7 @@ class MDB2
      *
      * @access  public
      */
-    function errorMessage($value = null)
+    static function errorMessage($value = null)
     {
         static $errorMessages;
 
@@ -888,10 +888,10 @@ class MDB2
         if ($dsn) {
             // /database
             if (($pos = strpos($dsn, '?')) === false) {
-                $parsed['database'] = $dsn;
+                $parsed['database'] = rawurldecode($dsn);
             // /database?param1=value1&param2=value2
             } else {
-                $parsed['database'] = substr($dsn, 0, $pos);
+                $parsed['database'] = rawurldecode(substr($dsn, 0, $pos));
                 $dsn = substr($dsn, $pos + 1);
                 if (strpos($dsn, '&') !== false) {
                     $opts = explode('&', $dsn);
@@ -996,67 +996,97 @@ class MDB2_Driver_Common extends PEAR
     // {{{ Variables (Properties)
 
     /**
+     * @var MDB2_Driver_Datatype_Common
+     */
+    public $datatype;
+
+    /**
+     * @var MDB2_Extended
+     */
+    public $extended;
+
+    /**
+     * @var MDB2_Driver_Function_Common
+     */
+    public $function;
+
+    /**
+     * @var MDB2_Driver_Manager_Common
+     */
+    public $manager;
+
+    /**
+     * @var MDB2_Driver_Native_Commonn
+     */
+    public $native;
+
+    /**
+     * @var MDB2_Driver_Reverse_Common
+     */
+    public $reverse;
+
+    /**
      * index of the MDB2 object within the $GLOBALS['_MDB2_databases'] array
      * @var     int
      * @access  public
      */
-    var $db_index = 0;
+    public $db_index = 0;
 
     /**
      * DSN used for the next query
      * @var     array
      * @access  protected
      */
-    var $dsn = array();
+    public $dsn = array();
 
     /**
      * DSN that was used to create the current connection
      * @var     array
      * @access  protected
      */
-    var $connected_dsn = array();
+    public $connected_dsn = array();
 
     /**
      * connection resource
      * @var     mixed
      * @access  protected
      */
-    var $connection = 0;
+    public $connection = 0;
 
     /**
      * if the current opened connection is a persistent connection
      * @var     bool
      * @access  protected
      */
-    var $opened_persistent;
+    public $opened_persistent;
 
     /**
      * the name of the database for the next query
      * @var     string
-     * @access  protected
+     * @access  public
      */
-    var $database_name = '';
+    public $database_name = '';
 
     /**
      * the name of the database currently selected
      * @var     string
      * @access  protected
      */
-    var $connected_database_name = '';
+    public $connected_database_name = '';
 
     /**
      * server version information
      * @var     string
      * @access  protected
      */
-    var $connected_server_info = '';
+    public $connected_server_info = '';
 
     /**
      * list of all supported features of the given driver
      * @var     array
      * @access  public
      */
-    var $supported = array(
+    public $supported = array(
         'sequences' => false,
         'indexes' => false,
         'affected_rows' => false,
@@ -1081,10 +1111,10 @@ class MDB2_Driver_Common extends PEAR
 
     /**
      * Array of supported options that can be passed to the MDB2 instance.
-     * 
+     *
      * The options can be set during object creation, using
-     * MDB2::connect(), MDB2::factory() or MDB2::singleton(). The options can 
-     * also be set after the object is created, using MDB2::setOptions() or 
+     * MDB2::connect(), MDB2::factory() or MDB2::singleton(). The options can
+     * also be set after the object is created, using MDB2::setOptions() or
      * MDB2_Driver_Common::setOption().
      * The list of available option includes:
      * <ul>
@@ -1130,7 +1160,7 @@ class MDB2_Driver_Common extends PEAR
      * @see     MDB2::singleton()
      * @see     MDB2_Driver_Common::setOption()
      */
-    var $options = array(
+    public $options = array(
         'ssl' => false,
         'field_case' => CASE_LOWER,
         'disable_query' => false,
@@ -1177,23 +1207,32 @@ class MDB2_Driver_Common extends PEAR
     /**
      * string array
      * @var     string
-     * @access  protected
+     * @access  public
      */
-    var $string_quoting = array('start' => "'", 'end' => "'", 'escape' => false, 'escape_pattern' => false);
+    public $string_quoting = array(
+        'start'  => "'",
+        'end'    => "'",
+        'escape' => false,
+        'escape_pattern' => false,
+    );
 
     /**
      * identifier quoting
      * @var     array
-     * @access  protected
+     * @access  public
      */
-    var $identifier_quoting = array('start' => '"', 'end' => '"', 'escape' => '"');
+    public $identifier_quoting = array(
+        'start'  => '"',
+        'end'    => '"',
+        'escape' => '"',
+    );
 
     /**
      * sql comments
      * @var     array
      * @access  protected
      */
-    var $sql_comments = array(
+    public $sql_comments = array(
         array('start' => '--', 'end' => "\n", 'escape' => false),
         array('start' => '/*', 'end' => '*/', 'escape' => false),
     );
@@ -1203,105 +1242,105 @@ class MDB2_Driver_Common extends PEAR
      * @var     array
      * @access  protected
      */
-    var $wildcards = array('%', '_');
+    protected $wildcards = array('%', '_');
 
     /**
      * column alias keyword
      * @var     string
      * @access  protected
      */
-    var $as_keyword = ' AS ';
+    public $as_keyword = ' AS ';
 
     /**
      * warnings
      * @var     array
      * @access  protected
      */
-    var $warnings = array();
+    public $warnings = array();
 
     /**
      * string with the debugging information
      * @var     string
      * @access  public
      */
-    var $debug_output = '';
+    public $debug_output = '';
 
     /**
      * determine if there is an open transaction
      * @var     bool
      * @access  protected
      */
-    var $in_transaction = false;
+    public $in_transaction = false;
 
     /**
      * the smart transaction nesting depth
      * @var     int
      * @access  protected
      */
-    var $nested_transaction_counter = null;
+    public $nested_transaction_counter = null;
 
     /**
      * the first error that occured inside a nested transaction
      * @var     MDB2_Error|bool
      * @access  protected
      */
-    var $has_transaction_error = false;
+    protected $has_transaction_error = false;
 
     /**
      * result offset used in the next query
      * @var     int
-     * @access  protected
+     * @access  public
      */
-    var $offset = 0;
+    public $offset = 0;
 
     /**
      * result limit used in the next query
      * @var     int
-     * @access  protected
+     * @access  public
      */
-    var $limit = 0;
+    public $limit = 0;
 
     /**
      * Database backend used in PHP (mysql, odbc etc.)
      * @var     string
      * @access  public
      */
-    var $phptype;
+    public $phptype;
 
     /**
      * Database used with regards to SQL syntax etc.
      * @var     string
      * @access  public
      */
-    var $dbsyntax;
+    public $dbsyntax;
 
     /**
      * the last query sent to the driver
      * @var     string
      * @access  public
      */
-    var $last_query;
+    public $last_query;
 
     /**
      * the default fetchmode used
      * @var     int
-     * @access  protected
+     * @access  public
      */
-    var $fetchmode = MDB2_FETCHMODE_ORDERED;
+    public $fetchmode = MDB2_FETCHMODE_ORDERED;
 
     /**
      * array of module instances
      * @var     array
      * @access  protected
      */
-    var $modules = array();
+    protected $modules = array();
 
     /**
      * determines of the PHP4 destructor emulation has been enabled yet
      * @var     array
      * @access  protected
      */
-    var $destructor_registered = true;
+    protected $destructor_registered = true;
 
     // }}}
     // {{{ constructor: function __construct()
@@ -1390,7 +1429,7 @@ class MDB2_Driver_Common extends PEAR
      * callbacks etc.  Basically a wrapper for PEAR::raiseError
      * without the message string.
      *
-     * @param mixed  $code     integer error code, or a PEAR error object (all 
+     * @param mixed  $code     integer error code, or a PEAR error object (all
      *                         other parameters are ignored if this parameter is
      *                         an object
      * @param int    $mode     error mode, see PEAR_Error docs
@@ -2410,7 +2449,7 @@ class MDB2_Driver_Common extends PEAR
             $affected_rows =  $this->_affectedRows($connection, $result);
             return $affected_rows;
         }
-        $result = $this->_wrapResult($result, $types, true, false, $limit, $offset);
+        $result = $this->_wrapResult($result, $types, true, true, $limit, $offset);
         return $result;
     }
 
@@ -2531,7 +2570,7 @@ class MDB2_Driver_Common extends PEAR
      *
      * @access  public
      */
-    function query($query, $types = null, $result_class = true, $result_wrap_class = false)
+    function query($query, $types = null, $result_class = true, $result_wrap_class = true)
     {
         $offset = $this->offset;
         $limit = $this->limit;
@@ -2571,7 +2610,7 @@ class MDB2_Driver_Common extends PEAR
      * @access  protected
      */
     function _wrapResult($result_resource, $types = array(), $result_class = true,
-        $result_wrap_class = false, $limit = null, $offset = null)
+        $result_wrap_class = true, $limit = null, $offset = null)
     {
         if ($types === true) {
             if ($this->supports('result_introspection')) {
@@ -2581,8 +2620,10 @@ class MDB2_Driver_Common extends PEAR
                     return $tableInfo;
                 }
                 $types = array();
+                $types_assoc = array();
                 foreach ($tableInfo as $field) {
                     $types[] = $field['mdb2type'];
+                    $types_assoc[$field['name']] = $field['mdb2type'];
                 }
             } else {
                 $types = null;
@@ -2607,6 +2648,7 @@ class MDB2_Driver_Common extends PEAR
                     'result class is not extended from MDB2_Result_Common', __FUNCTION__);
                 return $err;
             }
+
             if (!empty($types)) {
                 $err = $result->setResultTypes($types);
                 if (PEAR::isError($err)) {
@@ -2614,19 +2656,30 @@ class MDB2_Driver_Common extends PEAR
                     return $err;
                 }
             }
-        }
-        if ($result_wrap_class === true) {
-            $result_wrap_class = $this->options['result_wrap_class'];
-        }
-        if ($result_wrap_class) {
-            if (!MDB2::classExists($result_wrap_class)) {
-                $err = $this->raiseError(MDB2_ERROR_NOT_FOUND, null, null,
-                    'result wrap class does not exist '.$result_wrap_class, __FUNCTION__);
-                return $err;
+            if (!empty($types_assoc)) {
+                $err = $result->setResultTypes($types_assoc);
+                if (PEAR::isError($err)) {
+                    $result->free();
+                    return $err;
+                }
             }
-            $result = new $result_wrap_class($result_resource, $this->fetchmode);
+
+            if ($result_wrap_class === true) {
+                $result_wrap_class = $this->options['result_wrap_class'];
+            }
+            if ($result_wrap_class) {
+                if (!MDB2::classExists($result_wrap_class)) {
+                    $err = $this->raiseError(MDB2_ERROR_NOT_FOUND, null, null,
+                        'result wrap class does not exist '.$result_wrap_class, __FUNCTION__);
+                    return $err;
+                }
+                $result = new $result_wrap_class($result, $this->fetchmode);
+            }
+
+            return $result;
         }
-        return $result;
+
+        return $result_resource;
     }
 
     // }}}
@@ -2881,7 +2934,7 @@ class MDB2_Driver_Common extends PEAR
      *                        MDB2_PREPARE_MANIP the query is handled as a manipulation query
      * @param   mixed   key (field) value (parameter) pair for all lob placeholders
      *
-     * @return  mixed   resource handle for the prepared query on success, 
+     * @return  mixed   resource handle for the prepared query on success,
      *                  a MDB2 error on failure
      *
      * @access  public
@@ -2977,7 +3030,7 @@ class MDB2_Driver_Common extends PEAR
 
     // }}}
     // {{{ function _skipDelimitedStrings($query, $position, $p_position)
-    
+
     /**
      * Utility method, used by prepare() to avoid replacing placeholders within delimited strings.
      * Check if the placeholder is contained within a delimited string.
@@ -2999,7 +3052,7 @@ class MDB2_Driver_Common extends PEAR
         $ignores[] = $this->string_quoting;
         $ignores[] = $this->identifier_quoting;
         $ignores = array_merge($ignores, $this->sql_comments);
-        
+
         foreach ($ignores as $ignore) {
             if (!empty($ignore['start'])) {
                 if (is_int($start_quote = strpos($query, $ignore['start'], $position)) && $start_quote < $p_position) {
@@ -3028,7 +3081,7 @@ class MDB2_Driver_Common extends PEAR
         }
         return $position;
     }
-    
+
     // }}}
     // {{{ function quote($value, $type = null, $quote = true)
 
@@ -3383,15 +3436,16 @@ class MDB2_Result_Common extends MDB2_Result
 {
     // {{{ Variables (Properties)
 
-    var $db;
-    var $result;
-    var $rownum = -1;
-    var $types = array();
-    var $values = array();
-    var $offset;
-    var $offset_count = 0;
-    var $limit;
-    var $column_names;
+    protected $db;
+    protected $result;
+    protected $rownum = -1;
+    protected $types = array();
+    protected $types_assoc = array();
+    protected $values = array();
+    protected $offset;
+    protected $offset_count = 0;
+    protected $limit;
+    protected $column_names;
 
     // }}}
     // {{{ constructor: function __construct($db, &$result, $limit = 0, $offset = 0)
@@ -3441,7 +3495,13 @@ class MDB2_Result_Common extends MDB2_Result
         if (PEAR::isError($types)) {
             return $types;
         }
-        $this->types = $types;
+        foreach ($types as $key => $value) {
+            if (is_numeric($key)) {
+                $this->types[$key] = $value;
+            } else {
+                $this->types_assoc[$key] = $value;
+            }
+        }
         return MDB2_OK;
     }
 
@@ -3605,7 +3665,7 @@ class MDB2_Result_Common extends MDB2_Result
                     $key = reset($arr);
                     unset($row->{$key});
                 } else {
-                    if ($fetchmode & MDB2_FETCHMODE_ASSOC) {
+                    if ($fetchmode == MDB2_FETCHMODE_ASSOC) {
                         $key = reset($row);
                         unset($row[key($row)]);
                     } else {
@@ -3621,7 +3681,7 @@ class MDB2_Result_Common extends MDB2_Result
                     $all[$key] = $row;
                 }
             } while (($row = $this->fetchRow($fetchmode)));
-        } elseif ($fetchmode & MDB2_FETCHMODE_FLIPPED) {
+        } elseif ($fetchmode == MDB2_FETCHMODE_FLIPPED) {
             do {
                 foreach ($row as $key => $val) {
                     $all[$key][] = $val;
@@ -3930,7 +3990,9 @@ class MDB2_Statement_Common
     function bindValue($parameter, $value, $type = null)
     {
         if (!is_numeric($parameter)) {
-            $parameter = preg_replace('/^:(.*)$/', '\\1', $parameter);
+            if (strpos($parameter, ':') === 0) {
+                $parameter = substr($parameter, 1);
+            }
         }
         if (!in_array($parameter, $this->positions)) {
             return $this->db->raiseError(MDB2_ERROR_NOT_FOUND, null, null,
@@ -3963,20 +4025,22 @@ class MDB2_Statement_Common
     {
         $types = is_array($types) ? array_values($types) : array_fill(0, count($values), null);
         $parameters = array_keys($values);
+        $this->db->pushErrorHandling(PEAR_ERROR_RETURN);
+        $this->db->expectError(MDB2_ERROR_NOT_FOUND);
         foreach ($parameters as $key => $parameter) {
-            $this->db->pushErrorHandling(PEAR_ERROR_RETURN);
-            $this->db->expectError(MDB2_ERROR_NOT_FOUND);
             $err = $this->bindValue($parameter, $values[$parameter], $types[$key]);
-            $this->db->popExpect();
-            $this->db->popErrorHandling();
             if (PEAR::isError($err)) {
                 if ($err->getCode() == MDB2_ERROR_NOT_FOUND) {
                     //ignore (extra value for missing placeholder)
                     continue;
                 }
+                $this->db->popExpect();
+                $this->db->popErrorHandling();
                 return $err;
             }
         }
+        $this->db->popExpect();
+        $this->db->popErrorHandling();
         return MDB2_OK;
     }
 
@@ -3999,7 +4063,9 @@ class MDB2_Statement_Common
     function bindParam($parameter, &$value, $type = null)
     {
         if (!is_numeric($parameter)) {
-            $parameter = preg_replace('/^:(.*)$/', '\\1', $parameter);
+            if (strpos($parameter, ':') === 0) {
+                $parameter = substr($parameter, 1);
+            }
         }
         if (!in_array($parameter, $this->positions)) {
             return $this->db->raiseError(MDB2_ERROR_NOT_FOUND, null, null,
@@ -4179,7 +4245,7 @@ class MDB2_Module_Common
      * @var     int
      * @access  protected
      */
-    var $db_index;
+    protected $db_index;
 
     // }}}
     // {{{ constructor: function __construct($db_index)

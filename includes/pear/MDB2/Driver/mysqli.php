@@ -43,7 +43,7 @@
 // | Author: Lukas Smith <smith@pooteeweet.org>                           |
 // +----------------------------------------------------------------------+
 //
-// $Id: mysqli.php 302867 2010-08-29 11:22:07Z quipo $
+// $Id$
 //
 
 /**
@@ -57,21 +57,42 @@ class MDB2_Driver_mysqli extends MDB2_Driver_Common
 {
     // {{{ properties
 
-    var $string_quoting = array('start' => "'", 'end' => "'", 'escape' => '\\', 'escape_pattern' => '\\');
+    public $string_quoting = array(
+        'start'  => "'",
+        'end'    => "'",
+        'escape' => '\\',
+        'escape_pattern' => '\\',
+    );
 
-    var $identifier_quoting = array('start' => '`', 'end' => '`', 'escape' => '`');
+    public $identifier_quoting = array(
+        'start'  => '`',
+        'end'    => '`',
+        'escape' => '`',
+    );
 
-    var $sql_comments = array(
+    /**
+     * The ouptut of mysqli_errno() in _doQuery(), if any.
+     * @var integer
+     */
+    protected $_query_errno;
+
+    /**
+     * The ouptut of mysqli_error() in _doQuery(), if any.
+     * @var string
+     */
+    protected $_query_error;
+
+    public $sql_comments = array(
         array('start' => '-- ', 'end' => "\n", 'escape' => false),
         array('start' => '#', 'end' => "\n", 'escape' => false),
         array('start' => '/*', 'end' => '*/', 'escape' => false),
     );
 
-    var $server_capabilities_checked = false;
+    protected $server_capabilities_checked = false;
 
-    var $start_transaction = false;
+    protected $start_transaction = false;
 
-    var $varchar_max_length = 255;
+    protected $varchar_max_length = 255;
 
     // }}}
     // {{{ constructor
@@ -182,7 +203,10 @@ class MDB2_Driver_mysqli extends MDB2_Driver_Common
      */
     function errorInfo($error = null)
     {
-        if ($this->connection) {
+        if ($this->_query_errno) {
+            $native_code = $this->_query_errno;
+            $native_msg  = $this->_query_error;
+        } elseif ($this->connection) {
             $native_code = @mysqli_errno($this->connection);
             $native_msg  = @mysqli_error($this->connection);
         } else {
@@ -716,7 +740,7 @@ class MDB2_Driver_mysqli extends MDB2_Driver_Common
         $limit = $this->limit;
         $this->offset = $this->limit = 0;
         $query = $this->_modifyQuery($query, $is_manip, $limit, $offset);
-        
+
         $result = $this->_doQuery($query, $is_manip, $connection, $this->database_name);
         if (!PEAR::isError($result)) {
             $result = $this->_affectedRows($connection, $result);
@@ -781,10 +805,15 @@ class MDB2_Driver_mysqli extends MDB2_Driver_Common
             $result = mysqli_query($connection, $query);
         }
 
-        if (!$result && 0 !== mysqli_errno($connection)) {
-            $err = $this->raiseError(null, null, null,
-                'Could not execute statement', __FUNCTION__);
-            return $err;
+        if (!$result) {
+            // Store now because standaloneQuery throws off $this->connection.
+            $this->_query_errno = mysqli_errno($connection);
+            if (0 !== $this->_query_errno) {
+                $this->_query_error = mysqli_error($connection);
+                $err = $this->raiseError(null, null, null,
+                    'Could not execute statement', __FUNCTION__);
+                return $err;
+            }
         }
 
         if ($this->options['multi_query']) {
@@ -951,7 +980,7 @@ class MDB2_Driver_mysqli extends MDB2_Driver_Common
             $server_info = $this->getServerVersion();
             if (is_array($server_info)) {
                 $server_version = $server_info['major'].'.'.$server_info['minor'].'.'.$server_info['patch'];
-            
+
                 if (!version_compare($server_version, '4.1.0', '<')) {
                     $this->supported['sub_selects'] = true;
                     $this->supported['prepared_statements'] = true;
@@ -1079,7 +1108,7 @@ class MDB2_Driver_mysqli extends MDB2_Driver_Common
             if (null === $placeholder_type) {
                 $placeholder_type_guess = $query[$p_position];
             }
-            
+
             $new_pos = $this->_skipDelimitedStrings($query, $position, $p_position);
             if (PEAR::isError($new_pos)) {
                 return $new_pos;
@@ -1088,7 +1117,7 @@ class MDB2_Driver_mysqli extends MDB2_Driver_Common
                 $position = $new_pos;
                 continue; //evaluate again starting from the new position
             }
-            
+
             //make sure this is not part of an user defined variable
             $new_pos = $this->_skipUserDefinedVariable($query, $position);
             if ($new_pos != $position) {
@@ -1379,7 +1408,7 @@ class MDB2_Result_mysqli extends MDB2_Result_Common
         if ($fetchmode == MDB2_FETCHMODE_DEFAULT) {
             $fetchmode = $this->db->fetchmode;
         }
-        if ($fetchmode & MDB2_FETCHMODE_ASSOC) {
+        if ($fetchmode == MDB2_FETCHMODE_ASSOC) {
             $row = @mysqli_fetch_assoc($this->result);
             if (is_array($row)
                 && $this->db->options['portability'] & MDB2_PORTABILITY_FIX_CASE
@@ -1410,8 +1439,10 @@ class MDB2_Result_mysqli extends MDB2_Result_Common
         if ($mode) {
             $this->db->_fixResultArrayValues($row, $mode);
         }
-        if (!empty($this->types)) {
+        if (($fetchmode != MDB2_FETCHMODE_ASSOC) && !empty($this->types)) {
             $row = $this->db->datatype->convertResultRow($this->types, $row, $rtrim);
+        } elseif (($fetchmode == MDB2_FETCHMODE_ASSOC) && !empty($this->types_assoc)) {
+            $row = $this->db->datatype->convertResultRow($this->types_assoc, $row, $rtrim);
         }
         if (!empty($this->values)) {
             $this->_assignBindColumns($row);
@@ -1670,7 +1701,7 @@ class MDB2_Statement_mysqli extends MDB2_Statement_Common
      *               a MDB2 error on failure
      * @access private
      */
-    function _execute($result_class = true, $result_wrap_class = false)
+    function _execute($result_class = true, $result_wrap_class = true)
     {
         if (null === $this->statement) {
             $result = parent::_execute($result_class, $result_wrap_class);
@@ -1756,7 +1787,7 @@ class MDB2_Statement_mysqli extends MDB2_Statement_Common
                 $query.= ' USING @'.implode(', @', array_values($this->positions));
             } else {
                 $result = call_user_func_array('mysqli_stmt_bind_param', $parameters);
-                if (false !== true) {
+                if (false === $result) {
                     $err = $this->db->raiseError(null, null, null,
                         'Unable to bind parameters', __FUNCTION__);
                     return $err;
@@ -1804,10 +1835,7 @@ class MDB2_Statement_mysqli extends MDB2_Statement_Common
             $result = $this->db->_wrapResult($result, $this->result_types,
                 $result_class, $result_wrap_class, $this->limit, $this->offset);
         } else {
-//echo '<pre>'; var_dump($this->statement, mysqli_stmt_error($this->statement));exit;
-
             if (!mysqli_stmt_execute($this->statement)) {
-echo '<pre>'; var_dump($this->statement, mysqli_stmt_error($this->statement));exit;
                 $err = $this->db->raiseError(null, null, null,
                     'Unable to execute statement', __FUNCTION__);
                 return $err;

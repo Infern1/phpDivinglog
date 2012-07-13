@@ -645,6 +645,9 @@ class MDB2_Extended extends MDB2_Module_Common
      */
     function executeMultiple($stmt, $params = null)
     {
+        if (MDB2::isError($stmt)) {
+            return $stmt;
+        }
         for ($i = 0, $j = count($params); $i < $j; $i++) {
             $result = $stmt->execute($params[$i]);
             if (PEAR::isError($result)) {
