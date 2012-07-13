@@ -788,13 +788,14 @@ rel="lightbox[others]" title="{$divepic_linktit}">{$divepic_pt}</a>
         <p class="centeredImage">
           {foreach from=$image_link key=id item=i name=images}
             {if isset($pics_resized)}
-            <a id="thumb{$id}" href="{$web_root}/{$i.img_url}" 
+<!-- height="{$thumb_height}" width="{$thumb_width}" -->
+    <a id="thumb{$id}" href="{$web_root}/{$i.img_url}" 
 class="highslide" onclick="return hs.expand(this)" 
 title="{$i.img_title}"><img 
 src="{$web_root}/{$i.img_thumb_url}" 
 alt="Highslide JS" 
 title="{$i.img_title}" 
-height="{$thumb_height}" width="{$thumb_width}" ></a>
+ ></a>
             {else}
             <a id="thumb{$id}" href="{$web_root}/{$i.img_url}" 
 class="highslide" onclick="return hs.expand(this)" 

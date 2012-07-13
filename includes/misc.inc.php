@@ -199,7 +199,7 @@ function parse_mysql_query($filename, $sql_query = 0, $debug = false) {
     if ($query) {
         $connection = mysql_connect($server, $username, $password);
         mysql_select_db($db, $connection);
-        mysql_query("SET CHARACTER SET 'utf8'", $connection);
+        //mysql_query("SET CHARACTER SET 'utf8'", $connection);
         $server_query = mysql_query($query, $connection);
         if (mysql_errno()) {
             echo "<hr>\n<b>MySQL error " . mysql_errno(). ": " . mysql_error() . "\n:</b><br>\n";
@@ -781,9 +781,8 @@ function make_thumb_new ($img, $thumb, $i = 0){
     $handle = new Upload($img);
     $handle->file_name_body_pre = 'thumb_';
     $handle->file_auto_rename     = false;
-    //$handle->file_new_name_body    = $thumb;
-    //$handle->file_dst_path         = $_config['app_root'] . $_config['picpath_web_thumb'];
     $handle->image_resize          = true;
+    $handle->image_ratio_fill      = true;
     $handle->image_ratio           = true;
     $handle->image_y               = $_config['thumb-height'];
     $handle->image_x               = $_config['thumb-width'];

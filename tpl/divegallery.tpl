@@ -28,7 +28,7 @@
 <div class="thumbwrapper">
     {if isset($pics_resized)}
         <a id="thumb{$id}" href="{$web_root}/{$i.img_url}" class="highslide" onclick="return hs.expand(this)" title="{$i.img_title}">
-        <img src="{$web_root}/{$i.img_thumb_url}" alt="Highslide JS" title="{$i.img_title}" height="{$thumb_height}" width="{$thumb_width}" ></a>
+        <img src="{$web_root}/{$i.img_thumb_url}" alt="Highslide JS" title="{$i.img_title}"  ></a>
     {else}
         <a id="thumb{$id}" href="{$web_root}/{$i.img_url}" class="highslide" onclick="return hs.expand(this)" title="{$i.img_title}">
         <img src="{$web_root}/imagesize.php?w={$thumb_width}&img={$i.img_url}" alt="Highslide JS" title="{$i.img_title}" height="{$thumb_height}" width="{$thumb_width}" ></a>
