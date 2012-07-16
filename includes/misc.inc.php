@@ -780,7 +780,8 @@ function make_thumb_new ($img, $thumb, $i = 0){
 
     $handle = new Upload($img);
     $handle->file_name_body_pre = 'thumb_';
-    $handle->file_auto_rename     = false;
+      $handle->file_overwrite        = true;
+  $handle->file_auto_rename     = false;
     $handle->image_resize          = true;
     $handle->image_ratio_fill      = true;
     $handle->image_ratio           = true;

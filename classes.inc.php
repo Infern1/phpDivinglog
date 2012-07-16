@@ -6370,15 +6370,17 @@ class DivePictures{
                             if ($size[0] <= $_config['pic-width']) {
                                 // echo "<strong>ERROR: No resize!</strong><br>";
                             } else {
-                                $this->image_link[$i]['resize'] = true;
-                                $this->number_images_resize++;
+                                if(is_writeable($this->image_link[$i]['img_url'])){
+                                    $this->image_link[$i]['resize'] = true;
+                                    $this->number_images_resize++;
+                                }
                             }
                             /**
                              * Make array of the beresized thumbs
                              */
                             $file = $this->image_link[$i]['img_thumb_url'];
                             $file = preg_replace('/\s+/', '_', $file);
-                            if (!file_exists($file)) {
+                            if (!file_exists($file) ) {
                                 $this->image_link[$i]['thumb'] = true;
                                 $this->number_images_resize++;
                                 //new dBug($i); 
@@ -6389,8 +6391,10 @@ class DivePictures{
                                 if ($size_thumb[0]<=$_config['thumb-width'] && $size_thumb[1]<=$_config['thumb-width']) {
                                     // echo "<strong>ERROR: No thumb!</strong><br>";
                                 } else {
-                                    $this->image_link[$i]['thumb'] = true;
-                                    $this->number_images_resize++;
+                                    if(is_writeable($file)){
+                                        $this->image_link[$i]['thumb'] = true;
+                                        $this->number_images_resize++;
+                                    }
                                 }
                             }
                         } else {
