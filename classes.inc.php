@@ -543,11 +543,11 @@ class TableGrid{
             case 'english' :
                 // Do nothing since default is english for phpmydatgrid
                 break;
-          /*  case 'nederlands': case 'dutch' :
-                $this->gridtable->setLanguage("ne");
-                break;*/
+            case 'dutch' :
+                $this->gridtable->setLanguage("dutch");
+                break;
             case 'deutch': case 'german' :
-                $this->gridtable->setLanguage("de");
+                $this->gridtable->setLanguage("german");
                 break;
             case 'espa.ol': case 'es' :
                 $this->gridtable->Language("es");

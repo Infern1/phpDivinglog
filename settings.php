@@ -182,7 +182,7 @@ $options = array(
         'portability' => MDB2_PORTABILITY_ALL,
         );
 
-$db =& MDB2::connect($dsn, $options);
+$db = MDB2::connect($dsn, $options);
 if (PEAR::isError($db)) {
   die($db->getMessage());
 }
