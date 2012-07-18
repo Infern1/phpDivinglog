@@ -1377,10 +1377,11 @@ class Divelog {
         }
 
         if (isset($result['Depth']) && ($result['Depth'] != "")) {
+            $depth = round($result['Depth'],1);
             if ($_config['length']) {
-                $t->assign('dive_depth', MetreToFeet($result['Depth'], 0) ."&nbsp;". $_lang['unit_length_imp']);
+                $t->assign('dive_depth', MetreToFeet($depth, 0) ."&nbsp;". $_lang['unit_length_imp']);
             } else {
-                $t->assign('dive_depth', $result['Depth'] ."&nbsp;". $_lang['unit_length']);
+                $t->assign('dive_depth', $depth ."&nbsp;". $_lang['unit_length']);
             }
         } else {
             $t->assign('dive_depth','-');
@@ -2156,6 +2157,7 @@ class Divelog {
                 $Weight = $result['Weight'] ."&nbsp;". $_lang['unit_weight'] ;
             }
         }
+        $Weight = round ($Weight, 1);
 		$t->assign('Weight', $Weight);
 
 
@@ -2643,10 +2645,11 @@ class Divesite{
         }
 
         if (isset($result['MaxDepth']) && ($result['MaxDepth'] != "")) {
+            $MaxDepth = round ($result['MaxDepth'] , 1);
             if ($_config['length']) {
-                $MaxDepth = MetreToFeet($result['MaxDepth'], 0) ."&nbsp;". $_lang['unit_length_short_imp'] ;
+                $MaxDepth = MetreToFeet($MaxDepth, 0) ."&nbsp;". $_lang['unit_length_short_imp'] ;
             } else {
-                $MaxDepth = $result['MaxDepth'] ."&nbsp;". $_lang['unit_length_short'];
+                $MaxDepth = $MaxDepth ."&nbsp;". $_lang['unit_length_short'];
             }
         } else {
             $MaxDepth = "-";
@@ -5855,23 +5858,23 @@ class Divestats{
         $t->assign('stats_depthavg', $_lang['stats_depthavg'] );
 
         if ($_config['length']) {
-            $DepthMax = MetreToFeet($divestats['DepthMax'], 0) ."&nbsp;". $_lang['unit_length_short_imp'];
+            $DepthMax = round(MetreToFeet($divestats['DepthMax'],0), 1) ."&nbsp;". $_lang['unit_length_short_imp'];
         } else {
-            $DepthMax =  $divestats['DepthMax'] ."&nbsp;". $_lang['unit_length'];
+            $DepthMax =  round($divestats['DepthMax'],1) ."&nbsp;". $_lang['unit_length'];
         }
         $t->assign('DepthMax', $DepthMax);
         $t->assign('DepthMaxNr', $this->DepthMaxNr);
 
         if ($_config['length']) {
-            $DepthMin =  MetreToFeet($divestats['DepthMin'], 0) ."&nbsp;". $_lang['unit_length_short_imp'];
+            $DepthMin =  round(MetreToFeet($divestats['DepthMin'], 0),1) ."&nbsp;". $_lang['unit_length_short_imp'];
         } else {
-            $DepthMin =  $divestats['DepthMin'] ."&nbsp;". $_lang['unit_length'];
+            $DepthMin =  round($divestats['DepthMin'],1) ."&nbsp;". $_lang['unit_length'];
         }
         $t->assign('DepthMin',$DepthMin);
         $t->assign('DepthMinNr', $this->DepthMinNr );
 
         if ($_config['length']) {
-            $DepthAvg =  MetreToFeet($divestats['DepthAvg'], 0) ."&nbsp;". $_lang['unit_length_short_imp'];
+            $DepthAvg =  round(MetreToFeet($divestats['DepthAvg'], 0),1) ."&nbsp;". $_lang['unit_length_short_imp'];
         } else {
             $DepthAvg =  round($divestats['DepthAvg'], 1) ."&nbsp;". $_lang['unit_length'];
         }

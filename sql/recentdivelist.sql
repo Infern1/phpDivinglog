@@ -1,7 +1,7 @@
 SELECT  Number, 
         Divedate, 
         Divetime, 
-        Depth, 
+        round ( Depth , 1 )  AS Depth, 
         Place, 
         City,
 	Profile <> '' AS Profile
