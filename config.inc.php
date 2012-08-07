@@ -12,9 +12,9 @@
  *  database settings
  */
 $_config['database_server'] = "localhost";
-$_config['database_db'] = "divelog";
-$_config['database_username'] = "divelog";
-$_config['database_password'] = "password";
+$_config['database_db'] = "dive";
+$_config['database_username'] = "dive";
+$_config['database_password'] = "dive";
 
 /**
  * Define the connection type use mysqli for php5 (check if mysqli is installed), otherwise enter mysql
@@ -25,7 +25,7 @@ $_config['database_type'] = "mysqli";
 /**
  * Enter prefix for single user mode (for multi user see below) 
  */
-$_config['table_prefix'] = ""; 
+$_config['table_prefix'] = "DL_"; 
 
 /**
  *  language setting determines which language file is used
@@ -53,7 +53,7 @@ $_config['query_string'] = false;
 /**
  * change this to your website url
  */
-$_config['web_root'] = 'http://localhost/lrb-2004/phpDivinglog3'; 
+$_config['web_root'] = 'http://robhome.lensen.nu/phpDivinglog'; 
 
 /**
  * Your path where divelog is located
@@ -61,7 +61,7 @@ $_config['web_root'] = 'http://localhost/lrb-2004/phpDivinglog3';
  * abs_url_path = /users/j/jo/john
  * Nothing todo where phpdivinglog is installed on your harddrive!
  */
-$_config['abs_url_path'] = '/lrb-2004/phpDivinglog3'; 
+$_config['abs_url_path'] = '/phpDivinglog'; 
 
 /**
  * See below for more file location settings 
@@ -71,12 +71,12 @@ $_config['abs_url_path'] = '/lrb-2004/phpDivinglog3';
  * Define if we need to embed phpDivinglog
  * @todo make embedding possible 
  */
-$_config['embed_mode'] = false;
+$_config['embed_mode'] = true;
 
 /**
  * when view_type = 1 grid with ajax is displayed, view_type = 2 old table mode 
  */
-$_config['view_type'] = 1;
+$_config['view_type'] = 2;
 
 /**
  * When multiuser is set to true, you need to define the table prefixes

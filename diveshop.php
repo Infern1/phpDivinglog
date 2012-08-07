@@ -75,10 +75,25 @@ if ($diveshop->get_request_type() == 1) {
 $t->assign('base_page','diveshop.php');
 $t->assign('colspanlinks','4');
 if ($_config['embed_mode'] == TRUE) {
-    // Get the HTML output and send it to the requesting
-    include('header.php');
-    $t->display('diveshop.tpl');
-    include('footer.php');
+   	if(isset($_GET['header']) && htmlspecialchars($_GET['header']) == "TRUE"){
+		//$packet_id = wddx_packet_start("HEADER");
+		$output = $t->fetch('header_meta.tpl');
+		$output .= $t->fetch('header_css.tpl');
+		$output .= $t->fetch('header_script.tpl');
+		$packet = wddx_serialize_value($output);
+		echo $packet;
+	} elseif( isset($_GET['title']) && htmlspecialchars($_GET['title']) == "TRUE"){
+			$output = $t->fetch('header_title.tpl');
+			$packet = wddx_serialize_value($output);
+			echo $packet;
+	} elseif( isset($_GET['footer']) && htmlspecialchars($_GET['footer']) == "TRUE"){
+		//$output = $t->fetch('footer.tpl');
+		//$packet = wddx_serialize_value($output);
+		//echo $packet;
+	}	else {
+		$output =  $t->fetch('diveshop.tpl');
+		echo $output;
+    }
 } else {
     $t->display('diveshop.tpl');
 }

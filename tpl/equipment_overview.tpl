@@ -38,13 +38,10 @@ alt="{$equipment_service_warning}" title="{$equipment_service_warning}">
 {* Loop through the array *}
 {section name=cell_data loop=$cells }
 <tr class="diveoverview">
-{if isset($multiuser_id)}
-<td><a href="{$app_path}/{$base_page}{$sep1}{$multiuser_id}{$sep2}{$cells[cell_data].id}" 
-             title="{$cells[cell_data].object} {$logbook_equip_linktitle}" >{$cells[cell_data].object}</a></td>
-{else}
 <td><a href="{$app_path}/{$base_page}{$sep2}{$cells[cell_data].id}" 
-             title="{$cells[cell_data].object} {$logbook_equip_linktitle}" >{$cells[cell_data].object}</a></td>
-{/if}
+             title="{$cells[cell_data].object} {$logbook_equip_linktitle}"
+ 			 onclick="ajax_request('{$app_path}/{$base_page}{$sep2}{$cells[cell_data].id}')">{$cells[cell_data].object}</a></td>
+
 <td>{$cells[cell_data].manufacturer}</td>
 {if $cells[cell_data].inactive == 'True'}
 <td><img src="{$app_path}/images/icon_inactive_16.png" border="0" alt="{$equip_inactive_inactive}" title="{$equip_inactive_inactive}"></td>

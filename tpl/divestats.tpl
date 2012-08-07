@@ -1,4 +1,6 @@
+{if !isset($embed)}
 {include file='header.tpl'}
+{/if}
 <div id="content">
 <h1>{$pagetitle}</h1>
 <!-- Include links_overview -->

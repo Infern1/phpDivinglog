@@ -1,4 +1,6 @@
+{if !isset($embed)}
 {include file='header.tpl'}
+{/if}
 <div id="content">
 {*load part *}
 {if isset($divecity_id)}

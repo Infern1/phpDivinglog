@@ -32,23 +32,15 @@
 {section name=cell_data loop=$cells }
     <tr class="diveoverview">
         <td>
-{if isset($multiuser_id)}
-{if $cells[cell_data].profile == '1'}
-<img src="{$app_path}/images/profile.gif" border="0" alt="{$logbook_profile}" title="{$logbook_profile}">
-{else}
-<img src="{$app_path}/images/no_profile.gif" border="0" alt="{$logbook_no_profile}" title="{$logbook_no_profile}">
-{/if}
-<a href="{$app_path}/index.php{$sep1}{$multiuser_id}{$sep2}{$cells[cell_data].number}" 
-title="{$dlog_number_title}{$cells[cell_data].number}" >{$cells[cell_data].number}</a></td>
-{else}
-{if $cells[cell_data].profile == '1'}
-<img src="{$app_path}/images/profile.gif" border="0" alt="{$logbook_profile}" title="{$logbook_profile}">
-{else}
-<img src="{$app_path}/images/no_profile.gif" border="0" alt="{$logbook_no_profile}" title="{$logbook_no_profile}">
-{/if}
-<a href="{$app_path}/index.php{$sep2}{$cells[cell_data].number}" 
-title="{$dlog_number_title}{$cells[cell_data].number}" >{$cells[cell_data].number}</a></td>
-{/if}
+	{if $cells[cell_data].profile == '1'}
+	<img src="{$app_path}/images/profile.gif" border="0" alt="{$logbook_profile}" title="{$logbook_profile}">
+	{else}
+	<img src="{$app_path}/images/no_profile.gif" border="0" alt="{$logbook_no_profile}" title="{$logbook_no_profile}">
+	{/if}
+	<a href="{$app_path}/index.php{$sep1}{$multiuser_id}{$sep2}{$cells[cell_data].number}"
+	id="link" 
+	title="{$dlog_number_title}{$cells[cell_data].number}" 
+	onclick="ajax_request('{$app_path}/index.php{$sep2}{$cells[cell_data].number}')" >{$cells[cell_data].number}</a></td>
         <td>{$cells[cell_data].divedate}</td>
         <td>{$cells[cell_data].depth} {$unit_length_short}</td>
         <td>{$cells[cell_data].divetime} {$unit_time_short} </td>
