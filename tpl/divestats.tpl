@@ -58,17 +58,10 @@
 
 <tr class="divedetails">
  <td>{$end}</td>
- {if isset($multiuser_id)}
- <td>{$DivedateMax}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep1}{$multiuser_id}{$sep2}{$DivedateMaxNr}"
-title="{$dlog_number_title}{$DivedateMaxNr}">{$DivedateMaxNr}</a></td>
- <td>{$DivedateMin}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep1}{$multiuser_id}{$sep2}{$DivedateMinNr}"
-title="{$dlog_number_title}{$DivedateMinNr}">{$DivedateMinNr}</a></td>
- {else}
  <td>{$DivedateMax}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep2}{$DivedateMaxNr}" 
 title="{$dlog_number_title}{$DivedateMaxNr}">{$DivedateMaxNr}</a></td>
  <td>{$DivedateMin}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep2}{$DivedateMinNr}" 
 title="{$dlog_number_title}{$DivedateMinNr}">{$DivedateMinNr}</a></td>
- {/if}
  <td>&nbsp;</td>
 </tr>
 
@@ -82,13 +75,8 @@ title="{$dlog_number_title}{$DivedateMinNr}">{$DivedateMinNr}</a></td>
 
 <tr class="divedetails">
  <td>{$total_abt}</td>
- {if isset($multiuser_id)}
- <td>{$DivetimeMax}&nbsp;{$unit_time}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep1}{$multiuser_id}{$sep2}{$DivetimeMaxNr}"  title="{$dlog_number_title}{$DivetimeMaxNr}">{$DivetimeMaxNr}</a></td>
- <td>{$DivetimeMin}&nbsp;{$unit_time}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep1}{$multiuser_id}{$sep2}{$DivetimeMinNr}"  title="{$dlog_number_title}{$DivetimeMinNr}">{$DivetimeMinNr}</a></td>
- {else}
  <td>{$DivetimeMax}&nbsp;{$unit_time}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep2}{$DivetimeMaxNr}" title="{$dlog_number_title} {$DivetimeMaxNr}">{$DivetimeMaxNr}</a></td>
  <td>{$DivetimeMin}&nbsp;{$unit_time}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep2}{$DivetimeMinNr}" title="{$dlog_number_title} {$DivetimeMinNr}">{$DivetimeMinNr}</a></td>
- {/if}
  <td>{$DivetimeAvg}&nbsp;{$unit_time}</td>
 </tr>
 
@@ -102,29 +90,17 @@ title="{$dlog_number_title}{$DivedateMinNr}">{$DivedateMinNr}</a></td>
 
 <tr class="divedetails">
  <td>&nbsp;</td>
- {if isset($multiuser_id)}
- <td>{$DepthMax}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep1}{$multiuser_id}{$sep2}{$DepthMaxNr}"  
-title="{$dlog_number_title}{$DepthMaxNr}">{$DepthMaxNr}</a></td>
- <td>{$DepthMin}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep1}{$multiuser_id}{$sep2}{$DepthMinNr}"  
-title="{$dlog_number_title}{$DepthMinNr}">{$DepthMinNr}</a></td>
- {else}
  <td>{$DepthMax}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep2}{$DepthMaxNr}"  title="{$dlog_number_title}{$DepthMaxNr}">{$DepthMaxNr}</a></td>
  <td>{$DepthMin}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep2}{$DepthMinNr}"  title="{$dlog_number_title}{$DepthMinNr}">{$DepthMinNr}</a></td>
- {/if}
  <td>{$DepthAvg}</td>
 </tr>
 
 {* Show dive depth tablea *}
 <tr class="divedetails">
  <td colspan="4" align="center">
- {if isset($multiuser_id)}
-   <p align="center"><img src="{$app_path}/drawpiechart.php{$sep1}{$multiuser_id}{$sep2}{$get_nr}" 
-   border="0" alt="" title=""></p>
- {else}
-   <p align="center"><img src="{$app_path}/drawpiechart.php" 
-   border="0" alt="" title=""></p>
- {/if}
- </td>
+   <!-- <p align="center"><img src="{$app_path}/drawpiechart.php" border="0" alt="" title=""></p> -->
+   <div id="chartpie" style="margin-top:20px; margin-left:20px; width:450px; height:200px;"></div> 
+</td>
 </tr>
 
 {* Show water temp details *}
@@ -136,15 +112,9 @@ title="{$dlog_number_title}{$DepthMinNr}">{$DepthMinNr}</a></td>
 </tr>
 
 <tr class="divedetails">
- {if isset($multiuser_id)}
-<td>{$WatertempMin}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep1}{$multiuser_id}{$sep2}{$WatertempMinNr}" title="{$dlog_number_title} {$WatertempMinNr}">{$WatertempMinNr}</a></td>
-<td>{$WatertempMax}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep1}{$multiuser_id}{$sep2}{$WatertempMaxNr}" title="{$dlog_number_title} {$WatertempMaxNr}">{$WatertempMaxNr}</a></td>
+<td>{$WatertempMin|commify:2}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep2}{$WatertempMinNr}" title="{$dlog_number_title} {$WatertempMinNr}">{$WatertempMinNr}</a></td>
+<td>{$WatertempMax|commify:2}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep2}{$WatertempMaxNr}" title="{$dlog_number_title} {$WatertempMaxNr}">{$WatertempMaxNr}</a></td>
 <td>{$WatertempAvg}</td>
- {else}
-<td>{$WatertempMin}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep2}{$WatertempMinNr}" title="{$dlog_number_title} {$WatertempMinNr}">{$WatertempMinNr}</a></td>
-<td>{$WatertempMax}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep2}{$WatertempMaxNr}" title="{$dlog_number_title} {$WatertempMaxNr}">{$WatertempMaxNr}</a></td>
-<td>{$WatertempAvg}</td>
- {/if}
  <td>&nbsp;</td>
 </tr>
 
@@ -157,15 +127,9 @@ title="{$dlog_number_title}{$DepthMinNr}">{$DepthMinNr}</a></td>
 </tr>
 
 <tr class="divedetails">
- {if isset($multiuser_id)}
-<td>{$AirtempMin}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep1}{$multiuser_id}{$sep2}{$AirtempMinNr}" title="{$dlog_number_title} {$AirtempMinNr}">{$AirtempMinNr}</a></td>
-<td>{$AirtempMax}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep1}{$multiuser_id}{$sep2}{$AirtempMaxNr}" title="{$dlog_number_title} {$AirtempMaxNr}">{$AirtempMaxNr}</a></td>
-<td>{$AirtempAvg}</td>
- {else}
 <td>{$AirtempMin}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep2}{$AirtempMinNr}" title="{$dlog_number_title} {$AirtempMinNr}">{$AirtempMinNr}</a></td>
 <td>{$AirtempMax}&nbsp;&nbsp;<a href="{$app_path}/index.php{$sep2}{$AirtempMaxNr}" title="{$dlog_number_title} {$AirtempMaxNr}">{$AirtempMaxNr}</a></td>
 <td>{$AirtempAvg}</td>
- {/if}
  <td>&nbsp;</td>
 </tr>
 
@@ -351,24 +315,28 @@ title="{$dlog_number_title}{$DepthMinNr}">{$DepthMinNr}</a></td>
 
 </div>
 
-{* {literal}
-<!-- This JavaScript snippet activates those tabs -->
-<script type="text/javascript">
-
-// perform JavaScript after the document is scriptable.
-$(function() {
-	// setup ul.tabs to work as tabs for each div directly under div.panes
-	$("ul.tabs").tabs("div.panes > div");
-});
-</script>
-{/literal} *}
 
 {literal}
 <!-- activate tabs with JavaScript -->
 <script type="text/javascript">
-$(function() {
+jQuery(document).ready(function(){
 	// :first selector is optional if you have only one tabs on the page
-	$(".css-tabs:first").tabs(".css-panes:first > div");
+	jQuery(".css-tabs").tabs(".css-panes:first > div");
+    var data = {/literal}{$json_pie_data}{literal};
+    var plotchartpie = jQuery.jqplot ('chartpie', [data], 
+    { 
+      seriesDefaults: {
+        // Make this a pie chart.
+        renderer: jQuery.jqplot.PieRenderer, 
+        rendererOptions: {
+          // Put data labels on the pie slices.
+          // By default, labels show the percentage of the slice.
+          showDataLabels: true
+        }
+      }, 
+      legend: { show:true, location: 'e' }
+    }
+  );
 });
 </script>
 {/literal}
@@ -377,19 +345,21 @@ $(function() {
 
 {* Show the program deails *}
 <table class="details" cellspacing="0" cellpadding="0" width="100%">
-<tr class="divedetails"><td class="spacing">&nbsp;</td></tr>
-<tr class="divedetails">
- <td>{$poweredby} <a href="{$dlog_url}" target="_blank"
-title="{$Divelogname} web site">{$Divelogname}</a> {$dlog_version}
-{$dbversion}{$DivelogVersion}{$and}
-<a href="{$app_url}" target="_blank"
-title="{$Appname} web site">{$Appname}</a>
-{$phpDivelogVersion}</td>
-</tr>
-<tr class="divedetails"><td class="spacing">&nbsp;</td></tr>
-<tr class="divesection">
- <td colspan="4">&nbsp;</td>
-</tr>
+    <tr class="divedetails">
+        <td class="spacing">&nbsp;</td>
+    </tr>
+    <tr class="divedetails">
+        <td>{$poweredby} <a href="{$dlog_url}" target="_blank" title="{$Divelogname} web site">{$Divelogname}</a>
+            {$dlog_version} {$dbversion}{$DivelogVersion}{$and} 
+            <a href="{$app_url}" target="_blank" title="{$Appname} web site">{$Appname}</a>
+            {$phpDivelogVersion}</td>
+    </tr>
+    <tr class="divedetails">
+        <td class="spacing">&nbsp;</td>
+    </tr>
+    <tr class="divesection">
+        <td colspan="4">&nbsp;</td>
+    </tr>
 </table>
 
 <!-- Include links_overview -->

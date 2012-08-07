@@ -197,6 +197,9 @@ if (($sql_query)) {
     $query = sql_file($filename);
 }
 if ($query) {
+    if($debug == true){
+    //    echo "query is: $query <br>";
+    }
     $connection = mysql_connect($server, $username, $password);
     mysql_select_db($db, $connection);
     //mysql_query("SET CHARACTER SET 'utf8'", $connection);
@@ -359,43 +362,134 @@ return true;
 * @return void
 */
 function GetProfileData($result) {
-global $_config; /*{{{*/
-global $_lang;
-$profile = $result['Profile'];
-$length = ( strlen($profile) / 12);
-$profileint = ($result['ProfileInt'] / 60);
+    global $_config; /*{{{*/
+    global $_lang;
+    $profile = $result['Profile'];
+    $length = ( strlen($profile) / 12);
+    $profileint = ($result['ProfileInt'] / 60);
 
-/**
- * Divetime calculation changed to Divetime from Divelog table see:
- * http://www.divinglog.de/phpbb/viewtopic.php?p=3094#3094
- */
-$divetime = $profileint * $length;
-if (isset($result['Divetime'])) {
-    $divetime = $result['Divetime'];
-} else {
+    /**
+     * Divetime calculation changed to Divetime from Divelog table see:
+     * http://www.divinglog.de/phpbb/viewtopic.php?p=3094#3094
+     */
     $divetime = $profileint * $length;
-}
-$start = 0;
-$ydata = 0;
-for ($i=0; $i < $length; $i++) {
-    $ydata = $ydata + (substr(substr($profile,$start,12),0,5) / 100);
-    $start += 12;
-}
-$averagedepth = $ydata / $length;
-$sac = (($result['PresS'] - $result['PresE']) * $result['Tanksize']) / ($divetime * ($averagedepth / 10 + 1));
+    if (isset($result['Divetime'])) {
+        $divetime = $result['Divetime'];
+    } else {
+        $divetime = $profileint * $length;
+    }
+    $start = 0;
+    $ydata = 0;
+    $ydata_ar = array();
+    $ydata_asc_ar = array();
+    $merged = array();
+    $merged_asc = array();
+    $merged_avg = array();
+    $merged_deco = array();
+    $merged_rbt  = array();
+    $merged_desc = array();
+    $merged_work = array();
 
-if ($_config['length']) {
-    $averagedepth = MetreToFeet($averagedepth / 3.2808399, 2) ."&nbsp;";
-} else {
-    $averagedepth = number_format($averagedepth, 2) ."&nbsp;";
-}
-if ($_config['volume']) {
-    $sac = LitreToCuft($sac, 2) ."&nbsp;". $_lang['unit_rate_imp'];
-} else {
-    $sac = number_format($sac, 2) ."&nbsp;". $_lang['unit_rate'];
-}
-return array('averagedepth' => $averagedepth , 'sac' => $sac);
-/*}}}*/
+   for ($i=0; $i < $length; $i++) {
+        $ydata = $ydata + (substr(substr($profile,$start,12),0,5) / 100);
+        $ydata_ar[$i] = substr(substr($profile, $start, 12), 0, 5) / 100;
+        $decowarning[$i] = substr(substr($profile, $start, 12), 5, 1);
+        $rbtwarning[$i] = substr(substr($profile, $start, 12), 6, 1);
+        $ascwarning[$i] = substr(substr($profile, $start, 12), 7, 1);
+        $decwarning[$i] = substr(substr($profile, $start, 12), 8, 1);
+        $workwarning[$i] = substr(substr($profile, $start, 12), 9, 1);
+        $start += 12;
+    }
+    /**
+     * Use the profile interval time to assign time values to the data 
+     */
+    $profileint = ($result['ProfileInt'] / 60);
+    $xdata = array();
+    $temp = 0;
+    for ($i = 0; $i < $length; $i++) {
+        $xdata[$i] = round($temp, 1);
+        $temp += $profileint;
+    } 
+    /**
+     * Negate all profile data and convert units if required 
+     */
+    $n = count($ydata_ar);
+    for($i = 0; $i < $n; ++$i) {
+        if ($_config['length']) {
+            $ydata_ar[$i] = toFeet($ydata_ar[$i]);
+        } else {
+            $ydata_ar[$i] = round(- $ydata_ar[$i], 1);
+        } 
+    } 
+    $averagedepth = $ydata / $length;
+    for ($a = 0; $a < count($ydata_ar); $a++) {
+        $ydata_asc[$a] = $ydata_ar[$a] * $ascwarning[$a]; /*{{{*/
+        $ydata_desc[$a] = $ydata_ar[$a] * $decwarning[$a];
+        $ydata_deco[$a] = $ydata_ar[$a] * $decowarning[$a];
+        $ydata_rbt[$a] = $ydata_ar[$a] * $rbtwarning[$a];
+        $ydata_work[$a] = $ydata_ar[$a] * $workwarning[$a];
+        $ydata_avg[$a] = round($averagedepth,2) * -1.0;
+
+        if (intval($ydata_asc[$a]) === 0) {
+            //$ydata_asc[$a] = "";
+        } else {
+            $ydata_asc[$a-1] = $ydata_ar[$a-1];
+        } 
+        if (intval($ydata_desc[$a]) === 0) {
+            //$ydata_desc[$a] = "";
+        } else {
+            $ydata_desc[$a-1] = $ydata_ar[$a-1];
+        } 
+        if (intval($ydata_deco[$a]) === 0) {
+            //$ydata_deco[$a] = "";
+        } else {
+            $ydata_deco[$a-1] = $ydata_ar[$a-1];
+        } 
+        if (intval($ydata_rbt[$a]) === 0) {
+            //$ydata_rbt[$a] = "";
+        } else {
+            $ydata_rbt[$a-1] = $ydata_ar[$a-1];
+        } 
+        if (intval($ydata_work[$a]) === 0) {
+            //$ydata_work[$a] = "";
+        } else {
+            $ydata_work[$a-1] = $ydata_ar[$a-1];
+        } /*}}}*/
+    }     
+   for($i = 0; $i < $n; ++$i) {
+        $merged[$i] = array($xdata[$i] , $ydata_ar[$i]);
+        $merged_asc[$i] = array($xdata[$i] , $ydata_asc[$i]);
+        $merged_avg[$i] = array($xdata[$i] , $ydata_avg[$i]);
+        $merged_deco[$i] = array($xdata[$i] , $ydata_deco[$i]);
+        $merged_rbt[$i] = array($xdata[$i] , $ydata_rbt[$i]);
+        $merged_desc[$i] = array($xdata[$i] , $ydata_desc[$i]);
+        $merged_work[$i] = array($xdata[$i] , $ydata_work[$i]);
+   } 
+
+    $sac = (($result['PresS'] - $result['PresE']) * $result['Tanksize']) / ($divetime * ($averagedepth / 10 + 1));
+
+    if ($_config['length']) {
+        $averagedepth = MetreToFeet($averagedepth / 3.2808399, 2) ."&nbsp;";
+    } else {
+        $averagedepth = number_format($averagedepth, 2) ."&nbsp;";
+    }
+    if ($_config['volume']) {
+        $sac = LitreToCuft($sac, 2) ."&nbsp;". $_lang['unit_rate_imp'];
+    } else {
+        $sac = number_format($sac, 2) ."&nbsp;". $_lang['unit_rate'];
+    }
+    return array(
+            'averagedepth'  => $averagedepth , 
+            'sac'           => $sac, 
+            'data'          => $merged , 
+            'ascdata'       => $merged_asc,
+            'avgdata'       => $merged_avg,
+            'decodata'      => $merged_deco,
+            'rbtdata'       => $merged_rbt,
+            'descdata'      => $merged_desc,
+            'workdata'      => $merged_work
+        );
+    /*}}}*/
 }
 
 
@@ -593,6 +687,7 @@ function datecheck($date,$format='ymd',$separator='-',$toformat='mdy',$toseparat
 function add_unit_depth($value) {
     global $_config, $_lang; /*{{{*/
     if (!empty($value)) {
+        $value = number_format($value, 1,$_config['decsep'], '');
         if ($_config['length']) {
             $value .=  " ".$_lang['unit_length_short_imp'];
         } else {

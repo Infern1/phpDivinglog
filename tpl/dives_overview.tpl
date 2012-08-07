@@ -50,7 +50,7 @@ title="{$dlog_number_title}{$cells[cell_data].number}" >{$cells[cell_data].numbe
 title="{$dlog_number_title}{$cells[cell_data].number}" >{$cells[cell_data].number}</a></td>
 {/if}
         <td>{$cells[cell_data].divedate}</td>
-        <td>{$cells[cell_data].depth} {$unit_length_short}</td>
+        <td>{$cells[cell_data].depth|commify:2} {$unit_length_short}</td>
         <td>{$cells[cell_data].divetime} {$unit_time_short} </td>
         <td>{$cells[cell_data].place}, {$cells[cell_data].city}</td>
     </tr>

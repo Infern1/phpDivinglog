@@ -1222,6 +1222,7 @@ class Divelog {
     var $sac;
     var $userdefined;
     var $userdefined_count;
+    var $profile_array;
     var $request_type; // request_type = 0 overview, request_type = 1 details
    
     /**
@@ -1297,7 +1298,15 @@ class Divelog {
                 $this->sac = "-";
             } else {
                 $profile_info = GetProfileData($result);
-                $this->averagedepth = $profile_info['averagedepth'];
+                $this->profile_array['data']        = $profile_info['data'];
+                $this->profile_array['ascdata']     = $profile_info['ascdata'];
+                $this->profile_array['avgdata']     = $profile_info['avgdata'];
+                $this->profile_array['decodata']    = $profile_info['decodata'];
+                $this->profile_array['rbtdata']     = $profile_info['rbtdata'];
+                $this->profile_array['descdata']    = $profile_info['descdata'];
+                $this->profile_array['workdata']    = $profile_info['workdata'];
+
+                $this->averagedepth = floatval($profile_info['averagedepth']);
                 $this->sac = $profile_info['sac'];
             }   
         } else {
@@ -1581,6 +1590,33 @@ class Divelog {
         $profile = $result['Profile'];
         if ($profile && $_config['show_profile'] == true) {
             $t->assign('profile','1');
+            
+            $json_profile       = json_encode($this->profile_array['data']);
+            $json_profile_asc   = json_encode($this->profile_array['ascdata']);
+            $json_profile_avg   = json_encode($this->profile_array['avgdata']);
+            $json_profile_deco  = json_encode($this->profile_array['decodata'] );
+            $json_profile_rbt   = json_encode($this->profile_array['rbtdata']  );
+            $json_profile_desc  = json_encode($this->profile_array['descdata'] );
+            $json_profile_work  = json_encode($this->profile_array['workdata'] );
+
+            $t->assign('json_profile', $json_profile); 
+            $t->assign('json_profile_asc', $json_profile_asc); 
+            $t->assign('json_profile_avg', $json_profile_avg); 
+            $t->assign('json_profile_deco',$json_profile_deco );
+            $t->assign('json_profile_rbt', $json_profile_rbt  );
+            $t->assign('json_profile_desc',$json_profile_desc );
+            $t->assign('json_profile_work',$json_profile_work );
+            $t->assign('profile_title', $_lang['dive_profile_title'] .$this->dive_nr ); 
+            $t->assign('profile_xaxis', $_lang['dive_profile_xaxis_title'] ); 
+            if ($_config['length']) {
+                $t->assign('profile_yaxis',$_lang['dive_profile_yimperial_title']  ); 
+            } else {
+                $t->assign('profile_yaxis', $_lang['dive_profile_ymetric_title']  ); 
+            } 
+            $t->assign('dive_profile_depth_legend', $_lang['dive_profile_depth_legend']);
+            $t->assign('dive_profile_ascent_legend', $_lang['dive_profile_ascent_legend']);
+            $t->assign('dive_profile_avgdepth_title', $_lang['dive_profile_avgdepth_title']);
+            $t->assign('averagedepth', $this->averagedepth);
             $t->assign('get_nr',$this->dive_nr);
             $t->assign('dive_profile_title', $_lang['dive_profile_title'] . $result['Number']);
         }
@@ -5668,8 +5704,8 @@ class Divestats{
                 $this->DepthMaxNr = $divestatsnr['Number'];
             }
             // Get dive number for coldest water dive
-            $globals['stats'] = "Watertemp = '" . $divestats['WatertempMin'] . "'";
-            $divestatsnr = parse_mysql_query('divestatsnr.sql');
+            $globals['stats'] = "Watertemp = " . $divestats['WatertempMin'] . "";
+            $divestatsnr = parse_mysql_query('divestatsnr.sql',0,true);
             if ($globals['sql_num_rows'] > 1) {
                 $this->WatertempMinNr = $divestatsnr[0]['Number'];
             } else {
@@ -5680,7 +5716,7 @@ class Divestats{
                  }
             }
             // Get dive number for warmest water dive
-            $globals['stats'] = "Watertemp = '" . $divestats['WatertempMax'] . "'";
+            $globals['stats'] = "Watertemp = " . $divestats['WatertempMax'] . "";
             $divestatsnr = parse_mysql_query('divestatsnr.sql');
             if ($globals['sql_num_rows'] > 1) {
                 $this->WatertempMaxNr = $divestatsnr[0]['Number'];
@@ -5881,25 +5917,40 @@ class Divestats{
         $t->assign('DepthAvg', $DepthAvg);
 
         // Show dive depth table
-        $t->assign('stats_depth1m',  $_config['length'] ? $_lang['stats_depth1i'] : $_lang['stats_depth1m']);
+        $stats_depth1m = $_config['length'] ? $_lang['stats_depth1i'] : $_lang['stats_depth1m'];
+        $t->assign('stats_depth1m', $stats_depth1m );
         $t->assign('depthrange1',$this->depthrange );
         $t->assign('depthrange1_per' , $this->depthrange1_per);
 
-        $t->assign('stats_depth2m',  $_config['length'] ? $_lang['stats_depth2i'] : $_lang['stats_depth2m']);
+        $stats_depth2m = $_config['length'] ? $_lang['stats_depth2i'] : $_lang['stats_depth2m'];
+        $t->assign('stats_depth2m', $stats_depth2m );
         $t->assign('depthrange2',  $this->depthrange[1]  );
         $t->assign('depthrange2_per', $this->depthrange2_per);
 
-        $t->assign('stats_depth3m',  $_config['length'] ? $_lang['stats_depth3i'] : $_lang['stats_depth3m']) ;
+        $stats_depth3m =$_config['length'] ? $_lang['stats_depth3i'] : $_lang['stats_depth3m'];
+        $t->assign('stats_depth3m',  $stats_depth3m) ;
         $t->assign('depthrange3', $this->depthrange[2]);
         $t->assign('depthrange3_per', $this->depthrange3_per);
 
-        $t->assign('stats_depth4m',  $_config['length'] ? $_lang['stats_depth4i'] : $_lang['stats_depth4m']);
+        $stats_depth4m =$_config['length'] ? $_lang['stats_depth4i'] : $_lang['stats_depth4m'];
+        $t->assign('stats_depth4m',  $stats_depth4m);
         $t->assign('depthrange4', $this->depthrange[3]);
         $t->assign('depthrange4_per', $this->depthrange4_per );
 
-        $t->assign('stats_depth5m',  $_config['length'] ? $_lang['stats_depth5i'] : $_lang['stats_depth5m']);
+        $stats_depth5m =$_config['length'] ? $_lang['stats_depth5i'] : $_lang['stats_depth5m'];
+        $t->assign('stats_depth5m', $stats_depth5m );
         $t->assign('depthrange5', $this->depthrange[4]);
         $t->assign('depthrange5_per', $this->depthrange5_per);
+        
+        $pie_data[0] = array( $stats_depth1m , $this->depthrange1_per);
+        $pie_data[1] = array( $stats_depth2m , $this->depthrange2_per);
+        $pie_data[2] = array( $stats_depth3m , $this->depthrange3_per);
+        $pie_data[3] = array( $stats_depth4m , $this->depthrange4_per);
+        $pie_data[4] = array( $stats_depth5m , $this->depthrange5_per);
+
+        $json_pie_data = json_encode(($pie_data));
+        $t->assign('json_pie_data' , $json_pie_data);
+        $t->assign('piechart_display', 1);
 
         // Show water temp details
         $t->assign('stats_watertempmin', $_lang['stats_watertempmin']);
