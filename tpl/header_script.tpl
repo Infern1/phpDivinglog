@@ -24,7 +24,6 @@
 <script type="text/javascript">
 function ajax_request($url) {
 }
-
 </script>
 {/literal}
 
@@ -35,10 +34,7 @@ function ajax_request($url) {
 	jQuery('#content').load($url, function() {
 		update_links();
 	});
-
-	
 }
-
 function update_links(){
 	jQuery(".divelogcrumbs a").each(function (index) {
 		jQuery(this).click(function(event){
@@ -102,6 +98,7 @@ window.location.href = '{/literal}{$web_root}{literal}' + link + index  ;
 <script type="text/javascript" src="{$app_path}/includes/jqplot/plugins/jqplot.canvasAxisLabelRenderer.min.js"></script>
 <script type="text/javascript" src="{$app_path}/includes/jqplot/plugins/jqplot.highlighter.min.js"></script>
 <script type="text/javascript" src="{$app_path}/includes/jqplot/plugins/jqplot.cursor.min.js"></script>
+<script type="text/javascript" src="{$app_path}/includes/jqplot/plugins/jqplot.pieRenderer.min.js"></script>
 {/if}
 {if isset($piechart_display)}
 <script type="text/javascript" src="{$app_path}/includes/jqplot/jquery.jqplot.min.js"></script>

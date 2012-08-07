@@ -972,7 +972,7 @@ jQuery(document).ready(function(){
         if (name  ===  "{/literal}{$dive_tab_profile}{literal}" && plot1._drawCount === 0) {
             plot1.replot();
         }
- });
+    });
 });
 
 </script>

@@ -324,21 +324,29 @@ title="{$dlog_number_title}{$DivedateMinNr}">{$DivedateMinNr}</a></td>
 jQuery(document).ready(function(){
 	// :first selector is optional if you have only one tabs on the page
 	jQuery(".css-tabs").tabs(".css-panes:first > div");
+    var api = jQuery('.css-tabs').data('tabs');
     var data = {/literal}{$json_pie_data}{literal};
     var plotchartpie = jQuery.jqplot ('chartpie', [data], 
     { 
       seriesDefaults: {
-        // Make this a pie chart.
         renderer: jQuery.jqplot.PieRenderer, 
         rendererOptions: {
-          // Put data labels on the pie slices.
-          // By default, labels show the percentage of the slice.
           showDataLabels: true
         }
       }, 
       legend: { show:true, location: 'e' }
     }
   );
+    api.onClick(function(event, tabIndex) {
+        //var tabPanes = this;
+        var name = api.getCurrentTab().text();
+        //console.info("current position is: " + tabIndex);
+        //console.info("current tab is: " + name);
+        if (name  ===  "{/literal}{$dive_tab_stats}{literal}" && plotchartpie._drawCount === 0) {
+            plotchartpie.replot();
+        }
+    });
+
 });
 </script>
 {/literal}

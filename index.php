@@ -87,7 +87,8 @@ if($_config['embed_mode'] == TRUE){
     // Get the HTML output and send it to the requesting
    	if(isset($_GET['header']) && htmlspecialchars($_GET['header']) == "TRUE"){
 		//$packet_id = wddx_packet_start("HEADER");
-		$output = $t->fetch('header_meta.tpl');
+		$t->assign('profile',1);
+        $output = $t->fetch('header_meta.tpl');
 		$output .= $t->fetch('header_css.tpl');
 		$output .= $t->fetch('header_script.tpl');
 		$packet = wddx_serialize_value($output);
