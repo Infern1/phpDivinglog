@@ -543,11 +543,11 @@ class TableGrid{
             case 'english' :
                 // Do nothing since default is english for phpmydatgrid
                 break;
-          /*  case 'nederlands': case 'dutch' :
-                $this->gridtable->setLanguage("ne");
-                break;*/
+            case 'dutch' :
+                $this->gridtable->setLanguage("dutch");
+                break;
             case 'deutch': case 'german' :
-                $this->gridtable->setLanguage("de");
+                $this->gridtable->setLanguage("german");
                 break;
             case 'espa.ol': case 'es' :
                 $this->gridtable->Language("es");
@@ -1222,6 +1222,7 @@ class Divelog {
     var $sac;
     var $userdefined;
     var $userdefined_count;
+    var $profile_array;
     var $request_type; // request_type = 0 overview, request_type = 1 details
    
     /**
@@ -1297,7 +1298,15 @@ class Divelog {
                 $this->sac = "-";
             } else {
                 $profile_info = GetProfileData($result);
-                $this->averagedepth = $profile_info['averagedepth'];
+                $this->profile_array['data']        = $profile_info['data'];
+                $this->profile_array['ascdata']     = $profile_info['ascdata'];
+                $this->profile_array['avgdata']     = $profile_info['avgdata'];
+                $this->profile_array['decodata']    = $profile_info['decodata'];
+                $this->profile_array['rbtdata']     = $profile_info['rbtdata'];
+                $this->profile_array['descdata']    = $profile_info['descdata'];
+                $this->profile_array['workdata']    = $profile_info['workdata'];
+
+                $this->averagedepth = floatval($profile_info['averagedepth']);
                 $this->sac = $profile_info['sac'];
             }   
         } else {
@@ -1377,10 +1386,11 @@ class Divelog {
         }
 
         if (isset($result['Depth']) && ($result['Depth'] != "")) {
+            $depth = round($result['Depth'],1);
             if ($_config['length']) {
-                $t->assign('dive_depth', MetreToFeet($result['Depth'], 0) ."&nbsp;". $_lang['unit_length_imp']);
+                $t->assign('dive_depth', MetreToFeet($depth, 0) ."&nbsp;". $_lang['unit_length_imp']);
             } else {
-                $t->assign('dive_depth', $result['Depth'] ."&nbsp;". $_lang['unit_length']);
+                $t->assign('dive_depth', $depth ."&nbsp;". $_lang['unit_length']);
             }
         } else {
             $t->assign('dive_depth','-');
@@ -1580,6 +1590,33 @@ class Divelog {
         $profile = $result['Profile'];
         if ($profile && $_config['show_profile'] == true) {
             $t->assign('profile','1');
+            
+            $json_profile       = json_encode($this->profile_array['data']);
+            $json_profile_asc   = json_encode($this->profile_array['ascdata']);
+            $json_profile_avg   = json_encode($this->profile_array['avgdata']);
+            $json_profile_deco  = json_encode($this->profile_array['decodata'] );
+            $json_profile_rbt   = json_encode($this->profile_array['rbtdata']  );
+            $json_profile_desc  = json_encode($this->profile_array['descdata'] );
+            $json_profile_work  = json_encode($this->profile_array['workdata'] );
+
+            $t->assign('json_profile', $json_profile); 
+            $t->assign('json_profile_asc', $json_profile_asc); 
+            $t->assign('json_profile_avg', $json_profile_avg); 
+            $t->assign('json_profile_deco',$json_profile_deco );
+            $t->assign('json_profile_rbt', $json_profile_rbt  );
+            $t->assign('json_profile_desc',$json_profile_desc );
+            $t->assign('json_profile_work',$json_profile_work );
+            $t->assign('profile_title', $_lang['dive_profile_title'] .$this->dive_nr ); 
+            $t->assign('profile_xaxis', $_lang['dive_profile_xaxis_title'] ); 
+            if ($_config['length']) {
+                $t->assign('profile_yaxis',$_lang['dive_profile_yimperial_title']  ); 
+            } else {
+                $t->assign('profile_yaxis', $_lang['dive_profile_ymetric_title']  ); 
+            } 
+            $t->assign('dive_profile_depth_legend', $_lang['dive_profile_depth_legend']);
+            $t->assign('dive_profile_ascent_legend', $_lang['dive_profile_ascent_legend']);
+            $t->assign('dive_profile_avgdepth_title', $_lang['dive_profile_avgdepth_title']);
+            $t->assign('averagedepth', $this->averagedepth);
             $t->assign('get_nr',$this->dive_nr);
             $t->assign('dive_profile_title', $_lang['dive_profile_title'] . $result['Number']);
         }
@@ -2156,6 +2193,7 @@ class Divelog {
                 $Weight = $result['Weight'] ."&nbsp;". $_lang['unit_weight'] ;
             }
         }
+        $Weight = round ($Weight, 1);
 		$t->assign('Weight', $Weight);
 
 
@@ -2643,10 +2681,11 @@ class Divesite{
         }
 
         if (isset($result['MaxDepth']) && ($result['MaxDepth'] != "")) {
+            $MaxDepth = round ($result['MaxDepth'] , 1);
             if ($_config['length']) {
-                $MaxDepth = MetreToFeet($result['MaxDepth'], 0) ."&nbsp;". $_lang['unit_length_short_imp'] ;
+                $MaxDepth = MetreToFeet($MaxDepth, 0) ."&nbsp;". $_lang['unit_length_short_imp'] ;
             } else {
-                $MaxDepth = $result['MaxDepth'] ."&nbsp;". $_lang['unit_length_short'];
+                $MaxDepth = $MaxDepth ."&nbsp;". $_lang['unit_length_short'];
             }
         } else {
             $MaxDepth = "-";
@@ -5665,8 +5704,8 @@ class Divestats{
                 $this->DepthMaxNr = $divestatsnr['Number'];
             }
             // Get dive number for coldest water dive
-            $globals['stats'] = "Watertemp = '" . $divestats['WatertempMin'] . "'";
-            $divestatsnr = parse_mysql_query('divestatsnr.sql');
+            $globals['stats'] = "Watertemp = " . $divestats['WatertempMin'] . "";
+            $divestatsnr = parse_mysql_query('divestatsnr.sql',0,true);
             if ($globals['sql_num_rows'] > 1) {
                 $this->WatertempMinNr = $divestatsnr[0]['Number'];
             } else {
@@ -5677,7 +5716,7 @@ class Divestats{
                  }
             }
             // Get dive number for warmest water dive
-            $globals['stats'] = "Watertemp = '" . $divestats['WatertempMax'] . "'";
+            $globals['stats'] = "Watertemp = " . $divestats['WatertempMax'] . "";
             $divestatsnr = parse_mysql_query('divestatsnr.sql');
             if ($globals['sql_num_rows'] > 1) {
                 $this->WatertempMaxNr = $divestatsnr[0]['Number'];
@@ -5855,48 +5894,63 @@ class Divestats{
         $t->assign('stats_depthavg', $_lang['stats_depthavg'] );
 
         if ($_config['length']) {
-            $DepthMax = MetreToFeet($divestats['DepthMax'], 0) ."&nbsp;". $_lang['unit_length_short_imp'];
+            $DepthMax = round(MetreToFeet($divestats['DepthMax'],0), 1) ."&nbsp;". $_lang['unit_length_short_imp'];
         } else {
-            $DepthMax =  $divestats['DepthMax'] ."&nbsp;". $_lang['unit_length'];
+            $DepthMax =  round($divestats['DepthMax'],1) ."&nbsp;". $_lang['unit_length'];
         }
         $t->assign('DepthMax', $DepthMax);
         $t->assign('DepthMaxNr', $this->DepthMaxNr);
 
         if ($_config['length']) {
-            $DepthMin =  MetreToFeet($divestats['DepthMin'], 0) ."&nbsp;". $_lang['unit_length_short_imp'];
+            $DepthMin =  round(MetreToFeet($divestats['DepthMin'], 0),1) ."&nbsp;". $_lang['unit_length_short_imp'];
         } else {
-            $DepthMin =  $divestats['DepthMin'] ."&nbsp;". $_lang['unit_length'];
+            $DepthMin =  round($divestats['DepthMin'],1) ."&nbsp;". $_lang['unit_length'];
         }
         $t->assign('DepthMin',$DepthMin);
         $t->assign('DepthMinNr', $this->DepthMinNr );
 
         if ($_config['length']) {
-            $DepthAvg =  MetreToFeet($divestats['DepthAvg'], 0) ."&nbsp;". $_lang['unit_length_short_imp'];
+            $DepthAvg =  round(MetreToFeet($divestats['DepthAvg'], 0),1) ."&nbsp;". $_lang['unit_length_short_imp'];
         } else {
             $DepthAvg =  round($divestats['DepthAvg'], 1) ."&nbsp;". $_lang['unit_length'];
         }
         $t->assign('DepthAvg', $DepthAvg);
 
         // Show dive depth table
-        $t->assign('stats_depth1m',  $_config['length'] ? $_lang['stats_depth1i'] : $_lang['stats_depth1m']);
+        $stats_depth1m = $_config['length'] ? $_lang['stats_depth1i'] : $_lang['stats_depth1m'];
+        $t->assign('stats_depth1m', $stats_depth1m );
         $t->assign('depthrange1',$this->depthrange );
         $t->assign('depthrange1_per' , $this->depthrange1_per);
 
-        $t->assign('stats_depth2m',  $_config['length'] ? $_lang['stats_depth2i'] : $_lang['stats_depth2m']);
+        $stats_depth2m = $_config['length'] ? $_lang['stats_depth2i'] : $_lang['stats_depth2m'];
+        $t->assign('stats_depth2m', $stats_depth2m );
         $t->assign('depthrange2',  $this->depthrange[1]  );
         $t->assign('depthrange2_per', $this->depthrange2_per);
 
-        $t->assign('stats_depth3m',  $_config['length'] ? $_lang['stats_depth3i'] : $_lang['stats_depth3m']) ;
+        $stats_depth3m =$_config['length'] ? $_lang['stats_depth3i'] : $_lang['stats_depth3m'];
+        $t->assign('stats_depth3m',  $stats_depth3m) ;
         $t->assign('depthrange3', $this->depthrange[2]);
         $t->assign('depthrange3_per', $this->depthrange3_per);
 
-        $t->assign('stats_depth4m',  $_config['length'] ? $_lang['stats_depth4i'] : $_lang['stats_depth4m']);
+        $stats_depth4m =$_config['length'] ? $_lang['stats_depth4i'] : $_lang['stats_depth4m'];
+        $t->assign('stats_depth4m',  $stats_depth4m);
         $t->assign('depthrange4', $this->depthrange[3]);
         $t->assign('depthrange4_per', $this->depthrange4_per );
 
-        $t->assign('stats_depth5m',  $_config['length'] ? $_lang['stats_depth5i'] : $_lang['stats_depth5m']);
+        $stats_depth5m =$_config['length'] ? $_lang['stats_depth5i'] : $_lang['stats_depth5m'];
+        $t->assign('stats_depth5m', $stats_depth5m );
         $t->assign('depthrange5', $this->depthrange[4]);
         $t->assign('depthrange5_per', $this->depthrange5_per);
+        
+        $pie_data[0] = array( $stats_depth1m , $this->depthrange1_per);
+        $pie_data[1] = array( $stats_depth2m , $this->depthrange2_per);
+        $pie_data[2] = array( $stats_depth3m , $this->depthrange3_per);
+        $pie_data[3] = array( $stats_depth4m , $this->depthrange4_per);
+        $pie_data[4] = array( $stats_depth5m , $this->depthrange5_per);
+
+        $json_pie_data = json_encode(($pie_data));
+        $t->assign('json_pie_data' , $json_pie_data);
+        $t->assign('piechart_display', 1);
 
         // Show water temp details
         $t->assign('stats_watertempmin', $_lang['stats_watertempmin']);
@@ -6370,15 +6424,17 @@ class DivePictures{
                             if ($size[0] <= $_config['pic-width']) {
                                 // echo "<strong>ERROR: No resize!</strong><br>";
                             } else {
-                                $this->image_link[$i]['resize'] = true;
-                                $this->number_images_resize++;
+                                if(is_writeable($this->image_link[$i]['img_url'])){
+                                    $this->image_link[$i]['resize'] = true;
+                                    $this->number_images_resize++;
+                                }
                             }
                             /**
                              * Make array of the beresized thumbs
                              */
                             $file = $this->image_link[$i]['img_thumb_url'];
                             $file = preg_replace('/\s+/', '_', $file);
-                            if (!file_exists($file)) {
+                            if (!file_exists($file) ) {
                                 $this->image_link[$i]['thumb'] = true;
                                 $this->number_images_resize++;
                                 //new dBug($i); 
@@ -6389,8 +6445,10 @@ class DivePictures{
                                 if ($size_thumb[0]<=$_config['thumb-width'] && $size_thumb[1]<=$_config['thumb-width']) {
                                     // echo "<strong>ERROR: No thumb!</strong><br>";
                                 } else {
-                                    $this->image_link[$i]['thumb'] = true;
-                                    $this->number_images_resize++;
+                                    if(is_writeable($file)){
+                                        $this->image_link[$i]['thumb'] = true;
+                                        $this->number_images_resize++;
+                                    }
                                 }
                             }
                         } else {

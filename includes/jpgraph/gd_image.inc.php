@@ -3,7 +3,7 @@
 // File:        GD_IMAGE.INC.PHP
 // Description: PHP Graph Plotting library. Low level image drawing routines
 // Created:     2001-01-08, refactored 2008-03-29
-// Ver:         $Id$
+// Ver:         $Id: gd_image.inc.php 1922 2010-01-11 11:42:50Z ljp $
 //
 // Copyright (c) Asial Corporation. All rights reserved.
 //========================================================================
@@ -107,6 +107,9 @@ class Image {
             imageantialias($this->img,$aFlg);
         }
         else {
+            /**
+             * removed gives problem on debian systems 
+             */
             //JpGraphError::RaiseL(25128);//('The function imageantialias() is not available in your PHP installation. Use the GD version that comes with PHP and not the standalone version.')
         }
     }

@@ -15,7 +15,7 @@
  * application name and revision number
  */
 $_config['app_name'] = "phpDivingLog";
-$_config['app_version'] = "3.0-alpha4";
+$_config['app_version'] = "3.1-RC1";
 $_config['app_url'] = "https://github.com/Infern1/phpDivinglog";
 $_config['dlog_url'] = "http://www.divinglog.de/";
 $_config['dlog_version'] = "5.0.5";
@@ -182,7 +182,7 @@ $options = array(
         'portability' => MDB2_PORTABILITY_ALL,
         );
 
-$db =& MDB2::connect($dsn, $options);
+$db = MDB2::connect($dsn, $options);
 if (PEAR::isError($db)) {
   die($db->getMessage());
 }

@@ -5,7 +5,7 @@
  * @author  Rob Lensen <rob@bsdfreaks.nl>
  * @package phpdivinglog
  * @version $Rev$
- * Last Modified: $Date$
+ * Last Modified: $Date:   Fri Jul 29 22:43:17 2011 +0200 $
  * @copyright (C) 2006 Lloyd Borrett - http://www.borrett.id.au
  * 
  * Adapted from code by Olaf van Zandwijk - http://enschede.vanzandwijk.net
@@ -35,8 +35,7 @@ if($request->get_multiuser()){
 reset_config_table_prefix();
 
 //print_r($divestats);
-$data =
-array($divestats->depthrange1_per,$divestats->depthrange2_per,$divestats->depthrange3_per,$divestats->depthrange4_per,$divestats->depthrange5_per);
+$data = array($divestats->depthrange1_per,$divestats->depthrange2_per,$divestats->depthrange3_per,$divestats->depthrange4_per,$divestats->depthrange5_per);
 
 $graph = new PieGraph(450,200,"auto");
 //$graph->SetShadow();
@@ -44,7 +43,6 @@ $graph = new PieGraph(450,200,"auto");
 //$graph->title->Set("A simple Pie plot");
 $graph->SetFrame(true,$_config['background_color'],1);
 $p1 = new PiePlot($data);
-//$legends = array('April (%d)','May (%d)','June (%d)');
 $legends = array(   
 $_config['length'] ? backhtmlentities($_lang['stats_depth1i']) : backhtmlentities($_lang['stats_depth1m']) . $divestats->depthrange[0].' (%d%%)',
 $_config['length'] ? backhtmlentities($_lang['stats_depth2i']) : backhtmlentities($_lang['stats_depth2m']) . $divestats->depthrange[1].' (%d%%)' ,

@@ -1,99 +1,99 @@
 <?php
 /**
- * Filename:  includes/misc.inc.php
- * Function:  Miscellaneous functions file for phpDivingLog.
- * @author  Lloyd Borrett - www.borrett.id.au ; Rob Lensen <rob@bsdfreaks.nl>
- * @package phpdivinglog
- * @version $Rev$
- * Last Modified: $Date:   Fri Jul 29 22:43:17 2011 +0200 $
- * @copyright (C) 2006 Lloyd Borrett - http://www.borrett.id.au
- * 
- * Adapted from code by Olaf van Zandwijk - http://enschede.vanzandwijk.net
- * 
- * For use with Diving Log by Sven Knoch - http://www.divinglog.de
- *
+* Filename:  includes/misc.inc.php
+* Function:  Miscellaneous functions file for phpDivingLog.
+* @author  Lloyd Borrett - www.borrett.id.au ; Rob Lensen <rob@bsdfreaks.nl>
+* @package phpdivinglog
+* @version $Rev$
+* Last Modified: $Date:   Fri Jul 29 22:43:17 2011 +0200 $
+* @copyright (C) 2006 Lloyd Borrett - http://www.borrett.id.au
+* 
+* Adapted from code by Olaf van Zandwijk - http://enschede.vanzandwijk.net
+* 
+* For use with Diving Log by Sven Knoch - http://www.divinglog.de
+*
 */
 
 global $_config;
 
 /**
- * htmlentities_array HTML on screen function
- * 
- * @param array $arr 
- * @access public
- * @return void
- */
+* htmlentities_array HTML on screen function
+* 
+* @param array $arr 
+* @access public
+* @return void
+*/
 function htmlentities_array($arr = array()) 
 {/*{{{*/
-    $rs =  array();
-    while(list($key,$val) = each($arr)) {
-        if (is_array($val)) {
-            $rs[$key] = htmlentities_array($val);
-        } else {
-            $rs[$key] = htmlentities($val, ENT_QUOTES, "UTF-8",0);
-        }
+$rs =  array();
+while(list($key,$val) = each($arr)) {
+    if (is_array($val)) {
+        $rs[$key] = htmlentities_array($val);
+    } else {
+        $rs[$key] = htmlentities($val, ENT_QUOTES, "UTF-8",0);
     }
-    return $rs; 
+}
+return $rs; 
 /*}}}*/
 }
 
 function action($value_of_clicked_field, $array_values) {
 /*{{{*/
-    global $_config;
-    if ($_config['multiuser'] && isset($_SESSION['user_id'])) {
-        $user_id = $_SESSION['user_id'];
-        if ($_config['query_string']) {
-            $ext = "?user_id=$user_id&id=";
-        } else {
-            $ext = "/$user_id/";
-        }
+global $_config;
+if ($_config['multiuser'] && isset($_SESSION['user_id'])) {
+    $user_id = $_SESSION['user_id'];
+    if ($_config['query_string']) {
+        $ext = "?user_id=$user_id&id=";
     } else {
-        if ($_config['query_string']) {
-            $ext = "?id=";
-        } else {
-            $ext = "/";
-        }
+        $ext = "/$user_id/";
     }
+} else {
+    if ($_config['query_string']) {
+        $ext = "?id=";
+    } else {
+        $ext = "/";
+    }
+}
 
-    if (isset($_SESSION['request_type'])) {
-        $request_type = $_SESSION['request_type'];
-        if ($request_type == 1) { 
-            return "javascript:open_url(".$array_values["Number"].",'/index.php".$ext."' )";
-        } elseif ($request_type == 2) {
-            return "javascript:open_url(".$array_values["ID"].",'/divesite.php".$ext."' )";
-        } elseif ($request_type == 3) {
-            return "javascript:open_url(".$array_values["ID"].",'/equipment.php".$ext."' )";
-        } elseif ($request_type == 8) {
-            return "javascript:open_url(".$array_values["ID"].",'/divetrip.php".$ext."' )";
-        } elseif ($request_type == 9) {
-            return "javascript:open_url(".$array_values["ID"].",'/diveshop.php".$ext."' )";
-         } elseif ($request_type == 10) {
-            return "javascript:open_url(".$array_values["ID"].",'/divecountry.php".$ext."' )";
-         } elseif ($request_type == 11) {
-            return "javascript:open_url(".$array_values["ID"].",'/divecity.php".$ext."' )";
-       }
-    } else {
-        $request = new HandleRequest();
-        $request->set_request_uri($_SERVER['REQUEST_URI']);
-        $request->set_file_depth(0);
-        $foo = $request->handle_url();
-        $request_type = $_SESSION['request_type'];
-        if ($request_type == 1) { 
-            return "javascript:open_url(".$array_values["Number"].",'/index.php".$ext."' )";
-        } elseif ($request_type == 2) {
-            return "javascript:open_url(".$array_values["ID"].",'/divesite.php".$ext."' )";
-        } elseif ($request_type == 3) {
-            return "javascript:open_url(".$array_values["ID"].",'/equipment.php".$ext."' )";
-        } elseif ($request_type == 8) {
-            return "javascript:open_url(".$array_values["ID"].",'/divetrip.php".$ext."' )";
-        } elseif ($request_type == 9) {
-            return "javascript:open_url(".$array_values["ID"].",'/diveshop.php".$ext."' )";
-        } elseif ($request_type == 10) {
-            return "javascript:open_url(".$array_values["ID"].",'/divecountry.php".$ext."' )";
-        } elseif ($request_type == 11) {
-            return "javascript:open_url(".$array_values["ID"].",'/divecity.php".$ext."' )";
-        }
+if (isset($_SESSION['request_type'])) {
+    $request_type = $_SESSION['request_type'];
+    if ($request_type == 1) { 
+        return "javascript:open_url(".$array_values["Number"].",'/index.php".$ext."' )";
+    } elseif ($request_type == 2) {
+        return "javascript:open_url(".$array_values["ID"].",'/divesite.php".$ext."' )";
+    } elseif ($request_type == 3) {
+        return "javascript:open_url(".$array_values["ID"].",'/equipment.php".$ext."' )";
+    } elseif ($request_type == 8) {
+        return "javascript:open_url(".$array_values["ID"].",'/divetrip.php".$ext."' )";
+    } elseif ($request_type == 9) {
+        return "javascript:open_url(".$array_values["ID"].",'/diveshop.php".$ext."' )";
+     } elseif ($request_type == 10) {
+        return "javascript:open_url(".$array_values["ID"].",'/divecountry.php".$ext."' )";
+     } elseif ($request_type == 11) {
+        return "javascript:open_url(".$array_values["ID"].",'/divecity.php".$ext."' )";
+   }
+} else {
+    $request = new HandleRequest();
+    $request->set_request_uri($_SERVER['REQUEST_URI']);
+    $request->set_file_depth(0);
+    $foo = $request->handle_url();
+    $request_type = $_SESSION['request_type'];
+    if ($request_type == 1) { 
+        return "javascript:open_url(".$array_values["Number"].",'/index.php".$ext."' )";
+    } elseif ($request_type == 2) {
+        return "javascript:open_url(".$array_values["ID"].",'/divesite.php".$ext."' )";
+    } elseif ($request_type == 3) {
+        return "javascript:open_url(".$array_values["ID"].",'/equipment.php".$ext."' )";
+    } elseif ($request_type == 8) {
+        return "javascript:open_url(".$array_values["ID"].",'/divetrip.php".$ext."' )";
+    } elseif ($request_type == 9) {
+        return "javascript:open_url(".$array_values["ID"].",'/diveshop.php".$ext."' )";
+    } elseif ($request_type == 10) {
+        return "javascript:open_url(".$array_values["ID"].",'/divecountry.php".$ext."' )";
+    } elseif ($request_type == 11) {
+        return "javascript:open_url(".$array_values["ID"].",'/divecity.php".$ext."' )";
     }
+}
 /*}}}*/
 }
 
@@ -101,23 +101,23 @@ function action($value_of_clicked_field, $array_values) {
 
 // use english if it is not set in the configuration file
 if (!isset($_config['language'])) {
-    $_config['language'] = "english"; // if not set, get the english language file.
+$_config['language'] = "english"; // if not set, get the english language file.
 }
 // first get the default english values
 // so that we'll have values for anything not in the specified language file
 if ($_config['language'] != "english") {
-    if (!file_exists($_config['app_root'] .'includes/language/english.inc.php')) {
-        print "<p>Language file includes/language/english.inc.php not found.</p>";
-        exit;
-    }
-    include_once($_config['app_root'] . 'includes/language/english.inc.php');
+if (!file_exists($_config['app_root'] .'includes/language/english.inc.php')) {
+    print "<p>Language file includes/language/english.inc.php not found.</p>";
+    exit;
+}
+include_once($_config['app_root'] . 'includes/language/english.inc.php');
 }
 
 // include the specified language file
 $language_filename =  $_config['app_root'] . "includes/language/". $_config['language'] .".inc.php";
 if (!file_exists($language_filename)) {
-   print "<p>Language file '". $language_filename ."' not found.</p>";
-   exit;
+print "<p>Language file '". $language_filename ."' not found.</p>";
+exit;
 }
 $_lang = array();
 include_once ($language_filename);
@@ -127,237 +127,240 @@ include_once ($language_filename);
 
 
 /**
- * sql_file Returns the contents of an SQL statement file as a string. $filename is  
- * the name of the SQL-file to be parsed. Variables defined under 'global'  
- * may be used in the sql-scripts and will be replaced by their values!     
- * The globals term should include all the variables witch are used in the  
- * sql-script, so the variables are parsed correctly
- *
- * @param mixed $filename 
- * @access public
- * @return void
- */
+* sql_file Returns the contents of an SQL statement file as a string. $filename is  
+* the name of the SQL-file to be parsed. Variables defined under 'global'  
+* may be used in the sql-scripts and will be replaced by their values!     
+* The globals term should include all the variables witch are used in the  
+* sql-script, so the variables are parsed correctly
+*
+* @param mixed $filename 
+* @access public
+* @return void
+*/
 function sql_file($filename) {
-    global $_config; /*{{{*/
-    $sqlpath = $_config['sqlpath'];
-    global $globals;
+global $_config; /*{{{*/
+$sqlpath = $_config['sqlpath'];
+global $globals;
 
-    if ($_config['multiuser'] && isset($_SESSION['user_id'])) {
-        $user_id = $_SESSION['user_id'];
-        $_config['table_prefix'] = $_config['user_prefix'][$user_id];
-    } else {
+if ($_config['multiuser'] && isset($_SESSION['user_id'])) {
+    $user_id = $_SESSION['user_id'];
+    $_config['table_prefix'] = $_config['user_prefix'][$user_id];
+} else {
+}
+
+$location = $sqlpath.$filename;
+if (!file_exists($location)) {
+    die ("SQL file '". $location ."' not found !");
+}
+
+if ($location) {
+    $contents = implode('', file($location));
+    eval ("\$contents = \"$contents\";");
+    //Support the "'" character from a HTTP GET variabele
+    $contents = str_replace ("\'", "'", $contents);
+
+    /* Handles debug-information: if debugging is enabled by setting	*/
+    /* $debug =1 in the script, thiswrites debug output.			*/
+
+    if ($_config['debug']) {
+        echo "<hr>\n<b>".$location.":</b><br>\n<br>\n";
+        echo nl2br(htmlentities($contents))."<br>\n<hr>\n";
     }
 
-    $location = $sqlpath.$filename;
-    if (!file_exists($location)) {
-        die ("SQL file '". $location ."' not found !");
-    }
-
-    if ($location) {
-        $contents = implode('', file($location));
-        eval ("\$contents = \"$contents\";");
-        //Support the "'" character from a HTTP GET variabele
-        $contents = str_replace ("\'", "'", $contents);
-
-        /* Handles debug-information: if debugging is enabled by setting	*/
-        /* $debug =1 in the script, thiswrites debug output.			*/
-
-        if ($_config['debug']) {
-            echo "<hr>\n<b>".$location.":</b><br>\n<br>\n";
-            echo nl2br(htmlentities($contents))."<br>\n<hr>\n";
-        }
-
-        return $contents;
-    } else {
-        return false;
-    } 
+    return $contents;
+} else {
+    return false;
+} 
 /*}}}*/
 }
 
 
 /**
- * parse_mysql_query 
- * 
- * @param mixed $filename 
- * @access public
- * @return void
- */
+* parse_mysql_query 
+* 
+* @param mixed $filename 
+* @access public
+* @return void
+*/
 function parse_mysql_query($filename, $sql_query = 0, $debug = false) {
-    global $_config, $globals; /*{{{*/
-    $username = $_config['database_username'];
-    $password = $_config['database_password'];
-    $server = $_config['database_server'];
-    $db = $_config['database_db'];
+global $_config, $globals; /*{{{*/
+$username = $_config['database_username'];
+$password = $_config['database_password'];
+$server = $_config['database_server'];
+$db = $_config['database_db'];
 
-    $globals['sql_num_rows'] = 0;
-    $result = array();
-    if (($sql_query)) {
-        $query = $sql_query;
+$globals['sql_num_rows'] = 0;
+$result = array();
+if (($sql_query)) {
+    $query = $sql_query;
+} else {
+    $query = sql_file($filename);
+}
+if ($query) {
+    if($debug == true){
+    //    echo "query is: $query <br>";
+    }
+    $connection = mysql_connect($server, $username, $password);
+    mysql_select_db($db, $connection);
+    //mysql_query("SET CHARACTER SET 'utf8'", $connection);
+    $server_query = mysql_query($query, $connection);
+    if (mysql_errno()) {
+        echo "<hr>\n<b>MySQL error " . mysql_errno(). ": " . mysql_error() . "\n:</b><br>\n";
+        echo "Query: $query <br><hr>";
+        exit;
+    }
+    $globals['sql_num_rows'] = mysql_num_rows($server_query);
+    if ($globals['sql_num_rows'] == 1) {
+        $result = mysql_fetch_assoc($server_query);
     } else {
-        $query = sql_file($filename);
-    }
-    if ($query) {
-        $connection = mysql_connect($server, $username, $password);
-        mysql_select_db($db, $connection);
-        //mysql_query("SET CHARACTER SET 'utf8'", $connection);
-        $server_query = mysql_query($query, $connection);
-        if (mysql_errno()) {
-            echo "<hr>\n<b>MySQL error " . mysql_errno(). ": " . mysql_error() . "\n:</b><br>\n";
-            echo "Query: $query <br><hr>";
-            exit;
-        }
-        $globals['sql_num_rows'] = mysql_num_rows($server_query);
-        if ($globals['sql_num_rows'] == 1) {
-            $result = mysql_fetch_assoc($server_query);
-        } else {
-            for ($i=0; $query_output = mysql_fetch_assoc($server_query); $i++) {
-                while (list($key, $val) = each($query_output)) {
-                    if (is_string($val)) {
-                        //$val = utf8_encode($val);
-                        $query_output[$key] = $val;
-                    }
+        for ($i=0; $query_output = mysql_fetch_assoc($server_query); $i++) {
+            while (list($key, $val) = each($query_output)) {
+                if (is_string($val)) {
+                    //$val = utf8_encode($val);
+                    $query_output[$key] = $val;
                 }
-                $result[$i] = $query_output;
             }
+            $result[$i] = $query_output;
         }
     }
-    return $result; 
-    /*}}}*/
+}
+return $result; 
+/*}}}*/
 }
 
 
 /**
- * rows_mysql_query 
- * 
- * @param mixed $filename 
- * @access public
- * @return void
- */
+* rows_mysql_query 
+* 
+* @param mixed $filename 
+* @access public
+* @return void
+*/
 function rows_mysql_query() {
-    global $globals; /*{{{*/
-    return $globals['sql_num_rows']; 
-    /*}}}*/
+global $globals; /*{{{*/
+return $globals['sql_num_rows']; 
+/*}}}*/
 }
 
 
 /**
- * check_number Only allow the characters 0 to 9.
- * 
- * @param mixed $number 
- * @access public
- * @return void  Return nothing otherwise.
- */
+* check_number Only allow the characters 0 to 9.
+* 
+* @param mixed $number 
+* @access public
+* @return void  Return nothing otherwise.
+*/
 function check_number($number) {
-    if (!$number) { /*{{{*/
+if (!$number) { /*{{{*/
+    $get = "";
+} else {
+    if (preg_match('[^0-9]', $number)) {
         $get = "";
     } else {
-        if (preg_match('[^0-9]', $number)) {
+        if ($number == 0) {
             $get = "";
         } else {
-            if ($number == 0) {
-                $get = "";
-            } else {
-                $get = $number;
-            }
+            $get = $number;
         }
     }
-    return $get;
+}
+return $get;
 /*}}}*/
 }
 
 /**
- * GetRequestVar get the info from the url request and split it into chunks
- *
- * @param mixed $url
- * @param mixes $request_file_depth
- * @access public
- * return void
- */
+* GetRequestVar get the info from the url request and split it into chunks
+*
+* @param mixed $url
+* @param mixes $request_file_depth
+* @access public
+* return void
+*/
 function GetRequestVar($url, $request_file_depth=0) { 
 /*{{{*/
-    global $_config, $t,$_POST;
-    $paginas = NULL;
-    if ($_config['query_string']) {
-        $url_array = parse_url($url);
-        if (isset($url_array['query'])) {
-            parse_str($url_array['query'],$output);
-            $paginas = array();
-            $file = basename($url_array['path']);
-            $paginas[0] = $file;
-            if (!isset($output['DG_ajaxid']) && !isset($output['pageID'])) {
-                foreach ($output as $el) {
-                    $paginas[] .= $el;
-                }
-            } elseif (isset($output['pageID'])) {
-                if ($_config['multiuser']) {
-                    $paginas[] .= $output['user_id']; 
-                }
-                $paginas[] .= "list";
-            } else {
-                $paginas[] .= $output['user_id'];
-                $paginas[] .= $output['id'];
-            }
-        }
-    } else {
-        $number_folders = $request_file_depth ; //number of folders from the root of the script
-        $adres = $url;
-        $possessid = strpos($adres,"?PHPSESSID");
-        if ($possessid !== false) {
-            $adres = substr($adres,0,$possessid);
-        }
-        //$adres = $_SERVER['REQUEST_URI'];
-        $adres = substr($adres,1);
-        $adres = $adres."/";
-        $array = explode("/",$adres);
+global $_config, $t,$_POST;
+$paginas = NULL;
+if ($_config['query_string']) {
+    $url_array = parse_url($url);
+    if (isset($url_array['query'])) {
+        parse_str($url_array['query'],$output);
         $paginas = array();
-        for ($i = $number_folders; $i< count($array) ; $i++) {
-            if (!empty($array[$i])) { 
-                $paginas[] = $array[$i]; 
-            }  
+        $file = basename($url_array['path']);
+        $paginas[0] = $file;
+        if (!isset($output['DG_ajaxid']) && !isset($output['pageID'])) {
+            foreach ($output as $el) {
+                $paginas[] .= $el;
+            }
+        } elseif (isset($output['pageID'])) {
+            if ($_config['multiuser']) {
+                $paginas[] .= $output['user_id']; 
+            }
+            $paginas[] .= "list";
+        } else {
+            $paginas[] .= $output['user_id'];
+            $paginas[] .= $output['id'];
         }
     }
-    //print_r($paginas);
-    return $paginas;
+} else {
+    $number_folders = $request_file_depth ; //number of folders from the root of the script
+    $adres = $url;
+    $possessid = strpos($adres,"?PHPSESSID");
+    if ($possessid !== false) {
+        $adres = substr($adres,0,$possessid);
+    }
+    //$adres = $_SERVER['REQUEST_URI'];
+    $adres = substr($adres,1);
+    $adres = $adres."/";
+    $array = explode("/",$adres);
+    $paginas = array();
+    for ($i = $number_folders; $i< count($array) ; $i++) {
+        if (!empty($array[$i])) { 
+            $paginas[] = $array[$i]; 
+        }  
+    }
+}
+//print_r($paginas);
+return $paginas;
 /*}}}*/
 }
 
 /**
- * is__writable It can accept files or folders, but folders should end with a trailing slash! The function attempts to actually
- * write a file, so it will correctly return true when a file/folder can be written to when the user has ACL write access to it.
- * 
- * @param mixed $path 
- * @access public
- * @return void
- */
+* is__writable It can accept files or folders, but folders should end with a trailing slash! The function attempts to actually
+* write a file, so it will correctly return true when a file/folder can be written to when the user has ACL write access to it.
+* 
+* @param mixed $path 
+* @access public
+* @return void
+*/
 function is__writable($path) {
 //will work in despite of Windows ACLs bug /*{{{*/
 //NOTE: use a trailing slash for folders!!!
 //see http://bugs.php.net/bug.php?id=27609
 //see http://bugs.php.net/bug.php?id=30931
 
-    if ($path{strlen($path)-1}=='/') // recursively return a temporary file path
-        return is__writable($path.uniqid(mt_rand()).'.tmp');
-    else if (is_dir($path))
-        return is__writable($path.'/'.uniqid(mt_rand()).'.tmp');
-    // check tmp file for read/write capabilities
-    $rm = file_exists($path);
-    $f = @fopen($path, 'a');
-    if ($f===false)
-        return false;
-    fclose($f);
-    if (!$rm)
-        unlink($path);
-    return true;
+if ($path{strlen($path)-1}=='/') // recursively return a temporary file path
+    return is__writable($path.uniqid(mt_rand()).'.tmp');
+else if (is_dir($path))
+    return is__writable($path.'/'.uniqid(mt_rand()).'.tmp');
+// check tmp file for read/write capabilities
+$rm = file_exists($path);
+$f = @fopen($path, 'a');
+if ($f===false)
+    return false;
+fclose($f);
+if (!$rm)
+    unlink($path);
+return true;
 /*}}}*/
 }
 
 /**
- * GetProfileData Extract averagedepth and sac info from the profile data
- * 
- * @param mixed $result 
- * @access public
- * @return void
- */
+* GetProfileData Extract averagedepth and sac info from the profile data
+* 
+* @param mixed $result 
+* @access public
+* @return void
+*/
 function GetProfileData($result) {
     global $_config; /*{{{*/
     global $_lang;
@@ -377,11 +380,92 @@ function GetProfileData($result) {
     }
     $start = 0;
     $ydata = 0;
-    for ($i=0; $i < $length; $i++) {
+    $ydata_ar = array();
+    $ydata_asc_ar = array();
+    $merged = array();
+    $merged_asc = array();
+    $merged_avg = array();
+    $merged_deco = array();
+    $merged_rbt  = array();
+    $merged_desc = array();
+    $merged_work = array();
+
+   for ($i=0; $i < $length; $i++) {
         $ydata = $ydata + (substr(substr($profile,$start,12),0,5) / 100);
+        $ydata_ar[$i] = substr(substr($profile, $start, 12), 0, 5) / 100;
+        $decowarning[$i] = substr(substr($profile, $start, 12), 5, 1);
+        $rbtwarning[$i] = substr(substr($profile, $start, 12), 6, 1);
+        $ascwarning[$i] = substr(substr($profile, $start, 12), 7, 1);
+        $decwarning[$i] = substr(substr($profile, $start, 12), 8, 1);
+        $workwarning[$i] = substr(substr($profile, $start, 12), 9, 1);
         $start += 12;
     }
+    /**
+     * Use the profile interval time to assign time values to the data 
+     */
+    $profileint = ($result['ProfileInt'] / 60);
+    $xdata = array();
+    $temp = 0;
+    for ($i = 0; $i < $length; $i++) {
+        $xdata[$i] = round($temp, 1);
+        $temp += $profileint;
+    } 
+    /**
+     * Negate all profile data and convert units if required 
+     */
+    $n = count($ydata_ar);
+    for($i = 0; $i < $n; ++$i) {
+        if ($_config['length']) {
+            $ydata_ar[$i] = toFeet($ydata_ar[$i]);
+        } else {
+            $ydata_ar[$i] = round(- $ydata_ar[$i], 1);
+        } 
+    } 
     $averagedepth = $ydata / $length;
+    for ($a = 0; $a < count($ydata_ar); $a++) {
+        $ydata_asc[$a] = $ydata_ar[$a] * $ascwarning[$a]; /*{{{*/
+        $ydata_desc[$a] = $ydata_ar[$a] * $decwarning[$a];
+        $ydata_deco[$a] = $ydata_ar[$a] * $decowarning[$a];
+        $ydata_rbt[$a] = $ydata_ar[$a] * $rbtwarning[$a];
+        $ydata_work[$a] = $ydata_ar[$a] * $workwarning[$a];
+        $ydata_avg[$a] = round($averagedepth,2) * -1.0;
+
+        if (intval($ydata_asc[$a]) === 0) {
+            //$ydata_asc[$a] = "";
+        } else {
+            $ydata_asc[$a-1] = $ydata_ar[$a-1];
+        } 
+        if (intval($ydata_desc[$a]) === 0) {
+            //$ydata_desc[$a] = "";
+        } else {
+            $ydata_desc[$a-1] = $ydata_ar[$a-1];
+        } 
+        if (intval($ydata_deco[$a]) === 0) {
+            //$ydata_deco[$a] = "";
+        } else {
+            $ydata_deco[$a-1] = $ydata_ar[$a-1];
+        } 
+        if (intval($ydata_rbt[$a]) === 0) {
+            //$ydata_rbt[$a] = "";
+        } else {
+            $ydata_rbt[$a-1] = $ydata_ar[$a-1];
+        } 
+        if (intval($ydata_work[$a]) === 0) {
+            //$ydata_work[$a] = "";
+        } else {
+            $ydata_work[$a-1] = $ydata_ar[$a-1];
+        } /*}}}*/
+    }     
+   for($i = 0; $i < $n; ++$i) {
+        $merged[$i] = array($xdata[$i] , $ydata_ar[$i]);
+        $merged_asc[$i] = array($xdata[$i] , $ydata_asc[$i]);
+        $merged_avg[$i] = array($xdata[$i] , $ydata_avg[$i]);
+        $merged_deco[$i] = array($xdata[$i] , $ydata_deco[$i]);
+        $merged_rbt[$i] = array($xdata[$i] , $ydata_rbt[$i]);
+        $merged_desc[$i] = array($xdata[$i] , $ydata_desc[$i]);
+        $merged_work[$i] = array($xdata[$i] , $ydata_work[$i]);
+   } 
+
     $sac = (($result['PresS'] - $result['PresE']) * $result['Tanksize']) / ($divetime * ($averagedepth / 10 + 1));
 
     if ($_config['length']) {
@@ -394,8 +478,18 @@ function GetProfileData($result) {
     } else {
         $sac = number_format($sac, 2) ."&nbsp;". $_lang['unit_rate'];
     }
-    return array('averagedepth' => $averagedepth , 'sac' => $sac);
-/*}}}*/
+    return array(
+            'averagedepth'  => $averagedepth , 
+            'sac'           => $sac, 
+            'data'          => $merged , 
+            'ascdata'       => $merged_asc,
+            'avgdata'       => $merged_avg,
+            'decodata'      => $merged_deco,
+            'rbtdata'       => $merged_rbt,
+            'descdata'      => $merged_desc,
+            'workdata'      => $merged_work
+        );
+    /*}}}*/
 }
 
 
@@ -417,7 +511,7 @@ function formatBytes($size, $precision = 2)
 
 define('MetreToFeet', "calc:(Depth*3.2808399)");
 function MetreToFeet($value, $precision = 2) {
-    return round(($value * sqrt( 3.2808399 ) ), $precision);
+    return round(($value * ( 3.2808399 ) ), $precision);
 }
  
 function BarToPsi($value, $precision = 2) {
@@ -593,6 +687,7 @@ function datecheck($date,$format='ymd',$separator='-',$toformat='mdy',$toseparat
 function add_unit_depth($value) {
     global $_config, $_lang; /*{{{*/
     if (!empty($value)) {
+        $value = number_format($value, 1,$_config['decsep'], '');
         if ($_config['length']) {
             $value .=  " ".$_lang['unit_length_short_imp'];
         } else {
@@ -780,7 +875,8 @@ function make_thumb_new ($img, $thumb, $i = 0){
 
     $handle = new Upload($img);
     $handle->file_name_body_pre = 'thumb_';
-    $handle->file_auto_rename     = false;
+      $handle->file_overwrite        = true;
+  $handle->file_auto_rename     = false;
     $handle->image_resize          = true;
     $handle->image_ratio_fill      = true;
     $handle->image_ratio           = true;

@@ -241,6 +241,12 @@ $_config['temp'] = false;
 $_config['volume'] = false;
 
 /**
+ * Decimal separator 
+ */
+$_config['decsep'] = ",";
+
+
+/**
  * default O2 % 
  */
 $_config['default_o2'] = 20.9;

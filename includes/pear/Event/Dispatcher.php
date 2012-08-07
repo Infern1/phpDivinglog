@@ -33,7 +33,7 @@
 // |         Stephan Schmidt <schst@php.net>                               |
 // +-----------------------------------------------------------------------+
 //
-// $Id$
+// $Id: Dispatcher.php 284686 2009-07-24 05:22:17Z clockwerx $
 
 require_once 'Event/Notification.php';
 
@@ -246,8 +246,9 @@ class Event_Dispatcher
      */
     function &post(&$object, $nName, $info = array(), $pending = true, $bubble = true)
     {
-        $notification =& new $this->_notificationClass($object, $nName, $info);
-        return $this->postNotification($notification, $pending, $bubble);
+        $notification = new $this->_notificationClass($object, $nName, $info);
+        $notification_ref =& $notification;
+        return $this->postNotification($notification_ref, $pending, $bubble);
     }
 
     /**

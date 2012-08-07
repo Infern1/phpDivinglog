@@ -25,7 +25,7 @@
   <li><a href="#">{$dive_tab_photos}</a></li>
 {/if}
 {if isset($profile)}
-  <li><a href="#">{$dive_tab_profile}</a></li>
+  <li><a href="#" id="profile">{$dive_tab_profile}</a></li>
 {/if}
 {if $userdefined_count == '1'}
   <li><a href="#">{$dive_tab_userdefined}</a></li>
@@ -36,7 +36,7 @@
 <div class="css-panes">
 
 <!-- pane 1 -->
-  <div>
+  <div id="tabs-1">
   <table class="details" cellspacing="0" cellpadding="0" width="100%">
     <colgroup>
       <col width="25%">
@@ -89,21 +89,13 @@
 
     <tr class="divedetails">
     {if isset($dive_site_nr)} 
-      {if isset($multiuser_id)}
-      <td colspan="2"><a href="{$app_path}/divesite.php{$sep1}{$multiuser_id}{$sep2}{$dive_site_nr}" title="{$dive_place} {$logbook_place_linktitle}">{$dive_place}</a></td>
-      {else}
       <td colspan="2"><a href="{$app_path}/divesite.php{$sep2}{$dive_site_nr}" title="{$dive_place} {$logbook_place_linktitle}">{$dive_place}</a></td>
-      {/if}
     {else}
       <td colspan="2">-</td>
     {/if} 
 
     {if isset($dive_city_nr)} 
-      {if isset($multiuser_id)}
-      <td colspan="2"><a href="{$app_path}/divecity.php{$sep1}{$multiuser_id}{$sep2}{$dive_city_nr}" title="{$dive_city} {$logbook_city_linktitle}">{$dive_city}</a></td>
-      {else}
-      <td colspan="2"><a href="{$app_path}/divecity.php{$sep2}{$dive_city_nr}" title="{$dive_city} {$logbook_city_linktitle}">{$dive_city}</a></td>
-      {/if}
+          <td colspan="2"><a href="{$app_path}/divecity.php{$sep2}{$dive_city_nr}" title="{$dive_city} {$logbook_city_linktitle}">{$dive_city}</a></td>
     {else}
       <td colspan="2">-</td>
     {/if}
@@ -117,11 +109,7 @@
     <tr class="divedetails">
 
     {if isset($dive_country_nr)} 
-      {if isset($multiuser_id)}
-      <td colspan="2"><a href="{$app_path}/divecountry.php{$sep1}{$multiuser_id}{$sep2}{$dive_country_nr}" title="{$dive_country} {$logbook_country_linktitle}">{$dive_country}</a></td>
-      {else}
       <td colspan="2"><a href="{$app_path}/divecountry.php{$sep2}{$dive_country_nr}" title="{$dive_country} {$logbook_country_linktitle}">{$dive_country}</a></td>
-      {/if}
     {else}
       <td colspan="2">-</td>
     {/if} 
@@ -140,21 +128,13 @@
 
     <tr class="divedetails">
     {if $dive_shop_name != "-"} 
-      {if isset($multiuser_id)}
-      <td colspan="2"><a href="{$app_path}/diveshop.php{$sep1}{$multiuser_id}{$sep2}{$dive_shop_nr}" title="{$dive_shop_name} {$logbook_shop_linktitle}">{$dive_shop_name}</a></td>
-      {else}
       <td colspan="2"><a href="{$app_path}/diveshop.php{$sep2}{$dive_shop_nr}" title="{$dive_shop_name} {$logbook_shop_linktitle}">{$dive_shop_name}</a></td>
-      {/if}
     {else}
       <td colspan="2">-</td>
     {/if}
 
     {if $dive_trip_name != '-'}
-      {if isset($multiuser_id)}
-      <td colspan="2"><a href="{$app_path}/divetrip.php{$sep1}{$multiuser_id}{$sep2}{$dive_trip_nr}" title="{$dive_trip_name} {$logbook_shop_linktitle}">{$dive_trip_name}</a></td>
-      {else}
-      <td colspan="2"><a href="{$app_path}/divetrip.php{$sep2}{$dive_trip_nr}" title="{$dive_trip_name} {$logbook_shop_linktitle}">{$dive_trip_name}</a></td>
-      {/if}
+      <td colspan="2"><a href="{$app_path}/divetrip.php{$sep2}{$dive_trip_nr}" title="{$dive_trip_name} {$logbook_trip_linktitle}">{$dive_trip_name}</a></td>
     {else}
       <td colspan="2">-</td>
     {/if}
@@ -355,7 +335,7 @@
     {/if}
 
     {if $Watertemp != ''}
-      <td>{$Watertemp}</td>
+      <td>{$Watertemp|commify:2}</td>
     {else}
       <td>-</td>
     {/if}
@@ -461,13 +441,8 @@
     <tr class="divedetails">
       <td colspan="4">
       {foreach from=$equip_link key=id item=i name=equipment}
-        {if isset($multiuser_id)}
-        <a 
-href="{$app_path}/equipment.php{$sep1}{$multiuser_id}{$sep2}{$i.equipmentnr}" title="{$i.divegear} {$logbook_place_linktitle}">{$i.divegear}</a>{if !$i@last}{if $comma_separated}{$comma_separator}{else}&nbsp;{/if}{/if}
-        {else}
          <a href="{$app_path}/equipment.php{$sep2}{$i.equipmentnr}" 
 title="{$i.divegear} {$logbook_place_linktitle}">{$i.divegear}</a>{if !$i@last}{if $comma_separated}{$comma_separator}{else}&nbsp;{/if}{/if}
-        {/if}
       {/foreach}
       </td>
     </tr>
@@ -486,7 +461,7 @@ title="{$i.divegear} {$logbook_place_linktitle}">{$i.divegear}</a>{if !$i@last}{
 
 
 <!-- pane 2 -->
-  <div>
+  <div id="tabs-2">
   <table class="details" cellspacing="0" cellpadding="0" width="100%">
     <colgroup>
       <col width="25%">
@@ -533,13 +508,13 @@ title="{$i.divegear} {$logbook_place_linktitle}">{$i.divegear}</a>{if !$i@last}{
     {/if}
 
     {if $i.tanksfordive['Tanksize'] != ''}
-      <td>{$i.tanksfordive['DblTankImage']}{$i.tanksfordive['Tanksize']}</td>
+      <td>{$i.tanksfordive['DblTankImage']}{$i.tanksfordive['Tanksize']|commify:2}</td>
     {else}
       <td>-</td>
     {/if}
 
     {if $i.tanksfordive['PresW'] != ''}
-      <td>{$i.tanksfordive['PresW']}</td>
+      <td>{$i.tanksfordive['PresW']|commify:2}</td>
     {else}
       <td>-</td>
     {/if}
@@ -621,19 +596,19 @@ title="{$i.divegear} {$logbook_place_linktitle}">{$i.divegear}</a>{if !$i@last}{
 
     <tr class="divedetails">
     {if $i.tanksfordive['PresS'] != ''}
-      <td>{$i.tanksfordive['PresS']}</td>
+      <td>{$i.tanksfordive['PresS']|commify:2}</td>
     {else}
       <td>-</td>
     {/if}
 
     {if $i.tanksfordive['PresE'] != ''}
-      <td>{$i.tanksfordive['PresE']}</td>
+      <td>{$i.tanksfordive['PresE']|commify:2}</td>
     {else }
       <td>-</td>
     {/if}
 	
     {if $i.tanksfordive['PresSPresE'] != ''}
-      <td>{$i.tanksfordive['PresSPresE']}</td>
+      <td>{$i.tanksfordive['PresSPresE']|commify:2}</td>
     {else }
       <td>-</td>
     {/if}
@@ -721,7 +696,7 @@ title="{$i.divegear} {$logbook_place_linktitle}">{$i.divegear}</a>{if !$i@last}{
 
 <!-- pane 3 -->
 {if $Comments != ''}
-  <div>
+  <div id="tabs-3">
   <table class="details" cellspacing="0" cellpadding="0" width="100%">
     <colgroup>
       <col width="25%">
@@ -754,7 +729,7 @@ title="{$i.divegear} {$logbook_place_linktitle}">{$i.divegear}</a>{if !$i@last}{
 
 <!-- pane 4 -->
 {if isset($pics) || isset($pics2)}
-  <div>
+  <div id="tabs-4">
   <table class="details" cellspacing="0" cellpadding="0" width="100%">
     <colgroup>
       <col width="25%">
@@ -825,15 +800,8 @@ height="{$thumb_height}" width="{$thumb_width}" ></a>
 
 <!-- pane 5 -->
 {if isset($profile)}
-  <div>
+  <div id="tabs-5">
   <table class="details" cellspacing="0" cellpadding="0" width="100%">
-    <colgroup>
-      <col width="25%">
-      <col width="25%">
-      <col width="25%">
-     <col width="25%">
-    </colgroup>
-
     {* Dive profile *}
     {if isset($profile)}
     <tr>
@@ -842,15 +810,9 @@ height="{$thumb_height}" width="{$thumb_width}" ></a>
     <tr>
       <td colspan="4">
         <p class="centeredImage">
-        {if isset($multiuser_id)}
-        <img src="{$app_path}/drawprofile.php{$sep1}{$multiuser_id}{$sep2}{$get_nr}" 
-alt="{$dive_profile_title}" 
-title="{$dive_profile_title}">
-        {else}
-        <img src="{$app_path}/drawprofile.php{$sep2}{$get_nr}" 
-alt="{$dive_profile_title}" 
-title="{$dive_profile_title}">
-        {/if}
+            <!--<img src="{$app_path}/drawprofile.php{$sep2}{$get_nr}" alt="{$dive_profile_title}" title="{$dive_profile_title}">
+            -->
+             <div id="chart1" style="margin-top:20px; margin-left:20px; width:550px; height:400px;"></div> 
         </p>
       </td>
     </tr>
@@ -859,21 +821,15 @@ title="{$dive_profile_title}">
       <td colspan="4">No profile.</td>
     </tr>
     {/if}
-
-    {*
-    <tr class="divesection">
-      <td colspan="4">&nbsp;</td>
-    </tr>
-    *}
   </table>
   </div>
 {/if}
 
 
-<!-- pane 5 -->
+<!-- pane 6 -->
 {* User-defined fields *}
 {if $userdefined_count == '1'}
-  <div>
+  <div id="tabs-6">
   <table class="details" cellspacing="0" cellpadding="0" width="100%">
     <colgroup>
       <col width="25%">
@@ -917,28 +873,110 @@ title="{$dive_profile_title}">
 
 </div>
 
-{* {literal}
-<!-- This JavaScript snippet activates those tabs -->
-<script type="text/javascript">
-
-// perform JavaScript after the document is scriptable.
-$(function() {
-	// setup ul.tabs to work as tabs for each div directly under div.panes
-	$("ul.tabs").tabs("div.panes > div");
-});
-</script>
-{/literal} *}
-
 {literal}
-<!-- activate tabs with JavaScript -->
 <script type="text/javascript">
-$(function() {
-	// :first selector is optional if you have only one tabs on the page
-	$(".css-tabs:first").tabs(".css-panes:first > div");
+jQuery(document).ready(function(){
+    jQuery(".css-tabs").tabs(".css-panes > div" );
+    var api = jQuery('.css-tabs').data('tabs');
+    var profile       = {/literal}{$json_profile}{literal};
+    var profile_asc   = {/literal}{$json_profile_asc}{literal};
+    var profile_avg   = {/literal}{$json_profile_avg}{literal};
+    var profile_deco  = {/literal}{$json_profile_deco}{literal};
+    var profile_rbt   = {/literal}{$json_profile_rbt}{literal};
+    var profile_desc  = {/literal}{$json_profile_desc}{literal};
+    var profile_work  = {/literal}{$json_profile_work}{literal};
+
+    var grid = {
+        gridLineWidth: 1.5,
+        gridLineColor: 'rgb(235,235,235)',
+        drawGridlines: true
+    };
+    var plot1 = jQuery.jqplot('chart1', [profile_asc, profile, profile_avg] ,{
+        title: "{/literal}{$profile_title}{literal}" ,
+        height: 400,
+        width: 550,
+        legend:{
+            show:true,
+            location: 'se',
+        
+        },
+        series: [
+           {
+                //asc line
+                label: "{/literal}{$dive_profile_ascent_legend}{literal}" ,
+                color: 'red',
+                markerOptions: {
+                show: false
+                }
+           },
+           {
+                //profile
+                label: "{/literal}{$dive_profile_depth_legend}{literal}" ,
+                color: "#99d0e9", 
+                fill: true,
+                fillColor: "#99d0e9", 
+                fillToZero: true,
+           },
+           {
+                //avg
+                label: "{/literal}{$dive_profile_avgdepth_title}{literal}" ,
+                lineWidth: 1.5,
+                color: 'black',
+                showMarker: false
+           },
+           ],
+        axesDefaults: {
+                labelRenderer: jQuery.jqplot.CanvasAxisLabelRenderer
+                      },
+        axes: {
+            // options for each axis are specified in seperate option objects.
+            xaxis: {
+                label:"{/literal}{$profile_xaxis}{literal}" ,
+                pad: 0.1
+            },
+            yaxis: {
+                label:"{/literal}{$profile_yaxis}{literal}" ,
+                pad: 0
+            }
+        },
+        grid: grid,
+        canvasOverlay: {
+            show: true,
+            objects: [
+                {horizontalLine: {
+                    name: "{/literal}{$dive_profile_avgdepth_title}{literal}" ,
+                    y: -{/literal}{$averagedepth}{literal},
+                    lineWidth: 6,
+                    color: 'black',
+                    shadow: false
+                }}
+            ]
+        },
+        highlighter: {
+            show: true,
+            sizeAdjust: 9.5,
+            formatString: '%d min at %d m',
+
+        },
+        cursor: {
+            show:false, 
+            zoom:true
+        },
+      });    
+
+    api.onClick(function(event, tabIndex) {
+        //var tabPanes = this;
+        var name = api.getCurrentTab().text();
+        //console.info("current position is: " + tabIndex);
+        //console.info("current tab is: " + name);
+        if (name  ===  "{/literal}{$dive_tab_profile}{literal}" && plot1._drawCount === 0) {
+            plot1.replot();
+        }
+ });
 });
+
 </script>
 {/literal}
-
 
 {if isset($pics2)}
 <div id="controlbar" class="highslide-overlay controlbar">
