@@ -1592,13 +1592,33 @@ class Divelog {
             $t->assign('profile','1');
             
             $json_profile       = json_encode($this->profile_array['data']);
+            if($json_profile == FALSE){
+                $json_profile = '[[null]]';
+            }
             $json_profile_asc   = json_encode($this->profile_array['ascdata']);
+            if($json_profile_asc == FALSE){
+                $json_profile_asc = '[[null]]';
+            }
             $json_profile_avg   = json_encode($this->profile_array['avgdata']);
+            if($json_profile_avg == FALSE){
+                $json_profile_avg = '[[null]]';
+            }
             $json_profile_deco  = json_encode($this->profile_array['decodata'] );
+            if($json_profile_deco == FALSE){
+                $json_profile_deco = '[[null]]';
+            }
             $json_profile_rbt   = json_encode($this->profile_array['rbtdata']  );
+            if($json_profile_rbt == FALSE){
+                $json_profile_rbt = '[[null]]';
+            }
             $json_profile_desc  = json_encode($this->profile_array['descdata'] );
+            if($json_profile_desc == FALSE){
+                $json_profile_desc = '[[null]]';
+            }
             $json_profile_work  = json_encode($this->profile_array['workdata'] );
-
+            if($json_profile_work == FALSE){
+                $json_profile_work = '[[null]]';
+            }
             $t->assign('json_profile', $json_profile); 
             $t->assign('json_profile_asc', $json_profile_asc); 
             $t->assign('json_profile_avg', $json_profile_avg); 
@@ -5949,6 +5969,9 @@ class Divestats{
         $pie_data[4] = array( $stats_depth5m , $this->depthrange5_per);
 
         $json_pie_data = json_encode(($pie_data));
+        if($json_pie_data == FALSE){
+            $json_pie_data = '[[null]]';
+        }
         $t->assign('json_pie_data' , $json_pie_data);
         $t->assign('piechart_display', 1);
 

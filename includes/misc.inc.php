@@ -355,6 +355,31 @@ return true;
 }
 
 /**
+ * toFeet Callback to convert metres to feet
+ * 
+ * @param mixed $aVal 
+ * @access public
+ * @return void
+ */
+function toFeet($aVal)
+{
+    return round(- ($aVal * 3.2808399));
+} 
+
+
+/**
+ * toMetres Callback to convert feet to metres
+ * 
+ * @param mixed $aVal 
+ * @access public
+ * @return void
+ */
+function toMetres($aVal)
+{
+    return round(- ($aVal * 0.3048));
+} 
+
+/**
 * GetProfileData Extract averagedepth and sac info from the profile data
 * 
 * @param mixed $result 
