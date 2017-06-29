@@ -206,7 +206,7 @@ function Pager_Wrapper_MDB2(&$db, $query, $pager_options = array(), $disabled = 
             }
         } else {
             //GROUP BY => fetch the whole resultset and count the rows returned
-            $res =& $db->queryCol($query);
+            $res = $db->queryCol($query);
             if (PEAR::isError($res)) {
                 return $res;
             }

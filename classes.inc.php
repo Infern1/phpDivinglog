@@ -76,7 +76,7 @@ class HandleRequest {
      * @access public
      * @return void
      */
-    function HandleRequest() {
+    function __construct() {  //HandleRequest() {
         global $_config, $t; /*{{{*/
         $this->multiuser = $_config['multiuser'];
         $_SESSION['request_type'] = 1;
@@ -404,7 +404,7 @@ class User {
      * @access public
      * @return void
      */
-    function User() {
+    function __construct() { //User() {
         global $_config;
         $this->multiuser = $_config['multiuser'];
         if (!$this->multiuser) {
@@ -493,7 +493,7 @@ class TableGrid{
      * @access public
      * @return void
      */
-    function TableGrid($user_id = 0,$data) {
+    function __construct($user_id = 0,$data){  //TableGrid($user_id = 0,$data) {
         global $_config;
         $this->language = $_config['language'];
         $objGrid = new dataGrid($data,$void);
@@ -628,7 +628,7 @@ class TablePager{
      * @access public
      * @return void
      */
-    function TablePager($cpage, $path) {
+    function __construct($cpage, $path){ //TablePager($cpage, $path) {
         global $_config;
         if ($_config['query_string']) {
             $pager_options = array( 
@@ -739,7 +739,7 @@ class Users{
      * @access public
      * @return void
      */
-    function Users() {
+    function __construct(){  //Users() {
         global $_config, $t;
         // Get the user_ids and put them in a array
         if ($_config['multiuser']) {
@@ -843,7 +843,7 @@ class TopLevelMenu {
      * @access public
      * @return void
      */
-    function TopLevelMenu($request = 0) {
+    function  __construct($request = 0){ //TopLevelMenu($request = 0) {
         global $_config, $t;
         // Get the user_ids and put them in a array
         if ($_config['multiuser']) {
@@ -1133,34 +1133,36 @@ class TopLevelMenu {
             $last = $globals['sql_num_rows'] - 1;
             $position = -1;
             $countrycount = $globals['sql_num_rows'];
-            for ($i=0; $i<$countrycount; $i++) {
-                if ($countrylist[$i]['ID'] == $globals['countryid']) {
-                    $position = $i;
+            // Just one country so no need for next
+            if($countrycount > 1){
+                for ($i=0; $i<$countrycount; $i++) {
+                    if ($countrylist[$i]['ID'] == $globals['countryid']) {
+                        $position = $i;
+                    }
                 }
+
+                // First, Previous
+                if ($position != 0 ) {
+                    $t->assign('country_first','1');
+                    $t->assign('first_country_id', $countrylist[0]['ID']);
+                    $t->assign('first_country_linktitle', $_lang['first_country_linktitle']);
+                    $t->assign('first', $_lang['first']);
+                    $t->assign('previous_country_id', $countrylist[$position - 1]['ID']);
+                    $t->assign('previous_country_linktitle', $_lang['previous_country_linktitle']);
+                    $t->assign('previous', $_lang['previous']);
+                }
+
+                // Next, Last
+                if ($position != $last) {
+                    $t->assign('divecountry_not_null','1');
+                    $t->assign('next_country_nr', $countrylist[$position + 1]['ID']);
+                    $t->assign('next_country_linktitle', $_lang['next_country_linktitle']);
+                    $t->assign('next', $_lang['next'] );
+                    $t->assign('last_country_nr', $countrylist[$last]['ID']);
+                    $t->assign('last_country_linktitle', $_lang['last_country_linktitle'] );
+                    $t->assign('last', $_lang['last'] );
+                } 
             }
-
-            // First, Previous
-            if ($position != 0 ) {
-                $t->assign('country_first','1');
-                $t->assign('first_country_id', $countrylist[0]['ID']);
-                $t->assign('first_country_linktitle', $_lang['first_country_linktitle']);
-                $t->assign('first', $_lang['first']);
-                $t->assign('previous_country_id', $countrylist[$position - 1]['ID']);
-                $t->assign('previous_country_linktitle', $_lang['previous_country_linktitle']);
-                $t->assign('previous', $_lang['previous']);
-            }
-
-            // Next, Last
-            if ($position != $last) {
-                $t->assign('divecountry_not_null','1');
-                $t->assign('next_country_nr', $countrylist[$position + 1]['ID']);
-                $t->assign('next_country_linktitle', $_lang['next_country_linktitle']);
-                $t->assign('next', $_lang['next'] );
-                $t->assign('last_country_nr', $countrylist[$last]['ID']);
-                $t->assign('last_country_linktitle', $_lang['last_country_linktitle'] );
-                $t->assign('last', $_lang['last'] );
-            } 
-
         } elseif ($request->request_type == 11) {
             // First, Previous, Next, Last links and City #
             $citylist = parse_mysql_query('citylist.sql');
@@ -1231,7 +1233,7 @@ class Divelog {
      * @access public
      * @return void
      */
-    function Divelog() {
+    function __construct() { //Divelog() {
         global $_config;
         $this->multiuser = $_config['multiuser'];
     }
@@ -2313,7 +2315,8 @@ class Divelog {
      */
     function dive_has_photo($value, $row) {
         global $_config, $_lang;
-        if (Divelog::dive_has_pictures($row['Number'])) {
+        $var = new Divelog();
+        if ($var->dive_has_pictures($row['Number'])) {
             return '<img src="'.$_config['web_root'].'/images/photo_icon.gif" border="0" alt="'.$_lang['divepic_linktitle'].'" title="'.$_lang['divepic_linktitle'].'">';
         }
     }
@@ -3012,7 +3015,7 @@ class Equipment{
     var $show_equip_service; // if this is set show only equipment which needs service
     var $request_type; // request_type = 0 overview, request_type = 1 details
    
-    function Equipment() {
+    function __construct() { //Equipment() {
         global $_config;
         $this->multiuser = $_config['multiuser'];
     }
@@ -5529,7 +5532,7 @@ class Divestats{
      * @access public
      * @return void
      */
-    function Divestats() {
+    function __construct(){ // Divestats() {
         global $_config;
         $this->multiuser = $_config['multiuser'];
     }
@@ -6265,7 +6268,7 @@ class DivePictures{
      * @access public
      * @return void
      */
-    function DivePictures() {
+    function __construct(){ //DivePictures() {
         global $_config;
         $this->multiuser = $_config['multiuser'];
     }
@@ -6749,7 +6752,7 @@ class AppInfo{ /*{{{*/
      * @access public
      * @return void
      */
-    function AppInfo($request) {
+    function __construct($request){ //AppInfo($request) {
         global $_lang, $_config;
         if ($_config['multiuser']) {
             $this->user_id = $request->get_user_id();

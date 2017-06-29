@@ -63,7 +63,7 @@ class Pager_Sliding extends Pager_Common
      *
      * @access public
      */
-    function Pager_Sliding($options = array())
+    function __construct($options = array())
     {
         //set default Pager_Sliding options
         $this->_delta                 = 2;
@@ -81,6 +81,18 @@ class Pager_Sliding extends Pager_Common
             return $this->raiseError($this->errorMessage($err), $err);
         }
         $this->build();
+    }
+
+    /**
+     * Constructor for PHP4 compatibility
+     *
+     * @param array $options Associative array of option names and their values
+     *
+     * @see http://cweiske.de/tagebuch/php4-constructors-php7.htm
+     */
+    public function Pager_Sliding($options = array())
+    {
+        self::__construct($options);
     }
 
     // }}}
@@ -256,7 +268,11 @@ class Pager_Sliding extends Pager_Common
 
                 if ($i == $this->_currentPage) {
                     $this->range[$i] = true;
-                    $links .= $this->_curPageSpanPre . $i . $this->_curPageSpanPost;
+                    if (!empty($this->_linkContainer)) {
+                        $links .=  '<'.$this->_linkContainerPre.'>' . $this->_curPageSpanPre . $i . $this->_curPageSpanPost . '</'.$this->_linkContainer.'>';
+                    } else {
+                        $links .= $this->_curPageSpanPre . $i . $this->_curPageSpanPost;
+                    }
                 } else {
                     $this->range[$i] = false;
                     $this->_linkData[$this->_urlVar] = $i;
@@ -287,7 +303,11 @@ class Pager_Sliding extends Pager_Common
                     $links .= $this->_renderLink(str_replace('%d', $i, $this->_altPage), $i);
                 } else {
                     $this->range[$i] = true;
-                    $links .= $this->_curPageSpanPre . $i . $this->_curPageSpanPost;
+                    if (!empty($this->_linkContainer)) {
+                        $links .=  '<'.$this->_linkContainerPre.'>' . $this->_curPageSpanPre . $i . $this->_curPageSpanPost . '</'.$this->_linkContainer.'>';
+                    } else {
+                        $links .= $this->_curPageSpanPre . $i . $this->_curPageSpanPost;
+                    }
                 }
                 $links .= $this->_spacesBefore
                        . (($i != $this->_totalPages) ? $this->_separator.$this->_spacesAfter : '');

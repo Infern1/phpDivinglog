@@ -102,8 +102,7 @@ if ( ! defined( "PATH_SEPARATOR" ) ) {
 }
 ini_set('include_path', get_include_path() . PATH_SEPARATOR . 
   $_config['pear_path'] . PATH_SEPARATOR . 
-  $_config['app_root']."includes/". PATH_SEPARATOR . 
-  $_config['app_root']."includes/jpgraph/"
+  $_config['app_root']."includes/". PATH_SEPARATOR  
   );
 
 
@@ -115,7 +114,7 @@ if(!isset($_SERVER['REQUEST_URI'])) {
         $_SERVER['REQUEST_URI'] = $_SERVER['SCRIPT_NAME'];
     else
         $_SERVER['REQUEST_URI'] = $_SERVER['PHP_SELF'];
-    if($_SERVER['QUERY_STRING']){
+    if(isset($_SERVER['QUERY_STRING'])){
         $_SERVER['REQUEST_URI'] .= '?'.$_SERVER['QUERY_STRING'];
     }
 }
@@ -129,10 +128,6 @@ require_once(SMARTY_DIR . 'Smarty.class.php');
 
 require_once 'classes.inc.php';
 require_once 'PEAR.php';
-
-require_once 'jpgraph.php';
-require_once 'jpgraph_line.php';
-require_once 'jpgraph_pie.php';
 
 require_once 'Pager/Pager.php';
 require_once 'Pager_Wrapper.php';

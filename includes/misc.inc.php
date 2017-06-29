@@ -200,20 +200,24 @@ if ($query) {
     if($debug == true){
     //    echo "query is: $query <br>";
     }
-    $connection = mysql_connect($server, $username, $password);
-    mysql_select_db($db, $connection);
+    $connection = mysqli_connect($server, $username, $password, $db);
+    if (mysqli_connect_errno()) {
+        printf("Connect failed: %s\n", mysqli_connect_error());
+        exit();
+    }
+    //mysql_select_db($db, $connection);
     //mysql_query("SET CHARACTER SET 'utf8'", $connection);
-    $server_query = mysql_query($query, $connection);
-    if (mysql_errno()) {
-        echo "<hr>\n<b>MySQL error " . mysql_errno(). ": " . mysql_error() . "\n:</b><br>\n";
+    $server_query = mysqli_query($connection,  $query);
+    if (mysqli_errno($connection)) {
+        echo "<hr>\n<b>MySQL error " . mysqli_errno($connection). ": " . mysqli_error($connection) . "\n:</b><br>\n";
         echo "Query: $query <br><hr>";
         exit;
     }
-    $globals['sql_num_rows'] = mysql_num_rows($server_query);
+    $globals['sql_num_rows'] = mysqli_affected_rows($connection);
     if ($globals['sql_num_rows'] == 1) {
-        $result = mysql_fetch_assoc($server_query);
+        $result = mysqli_fetch_assoc($server_query);
     } else {
-        for ($i=0; $query_output = mysql_fetch_assoc($server_query); $i++) {
+        for ($i=0; $query_output = mysqli_fetch_assoc($server_query); $i++) {
             while (list($key, $val) = each($query_output)) {
                 if (is_string($val)) {
                     //$val = utf8_encode($val);

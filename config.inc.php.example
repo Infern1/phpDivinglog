@@ -48,7 +48,7 @@ if(function_exists("date_default_timezone_set") and function_exists("date_defaul
  * query strings  like ?id=&user=
  * If query_string = false normal rewrite is used, if set to true query string is used
  */
-$_config['query_string'] = false;
+$_config['query_string'] = true;
 
 /**
  * change this to your website url
@@ -76,7 +76,7 @@ $_config['embed_mode'] = false;
 /**
  * when view_type = 1 grid with ajax is displayed, view_type = 2 old table mode 
  */
-$_config['view_type'] = 1;
+$_config['view_type'] = 2;
 
 /**
  * When multiuser is set to true, you need to define the table prefixes

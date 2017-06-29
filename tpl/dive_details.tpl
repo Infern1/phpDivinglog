@@ -875,9 +875,9 @@ height="{$thumb_height}" width="{$thumb_width}" ></a>
 
 {literal}
 <script type="text/javascript">
-jQuery(document).ready(function(){
-    jQuery(".css-tabs").tabs(".css-panes > div" );
-    var api = jQuery('.css-tabs').data('tabs');
+$(document).ready(function(){
+    $(".css-tabs").tabs(".css-panes > div" );
+    var api = $('.css-tabs').data('tabs');
     var profile       = {/literal}{$json_profile}{literal};
     var profile_asc   = {/literal}{$json_profile_asc}{literal};
     var profile_avg   = {/literal}{$json_profile_avg}{literal};
@@ -891,7 +891,7 @@ jQuery(document).ready(function(){
         gridLineColor: 'rgb(235,235,235)',
         drawGridlines: true
     };
-    var plot1 = jQuery.jqplot('chart1', [profile_asc, profile, profile_avg] ,{
+    var plot1 = $.jqplot('chart1', [profile_asc, profile, profile_avg] ,{
         title: "{/literal}{$profile_title}{literal}" ,
         height: 400,
         width: 550,
@@ -926,7 +926,7 @@ jQuery(document).ready(function(){
            },
            ],
         axesDefaults: {
-                labelRenderer: jQuery.jqplot.CanvasAxisLabelRenderer
+                labelRenderer: $.jqplot.CanvasAxisLabelRenderer
                       },
         axes: {
             // options for each axis are specified in seperate option objects.
