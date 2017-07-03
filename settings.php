@@ -120,7 +120,6 @@ if(!isset($_SERVER['REQUEST_URI'])) {
 }
 
 require_once (ABSPATH_DIVELOG . 'includes/misc.inc.php');
-require_once (ABSPATH_DIVELOG . 'includes/class.datagrid.php');
 // hack version example that works on both *nix and windows
 // Smarty is assumend to be in 'includes/' dir under current script
 define('SMARTY_DIR',str_replace("\\","/",getcwd()).'/includes/smarty/');
@@ -129,9 +128,6 @@ require_once(SMARTY_DIR . 'Smarty.class.php');
 require_once 'classes.inc.php';
 require_once 'PEAR.php';
 
-require_once 'Pager/Pager.php';
-require_once 'Pager_Wrapper.php';
-require_once 'MDB2.php';
 
 if($_config['enable_debug']){
     include_once(ABSPATH_DIVELOG . 'includes/dBug.php');
@@ -176,11 +172,6 @@ $options = array(
         'debug'       => 2,
         'portability' => MDB2_PORTABILITY_ALL,
         );
-
-$db = MDB2::connect($dsn, $options);
-if (PEAR::isError($db)) {
-  die($db->getMessage());
-}
 
 
 /**

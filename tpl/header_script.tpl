@@ -49,6 +49,7 @@ window.location.href = '{/literal}{$web_root}{literal}' + link + index  ;
 {* No images based tabs - variable width *}
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
 <script type="text/javascript" src="{$app_path}/js/jquery.tools.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.15/datatables.min.js"></script>
 {if isset($profile)} 
 <script type="text/javascript" src="{$app_path}/includes/jqplot/jquery.jqplot.min.js"></script>
 <script type="text/javascript" src="{$app_path}/includes/jqplot/plugins/jqplot.canvasTextRenderer.min.js"></script>
@@ -62,4 +63,3 @@ window.location.href = '{/literal}{$web_root}{literal}' + link + index  ;
 {/if}
 <!-- tab styling -->
 <link rel="stylesheet" type="text/css" href="{$app_path}/includes/tabs-no-images.css">
-

@@ -5,6 +5,7 @@ phpDivingLog v3.1 - 2017-06-29 - Rob Lensen
     * Set default view to table, grid view is broken in newer versions of PHP
     * Replaced mysql_* functions by mysqli_*
     * Changed default config.inc.php to config.inc.php.example
+		* Massive clean-up, removed all not need libraries (MDB2,Pager,PEAR)
 
 phpDivingLog v3.0-alpha3 - 2011-10-24 - Lloyd Borrett and Rob Lensen
     * Added tabs to dive details and dive statistics pages 

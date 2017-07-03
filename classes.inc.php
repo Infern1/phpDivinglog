@@ -20,7 +20,6 @@
  * @license LGPL v3 http://www.gnu.org/licenses/lgpl-3.0.txt
  */
 class HandleRequest {
-    /*{{{*/
     var $request_uri;     
     var $request_file_depth;
     var $multiuser;
@@ -77,7 +76,7 @@ class HandleRequest {
      * @return void
      */
     function __construct() {  //HandleRequest() {
-        global $_config, $t; /*{{{*/
+        global $_config, $t; 
         $this->multiuser = $_config['multiuser'];
         $_SESSION['request_type'] = 1;
         $_SESSION['user_id'] = NULL;
@@ -105,7 +104,7 @@ class HandleRequest {
             $t->assign('kml','/kml');
             $t->assign('gpx','/gpx');
         }
-    /*}}}*/
+    
     }
 
     /**
@@ -194,7 +193,6 @@ class HandleRequest {
      * @return void
      */
     function handle_url() {
-    /*{{{*/
         global $_config, $t;
         if ($this->multiuser) {
             //  The url should contain a least one select person, otherwise return to the person chooser
@@ -296,14 +294,6 @@ class HandleRequest {
                     if (($_config['view_type'] == 2) && isset($split_request[2]) && !isset($split_request[3]) ) {
                         //Get the paginate page only if view is type 2
                         $this->requested_page = $split_request[2];
-                    } elseif ($_config['view_type'] == 1 && isset($split_request[2])) {
-                        //There some special request so get this info
-                        //Set the special request so the class will be able to check for it
-                        $this->special_req = $split_request[2];
-                        //Special case for the divegallery
-                        if($split_request[0] == 'divegallery.php'){
-                            $this->requested_page = $split_request[2];
-                        }
                     } elseif (($_config['view_type'] == 2) && isset($split_request[2]) && isset($split_request[3])) {
                         $this->requested_page = $split_request[3];
                         //There some special request so get this info
@@ -378,10 +368,10 @@ class HandleRequest {
                 $_SESSION['request_type'] = $this->request_type;
             }
         }
-    /*}}}*/
+    
     }
 
-/*}}}*/
+
 }
 
 /**
@@ -393,7 +383,7 @@ class HandleRequest {
  * @license LGPL v3 http://www.gnu.org/licenses/lgpl-3.0.txt
  */
 class User {
-    var $user_id; /*{{{*/
+    var $user_id; 
     var $table_prefix;
     var $username;
     var $multiuser;
@@ -471,252 +461,9 @@ class User {
     function get_table_prefix() {
         return $this->table_prefix;
     }
-/*}}}*/
+
 }
 
-/**
- * Grid Functions for the phpMyDatagrid grid which are globally used
- * 
- * @package phpdivinglog
- * @copyright Copyright (C) 2007 Rob Lensen. All rights reserved.
- * @author Rob Lensen <rob@bsdfreaks.nl> 
- * @license LGPL v3 http://www.gnu.org/licenses/lgpl-3.0.txt
- */
-
-class TableGrid{
-    var $language; /*{{{*/
-    var $gridtable;
-
-    /**
-     * Grid 
-     * 
-     * @access public
-     * @return void
-     */
-    function __construct($user_id = 0,$data){  //TableGrid($user_id = 0,$data) {
-        global $_config;
-        $this->language = $_config['language'];
-        $objGrid = new dataGrid($data,$void);
-        if ($_config['query_string']) {
-            // $objGrid->methodForm('GET');
-            // $objGrid->linkparam("user_id=".$user_id."&id=list");
-            $objGrid->URLa = "user_id=".$user_id."&id=list";
-        } else {
-            // $objGrid->useSEO = true;
-            // $objGrid->URLa = "index.php";
-        }
-        $objGrid->setRowActionFunction("action");
-        $objGrid->rowsOnPage = $_config['max_list'];
-        $this->gridtable =& $objGrid;
-        $this->SetGridLanguage();
-    }
-    
-    /**
-     * get_grid caputure the output of the grid and return the html to the class
-     * 
-     * @param mixed $objGrid 
-     * @access public
-     * @return void
-     */
-    function get_grid($objGrid) {
-        ob_start();
-        $objGrid->grid();
-        $objGrid -> desconectar(); 
-        $grid = ob_get_clean();
-        return $grid;
-    }
-
-    function get_grid_class() {
-        return $this->gridtable;
-    }
-
-    /**
-     * SetGridLanguage 
-     * 
-     * @param  void
-     * @access public
-     * @return void
-     */
-    function SetGridLanguage() {
-        global $_lang, $_config; /*{{{*/
-        switch ($this->language) {
-            case 'english' :
-                // Do nothing since default is english for phpmydatgrid
-                break;
-            case 'dutch' :
-                $this->gridtable->setLanguage("dutch");
-                break;
-            case 'deutch': case 'german' :
-                $this->gridtable->setLanguage("german");
-                break;
-            case 'espa.ol': case 'es' :
-                $this->gridtable->Language("es");
-                break;
-            case 'francais': case 'fr' :
-                $this->gridtable->setLanguage("fr");
-                break;
-            case 'italian' : case 'it' :
-                $this->gridtable->setLanguage("it");
-                break;
-            case '.e.tina': case 'cs' :
-                $this->gridtable->setLanguage("cs");
-                break;
-            case 'portuguese' : case 'portugese' :
-                $this->gridtable->setLanguage("pt");
-                break;
-            default:
-                if (!isset($_lang['grid_cancel'])) {
-                    echo "<center><strong>ERROR: No language found for the grid (".$_config['language']. "). Please fix your language file.</strong></center><br>";
-                } else {
-                    $this->gridtable->message['cancel'] = $_lang['grid_cancel'];
-                    $this->gridtable->message['close'] = $_lang['grid_close'];
-                    $this->gridtable->message['save'] = $_lang['grid_save'];
-                    $this->gridtable->message['saving'] = $_lang['grid_saving'];
-                    $this->gridtable->message['loading'] = $_lang['grid_loading'];
-                    $this->gridtable->message['edit'] = $_lang['grid_edit'];
-                    $this->gridtable->message['delete'] = $_lang['grid_delete'];
-                    $this->gridtable->message['add'] = $_lang['grid_add'];
-                    $this->gridtable->message['view'] = $_lang['grid_view'];
-                    $this->gridtable->message['addRecord'] = $_lang['grid_addRecord'];
-                    $this->gridtable->message['edtRecord'] = $_lang['grid_edtRecord'];
-                    $this->gridtable->message['chkRecord'] = $_lang['grid_chkRecord'];
-                    $this->gridtable->message['false'] = $_lang['grid_false'];
-                    $this->gridtable->message['true'] = $_lang['grid_true'];
-                    $this->gridtable->message['prev'] = $_lang['grid_prev'];
-                    $this->gridtable->message['next'] = $_lang['grid_next'];
-                    $this->gridtable->message['confirm'] = $_lang['grid_confirm'];
-                    $this->gridtable->message['search'] = $_lang['grid_search'];
-                    $this->gridtable->message['resetSearch'] = $_lang['grid_resetSearch'];
-                    $this->gridtable->message['doublefield'] = $_lang['grid_doublefield'];
-                    $this->gridtable->message['norecords'] = $_lang['grid_norecords'];
-                    $this->gridtable->message['errcode'] = $_lang['grid_errcode'];
-                    $this->gridtable->message['noinsearch'] = $_lang['grid_noinsearch'];
-                    $this->gridtable->message['noformdef'] = $_lang['grid_noformdef'];
-                    $this->gridtable->message['cannotadd'] = $_lang['grid_cannotadd'];
-                    $this->gridtable->message['cannotedit'] = $_lang['grid_cannotedit'];
-                    $this->gridtable->message['cannotsearch'] = $_lang['grid_cannotsearch'];
-                    $this->gridtable->message['cannotdel'] = $_lang['grid_cannotdel'];
-                    $this->gridtable->message['sqlerror'] = $_lang['grid_sqlerror'];
-                    $this->gridtable->message['errormsg'] = $_lang['grid_errormsg'];
-                    $this->gridtable->message['errorscript'] = $_lang['grid_errorscript'];
-                    $this->gridtable->message['display'] = $_lang['grid_display'];
-                    $this->gridtable->message['to'] = $_lang['grid_to'];
-                    $this->gridtable->message['of'] = $_lang['grid_of'];
-                }
-        }
-    /*}}}*/
-    }
-/*}}}*/
-}
-
-/**
- * TablePager class that sets the application wide defaults for the PEAR Pager module 
- * 
- * @package phpdivinglog
- * @version $Rev$
- * @copyright Copyright (C) 2007 Rob Lensen. All rights reserved.
- * @author Rob Lensen <rob@bsdfreaks.nl> 
- * @license LGPL v3 http://www.gnu.org/licenses/lgpl-3.0.txt
- */
-class TablePager{
-/*{{{*/
-    var $options;
-    var $pager;
-    /**
-     * TablePager default constructor which creates the defaults 
-     * 
-     * @access public
-     * @return void
-     */
-    function __construct($cpage, $path){ //TablePager($cpage, $path) {
-        global $_config;
-        if ($_config['query_string']) {
-            $pager_options = array( 
-                    'mode' => 'Sliding', 
-                    'perPage' => 16, 
-                    'append' => true,
-                    'currentPage' => $cpage,
-                    'path' => '' ,
-                    'fileName' => '%d',
-                    'delta' => 2, ); 
-        } else {
-            $pager_options = array( 
-                    'mode' => 'Sliding', 
-                    'perPage' => 16, 
-                    'append' => false,
-                    'currentPage' => $cpage,
-                    'path' => $path ,
-                    'fileName' => '%d',
-                    'delta' => 2, ); 
-        }
-        $this->options = $pager_options;
-    }
-
-    /**
-     * return_tablepager_options 
-     * 
-     * @access public
-     * @return void
-     */
-    function return_tablepager_options() {
-        return $this->options;
-    }
-
-    /**
-     * set_tablepager_itemdata 
-     * 
-     * @param mixed $itemdata 
-     * @access public
-     * @return void
-     */
-    function set_tablepager_itemdata($itemdata) {
-        $this->options['itemData'] = $itemdata;
-    }
-
-    /**
-     * create_pager 
-     * 
-     * @access public
-     * @return void
-     */
-    function create_pager() {
-        $this->pager = & Pager::factory($this->options);
-    }
-
-    /**
-     * return_pager_links 
-     * 
-     * @access public
-     * @return void
-     */
-    function return_pager_links() {
-        $links = $this->pager->links;
-        return $links;
-    }
-
-    function return_getCurrentPageID() {
-        return $this->pager->getCurrentPageID();
-    }
-
-    function return_numPages() {
-        return $this->pager->numPages();
-    }
-
-    /**
-     * return_pager_data 
-     * 
-     * @access public
-     * @return void
-     */
-    function return_pager_data() {
-        $data = $this->pager->getPageData();
-        if (!is_array($data)) {
-            $data = array();
-        }
-        return $data;
-    }
-/*}}}*/
-}
 
 /**
  * Users Class needed for multiple user phpDivinglog, gets the info from the config file 
@@ -727,7 +474,6 @@ class TablePager{
  * @license LGPL v3 http://www.gnu.org/licenses/lgpl-3.0.txt
  */
 class Users{
-/*{{{*/
     var $user_ids;
     var $usernames;
     var $user_array;
@@ -820,7 +566,7 @@ class Users{
         $this->set_user_data();
         return $this->user_array;
     }
-/*}}}*/
+
 }
 
 /**
@@ -832,7 +578,6 @@ class Users{
  * @license LGPL v3 http://www.gnu.org/licenses/lgpl-3.0.txt
  */
 class TopLevelMenu {
-    /*{{{*/
     var $table_prefix;
     var $user_id;
     var $multiuser;
@@ -869,7 +614,7 @@ class TopLevelMenu {
      * @return void
      */
     function get_std_links() {
-        global $t, $_lang; /*{{{*/
+        global $t, $_lang; 
         // Dive Log, Dive Sites, Dive Shops, Dive Trips, Dive Statistics
         $t->assign('diver_choice_linktitle', $_lang['diver_choice_linktitle']);
         $t->assign('diver_choice', $_lang['diver_choice']);
@@ -895,7 +640,7 @@ class TopLevelMenu {
         if ($this->multiuser) {
             $t->assign('multiuser_id', $this->user_id);
         }
-    /*}}}*/
+    
     }
 
     /**
@@ -905,7 +650,7 @@ class TopLevelMenu {
      * @return void
      */
     function get_ovv_links() {
-        global $t, $_lang; /*{{{*/
+        global $t, $_lang; 
         // Start filling the data in the links_overview.tpl file
         $t->assign('base_page','index.php');
         // Dive Sites, Dive Statistics
@@ -936,7 +681,7 @@ class TopLevelMenu {
         // Get the page header
         $pagetitle = $_lang['dive_log'];
         $t->assign('pagetitle',$pagetitle);
-    /*}}}*/
+    
     }
 
     /**
@@ -947,7 +692,6 @@ class TopLevelMenu {
      * @return void
      */
     function get_nav_links($request) {
-        /*{{{*/
         global $t, $globals, $_lang, $_config;
 
         if ($request->request_type == 1) {
@@ -1198,10 +942,10 @@ class TopLevelMenu {
             } 
             // End filling the links section
         }
-    /*}}}*/
+    
     }
 
-/*}}}*/
+
 }
 
 /**
@@ -1213,7 +957,7 @@ class TopLevelMenu {
  * @license LGPL v3 http://www.gnu.org/licenses/lgpl-3.0.txt
  */
 class Divelog {
-    var $multiuser; /*{{{*/
+    var $multiuser; 
     var $user_id;
     var $dive_nr;
     var $result;
@@ -1233,7 +977,7 @@ class Divelog {
      * @access public
      * @return void
      */
-    function __construct() { //Divelog() {
+    function __construct() {  
         global $_config;
         $this->multiuser = $_config['multiuser'];
     }
@@ -1251,7 +995,6 @@ class Divelog {
      */
     function set_divelog_info($request) {
         // We need to extract the info from the request
-        /*{{{*/
         if (!$request->diver_choice) {
             // Find request type
             if ($request->get_view_request() == 1) {
@@ -1273,7 +1016,7 @@ class Divelog {
         } else {
             $this->request_type = 3;
         }
-    /*}}}*/
+    
     }
 
     /**
@@ -1284,7 +1027,7 @@ class Divelog {
      * @return void
      */
     function get_divelog_info() {
-        global $globals, $_config; /*{{{*/
+        global $globals, $_config; 
         if (!empty($this->dive_nr)) {
             $this->request_type = 1;
             // Get the dive details from database
@@ -1320,7 +1063,7 @@ class Divelog {
             }
         }
         return $this->result; 
-    /*}}}*/
+    
     }
 
     /**
@@ -1330,7 +1073,7 @@ class Divelog {
      * @return void
      */
     function get_userdefined() {
-        global $globals, $_config; /*{{{*/
+        global $globals, $_config; 
         // Get the userdefined values for this dive, if any
         $globals['logid'] = $this->result['ID'];
         $this->userdefined = parse_mysql_query('userdefined.sql');
@@ -1340,7 +1083,7 @@ class Divelog {
         } else {
             $this->userdefined_count = 1;
         }
-    /*}}}*/
+    
     }
 
     /**
@@ -1350,7 +1093,7 @@ class Divelog {
      * @return void
      */
     function set_main_dive_details() {
-        global $t, $_config, $_lang, $globals; /*{{{*/
+        global $t, $_config, $_lang, $globals; 
         $result = $this->result; 
  
         $t->assign('dive_tab_logbook', $_lang['dive_tab_logbook']);
@@ -1452,7 +1195,7 @@ class Divelog {
             $t->assign('dive_trip_name','-');
         }
 
-    /*}}}*/
+    
     }
 
     /**
@@ -1462,7 +1205,7 @@ class Divelog {
      * @return void
      */
     function set_buddy_details() {
-        global $t, $_lang; /*{{{*/
+        global $t, $_lang; 
         $result = $this->result; 
         $t->assign('logbook_buddy', $_lang['logbook_buddy']);
         $t->assign('logbook_divemaster', $_lang['logbook_divemaster']);
@@ -1478,7 +1221,7 @@ class Divelog {
         } else {
             $t->assign('divemaster','-');
         }
-    /*}}}*/
+    
     }
 
     function get_log_id_for_dive_nr($dive_nr) {
@@ -1494,7 +1237,7 @@ class Divelog {
      * @return void
      */
     function dive_has_pictures($dive_nr) {
-        global $_config, $t, $_lang, $globals; /*{{{*/
+        global $_config, $t, $_lang, $globals; 
         $pic_class = new DivePictures;
         /**
          * We need to get the LogID for this dive 
@@ -1530,7 +1273,7 @@ class Divelog {
         } else {
             return false;
         } 
-    /*}}}*/
+    
     }
 
     /**
@@ -1540,7 +1283,7 @@ class Divelog {
      * @return void
      */
     function set_dive_pictures() {
-        global $_config, $t, $_lang, $globals; /*{{{*/
+        global $_config, $t, $_lang, $globals; 
         $result = $this->result; 
         $pic_class = new DivePictures;
         $pic_class->set_divegallery_info_direct($this->user_id);
@@ -1577,7 +1320,7 @@ class Divelog {
                 $t->assign('image_link', $image_link);
             }
         }
-    /*}}}*/
+    
     }
 
     /**
@@ -1587,7 +1330,7 @@ class Divelog {
      * @return void
      */
     function set_dive_profile() {
-        global $t, $_lang, $globals, $_config; /*{{{*/
+        global $t, $_lang, $globals, $_config; 
         $result = $this->result; 
         $profile = $result['Profile'];
         if ($profile && $_config['show_profile'] == true) {
@@ -1642,7 +1385,7 @@ class Divelog {
             $t->assign('get_nr',$this->dive_nr);
             $t->assign('dive_profile_title', $_lang['dive_profile_title'] . $result['Number']);
         }
-    /*}}}*/
+    
     }
 
     /**
@@ -1652,7 +1395,7 @@ class Divelog {
      * @return void
      */
     function set_dive_conditions() {
-        global $t, $_config, $_lang, $globals; /*{{{*/
+        global $t, $_config, $_lang, $globals; 
         $result = $this->result; 
         $t->assign('dive_sect_conditions', $_lang['dive_sect_conditions']);
 
@@ -1741,7 +1484,7 @@ class Divelog {
         } else {
             $t->assign('Watertemp','-');
         }
-    /*}}}*/
+    
     }
 
     /**
@@ -1751,7 +1494,7 @@ class Divelog {
      * @return void
      */ 
     function set_breathing_details() {
-        global $tanks, $t, $_config, $_lang, $globals; /*{{{*/
+        global $tanks, $t, $_config, $_lang, $globals; 
         $result = $this->result;
 
     /**
@@ -1761,7 +1504,7 @@ class Divelog {
      * @return void
      */ 
     function set_tank_details($i, $result) {
-        global $tanks, $t, $_config, $_lang; /*{{{*/
+        global $tanks, $t, $_config, $_lang; 
 
         $tanks[$i]['Set'] = $i + 1;
 
@@ -2029,7 +1772,7 @@ class Divelog {
 */
             $tanks[$i]['sac'] = "-"; 
 
-    /*}}}*/
+    
     }
 
         // Breathing
@@ -2115,7 +1858,7 @@ class Divelog {
             $t->assign('Gas','-');
         }
 
-    /*}}}*/
+    
     }
     
     /**
@@ -2125,7 +1868,7 @@ class Divelog {
      * @return void
      */
     function set_dive_details() {
-        global $t, $_lang, $globals; /*{{{*/
+        global $t, $_lang, $globals; 
         $result =  $this->result; 
         // Dive Details
         $t->assign('dive_sect_details', $_lang['dive_sect_details'] );
@@ -2190,7 +1933,7 @@ class Divelog {
 
             $t->assign('stops', $r);
         }
-    /*}}}*/
+    
     }
 
     /**
@@ -2200,7 +1943,7 @@ class Divelog {
      * @return void
      */
     function set_equipment() {
-        global $t, $_config, $_lang, $globals; /*{{{*/
+        global $t, $_config, $_lang, $globals; 
         $result =  $this->result; 
         $t->assign('dive_sect_equipment', $_lang['dive_sect_equipment'] );
         $t->assign('logbook_weight', $_lang['logbook_weight'] );
@@ -2250,7 +1993,7 @@ class Divelog {
         } 
         $t->assign('comma_separated', $_config['comma_separated']);
         $t->assign('comma_separator', $_config['comma_separator']);
-    /*}}}*/
+    
     }
 
     /**
@@ -2260,7 +2003,7 @@ class Divelog {
      * @return void
      */
     function set_comments() {
-        global $t, $_lang, $globals; /*{{{*/
+        global $t, $_lang, $globals; 
         $result = $this->result;
         // Show them if we have them
         if (isset($result['Comments']) && ($result['Comments'] != "")) {
@@ -2278,7 +2021,7 @@ class Divelog {
         } else {
             $t->assign('Comments', "");
         }
-    /*}}}*/
+    
     }
 
     /**
@@ -2288,7 +2031,7 @@ class Divelog {
      * @return void
      */
     function set_userdefined() {
-        global $globals, $_config, $t, $_lang; /*{{{*/
+        global $globals, $_config, $t, $_lang; 
         $this->get_userdefined();
         $userdefined = $this->userdefined; 
         $userdefined_count = $this->userdefined_count; 
@@ -2302,7 +2045,7 @@ class Divelog {
             $t->assign('userdefined_keys',"");
             $t->assign('userdefined_values',"");
         }
-    /*}}}*/
+    
     }
 
     /**
@@ -2328,23 +2071,14 @@ class Divelog {
      * @return void
      */
     function get_dive_overview() {
-        global $t, $_lang, $globals, $_config; /*{{{*/
+        global $t, $_lang, $globals, $_config; 
 
 // TODO: Count the dives and display a message if none
         $t->assign('dlog_none', $_lang['dlog_none']);
 
-        /**
-         * When view_type = 1 display the ajax grid, if type = 2 display old fashioned table 
-         */
-        if ($_config['view_type'] == 1) {
-            $this->get_dive_overview_grid();
-        } elseif ($_config['view_type'] == 2) {
-            $this->get_dive_overview_table();
-        } else{
-            echo '<strong>ERROR: No view_type defined!</strong><br>';
-        }
+        $this->get_dive_overview_table();
         $t->assign('pagetitle',$_lang['dive_log']);
-    /*}}}*/
+    
     }
 
     /**
@@ -2354,7 +2088,7 @@ class Divelog {
      * @return void
      */
     function get_dive_overview_table() {
-        global $db, $t, $_lang, $globals, $_config; /*{{{*/
+        global $db, $t, $_lang, $globals, $_config; 
         // Get the details of the dives to be listed
         if ($_config['length']) {
             $recentdivelist_query = sql_file('recentdivelist-imp.sql');
@@ -2383,102 +2117,34 @@ class Divelog {
         } else {
             $cpage = $this->requested_page;
         }
-        $pager_options = new TablePager($cpage,$path);
-        $paged_data = Pager_Wrapper_MDB2($db, $recentdivelist_query, $pager_options->options);
         $t->assign('dlog_number_title', $_lang['dlog_number_title']);
         if ($_config['length']) {
             $t->assign('unit_length_short', $_lang['unit_length_short_imp']);
         } else {
             $t->assign('unit_length_short', $_lang['unit_length_short']);
-        }
+				}
+				$new_paged = parse_mysql_query('',$recentdivelist_query);
         $t->assign('unit_time_short', $_lang['unit_time_short']);
-        $t->assign('pages', $paged_data['links']);
-        $t->assign('cells', $paged_data['data']);
-    /*}}}*/
+        $t->assign('cells', $new_paged); 
+    
     }
 
-    /**
-     * get_dive_overview_grid 
-     * 
-     * @access public
-     * @return void
-     */
-    function get_dive_overview_grid() {
-        global $db, $t, $_lang, $globals, $_config;
-        // Get the details of the dives to be listed
-        if ($_config['length']) {
-            $recentdivelist_query = sql_file('recentdivelist-imp.sql');
-        } else {
-            $recentdivelist_query = sql_file('recentdivelist.sql');
-        }
-        $recentdivelist_query .= " ORDER BY Number DESC";
-
-        $t->assign('dlog_title_number', $_lang['dlog_title_number'] );
-        $t->assign('dlog_title_divedate', $_lang['dlog_title_divedate']);
-        $t->assign('dlog_title_depth', $_lang['dlog_title_depth'] );
-        $t->assign('dlog_title_divetime', $_lang['dlog_title_divetime'] );
-        $t->assign('dlog_title_location', $_lang['dlog_title_location'] );
-        $t->assign('dlog_title_photo', $_lang['dlog_title_photo'] );
-
-        if (!empty($this->multiuser)) {
-            $path = $_config['web_root'].'/index.php/'.$this->user_id.'/list';
-        } else {
-            $path = $_config['web_root'].'/index.php/list';
-        }
-        if (empty($this->requested_page)) {
-            $cpage = 0;
-        } else {
-            $cpage = $this->requested_page;
-        }
-        $data = parse_mysql_query(0,$recentdivelist_query);
-        $GridClass = new TableGrid($this->user_id,$data);
-        $grid = $GridClass->get_grid_class();
-
-        // $grid = new dataGrid($data,$void); 
-        $grid->showColumn('Number', $_lang['dlog_title_number']);
-        $grid->setColwidth('Number',"35");
-        $grid->showColumn('Divedate', $_lang['dlog_title_divedate']);
-        $grid->setColwidth('Divedate',"80");
-        $grid->showColumn('Depth', $_lang['dlog_title_depth']);
-        $grid->setColwidth('Depth',"60");
-        $grid->showColumn('Divetime', $_lang['dlog_title_divetime']);
-        $grid->setColwidth('Divetime',"60");
-        $grid->showColumn('Place', $_lang['dlog_title_place']);
-        $grid->setColwidth('Place',"200");
-        $grid->showColumn('City', $_lang['dlog_title_location']);
-        $grid->setColwidth('City',"160");
-        $grid->showCustomColumn("photo", $_lang['dlog_title_photo']);
-        $grid->setColwidth('photo',"30");
-
-        $methodVariable = array($this, 'dive_has_photo'); 
-        $grid->setCallbackFunction("photo", $methodVariable);
-        $grid->setCallbackFunction("Divedate","convert_date"); 
-        $grid->setCallbackFunction("Depth","add_unit_depth");
-        $grid->setCallbackFunction("Divetime","add_unit_time");
-
-        $grid->setRowActionFunction("action");
-        $grid_ret = $grid->render(TRUE);
-
-        $t->assign('grid_display' ,1);
-        $t->assign('grid',$grid_ret );
-    }
-
-    /**
+     /**
      * get_overview_divers 
      * 
      * @access public
      * @return void
      */
     function get_overview_divers() {
-        global $t, $_lang, $globals, $_config; /*{{{*/
+        global $t, $_lang, $globals, $_config; 
         $users = new Users();
         $user_list = $users->get_user_data();
         $t->assign('diver_overview',1);
         $t->assign('divers', $user_list);
         $t->assign('file_name','index.php'); 
-    /*}}}*/
+    
     }
-/*}}}*/
+
 }
 
 /**
@@ -2490,7 +2156,7 @@ class Divelog {
  * @license LGPL v3 http://www.gnu.org/licenses/lgpl-3.0.txt
  */
 class Divesite{
-    var $multiuser; /*{{{*/
+    var $multiuser; 
     var $table_prefix;
     var $user_id;
     var $divesite_nr;
@@ -2543,7 +2209,6 @@ class Divesite{
 
     function set_divesite_info($request) {
         // We need to extract the info from the request
-        /*{{{*/
         if (!$request->diver_choice) {
             if ($request->get_view_request() == 1) {
                 $this->request_type = 1;
@@ -2565,11 +2230,11 @@ class Divesite{
         } else {
             $this->request_type = 3;
         }
-    /*}}}*/
+    
     }
 
     function get_divesite_info() {
-        global $globals, $_config; /*{{{*/
+        global $globals, $_config; 
         if (!empty($this->divesite_nr)) {
             $this->request_type = 1;
             $globals['placeid'] = $this->divesite_nr;
@@ -2584,17 +2249,17 @@ class Divesite{
             }
         }
         return $this->result;
-    /*}}}*/
+    
     }
 
     function get_overview_divers() {
-        global $t, $_lang, $globals, $_config; /*{{{*/
+        global $t, $_lang, $globals, $_config; 
         $users = new Users();
         $user_list = $users->get_user_data();
         $t->assign('diver_overview',1);
         $t->assign('divers', $user_list);
         $t->assign('file_name','divesite.php');
-    /*}}}*/
+    
     }
 
     /**
@@ -2604,7 +2269,7 @@ class Divesite{
      * @return void
      */
     function get_divesite_location_details() {
-        global $globals, $_config; /*{{{*/
+        global $globals, $_config; 
         $countrycity = $this->result_countrycity;
         if (count($countrycity) != 0) {
             if (isset($countrycity['Country']) && ($countrycity['Country'] != "")) {
@@ -2633,7 +2298,7 @@ class Divesite{
                 }
             }
         }
-    /*}}}*/
+    
     }
 
     /**
@@ -2643,14 +2308,13 @@ class Divesite{
      * @return void
      */
     function get_dives_at_location() {
-        global $globals, $_config; /*{{{*/
+        global $globals, $_config; 
         // Get the dives at this site from database
         $globals['placeid'] = $this->divesite_nr;
         $this->dives = parse_mysql_query('divelocations.sql');
         $this->dive_count = $globals['sql_num_rows'];
         // Get the site list from database
         $this->sitelist = parse_mysql_query('sitelist.sql');
-    /*}}}*/
     }
 
     /**
@@ -2660,7 +2324,7 @@ class Divesite{
      * @return void
      */
     function set_main_divesite_details() {
-        global $globals, $_config, $t, $_lang; /*{{{*/
+        global $globals, $_config, $t, $_lang; 
         $this->get_divesite_location_details(); 
         // Show main site details
         $result = $this->result;
@@ -2783,7 +2447,6 @@ class Divesite{
         } else {
             $t->assign('Difficulty','-');
         }
-    /*}}}*/
     }
 
     /**
@@ -2793,7 +2456,7 @@ class Divesite{
      * @return void
      */
     function set_divesite_pictures() {
-        global $_config, $t, $_lang, $globals; /*{{{*/
+        global $_config, $t, $_lang, $globals; 
         $pic_class = new DivePictures;
         $pic_class->set_divegallery_info_direct($this->user_id);
         $pic_class->get_divegallery_info(0,$this->divesite_nr,0,0,0);
@@ -2809,7 +2472,6 @@ class Divesite{
                  */
             }
         }
-    /*}}}*/
     }
 
     /**
@@ -2819,7 +2481,7 @@ class Divesite{
      * @return void
      */
     function set_dives_at_location() {
-        global $globals, $_config, $t, $_lang; /*{{{*/
+        global $globals, $_config, $t, $_lang; 
         $this->get_dives_at_location();
         // Show site dives if we have them
         if (count($this->dives) == 1) {
@@ -2845,7 +2507,6 @@ class Divesite{
         }
         $t->assign('comma_separated', $_config['comma_separated']);
         $t->assign('comma_separator', $_config['comma_separator']);
-    /*}}}*/
     }
 
     /**
@@ -2855,7 +2516,7 @@ class Divesite{
      * @return void
      */
     function set_divesite_comments() {
-        global $globals, $_lang, $_config, $t; /*{{{*/
+        global $globals, $_lang, $_config, $t; 
         // Comments
         $result = $this->result;
         // Show them if we have them
@@ -2876,7 +2537,6 @@ class Divesite{
 
             $t->assign('Comments', $r);
         }
-    /*}}}*/
     } 
 
     /**
@@ -2886,7 +2546,7 @@ class Divesite{
      * @return void
      */
     function get_divesite_overview() {
-        global $t, $_lang, $globals, $_config; /*{{{*/
+        global $t, $_lang, $globals, $_config; 
         $placetable = $this->table_prefix."Place";
         $logbooktable = $this->table_prefix."Logbook";
         
@@ -2899,19 +2559,8 @@ class Divesite{
 // TODO: Count the dive sites and display a message if none
         $t->assign('dsite_none', $_lang['dsite_none']);
 
-        /**
-         * when view_type = 1 display the ajax grid if type = 2 display old fashioned table 
-         */
-        if ($_config['view_type'] == 1) {
-            $this->get_divesite_overview_grid($sql);
-        }
-        elseif ($_config['view_type'] == 2) {
-            $this->get_divesite_overview_table($sql);
-        } else{
-            echo '<strong>ERROR: No view_type defined!</strong><br>';
-        }
+        $this->get_divesite_overview_table($sql);
         $t->assign('pagetitle',$_lang['dive_sites']);
-    /*}}}*/
     }
 
     /**
@@ -2921,7 +2570,7 @@ class Divesite{
      * @return void
      */
     function get_divesite_overview_table($sql) {
-        global $db, $t, $_lang, $globals, $_config; /*{{{*/
+        global $db, $t, $_lang, $globals, $_config; 
         // Get the page header
         // Get the details of the locations to be listed
         $locationlist_query = $sql." ORDER BY Place";
@@ -2939,9 +2588,7 @@ class Divesite{
         } else {
             $cpage = $this->requested_page;
         }
-        $pager_options = new TablePager($cpage,$path);
-        $paged_data = Pager_Wrapper_MDB2($db, $locationlist_query, $pager_options->options);
-        $t->assign('logbook_place_linktitle', $_lang['logbook_place_linktitle']);
+				$t->assign('logbook_place_linktitle', $_lang['logbook_place_linktitle']);
         $t->assign('dsite_title_place', $_lang['dsite_title_place']);
         $t->assign('dsite_title_city', $_lang['dsite_title_city']);
         $t->assign('dsite_title_country', $_lang['dsite_title_country']);
@@ -2951,51 +2598,12 @@ class Divesite{
         } else {
             $t->assign('unit_length_short', $_lang['unit_length_short']);
         }
-
-        $t->assign('pages', $paged_data['links']);
-        $t->assign('cells', $paged_data['data']);
-    /*}}}*/
+				$new_paged = parse_mysql_query('',$locationlist_query);
+				$t->assign('cells', $new_paged);
     }
 
-    /**
-     * get_divesite_overview_grid 
-     * 
-     * @param mixed $sql 
-     * @access public
-     * @return void
-     */
-    function get_divesite_overview_grid($sql) {
-        global $t, $_lang, $globals, $_config; /*{{{*/
-        $sql .=  " ORDER BY Place ASC";
-        $data = parse_mysql_query(0,$sql);;
-        $GridClass = new TableGrid($this->user_id,$data);
-        $grid = $GridClass->get_grid_class();
-        /**
-         * Define the table according some info 
-         */
-        if ($this->multiuser) {
-            $url = "/divesite.php".$t->getTemplateVars('sep1').$this->user_id.$t->getTemplateVars('sep2');
-        } else {
-            $url = "/divesite.php".$t->getTemplateVars('sep2');
-        }
-        $grid->showColumn('Place', $_lang['dsite_title_place']);
-        $grid->setColwidth('Place',"250");
-        $grid->showColumn('City', $_lang['dsite_title_city']);
-        $grid->setColwidth('City',"200");
-        $grid->showColumn('Country', $_lang['dsite_title_country']);
-        $grid->setColwidth('Country',"120");
-        $grid->showColumn('MaxDepth', $_lang['dsite_title_maxdepth']);
-        $grid->setColwidth('MaxDepth',"55");
-        $grid->setRowActionFunction("action");
-        $grid->setCallbackFunction("MaxDepth","add_unit_depth");
-
-        $grid_ret = $grid->render(TRUE); 
-        $t->assign('grid_display' ,1);
-        $t->assign('grid',$grid_ret );
-    /*}}}*/
-    }
-/*}}}*/
 }
+
 
 /**
  * Equipment contains all functions for displaying the equipment information
@@ -3006,7 +2614,7 @@ class Divesite{
  * @license LGPL v3 http://www.gnu.org/licenses/lgpl-3.0.txt
  */
 class Equipment{
-    var $multiuser; /*{{{*/
+    var $multiuser; 
     var $user_id;
     var $equipment_nr;
     var $result;
@@ -3015,9 +2623,9 @@ class Equipment{
     var $show_equip_service; // if this is set show only equipment which needs service
     var $request_type; // request_type = 0 overview, request_type = 1 details
    
-    function __construct() { //Equipment() {
-        global $_config;
-        $this->multiuser = $_config['multiuser'];
+		function __construct() { 
+			global $_config;
+			$this->multiuser = $_config['multiuser'];
     }
     
     function get_request_type() {
@@ -3037,7 +2645,6 @@ class Equipment{
      */
     function set_equipment_info($request) {
         // We need to extract the info from the request
-        /*{{{*/
         if (!$request->diver_choice) {
             // Find request type
             if ($request->get_view_request() == 1) {
@@ -3065,7 +2672,6 @@ class Equipment{
         } else {
             $this->request_type = 3;
         }
-    /*}}}*/
     }
 
     /**
@@ -3075,7 +2681,7 @@ class Equipment{
      * @return void
      */
     function get_equipment_info() {
-        global $_config, $globals; /*{{{*/
+        global $_config, $globals; 
         if (!empty($this->equipment_nr)) {
             $this->request_type = 1;
             $globals['gear'] = $this->equipment_nr;
@@ -3090,7 +2696,6 @@ class Equipment{
             }
         }
         return $this->result;
-    /*}}}*/
     }
 
     /**
@@ -3100,13 +2705,12 @@ class Equipment{
      * @return void
      */
     function get_overview_divers() {
-        global $t, $_lang, $globals, $_config; /*{{{*/
+        global $t, $_lang, $globals, $_config; 
         $users = new Users();
         $user_list = $users->get_user_data();
         $t->assign('diver_overview',1);
         $t->assign('divers', $user_list);
         $t->assign('file_name','equipment.php');
-    /*}}}*/
     }
 
     /**
@@ -3116,13 +2720,12 @@ class Equipment{
      * @return void
      */
     function set_equipment_service_info() {
-        global $_config, $globals, $t, $_lang; /*{{{*/
+        global $_config, $globals, $t, $_lang; 
         $this->service = parse_mysql_query('equipservice.sql');
         $this->equipment_service_count = $globals['sql_num_rows'];
         $t->assign('equipment_service_count', $this->equipment_service_count);
         $t->assign('equipment_service_reminder', $_config['equipment_service_reminder']);
         $t->assign('equipment_service_warning', $_lang['equip_service_warning']);
-    /*}}}*/
     }
 
     /**
@@ -3132,7 +2735,7 @@ class Equipment{
      * @return void
      */
     function set_main_equipment_details() {
-        global $t, $_config, $globals, $_lang; /*{{{*/
+        global $t, $_config, $globals, $_lang; 
         $result = $this->result; 
 
         $t->assign('pagetitle', $_lang['equip_details_pagetitle'].$result['Object']);
@@ -3241,7 +2844,6 @@ class Equipment{
             $t->assign('equip_photo_link', $_lang['equip_photo_link'] );
         }
 
-    /*}}}*/
     }
 
     /**
@@ -3251,7 +2853,7 @@ class Equipment{
      * @return void
      */
     function set_equipment_pictures() {
-        global $_config,$t, $_lang, $globals; /*{{{*/
+        global $_config,$t, $_lang, $globals; 
         $pic_class = new DivePictures;
         $pic_class->set_divegallery_info_direct($this->user_id);
         $pic_class->get_divegallery_info(0,0,$this->equipment_nr,0,0);
@@ -3273,7 +2875,6 @@ class Equipment{
             $t->assign('has_images', '0');
         // $t->assign('image_link', '');
         }
-    /*}}}*/
     }
 
     /**
@@ -3283,7 +2884,7 @@ class Equipment{
      * @return void
      */
     function set_comments() {
-        global $t, $_lang, $globals; /*{{{*/
+        global $t, $_lang, $globals; 
         $result =  $this->result; 
         // Show them if we have them
         if (isset($result['Comments']) && ($result['Comments'] != "")) {
@@ -3300,7 +2901,7 @@ class Equipment{
 
             $t->assign('Comments', $r);
         }
-    /*}}}*/
+    
     }
 
     /**
@@ -3363,23 +2964,13 @@ alt="'.$_lang['equip_service_warning'].'" title="'.$_lang['equip_service_warning
      * @return void
      */
     function get_equipment_overview() {
-        global $t, $_lang, $globals, $_config; /*{{{*/
+        global $t, $_lang, $globals, $_config; 
 
         // TODO: Count the equipment and display a message if none
         $t->assign('equip_none', $_lang['equip_none']);
         $t->assign('pagetitle', $_lang['dive_equip']);
 
-        /**
-         * When view_type = 1 display the ajax grid, if type = 2 display old fashioned table 
-         */
-        if ($_config['view_type'] == 1) {
-            $this->get_equipment_overview_grid();
-        } elseif ($_config['view_type'] == 2) {
-            $this->get_equipment_overview_table();
-        } else {
-            echo '<strong>ERROR: No view_type defined!</strong><br>';
-        }
-    /*}}}*/
+        $this->get_equipment_overview_table();
     }
 
     /**
@@ -3389,7 +2980,7 @@ alt="'.$_lang['equip_service_warning'].'" title="'.$_lang['equip_service_warning
      * @return void
      */
     function get_equipment_overview_table() {
-        global $db, $t, $_lang, $globals, $_config; /*{{{*/
+        global $db, $t, $_lang, $globals, $_config; 
         if ($this->show_equip_service == 1) {
             $equiplist_query = sql_file('equipservice.sql');
             $t->assign('equipment_service_warning', $_lang['equip_service_warning']);
@@ -3420,71 +3011,10 @@ alt="'.$_lang['equip_service_warning'].'" title="'.$_lang['equip_service_warning
         } else {
             $cpage = $this->requested_page;
         }
-        $pager_options = new TablePager($cpage,$path);
-        $paged_data = Pager_Wrapper_MDB2($db, $equiplist_query, $pager_options->options);
-        
-        $t->assign('pages', $paged_data['links']);
-        $t->assign('cells', $paged_data['data']);
-    /*}}}*/
+				$paged_data = parse_mysql_query('', $equiplist_query);
+        $t->assign('cells', $paged_data);
     }
 
-    /**
-     * get_equipment_overview_grid 
-     * 
-     * @access public
-     * @return void
-     */
-    function get_equipment_overview_grid() {
-        global $t, $_lang, $globals, $_config; /*{{{*/
-        if ($this->show_equip_service == 1) {
-            $sql = sql_file('equipservice.sql');
-            $t->assign('equipment_service_warning', $_lang['equip_service_warning']);
-            $t->assign('pagetitle', $_lang['equip_service_warning']);
-        } else {
-            $sql = sql_file('equiplist.sql');
-        }
-        $t->assign('show_equip_service', $this->show_equip_service);
-
-        $data = parse_mysql_query(0,$sql);;
-        $GridClass = new TableGrid($this->user_id,$data);
-        $grid = $GridClass->get_grid_class();
-
-        /**
-         * Define the table according some info 
-         */
-        if ($this->multiuser) {
-            $url = "/divesite.php".$t->getTemplateVars('sep1').$this->user_id.$t->getTemplateVars('sep2');
-        } else {
-            $url = "/divesite.php".$t->getTemplateVars('sep2');
-        }
-
-        $grid->showColumn('Object', $_lang['equip_title_object']);
-        $grid->setColwidth('Object',"350");
-        $grid->showColumn('Manufacturer', $_lang['equip_title_manufacturer']);
-        $grid->setColwidth('Manufacturer',"180");
-        $grid->showColumn('Inactive', $_lang['equip_title_inactive']);
-        $grid->setColwidth('Inactive',"30");
-        $grid->showCustomColumn("photo", $_lang['equip_title_photo']);
-        $grid->setColwidth('photo',"25");
-        $grid->showCustomColumn("service", $_lang['equip_title_service']);
-        $grid->setColwidth('service',"40");
-
-        $methodVariable = array($this, 'equip_has_photo'); 
-        $grid->setCallbackFunction("photo", $methodVariable);
-
-        $methodVariable = array($this, 'equipment_inactive'); 
-        $grid->setCallbackFunction("Inactive", $methodVariable);
-
-        $methodVariable = array($this, 'equip_service_warning'); 
-        $grid->setCallbackFunction("service", $methodVariable);
-
-        $grid->setRowActionFunction("action");
-        $grid_ret = $grid->render(TRUE); 
-        $t->assign('grid_display' ,1);
-        $t->assign('grid',$grid_ret );
-    /*}}}*/
-    }
-/*}}}*/
 }
 
 /**
@@ -3497,7 +3027,7 @@ alt="'.$_lang['equip_service_warning'].'" title="'.$_lang['equip_service_warning
  * @license LGPL v3 http://www.gnu.org/licenses/lgpl-3.0.txt
  */
 class Diveshop{
-    var $multiuser; /*{{{*/
+    var $multiuser; 
     var $table_prefix;
     var $user_id;
     var $diveshop_nr;
@@ -3550,7 +3080,6 @@ class Diveshop{
 
     function set_diveshop_info($request) {
         // We need to extract the info from the request
-        /*{{{*/
         if (!$request->diver_choice) {
             if ($request->get_view_request() == 1) {
                 $this->request_type = 1;
@@ -3572,11 +3101,10 @@ class Diveshop{
         } else {
             $this->request_type = 3;
         }
-    /*}}}*/
     }
 
     function get_diveshop_info() {
-        global $globals, $_config; /*{{{*/
+        global $globals, $_config; 
         if (!empty($this->diveshop_nr)) {
             $this->request_type = 1;
             $globals['shopid'] = $this->diveshop_nr;
@@ -3590,17 +3118,15 @@ class Diveshop{
             }
         }
         return $this->result;
-    /*}}}*/
     }
 
     function get_overview_divers() {
-        global $t, $_lang, $globals, $_config; /*{{{*/
+        global $t, $_lang, $globals, $_config; 
         $users = new Users();
         $user_list = $users->get_user_data();
         $t->assign('diver_overview',1);
         $t->assign('divers', $user_list);
         $t->assign('file_name','diveshop.php');
-    /*}}}*/
     }
 
     /**
@@ -3610,14 +3136,13 @@ class Diveshop{
      * @return void
      */
     function get_dives_with_shop() {
-        global $globals, $_config; /*{{{*/
+        global $globals, $_config; 
         // Get the dives with this shop from database
         $globals['shopid'] = $this->diveshop_nr;
         $this->dives = parse_mysql_query('shopdives.sql');
         $this->dive_count = $globals['sql_num_rows'];
         // Get the shop list from database
         $this->shoplist = parse_mysql_query('shoplist.sql');
-    /*}}}*/
     }
 
     /**
@@ -3627,14 +3152,13 @@ class Diveshop{
      * @return void
      */
     function get_trips_with_shop() {
-        global $globals, $_config; /*{{{*/
+        global $globals, $_config; 
         // Get the trips with this dive shop from database
         $globals['shopid'] = $this->diveshop_nr;
         $this->trips = parse_mysql_query('shoptrips.sql');
         $this->trip_count = $globals['sql_num_rows'];
         // Get the diveshop list from database
         $this->shoplist = parse_mysql_query('shoplist.sql');
-    /*}}}*/
     }
 
     /**
@@ -3644,7 +3168,7 @@ class Diveshop{
      * @return void
      */
     function set_main_diveshop_details() {
-        global $globals, $_config, $t, $_lang; /*{{{*/
+        global $globals, $_config, $t, $_lang; 
         // Show main shop details
         $result = $this->result;
 
@@ -3770,7 +3294,6 @@ class Diveshop{
             $t->assign('shop_photo_link', $_lang['shop_photo_link'] );
         }
 
-    /*}}}*/
     }
 
     /**
@@ -3780,7 +3303,7 @@ class Diveshop{
      * @return void
      */
     function set_diveshop_pictures() {
-        global $_config, $t, $_lang, $globals; /*{{{*/
+        global $_config, $t, $_lang, $globals;
         $pic_class = new DivePictures;
         $pic_class->set_divegallery_info_direct($this->user_id);
         $pic_class->get_divegallery_info(0,0,0,$this->diveshop_nr,0);
@@ -3800,7 +3323,7 @@ class Diveshop{
         } else {
                  $t->assign('has_images', '0');
         }
-    /*}}}*/
+    
     }
 
     /**
@@ -3810,7 +3333,7 @@ class Diveshop{
      * @return void
      */
     function set_dives_with_shop() {
-        global $globals, $_config, $t, $_lang; /*{{{*/
+        global $globals, $_config, $t, $_lang;
         $this->get_dives_with_shop();
         // Show shop dives if we have them
         if (count($this->dives) == 1) {
@@ -3837,7 +3360,7 @@ class Diveshop{
         }
         $t->assign('comma_separated', $_config['comma_separated']);
         $t->assign('comma_separator', $_config['comma_separator']);
-    /*}}}*/
+    
     }
 
     /**
@@ -3847,7 +3370,7 @@ class Diveshop{
      * @return void
      */
     function set_trips_with_shop() {
-        global $globals, $_config, $t, $_lang; /*{{{*/
+        global $globals, $_config, $t, $_lang;
         $this->get_trips_with_shop();
         // Show shop trips if we have them
         if ($this->trip_count == 1) {
@@ -3871,7 +3394,7 @@ class Diveshop{
         }
         $t->assign('comma_separated', $_config['comma_separated']);
         $t->assign('comma_separator', $_config['comma_separator']);
-    /*}}}*/
+    
     }
 
     /**
@@ -3881,7 +3404,7 @@ class Diveshop{
      * @return void
      */
     function set_diveshop_comments() {
-        global $globals, $_config, $t, $_lang; /*{{{*/
+        global $globals, $_config, $t, $_lang;
         // Comments
         $result = $this->result;
         // Show them if we have them
@@ -3898,7 +3421,7 @@ class Diveshop{
 
             $t->assign('Comments', $r);
         }
-    /*}}}*/
+    
     } 
 
     /**
@@ -3923,26 +3446,16 @@ class Diveshop{
      * @return void
      */
     function get_diveshop_overview() {
-        global $t, $_lang, $globals, $_config; /*{{{*/
+        global $t, $_lang, $globals, $_config;
         $shoptable = $this->table_prefix."Shop";
         $sql = sql_file("shoplist.sql");
 
 // TODO: Count the shops and display a message if none
         $t->assign('dshop_none', $_lang['dshop_none']);
 
-        /**
-         * when view_type = 1 display the ajax grid if type = 2 display old fashioned table 
-         */
-        if ($_config['view_type'] == 1) {
-            $this->get_diveshop_overview_grid($sql);
-        }
-        elseif ($_config['view_type'] == 2) {
-            $this->get_diveshop_overview_table($sql);
-        } else{
-            echo '<strong>ERROR: No view_type defined!</strong><br>';
-        }
+        $this->get_diveshop_overview_table($sql);
         $t->assign('pagetitle',$_lang['dive_shops']);
-    /*}}}*/
+    
     }
 
     /**
@@ -3952,7 +3465,7 @@ class Diveshop{
      * @return void
      */
     function get_diveshop_overview_table($sql) {
-        global $db, $t, $_lang, $globals, $_config; /*{{{*/
+        global $db, $t, $_lang, $globals, $_config;
         // Get the page header
         // Get the details of the locations to be listed
         $locationlist_query = $sql;
@@ -3975,55 +3488,12 @@ class Diveshop{
             $cpage = $this->requested_page;
         }
 
-        $pager_options = new TablePager($cpage,$path);
-        $paged_data = Pager_Wrapper_MDB2($db, $locationlist_query, $pager_options->options);
-
-        $t->assign('pages', $paged_data['links']);
-        $t->assign('cells', $paged_data['data']);
-    /*}}}*/
+				$paged_data = parse_mysql_query('',  $locationlist_query);
+        $t->assign('cells', $paged_data);
+    
     }
 
-    /**
-     * get_diveshop_overview_grid 
-     * 
-     * @param mixed $sql 
-     * @access public
-     * @return void
-     */
-    function get_diveshop_overview_grid($sql) {
-        global $t, $_lang, $globals, $_config; /*{{{*/
-        $data = parse_mysql_query(0,$sql);;
-        $GridClass = new TableGrid($this->user_id,$data);
-        $grid = $GridClass->get_grid_class();
 
-        /**
-         * Define the table according some info 
-         */
-        if ($this->multiuser) {
-            $url = "/diveshop.php".$t->getTemplateVars('sep1').$this->user_id.$t->getTemplateVars('sep2');
-        } else {
-            $url = "/diveshop.php".$t->getTemplateVars('sep2');
-        }
-
-        $grid->showColumn('ShopName', $_lang['dshop_title_shop']);
-        $grid->setColwidth('ShopName',"300");
-        $grid->showColumn('ShopType', $_lang['dshop_title_type']);
-        $grid->setColwidth('ShopType',"100");
-        $grid->showColumn('Country', $_lang['dshop_title_country']);
-        $grid->setColwidth('Country',"200");
-        $grid->setRowActionFunction("action");
-        $grid->showCustomColumn("photo", $_lang['dshop_title_photo']);
-        $grid->setColwidth('photo',"25");
-
-        $methodVariable = array($this, 'shop_has_photo'); 
-        $grid->setCallbackFunction("photo", $methodVariable);
-
-        $grid_ret = $grid->render(TRUE); 
-        $t->assign('grid_display' ,1);
-        $t->assign('grid',$grid_ret );
-    /*}}}*/
-    }
-/*}}}*/
 }
 
 
@@ -4037,7 +3507,7 @@ class Diveshop{
  * @license LGPL v3 http://www.gnu.org/licenses/lgpl-3.0.txt
  */
 class Divetrip{
-    var $multiuser; /*{{{*/
+    var $multiuser;
     var $table_prefix;
     var $user_id;
     var $divetrip_nr;
@@ -4091,7 +3561,6 @@ class Divetrip{
 
     function set_divetrip_info($request) {
         // We need to extract the info from the request
-        /*{{{*/
         if (!$request->diver_choice) {
             if ($request->get_view_request() == 1) {
                 $this->request_type = 1;
@@ -4113,11 +3582,11 @@ class Divetrip{
         } else {
             $this->request_type = 3;
         }
-    /*}}}*/
+    
     }
 
     function get_divetrip_info() {
-        global $globals, $_config; /*{{{*/
+        global $globals, $_config;
         if (!empty($this->divetrip_nr)) {
             $this->request_type = 1;
             $globals['tripid'] = $this->divetrip_nr;
@@ -4131,17 +3600,17 @@ class Divetrip{
             }
         }
         return $this->result;
-    /*}}}*/
+    
     }
 
     function get_overview_divers() {
-        global $t, $_lang, $globals, $_config; /*{{{*/
+        global $t, $_lang, $globals, $_config;
         $users = new Users();
         $user_list = $users->get_user_data();
         $t->assign('diver_overview',1);
         $t->assign('divers', $user_list);
         $t->assign('file_name','divetrip.php');
-    /*}}}*/
+    
     }
 
     /**
@@ -4151,14 +3620,14 @@ class Divetrip{
      * @return void
      */
     function get_dives_on_trip() {
-        global $globals, $_config; /*{{{*/
+        global $globals, $_config;
         // Get the dives on this trip from database
         $globals['tripid'] = $this->divetrip_nr;
         $this->dives = parse_mysql_query('tripdives.sql');
         $this->dive_count = $globals['sql_num_rows'];
         // Get the trip list from database
         $this->triplist = parse_mysql_query('triplist.sql');
-    /*}}}*/
+    
     }
 
     /**
@@ -4168,7 +3637,7 @@ class Divetrip{
      * @return void
      */
     function set_main_divetrip_details() {
-        global $globals, $_config, $t, $_lang; /*{{{*/
+        global $globals, $_config, $t, $_lang;
         // $this->get_divetrip_location_details(); 
         // Show main trip details
         $result = $this->result;
@@ -4240,7 +3709,7 @@ class Divetrip{
             $t->assign('trip_photo_link', $_lang['trip_photo_link'] );
         }
 
-    /*}}}*/
+    
     }
 
     /**
@@ -4250,7 +3719,7 @@ class Divetrip{
      * @return void
      */
     function set_divetrip_pictures() {
-        global $_config, $t, $_lang, $globals; /*{{{*/
+        global $_config, $t, $_lang, $globals;
         $pic_class = new DivePictures;
         $pic_class->set_divegallery_info_direct($this->user_id);
         $pic_class->get_divegallery_info(0,0,0,0,$this->divetrip_nr);
@@ -4270,7 +3739,7 @@ class Divetrip{
         } else {
                  $t->assign('has_images', '0');
         }
-    /*}}}*/
+    
     }
 
     /**
@@ -4280,7 +3749,7 @@ class Divetrip{
      * @return void
      */
     function set_dives_on_trip() {
-        global $globals, $_config, $t, $_lang; /*{{{*/
+        global $globals, $_config, $t, $_lang;
         $this->get_dives_on_trip();
         // Show trip dives if we have them
         if ($this->dive_count == 1) {
@@ -4307,7 +3776,7 @@ class Divetrip{
         }
         $t->assign('comma_separated', $_config['comma_separated']);
         $t->assign('comma_separator', $_config['comma_separator']);
-    /*}}}*/
+    
     }
 
     /**
@@ -4317,7 +3786,7 @@ class Divetrip{
      * @return void
      */
     function set_buddy_details() {
-        global $t, $_lang, $globals; /*{{{*/
+        global $t, $_lang, $globals;
         $result = $this->result;
         $t->assign('trip_buddy', $_lang['trip_buddy']);
 
@@ -4356,7 +3825,7 @@ class Divetrip{
         } else {
             $t->assign('buddy','-');
         }
-    /*}}}*/
+    
     }
 
     /**
@@ -4366,7 +3835,7 @@ class Divetrip{
      * @return void
      */
     function set_divetrip_comments() {
-        global $globals, $_config, $t, $_lang; /*{{{*/
+        global $globals, $_config, $t, $_lang;
         // Comments
         $result = $this->result;
         // Show them if we have them
@@ -4383,7 +3852,7 @@ class Divetrip{
 
             $t->assign('Comments', $r);
         }
-    /*}}}*/
+    
     } 
 
     /**
@@ -4408,26 +3877,16 @@ class Divetrip{
      * @return void
      */
     function get_divetrip_overview() {
-        global $t, $_lang, $globals, $_config; /*{{{*/
+        global $t, $_lang, $globals, $_config;
         $triptable = $this->table_prefix."Trip";
         $sql = sql_file("triplist.sql");
 
 // TODO: Count the dive trips and display a message if none
         $t->assign('dtrip_none', $_lang['dtrip_none']);
 
-        /**
-         * when view_type = 1 display the ajax grid if type = 2 display old fashioned table 
-         */
-        if ($_config['view_type'] == 1) {
-            $this->get_divetrip_overview_grid($sql);
-        }
-        elseif ($_config['view_type'] == 2) {
-            $this->get_divetrip_overview_table($sql);
-        } else{
-            echo '<strong>ERROR: No view_type defined!</strong><br>';
-        }
+        $this->get_divetrip_overview_table($sql);
         $t->assign('pagetitle',$_lang['dive_trips']);
-    /*}}}*/
+    
     }
 
     /**
@@ -4437,7 +3896,7 @@ class Divetrip{
      * @return void
      */
     function get_divetrip_overview_table($sql) {
-        global $db, $t, $_lang, $globals, $_config; /*{{{*/
+        global $db, $t, $_lang, $globals, $_config;
         // Get the page header
         // Get the details of the trips to be listed
         $locationlist_query = $sql;
@@ -4459,56 +3918,12 @@ class Divetrip{
         } else {
             $cpage = $this->requested_page;
         }
-
-        $pager_options = new TablePager($cpage,$path);
-        $paged_data = Pager_Wrapper_MDB2($db, $locationlist_query, $pager_options->options);
-
-        $t->assign('pages', $paged_data['links']);
-        $t->assign('cells', $paged_data['data']);
-    /*}}}*/
+        $paged_data = parse_mysql_query('',  $locationlist_query); 
+        $t->assign('cells', $paged_data);
+    
     }
 
-    /**
-     * get_divetrip_overview_grid 
-     * 
-     * @param mixed $sql 
-     * @access public
-     * @return void
-     */
-    function get_divetrip_overview_grid($sql) {
-        global $t, $_lang, $globals, $_config; /*{{{*/
-        $data = parse_mysql_query(0,$sql);;
-        $GridClass = new TableGrid($this->user_id,$data);
-        $grid = $GridClass->get_grid_class();
 
-        /**
-         * Define the table according some info 
-         */
-        if ($this->multiuser) {
-            $url = "/divetrip.php".$t->getTemplateVars('sep1').$this->user_id.$t->getTemplateVars('sep2');
-        } else {
-            $url = "/divetrip.php".$t->getTemplateVars('sep2');
-        }
-
-        $grid->showColumn('TripName', $_lang['dtrip_title_trip']);
-        $grid->setColwidth('ShopName',"250");
-        $grid->showColumn('ShopName', $_lang['dtrip_title_shop']);
-        $grid->setColwidth('ShopName',"225");
-        $grid->showColumn('Country', $_lang['dtrip_title_country']);
-        $grid->setColwidth('Country',"125");
-        $grid->setRowActionFunction("action");
-        $grid->showCustomColumn("photo", $_lang['dtrip_title_photo']);
-        $grid->setColwidth('photo',"25");
-
-        $methodVariable = array($this, 'trip_has_photo'); 
-        $grid->setCallbackFunction("photo", $methodVariable);
-
-        $grid_ret = $grid->render(TRUE); 
-        $t->assign('grid_display' ,1);
-        $t->assign('grid',$grid_ret );
-    /*}}}*/
-    }
-/*}}}*/
 }
 
 
@@ -4522,7 +3937,7 @@ class Divetrip{
  * @license LGPL v3 http://www.gnu.org/licenses/lgpl-3.0.txt
  */
 class Divecountry{
-    var $multiuser; /*{{{*/
+    var $multiuser;
     var $table_prefix;
     var $user_id;
     var $divecountry_nr;
@@ -4582,7 +3997,6 @@ class Divecountry{
 
     function set_divecountry_info($request) {
         // We need to extract the info from the request
-        /*{{{*/
         if (!$request->diver_choice) {
             if ($request->get_view_request() == 1) {
                 $this->request_type = 1;
@@ -4604,11 +4018,11 @@ class Divecountry{
         } else {
             $this->request_type = 3;
         }
-    /*}}}*/
+    
     }
 
     function get_divecountry_info() {
-        global $globals, $_config; /*{{{*/
+        global $globals, $_config;
         if (!empty($this->divecountry_nr)) {
             $this->request_type = 1;
             $globals['countryid'] = $this->divecountry_nr;
@@ -4622,17 +4036,17 @@ class Divecountry{
             }
         }
         return $this->result;
-    /*}}}*/
+    
     }
 
     function get_overview_divers() {
-        global $t, $_lang, $globals, $_config; /*{{{*/
+        global $t, $_lang, $globals, $_config;
         $users = new Users();
         $user_list = $users->get_user_data();
         $t->assign('diver_overview',1);
         $t->assign('divers', $user_list);
         $t->assign('file_name','divecountry.php');
-    /*}}}*/
+    
     }
 
     /**
@@ -4642,14 +4056,14 @@ class Divecountry{
      * @return void
      */
     function get_trips_in_country() {
-        global $globals, $_config; /*{{{*/
+        global $globals, $_config;
         // Get the trips in this country from database
         $globals['countryid'] = $this->divecountry_nr;
         $this->trips = parse_mysql_query('countrytrips.sql');
         $this->trip_count = $globals['sql_num_rows'];
         // Get the divecountry list from database
         $this->countrylist = parse_mysql_query('countrylist.sql');
-    /*}}}*/
+    
     }
 
     /**
@@ -4659,14 +4073,14 @@ class Divecountry{
      * @return void
      */
     function get_cities_in_country() {
-        global $globals, $_config; /*{{{*/
+        global $globals, $_config;
         // Get the cities in this country from database
         $globals['countryid'] = $this->divecountry_nr;
         $this->cities = parse_mysql_query('countrycities.sql');
         $this->cities_count = $globals['sql_num_rows'];
         // Get the divecountry list from database
         $this->countrylist = parse_mysql_query('countrylist.sql');
-    /*}}}*/
+    
     }
 
     /**
@@ -4676,14 +4090,14 @@ class Divecountry{
      * @return void
      */
     function get_sites_in_country() {
-        global $globals, $_config; /*{{{*/
+        global $globals, $_config;
         // Get the sites in this country from database
         $globals['countryid'] = $this->divecountry_nr;
         $this->sites = parse_mysql_query('countrysites.sql');
         $this->site_count = $globals['sql_num_rows'];
         // Get the divecountry list from database
         $this->countrylist = parse_mysql_query('countrylist.sql');
-    /*}}}*/
+    
     }
 
     /**
@@ -4693,14 +4107,14 @@ class Divecountry{
      * @return void
      */
     function get_dives_in_country() {
-        global $globals, $_config; /*{{{*/
+        global $globals, $_config;
         // Get the dives in this country from database
         $globals['countryid'] = $this->divecountry_nr;
         $this->dives = parse_mysql_query('countrydives.sql');
         $this->dive_count = $globals['sql_num_rows'];
         // Get the divecountry list from database
         $this->countrylist = parse_mysql_query('countrylist.sql');
-    /*}}}*/
+    
     }
 
     /**
@@ -4710,7 +4124,7 @@ class Divecountry{
      * @return void
      */
     function set_main_divecountry_details() {
-        global $globals, $_config, $t, $_lang; /*{{{*/
+        global $globals, $_config, $t, $_lang;
         // $this->get_divecountry_location_details(); 
         // Show main country details
         $result = $this->result;
@@ -4772,7 +4186,7 @@ class Divecountry{
             $t->assign('country_flag_linktitle','');
         }
 
-    /*}}}*/
+    
     }
 
     /**
@@ -4782,7 +4196,7 @@ class Divecountry{
      * @return void
      */
     function set_trips_in_country() {
-        global $globals, $_config, $t, $_lang; /*{{{*/
+        global $globals, $_config, $t, $_lang;
         $this->get_trips_in_country();
         // Show country trips if we have them
         if ($this->trip_count == 1) {
@@ -4806,7 +4220,7 @@ class Divecountry{
         }
         $t->assign('comma_separated', $_config['comma_separated']);
         $t->assign('comma_separator', $_config['comma_separator']);
-    /*}}}*/
+    
     }
 
     /**
@@ -4816,7 +4230,7 @@ class Divecountry{
      * @return void
      */
     function set_cities_in_country() {
-        global $globals, $_config, $t, $_lang; /*{{{*/
+        global $globals, $_config, $t, $_lang;
         $this->get_cities_in_country();
         // Show country cities if we have them
         if ($this->cities_count == 1) {
@@ -4840,7 +4254,7 @@ class Divecountry{
         }
         $t->assign('comma_separated', $_config['comma_separated']);
         $t->assign('comma_separator', $_config['comma_separator']);
-    /*}}}*/
+    
     }
 
     /**
@@ -4850,7 +4264,7 @@ class Divecountry{
      * @return void
      */
     function set_sites_in_country() {
-        global $globals, $_config, $t, $_lang; /*{{{*/
+        global $globals, $_config, $t, $_lang;
         $this->get_sites_in_country();
         // Show country sites if we have them
         if ($this->site_count == 1) {
@@ -4874,7 +4288,7 @@ class Divecountry{
         }
         $t->assign('comma_separated', $_config['comma_separated']);
         $t->assign('comma_separator', $_config['comma_separator']);
-    /*}}}*/
+    
     }
 
     /**
@@ -4884,7 +4298,7 @@ class Divecountry{
      * @return void
      */
     function set_dives_in_country() {
-        global $globals, $_config, $t, $_lang; /*{{{*/
+        global $globals, $_config, $t, $_lang;
         $this->get_dives_in_country();
         // Show country dives if we have them
         if ($this->dive_count == 1) {
@@ -4911,7 +4325,7 @@ class Divecountry{
         }
         $t->assign('comma_separated', $_config['comma_separated']);
         $t->assign('comma_separator', $_config['comma_separator']);
-    /*}}}*/
+    
     }
 
     /**
@@ -4921,7 +4335,7 @@ class Divecountry{
      * @return void
      */
     function set_divecountry_comments() {
-        global $globals, $_config, $t, $_lang; /*{{{*/
+        global $globals, $_config, $t, $_lang;
         // Comments
         $result = $this->result;
         // Show them if we have them
@@ -4938,7 +4352,7 @@ class Divecountry{
 
             $t->assign('Comments', $r);
         }
-    /*}}}*/
+    
     } 
 
     /**
@@ -4948,26 +4362,16 @@ class Divecountry{
      * @return void
      */
     function get_divecountry_overview() {
-        global $t, $_lang, $globals, $_config; /*{{{*/
+        global $t, $_lang, $globals, $_config;
         $countrytable = $this->table_prefix."Country";
         $sql = sql_file("countrylist.sql");
 
 // TODO: Count the countries and display a message if none
         $t->assign('country_none', $_lang['country_none']);
 
-        /**
-         * when view_type = 1 display the ajax grid if type = 2 display old fashioned table 
-         */
-        if ($_config['view_type'] == 1) {
-            $this->get_divecountry_overview_grid($sql);
-        }
-        elseif ($_config['view_type'] == 2) {
-            $this->get_divecountry_overview_table($sql);
-        } else{
-            echo '<strong>ERROR: No view_type defined!</strong><br>';
-        }
+        $this->get_divecountry_overview_table($sql);
         $t->assign('pagetitle',$_lang['dive_countries']);
-    /*}}}*/
+    
     }
 
     /**
@@ -4977,7 +4381,7 @@ class Divecountry{
      * @return void
      */
     function get_divecountry_overview_table($sql) {
-        global $db, $t, $_lang, $globals, $_config; /*{{{*/
+        global $db, $t, $_lang, $globals, $_config;
         // Get the page header
         // Get the details of the countries to be listed
         $countrylist_query = $sql;
@@ -4995,49 +4399,12 @@ class Divecountry{
         } else {
             $cpage = $this->requested_page;
         }
-
-        $pager_options = new TablePager($cpage,$path);
-        $paged_data = Pager_Wrapper_MDB2($db, $countrylist_query, $pager_options->options);
-
-        $t->assign('pages', $paged_data['links']);
-        $t->assign('cells', $paged_data['data']);
-    /*}}}*/
+        $paged_data = parse_mysql_query('', $countrylist_query);
+        $t->assign('cells', $paged_data);
+    
     }
 
-    /**
-     * get_divecountry_overview_grid 
-     * 
-     * @param mixed $sql 
-     * @access public
-     * @return void
-     */
-    function get_divecountry_overview_grid($sql) {
-        global $t, $_lang, $globals, $_config; /*{{{*/
-        $data = parse_mysql_query(0,$sql);;
-        $GridClass = new TableGrid($this->user_id,$data);
-        $grid = $GridClass->get_grid_class();
 
-        /**
-         * Define the table according some info 
-         */
-        if ($this->multiuser) {
-            $url = "/divecountry.php".$t->getTemplateVars('sep1').$this->user_id.$t->getTemplateVars('sep2');
-        } else {
-            $url = "/divecountry.php".$t->getTemplateVars('sep2');
-        }
-
-        $grid->showColumn('Country', $_lang['country_title_country']);
-        $grid->setColwidth('Country',"575");
-        $grid->showColumn('Dives', $_lang['country_title_count']);
-        $grid->setColwidth('Dives',"50");
-        $grid->setRowActionFunction("action");
-
-        $grid_ret = $grid->render(TRUE); 
-        $t->assign('grid_display' ,1);
-        $t->assign('grid',$grid_ret );
-    /*}}}*/
-    }
-/*}}}*/
 }
 
 
@@ -5053,7 +4420,7 @@ class Divecountry{
  * @license LGPL v3 http://www.gnu.org/licenses/lgpl-3.0.txt
  */
 class Divecity{
-    var $multiuser; /*{{{*/
+    var $multiuser;
     var $table_prefix;
     var $user_id;
     var $divecity_nr;
@@ -5109,7 +4476,6 @@ class Divecity{
 
     function set_divecity_info($request) {
         // We need to extract the info from the request
-        /*{{{*/
         if (!$request->diver_choice) {
             if ($request->get_view_request() == 1) {
                 $this->request_type = 1;
@@ -5131,11 +4497,11 @@ class Divecity{
         } else {
             $this->request_type = 3;
         }
-    /*}}}*/
+    
     }
 
     function get_divecity_info() {
-        global $globals, $_config; /*{{{*/
+        global $globals, $_config;
         if (!empty($this->divecity_nr)) {
             $this->request_type = 1;
             $globals['cityid'] = $this->divecity_nr;
@@ -5149,17 +4515,17 @@ class Divecity{
             }
         }
         return $this->result;
-    /*}}}*/
+    
     }
 
     function get_overview_divers() {
-        global $t, $_lang, $globals, $_config; /*{{{*/
+        global $t, $_lang, $globals, $_config;
         $users = new Users();
         $user_list = $users->get_user_data();
         $t->assign('diver_overview',1);
         $t->assign('divers', $user_list);
         $t->assign('file_name','divecity.php');
-    /*}}}*/
+    
     }
 
     /**
@@ -5169,14 +4535,14 @@ class Divecity{
      * @return void
      */
     function get_sites_in_city() {
-        global $globals, $_config; /*{{{*/
+        global $globals, $_config;
         // Get the sites in this city from database
         $globals['cityid'] = $this->divecity_nr;
         $this->sites = parse_mysql_query('citysites.sql');
         $this->site_count = $globals['sql_num_rows'];
         // Get the divecity list from database
         $this->citylist = parse_mysql_query('citylist.sql');
-    /*}}}*/
+    
     }
 
     /**
@@ -5186,14 +4552,14 @@ class Divecity{
      * @return void
      */
     function get_dives_in_city() {
-        global $globals, $_config; /*{{{*/
+        global $globals, $_config;
         // Get the dives in this city from database
         $globals['cityid'] = $this->divecity_nr;
         $this->dives = parse_mysql_query('citydives.sql');
         $this->dive_count = $globals['sql_num_rows'];
         // Get the divecity list from database
         $this->citylist = parse_mysql_query('citylist.sql');
-    /*}}}*/
+    
     }
 
     /**
@@ -5203,7 +4569,7 @@ class Divecity{
      * @return void
      */
     function set_main_divecity_details() {
-        global $globals, $_config, $t, $_lang; /*{{{*/
+        global $globals, $_config, $t, $_lang;
         // $this->get_divecity_location_details(); 
         // Show main city details
         $result = $this->result;
@@ -5241,7 +4607,7 @@ class Divecity{
             $t->assign('city_map_linktitle','');
         }
 
-    /*}}}*/
+    
     }
 
     /**
@@ -5251,7 +4617,7 @@ class Divecity{
      * @return void
      */
     function set_sites_in_city() {
-        global $globals, $_config, $t, $_lang; /*{{{*/
+        global $globals, $_config, $t, $_lang;
         $this->get_sites_in_city();
         // Show city sites if we have them
         if ($this->site_count == 1) {
@@ -5275,7 +4641,7 @@ class Divecity{
         }
         $t->assign('comma_separated', $_config['comma_separated']);
         $t->assign('comma_separator', $_config['comma_separator']);
-    /*}}}*/
+    
     }
 
     /**
@@ -5285,7 +4651,7 @@ class Divecity{
      * @return void
      */
     function set_dives_in_city() {
-        global $globals, $_config, $t, $_lang; /*{{{*/
+        global $globals, $_config, $t, $_lang;
         $this->get_dives_in_city();
         // Show city dives if we have them
         if ($this->dive_count == 1) {
@@ -5312,7 +4678,7 @@ class Divecity{
         }
         $t->assign('comma_separated', $_config['comma_separated']);
         $t->assign('comma_separator', $_config['comma_separator']);
-    /*}}}*/
+    
     }
 
     /**
@@ -5322,7 +4688,7 @@ class Divecity{
      * @return void
      */
     function set_divecity_comments() {
-        global $globals, $_config, $t, $_lang; /*{{{*/
+        global $globals, $_config, $t, $_lang;
         // Comments
         $result = $this->result;
         // Show them if we have them
@@ -5339,7 +4705,7 @@ class Divecity{
 
             $t->assign('Comments', $r);
         }
-    /*}}}*/
+    
     } 
 
     /**
@@ -5366,26 +4732,16 @@ class Divecity{
      * @return void
      */
     function get_divecity_overview() {
-        global $t, $_lang, $globals, $_config; /*{{{*/
+        global $t, $_lang, $globals, $_config;
         $citytable = $this->table_prefix."City";
         $sql = sql_file("citylist.sql");
 
 // TODO: Count the cities and display a message if none
         $t->assign('city_none', $_lang['city_none']);
 
-        /**
-         * when view_type = 1 display the ajax grid if type = 2 display old fashioned table 
-         */
-        if ($_config['view_type'] == 1) {
-            $this->get_divecity_overview_grid($sql);
-        }
-        elseif ($_config['view_type'] == 2) {
-            $this->get_divecity_overview_table($sql);
-        } else{
-            echo '<strong>ERROR: No view_type defined!</strong><br>';
-        }
+        $this->get_divecity_overview_table($sql);
         $t->assign('pagetitle',$_lang['dive_cities']);
-    /*}}}*/
+    
     }
 
     /**
@@ -5395,7 +4751,7 @@ class Divecity{
      * @return void
      */
     function get_divecity_overview_table($sql) {
-        global $db, $t, $_lang, $globals, $_config; /*{{{*/
+        global $db, $t, $_lang, $globals, $_config;
         // Get the page header
         // Get the details of the cities to be listed
         $citylist_query = $sql;
@@ -5416,55 +4772,13 @@ class Divecity{
             $cpage = $this->requested_page;
         }
 
-        $pager_options = new TablePager($cpage,$path);
-        $paged_data = Pager_Wrapper_MDB2($db, $citylist_query, $pager_options->options);
-
-        $t->assign('pages', $paged_data['links']);
-        $t->assign('cells', $paged_data['data']);
+        $paged_data = parse_mysql_query('', $citylist_query); 
+        $t->assign('cells', $paged_data);
         $t->assign('citytypes', $_lang['citytype']);
-    /*}}}*/
+    
     }
 
-    /**
-     * get_divecity_overview_grid 
-     * 
-     * @param mixed $sql 
-     * @access public
-     * @return void
-     */
-    function get_divecity_overview_grid($sql) {
-        global $t, $_lang, $globals, $_config; /*{{{*/
-        $data = parse_mysql_query(0,$sql);
-        $GridClass = new TableGrid($this->user_id,$data);
-        $grid = $GridClass->get_grid_class();
-        /**
-         * Define the table according some info 
-         */
-        if ($this->multiuser) {
-            $url = "/divecity.php".$t->getTemplateVars('sep1').$this->user_id.$t->getTemplateVars('sep2');
-        } else {
-            $url = "/divecity.php".$t->getTemplateVars('sep2');
-        }
 
-        $grid->showColumn('City', $_lang['city_title_city']);
-        $grid->setColwidth('City',"290");
-        $grid->showCustomColumn("type", $_lang['city_title_type']);
-        $grid->setColwidth('Type',"100");
-        $grid->showColumn('Country', $_lang['city_title_country']);
-        $grid->setColwidth('Country',"195");
-        $grid->showColumn('Dives', $_lang['city_title_count']);
-        $grid->setColwidth('Dives',"40");
-        $grid->setRowActionFunction("action");
-
-        $methodVariable = array($this, 'city_type_convert'); 
-        $grid->setCallbackFunction("type", $methodVariable);
-
-        $grid_ret = $grid->render(TRUE); 
-        $t->assign('grid_display' ,1);
-        $t->assign('grid',$grid_ret );
-    /*}}}*/
-    }
-/*}}}*/
 }
 
 
@@ -5477,7 +4791,7 @@ class Divecity{
  * @license LGPL v3 http://www.gnu.org/licenses/lgpl-3.0.txt
  */
 class Divestats{
-    var $multiuser; /*{{{*/
+    var $multiuser;
     var $user_id;
     var $username;
     var $result;
@@ -5546,7 +4860,6 @@ class Divestats{
      */
     function set_divestats_info($request) {
         // We need to extract the info from the request 
-        /*{{{*/
         if (!$request->diver_choice) {
             if ($this->multiuser) {
                 $this->user_id = $request->get_user_id();
@@ -5564,7 +4877,7 @@ class Divestats{
         } else {
             $this->request_type = 3;
         }
-    /*}}}*/
+    
     }
 
     /**
@@ -5574,7 +4887,7 @@ class Divestats{
      * @return void
      */
     function get_divestats_info() {
-        global $globals, $_config; /*{{{*/
+        global $globals, $_config;
         if (($this->multiuser && !empty($this->user_id)) || !$this->multiuser ) {
             // Get number of dives
             $count = parse_mysql_query('divecount.sql');
@@ -5807,7 +5120,7 @@ class Divestats{
                 $this->request_type = 0;
             }
         }
-    /*}}}*/
+    
     }
 
     /**
@@ -5817,7 +5130,7 @@ class Divestats{
      * @return void
      */
     function get_lastdive_info() {
-       global $globals, $_config; /*{{{*/
+       global $globals, $_config;
         if (($this->multiuser && !empty($this->user_id)) || !$this->multiuser ) {
             $lastdive = parse_mysql_query('lastdive.sql');
             $this->LastEntryTime = $lastdive['Entrytime'];
@@ -5828,7 +5141,7 @@ class Divestats{
             $this->LastCountry = $lastdive['Country'];
             $this->LastCountryID = $lastdive['CountryID'];
         }
-    /*}}}*/
+    
     }
     /**
      * set_all_statistics 
@@ -5837,9 +5150,9 @@ class Divestats{
      * @return void
      */
     function set_all_statistics() {
-        $this->set_dive_statistics(); /*{{{*/
+        $this->set_dive_statistics();
         $this->set_dive_certifications(); 
-    /*}}}*/
+    
     }
 
     /**
@@ -5849,13 +5162,13 @@ class Divestats{
      * @return void
      */
     function get_overview_divers() {
-        global $t, $_lang, $globals, $_config; /*{{{*/
+        global $t, $_lang, $globals, $_config;
         $users = new Users();
         $user_list = $users->get_user_data();
         $t->assign('diver_overview',1);
         $t->assign('divers', $user_list);
         $t->assign('file_name','divestats.php'); 
-    /*}}}*/
+    
     }
 
     /**
@@ -5865,7 +5178,7 @@ class Divestats{
      * @return void
      */
     function set_dive_statistics() {
-        global $globals, $_config, $t, $_lang; /*{{{*/
+        global $globals, $_config, $t, $_lang;
         $divestats = $this->divestats; 
 
         // Dive Log, Dive Sites, Dive Statistics
@@ -6115,7 +5428,7 @@ class Divestats{
         $t->assign('ccrdives', $this->ccrdives);
         $t->assign('ccrdives_per', round(($this->ccrdives / $this->end) * 100) );
 
-    /*}}}*/
+    
     }
 
     /**
@@ -6125,7 +5438,7 @@ class Divestats{
      * @return void
      */
     function set_lastdive_info() {
-        global $globals, $_config, $t, $_lang; /*{{{*/
+        global $globals, $_config, $t, $_lang;
         $t->assign('LastEntryTime', $this->LastEntryTime);
         $t->assign('LastDivePlace',$this->LastDivePlace);
         $t->assign('LastDiveID',$this->LastDiveID);
@@ -6133,7 +5446,7 @@ class Divestats{
         $t->assign('LastCityID',$this->LastCityID);
         $t->assign('LastCountry',$this->LastCountry);
         $t->assign('LastCountryID',$this->LastCountryID);
-    /*}}}*/
+    
     }
 
     /**
@@ -6143,7 +5456,7 @@ class Divestats{
      * @return void
      */
     function set_dive_certifications() {
-        global $globals, $_config, $t, $_lang; /*{{{*/
+        global $globals, $_config, $t, $_lang;
         /**
          * Declare the variables otherwise an error is displayed
          */
@@ -6235,9 +5548,9 @@ class Divestats{
             $t->assign('cert_none', $_lang['cert_none'] );
         }
         }
-    /*}}}*/
+    
     }
-/*}}}*/
+
 }
 
 /**
@@ -6250,7 +5563,6 @@ class Divestats{
  * @license LGPL v3 http://www.gnu.org/licenses/lgpl-3.0.txt
  */
 class DivePictures{
-/*{{{*/
     var $multiuser;
     var $user_id;
     var $table_prefix;
@@ -6282,7 +5594,6 @@ class DivePictures{
      */
     function set_divegallery_info($request) {
         // We need to extract the info from the request 
-        /*{{{*/
         if (!$request->diver_choice) {
             if ($this->multiuser) {
                 $this->user_id = $request->get_user_id();
@@ -6301,7 +5612,7 @@ class DivePictures{
         } else {
             $this->request_type = 3;
         }
-    /*}}}*/
+    
     }
     
     /**
@@ -6313,7 +5624,7 @@ class DivePictures{
      * @return void
      */
     function set_divegallery_info_direct($user_id) {
-        if ($this->multiuser) {/*{{{*/
+        if ($this->multiuser) {
             $this->user_id = $user_id;
             $user = new User();
             $user->set_user_id($this->user_id);
@@ -6324,7 +5635,7 @@ class DivePictures{
             $user = new User();
             $this->table_prefix = $user->get_table_prefix();
             $this->username = $user->get_username();
-        }/*}}}*/
+        }
     }
     
     /**
@@ -6335,7 +5646,7 @@ class DivePictures{
      * @return void
      */
     function get_divegallery_info($dive_id = 0, $site_id = 0, $equipment_nr = 0, $shop_id = 0, $trip_id = 0) {
-        global $globals, $_config, $_lang, $t;/*{{{*/
+        global $globals, $_config, $_lang, $t;
         //if (($this->multiuser && !empty($this->user_id)) || !$this->multiuser ) {
             if ($dive_id == 0 && $site_id == 0 && $equipment_nr == 0 && $shop_id == 0 && $trip_id == 0) {
                 $divepics = parse_mysql_query('divepicsall.sql');
@@ -6500,7 +5811,7 @@ class DivePictures{
 //                $this->request_type = 0;
 //            }
 //        }
-        /*}}}*/
+        
     }
 
     /**
@@ -6510,7 +5821,7 @@ class DivePictures{
      * @return void
      */
     function resizer($ref = 0) {
-        global $_config; /*{{{*/
+        global $_config;
         // $host  = $_SERVER['HTTP_HOST'];
         // $uri   = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
         $extra = 'resize.php?ref='.$ref;
@@ -6518,7 +5829,7 @@ class DivePictures{
         $url = $_config['web_root'];
         header("Location: $url/$extra");
         exit;
-    /*}}}*/
+    
     }
 
     /**
@@ -6528,12 +5839,12 @@ class DivePictures{
      * @return void
      */
     function resize_needed() {
-        if ($this->number_images_resize > 0) { /*{{{*/
+        if ($this->number_images_resize > 0) { 
             return true;
         } else {
             return false;
         }
-    /*}}}*/
+    
     }
 
     /**
@@ -6553,7 +5864,7 @@ class DivePictures{
      * @return void
      */
     function return_array_images_for_resize() {
-        $temp = array(); /*{{{*/
+        $temp = array();
         for ($i=0 ; $i < count($this->image_link) ; $i++) {
             $temp[] = array_filter($this->image_link[$i]);
         }   
@@ -6563,7 +5874,7 @@ class DivePictures{
             }
         }
         return $this->images_for_resize;
-    /*}}}*/
+    
     }
 
     /**
@@ -6583,7 +5894,7 @@ class DivePictures{
      */
 
     function get_exif_data($file) {
-        global $_config, $t, $_lang, $globals;/*{{{*/
+        global $_config, $t, $_lang, $globals;
         if (isset($_config["get_exif_data"]) && function_exists('exif_read_data')) {
             $exif_date = exif_read_data ( $file ,'IFD0'  ); 
             if(isset($exif_date['DateTime'])){
@@ -6594,7 +5905,7 @@ class DivePictures{
         } else {
             $edate = "";
         }
-        return $edate;/*}}}*/
+        return $edate;
     }
 
     /**
@@ -6604,7 +5915,6 @@ class DivePictures{
      * @return void
      */
     function set_all_dive_pictures() {
-    /*{{{*/
         global $_config,$t, $_lang, $globals;
         
         if (!empty($this->multiuser)) {
@@ -6617,9 +5927,9 @@ class DivePictures{
         } else {
             $cpage = $this->requested_page;
         }
-        $pager = new TablePager($cpage,$path);
+				/*
+				$pager = new TablePager($cpage,$path);
         $pager->set_tablepager_itemdata($this->image_link);
-        $pager->create_pager();
 
         $t->assign('pics2', '1');
         $t->assign('image_link', $pager->return_pager_data());
@@ -6635,10 +5945,11 @@ class DivePictures{
         $t->assign('divepic_place_linktitle', $_lang['logbook_place_linktitle'] );
         $t->assign('logbook_place', $_lang['logbook_place'] );
         $t->assign('divepic_dive_number', $_lang['divepic_dive_number'] );
-        $t->assign('dive_details_pagetitle', $_lang['dive_details_pagetitle'] );/*}}}*/
-    }
+        $t->assign('dive_details_pagetitle', $_lang['dive_details_pagetitle'] );
+				*/
+		}
     
-    /*}}}*/
+    
 }
 
 
@@ -6652,7 +5963,7 @@ class DivePictures{
  * @license LGPL v3 http://www.gnu.org/licenses/lgpl-3.0.txt
  */
 class Tank{
-    var $multiuser; /*{{{*/
+    var $multiuser;
     var $table_prefix;
     var $user_id;
     var $divetank_nr;
@@ -6691,7 +6002,7 @@ class Tank{
      * @return void
      */
     function get_divetank_info() {
-        global $_config, $globals; /*{{{*/
+        global $_config, $globals;
         if (!empty($this->divetank_nr)) {
             $this->request_type = 1;
             $globals['tank_id'] = $this->divetank_nr;
@@ -6705,7 +6016,7 @@ class Tank{
             }
         }
         return $this->result;
-    /*}}}*/
+    
     }
 
     /**
@@ -6715,18 +6026,16 @@ class Tank{
      * @return void
      */
     function get_tanks_from_dive() {
-        global $t, $_config, $_lang, $globals; /*{{{*/
+        global $t, $_config, $_lang, $globals;
         $globals['dive_nr'] = $this->dive_nr;
         $divetanks = parse_mysql_query('tanksdivelist.sql');
         $num_tanks = $globals['sql_num_rows'];
         if ($num_tanks > 0) {
             // Get the info for each tank
         }
-    /*}}}*/
     }
 
 
-/*}}}*/
 }
 
 /**
@@ -6737,7 +6046,7 @@ class Tank{
  * @author Rob Lensen <rob@bsdfreaks.nl> 
  * @license LGPL v3 http://www.gnu.org/licenses/lgpl-3.0.txt
  */
-class AppInfo{ /*{{{*/
+class AppInfo{ 
     var $table_prefix;
     var $user_id;
     var $DivelogVersion;
@@ -6795,5 +6104,5 @@ class AppInfo{ /*{{{*/
         $t->assign('dlog_url', $this->dlog_url);
         $t->assign('dlog_version', $this->dlog_version);
     }
-/*}}}*/
+
 }
