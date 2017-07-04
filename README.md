@@ -41,11 +41,11 @@ Copy `config.inc.php.example` to `config.inc.php` and update the values accordin
 	Upload your new pictures to the directory on your web server.
 	In version of Diving Log prior to version 4.0.5, after you do your MySQL Dump from Diving Log, you would need to edit the .sql file produced to strip out the path from the picture filenames. For example, your full picture pathnames might be,
 
-```
-E:\divelog\images\pictures\27_1.jpg
-```
-	Search for `E:\divelog\images\pictures\` and replace it with "", leaving just "27_1.jpg".
+	```
+	E:\divelog\images\pictures\27_1.jpg
+	```
 
+	Search for `E:\divelog\images\pictures\` and replace it with "", leaving just "27_1.jpg".
 	However, with the changes to the Diving Log MySQL Dump option in version 4.0.5, you should no longer need to do this editing.  Save the edited MySQL Dump file and upload it into your web database.  
 
 * EQUIPMENT PHOTOS Version 1.4+ supports equipment photos.  Use the same guidelines as for the dive pictures. 
@@ -82,7 +82,7 @@ E:\divelog\images\pictures\27_1.jpg
 
 
 ## Packages used in the Program
-* [RTFClass v155] (http://www.phpclasses.org/browse/file/7632.html) Rich Text Format - Parsing Class - (c) 2000 Markus Fischer
+* [RTFClass v155](http://www.phpclasses.org/browse/file/7632.html) Rich Text Format - Parsing Class - (c) 2000 Markus Fischer
 * [Highslide JS v4.1.4](http://highslide.com/support) Used to overlay dive pictures on the current page.
 * [SmartyHost v3.1.30](http://www.smarty.net/)
 * [jQuery Datatables](https://datatables.net/)
