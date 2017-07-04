@@ -1,6 +1,6 @@
 # phpDivinglog
 
-phpDivinglog is a PHP Project to display Dives entered in the Program [Divelog](http://www.divelog.de) on your own Webserver
+phpDivinglog is a PHP Project to display Dives entered in the Program [Divelog](http://divinglog.de/) on your own Webserver
 
 ## Getting Started
 
@@ -17,7 +17,7 @@ Copy config.inc.php.example to config.inc.php and changes the values according y
 
 Clone this project or download it, next step is to import your data into your mysql database with tools like [phpMyAdmin](https://www.phpmyadmin.net/)
 
-Copy config.inc.php.example to config.inc.php and update the values according your setup. You should at least change your mysql database and user credentials
+Copy `config.inc.php.example` to `config.inc.php` and update the values according your setup. You should at least change your mysql database and user credentials
 
 ### Further install detaisl
 
@@ -31,21 +31,22 @@ Copy config.inc.php.example to config.inc.php and update the values according yo
 	For ease of use, all dive pictures should be imported into diving log from the same directory, e.g. E:\divelog\images\pictures.
 	(To make it easy to know which picture is which, I also use filenames like 27_1.jpg, 27_2.jpg, 23_1.jpg, being the first and second pictures for dive number 27, and the first picture for dive number 23. But all that is required is that each picture filename be unique.)
 
-	Set the path to your pictures on your web site in the file locations section of includes/config.inc.php,
+	Set the path to your pictures on your web site in the file locations section of `config.inc.php`,
 	for example...
+
 	```
-$_config['picpath_web'] = "images/pictures/";
-```
+	$_config['picpath_web'] = "images/pictures/";
+	```
+
 	Upload your new pictures to the directory on your web server.
-
 	In version of Diving Log prior to version 4.0.5, after you do your MySQL Dump from Diving Log, you would need to edit the .sql file produced to strip out the path from the picture filenames. For example, your full picture pathnames might be,
-```	
-"E:\divelog\images\pictures\27_1.jpg".
-```
-	Search for "E:\divelog\images\pictures\" and replace it with "", leaving just "27_1.jpg".
 
-	However, with the changes to the Diving Log MySQL Dump option in version 4.0.5, you should no longer need to do this editing.  
-	Save the edited MySQL Dump file and upload it into your web database.  
+```
+E:\divelog\images\pictures\27_1.jpg
+```
+	Search for `E:\divelog\images\pictures\` and replace it with "", leaving just "27_1.jpg".
+
+	However, with the changes to the Diving Log MySQL Dump option in version 4.0.5, you should no longer need to do this editing.  Save the edited MySQL Dump file and upload it into your web database.  
 
 * EQUIPMENT PHOTOS Version 1.4+ supports equipment photos.  Use the same guidelines as for the dive pictures. 
 
