@@ -291,10 +291,10 @@ class HandleRequest {
                 if (isset($split_request[1]) && ($split_request[1] == 'list')) {
                     //var_dump($split_request);
                     $this->view_request = 0;
-                    if (($_config['view_type'] == 2) && isset($split_request[2]) && !isset($split_request[3]) ) {
+                    if ( isset($split_request[2]) && !isset($split_request[3]) ) {
                         //Get the paginate page only if view is type 2
                         $this->requested_page = $split_request[2];
-                    } elseif (($_config['view_type'] == 2) && isset($split_request[2]) && isset($split_request[3])) {
+                    } elseif (isset($split_request[2]) && isset($split_request[3])) {
                         $this->requested_page = $split_request[3];
                         //There some special request so get this info
                         //Set the special request so the class will be able to check for it
