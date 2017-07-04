@@ -19,7 +19,7 @@ Clone this project or download it, next step is to import your data into your my
 
 Copy `config.inc.php.example` to `config.inc.php` and update the values according your setup. You should at least change your mysql database and user credentials
 
-### Further install detaisl
+### Further install details
 
 * GOOGLE MAPS Version 1.2+ supports a user provided link to Google Maps.
 	If you add a line like:
