@@ -158,23 +158,6 @@ $t->setPluginsDir(array($_config['app_root'] . 'includes/smarty/plugins'));
 //$t->caching = false;
 
 /**
- * Define settings for MDB2 connection
- */
-$dsn = array(
-        'phptype'  => $_config['database_type'],
-        'username' => $_config['database_username'],
-        'password' => $_config['database_password'],
-        'hostspec' => $_config['database_server'],
-        'database' => $_config['database_db'],
-        );
-
-$options = array(
-        'debug'       => 2,
-        'portability' => MDB2_PORTABILITY_ALL,
-        );
-
-
-/**
  * GLOBAL SMARTY VALUES
  * Assign any global smarty values here.
  */
