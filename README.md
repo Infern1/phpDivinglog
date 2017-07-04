@@ -58,7 +58,7 @@ Copy `config.inc.php.example` to `config.inc.php` and update the values accordin
 	Diving Log stores all depth, pressure, weight, temperature and volume values in metric units. Thus metric units are exported via MySQL Dump and imported into your online MySQL database.
 
 	However, like Diving Log, phpDivingLog gives you the option to display values using either metric or imperial units.  
-	If you wish to have values display with imperial unit values, you will need to edit the 'Unit Conversion' values in the config.inc.php file.
+	If you wish to have values display with imperial unit values, you will need to edit the 'Unit Conversion' values in the `config.inc.php` file.
 	
 	Set the unit configuration values to 'true' if you want to convert values and have them display as imperial units, or to 'false' if values should be displayed as metric units. 
 
@@ -70,15 +70,13 @@ Copy `config.inc.php.example` to `config.inc.php` and update the values accordin
 * LANGUAGE COMPARE SCRIPT
 	A language file comparison PHP script has been sourced and added.  Those of you either maintaining or building new language file for phpDivingLog will find this script useful.
 
-	The script is includes/languages/compare.php. It needs to be where the language files are. Call it from the browser: http://example.com/divelog/includes/language/compare.php?f=danish to check "danish.inc.php" against "english.inc.php".
+	The script is `includes/languages/compare.php`  It needs to be where the language files are. Call it from the browser: http://example.com/divelog/includes/language/compare.php?f=danish to check "danish.inc.php" against "english.inc.php".
 
 
 * DIVE PROFILE GRAPH
 	Version 1.7+ supports the display of a dive profile graph without a background image. You can choose to provide a suitable 500 x 400 background image file (gif or jpg) and specify the path to it in the configuration file 'config.inc.php'.
-
 	By default, phpDivingLog will use the setting for the length units in the configuration file to determine if metres or feet will be used in the dive profile graph. It will show the primary units as the left side Y scale, and the secondary units as the right side Y scale.
-
-	Via settings in the configuration file 'config.inc.php', you can choose to show only the left Y scale, both the left and right Y scales with the same primary units, or with the primary units as the left side Y scale, and the secondary units as the right side Y scale (the default setting).
+	Via settings in the configuration file `config.inc.php`, you can choose to show only the left Y scale, both the left and right Y scales with the same primary units, or with the primary units as the left side Y scale, and the secondary units as the right side Y scale (the default setting).
 
 
 ## Packages used in the Program
@@ -90,10 +88,6 @@ Copy `config.inc.php.example` to `config.inc.php` and update the values accordin
 ## Contributing
 
 Please read [CONTRIBUTING.md](https://github.com/Infern1/phpDivinglog/blob/master/CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
-
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
 
 ## Authors
 * **Olaf van Zandwijk**  - *Initial work*
