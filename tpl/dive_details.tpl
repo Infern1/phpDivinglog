@@ -810,10 +810,8 @@ height="{$thumb_height}" width="{$thumb_width}" ></a>
     <tr>
       <td colspan="4">
         <p class="centeredImage">
-            <!--<img src="{$app_path}/drawprofile.php{$sep2}{$get_nr}" alt="{$dive_profile_title}" title="{$dive_profile_title}">
-            -->
              <div id="chart1" style="margin-top:20px; margin-left:20px; width:550px; height:400px;"></div> 
-        </p>
+        <!--</p>-->
       </td>
     </tr>
     {else} 

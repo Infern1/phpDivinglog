@@ -1,22 +1,3 @@
-{literal}
-<style type="text/css">
-.highslide {
-    cursor: url({/literal}{$web_root}{literal}/includes/highslide/graphics/zoomin.cur), pointer;
-}
-.highslide-loading {
-    background-image: url({/literal}{$web_root}{literal}/includes/highslide/graphics/loader.white.gif);
-}
-.highslide-controls {
-    background: url({/literal}{$web_root}{literal}/includes/highslide/graphics/controlbar-white.gif) 0 -90px no-repeat;
-}
-.highslide-controls ul {
-    background: url({/literal}{$web_root}{literal}/includes/highslide/graphics/controlbar-white.gif) right -90px no-repeat;
-}
-.highslide-controls a {
-    background-image: url({/literal}{$web_root}{literal}/includes/highslide/graphics/controlbar-white.gif);
-}
-</style>
-{/literal}
 <script type="text/javascript" src="{$app_path}/includes/misc.js"></script>
 <script type="text/javascript" src="{$app_path}/includes/highslide/highslide-with-gallery.js"></script>
 {literal}
@@ -47,7 +28,7 @@ window.location.href = '{/literal}{$web_root}{literal}' + link + index  ;
 {/literal}
 
 {* No images based tabs - variable width *}
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
 <script type="text/javascript" src="{$app_path}/js/jquery.tools.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.15/datatables.min.js"></script>
 {if isset($profile)} 
