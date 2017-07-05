@@ -1,6 +1,6 @@
 <?php
 /**
- * Filename:  includes/config.inc.php
+ * Filename:  config.inc.php
  * Function:  Configuration file for phpDivingLog.
  * @author  Lloyd Borrett - www.borrett.id.au Rob Lensen <rob@bsdfreaks.nl>
  * @package phpdivinglog
@@ -25,7 +25,7 @@ $_config['database_type'] = "mysqli";
 /**
  * Enter prefix for single user mode (for multi user see below) 
  */
-$_config['table_prefix'] = ""; 
+$_config['table_prefix'] = "DL_"; 
 
 /**
  *  language setting determines which language file is used
@@ -51,17 +51,18 @@ if(function_exists("date_default_timezone_set") and function_exists("date_defaul
 $_config['query_string'] = true;
 
 /**
- * change this to your website url
+ * change this to your website url (normally  not needed)
  */
-$_config['web_root'] = 'http://localhost/lrb-2004/phpDivinglog3'; 
+//$_config['web_root'] = 'http://localhost/lrb-2004/phpDivinglog3'; 
 
 /**
  * Your path where divelog is located
  * EXAMPLE: http://www.foo.com/users/j/jo/john
  * abs_url_path = /users/j/jo/john
  * Nothing todo where phpdivinglog is installed on your harddrive!
+ * No need to change normally
  */
-$_config['abs_url_path'] = '/lrb-2004/phpDivinglog3'; 
+//$_config['abs_url_path'] = '/divelog'; 
 
 /**
  * See below for more file location settings 
@@ -268,6 +269,9 @@ $_config['default_o2'] = "21";
  * ABS path to your website (no need to change normaly)
  */
 define('ABSPATH_DIVELOG', dirname(__FILE__).DIRECTORY_SEPARATOR);
+if ( !defined('ABSPATH') )
+	define('ABSPATH', dirname(__FILE__) . '/');
+
 $_config['app_root']        = ABSPATH_DIVELOG;  
 
 /**

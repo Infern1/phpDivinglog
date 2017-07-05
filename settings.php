@@ -27,11 +27,7 @@ $_config['dlog_version'] = "5.0.5";
  * want to be able to display
  */
 
-/**
- * ABS path to your pear installation
- */
-$_config['pear_path']       = $_config['app_root'] .  'includes/pear'; 
- 
+
 /**
  * logbook pics
  */
@@ -101,7 +97,6 @@ if ( ! defined( "PATH_SEPARATOR" ) ) {
   else define( "PATH_SEPARATOR", ":" );
 }
 ini_set('include_path', get_include_path() . PATH_SEPARATOR . 
-  $_config['pear_path'] . PATH_SEPARATOR . 
   $_config['app_root']."includes/". PATH_SEPARATOR  
   );
 
@@ -120,13 +115,24 @@ if(!isset($_SERVER['REQUEST_URI'])) {
 }
 
 require_once (ABSPATH_DIVELOG . 'includes/misc.inc.php');
+
+if(!isset($_config['abs_url_path'])){
+	$a = base_url(NULL,NULL,TRUE);
+	$b = rtrim($a['path'] ,'/');
+	$_config['abs_url_path'] = $b;
+}
+
+if(!isset($_config['web_root'])){
+	$url = rtrim(base_url() ,'/');
+	$_config['web_root'] = $url;
+}
+
 // hack version example that works on both *nix and windows
 // Smarty is assumend to be in 'includes/' dir under current script
 define('SMARTY_DIR',str_replace("\\","/",getcwd()).'/includes/smarty/');
 require_once(SMARTY_DIR . 'Smarty.class.php');
 
 require_once 'classes.inc.php';
-require_once 'PEAR.php';
 
 
 if($_config['enable_debug']){
@@ -166,11 +172,10 @@ $t->assign('web_root', $_config['web_root']);
 $t->assign('app_path',$_config['abs_url_path']);
 $t->assign('thumb_width',$_config['thumb-width']);
 $t->assign('thumb_height',$_config['thumb-height']);
-
+$t->assign('num_records', $_config['max_list']);
 if(($_config['embed_mode'])){
     $t->assign('embed',true);
 }
-
 /**
  * DEBUG MODE DETAILS
  * Set to true for debug mode 

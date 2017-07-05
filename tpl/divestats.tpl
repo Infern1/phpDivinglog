@@ -98,7 +98,6 @@ title="{$dlog_number_title}{$DivedateMinNr}">{$DivedateMinNr}</a></td>
 {* Show dive depth tablea *}
 <tr class="divedetails">
  <td colspan="4" align="center">
-   <!-- <p align="center"><img src="{$app_path}/drawpiechart.php" border="0" alt="" title=""></p> -->
    <div id="chartpie" style="margin-top:20px; margin-left:20px; width:450px; height:200px;"></div> 
 </td>
 </tr>

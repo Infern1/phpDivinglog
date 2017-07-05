@@ -238,10 +238,6 @@ class HandleRequest {
                         if ($this->view_request == 1)
                             $this->dive_nr = check_number($split_request[2]);
                         break;
-                    case 'drawpiechart.php':
-                        $this->diver_choice = false;
-                        $this->request_type = 5;
-                        break;                   
                     case 'divesummary.php':
                         $this->diver_choice = false;
                         $this->request_type = 5;
@@ -3919,11 +3915,8 @@ class Divetrip{
             $cpage = $this->requested_page;
         }
         $paged_data = parse_mysql_query('',  $locationlist_query); 
-        $t->assign('cells', $paged_data);
-    
+				$t->assign('cells', $paged_data);
     }
-
-
 }
 
 
