@@ -1946,7 +1946,7 @@ class Divelog {
         $t->assign('logbook_divesuit', $_lang['logbook_divesuit'] );
         $t->assign('logbook_computer', $_lang['logbook_computer'] );
 	
-		$Weight = '-';
+				$Weight = '-';
         if (isset($result['Weight']) && $result['Weight'] != "") {
             if ($_config['weight']) {
                 $Weight = KgToLbs($result['Weight'], 0) ."&nbsp;". $_lang['unit_weight_imp'] ;
@@ -1955,7 +1955,7 @@ class Divelog {
             }
         }
         $Weight = round ($Weight, 1);
-		$t->assign('Weight', $Weight);
+				$t->assign('Weight', $Weight);
 
 
         if (isset($result['Divesuit']) && ($result['Divesuit'] != "")) {
