@@ -13,6 +13,7 @@
     </tr>
 </table>
 
+{if isset($page_numbers)}
 {if $page_numbers.total > 1}
 <table style="clear: both;" width="100%" cellspacing="0" cellpadding="0">
     <tr>
@@ -20,10 +21,12 @@
     </tr>
 </table>
 {/if}
+{/if}
+
 
 {* Show photos per dive *}
 <div id="center_images">
-
+{if isset($image_link)}
 {foreach from=$image_link key=id item=i name=images}
 <div class="thumbwrapper">
     {if isset($pics_resized)}
@@ -49,7 +52,7 @@
         {/if}
         <br>
         {$i.img_title} 
-        {if $i.img_date != ''}
+        {if isset($i.img_date)}
             <br>
             Date: {$i.img_date}
         {/if}
@@ -77,15 +80,17 @@
     </div>
 </div>
 {/foreach}
+{/if}
 
 </div>
-
+{if isset($page_numbers)}
 {if $page_numbers.total > 1}
 <table style="clear: both;" width="100%" cellspacing="0" cellpadding="0">
     <tr>
         <td colspan="5" align="center"  class="divelog-navigation">{$pager_links}</td>
     </tr>
 </table>
+{/if}
 {/if}
 
 <table width="100%" cellspacing="0" cellpadding="0">
