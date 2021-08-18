@@ -39,6 +39,11 @@ $_config['picpath_web']     = "images/pictures/";
 $_config['picpath_web_thumb']     = "images/pictures/thumb"; 
 
 /**
+ * missing image icon
+ */
+$_config['pic_missing'] = "images/icons8-no-image-50.png";
+
+/**
  * place maps
  */
 $_config['mappath_web'] = "images/maps/";
@@ -149,7 +154,7 @@ $t->setCompileDir($_config['app_root'] .DIRECTORY_SEPARATOR . 'compile');
 /**
  * Before smarty we gonna check the rights in the compile dir 
  */
-if(!is__writable($t->getCompileDir()."/")){
+if(!is__writeable($t->getCompileDir()."/")){
 echo "Change the right on ".  $t->compile_dir ." so the webuser can write<br>
 chmod -R 777 " .$t->compile_dir ;
 }

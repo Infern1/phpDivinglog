@@ -36,7 +36,7 @@ alt="{$equipment_service_warning}" title="{$equipment_service_warning}">
 {else}
 <td><img src="{$app_path}/images/icon_active_16.png" border="0" alt="{$equip_inactive_active}" title="{$equip_inactive_active}"></td>
 {/if}
-{if $cells[cell_data].Photopath != ''}
+{if isset($cells[cell_data].Photopath)}
 <td><img src="{$app_path}/images/photo_icon.gif" border="0" alt="{$equip_photo_linktitle}{$cells[cell_data].object}" title="{$equip_photo_linktitle}{$cells[cell_data].object}"></td>
 {else}
 <td>&nbsp;</td>

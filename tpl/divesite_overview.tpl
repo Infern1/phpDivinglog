@@ -24,8 +24,8 @@
 {/if}
            <td>{$cells[cell_data].City}</td>
            <td>{$cells[cell_data].Country}</td>
-{if $cells[cell_data].Maxdepth != ''}
-           <td>{$cells[cell_data].Maxdepth} {$unit_length_short}</td>
+{if $cells[cell_data].MaxDepth != ''}
+           <td>{$cells[cell_data].MaxDepth} {$unit_length_short}</td>
 {else}
            <td>-</td>
 {/if}

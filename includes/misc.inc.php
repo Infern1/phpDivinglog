@@ -213,7 +213,7 @@ function parse_mysql_query($filename, $sql_query = 0, $debug = false) {
 			$result = mysqli_fetch_assoc($server_query);
 		} else {
 			for ($i=0; $query_output = mysqli_fetch_assoc($server_query); $i++) {
-				while (list($key, $val) = each($query_output)) {
+                          foreach ($query_output as $key => $val) {
 					if (is_string($val)) {
 						$query_output[$key] = $val;
 					}
@@ -325,6 +325,7 @@ function GetRequestVar($url, $request_file_depth=0) {
  * @access public
  * @return void
  */
+/*
 function is__writable($path) {
 	//will work in despite of Windows ACLs bug 
 	//NOTE: use a trailing slash for folders!!!
@@ -345,6 +346,29 @@ function is__writable($path) {
 		unlink($path);
 	return true;
 }
+ */
+/**
+ * function to override PHP's is_writable() which can occasionally be unreliable due to O/S and F/S differences
+ * attempts to open the specified file for writing. Returns true if successful, false if not.
+ * if a directory is specified, uses PHP's is_writable() anyway
+ *
+ * @var string
+ * @return boolean
+ */
+  function is__writeable($filepath, $make_unwritable = true) {
+    if (is_dir($filepath)) return is_writable($filepath);
+    $fp = @fopen($filepath, 'a');
+    if ($fp) {
+      @fclose($fp);
+      if ($make_unwritable) set_unwritable($filepath);
+      $fp = @fopen($filepath, 'a');
+      if ($fp) {
+        @fclose($fp);
+        return true;
+      }
+    }
+    return false;
+  }
 
 /**
  * toFeet Callback to convert metres to feet
@@ -990,5 +1014,53 @@ function base_url($atRoot=FALSE, $atCore=FALSE, $parse=FALSE){
 
 	return $base_url;
 	}
+
+/**
+ * Validates a file name and path against an allowed set of rules.
+ *
+ * A return value of `1` means the file path contains directory traversal.
+ *
+ * A return value of `2` means the file path contains a Windows drive path.
+ *
+ * A return value of `3` means the file is not in the allowed files list.
+ *
+ * @since 1.2.0
+ *
+ * @param string   $file          File path.
+ * @param string[] $allowed_files Optional. Array of allowed files.
+ * @return int 0 means nothing is wrong, greater than 0 means something was wrong.
+ */
+function validate_file( $file, $allowed_files = array() ) {
+	if ( ! is_scalar( $file ) || '' === $file ) {
+		return 0;
+	}
+
+	// `../` on its own is not allowed:
+	if ( '../' === $file ) {
+		return 1;
+	}
+
+	// More than one occurence of `../` is not allowed:
+	if ( preg_match_all( '#\.\./#', $file, $matches, PREG_SET_ORDER ) && ( count( $matches ) > 1 ) ) {
+		return 1;
+	}
+
+	// `../` which does not occur at the end of the path is not allowed:
+	if ( false !== strpos( $file, '../' ) && '../' !== mb_substr( $file, -3, 3 ) ) {
+		return 1;
+	}
+
+	// Files not in the allowed file list are not allowed:
+	if ( ! empty( $allowed_files ) && ! in_array( $file, $allowed_files, true ) ) {
+		return 3;
+	}
+
+	// Absolute Windows drive paths are not allowed:
+	if ( ':' === substr( $file, 1, 1 ) ) {
+		return 2;
+	}
+
+	return 0;
+}
 
 ?>
