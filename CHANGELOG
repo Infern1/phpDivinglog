@@ -1,3 +1,9 @@
+phpDivingLog v3.2 - 2021-08-20 - Rob Lensen
+    * Update Smarty latest version 
+    * Review a lot of PHP warnings and updated code accordingly
+    * Removed multiuser
+    * Changed to lightgallery from HighslideJS   
+
 phpDivingLog v3.1 - 2017-06-29 - Rob Lensen
     * Update jqplot latest version
     * Removed jpgraph

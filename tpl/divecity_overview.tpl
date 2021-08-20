@@ -15,13 +15,10 @@
 <tbody>
 {section name=cell_data loop=$cells }
     <tr class="diveoverview">
-{if isset($multiuser_id)}
-        <td><a href="{$app_path}/{$base_page}{$sep1}{$multiuser_id}{$sep2}{$cells[cell_data].ID}" 
-          title="{$cells[cell_data].City} {$logbook_city_linktitle}">{$cells[cell_data].City}</a></td>
-{else}
+
         <td><a href="{$app_path}/{$base_page}{$sep2}{$cells[cell_data].ID}" 
           title="{$cells[cell_data].City} {$logbook_city_linktitle}">{$cells[cell_data].City}</a></td>
-{/if}
+
 {if ($cells[cell_data].Type >= 0) && ($cells[cell_data].Type <= 5)}
         <td>{$citytypes[$cells[cell_data].Type]}</td>
 {else}

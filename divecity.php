@@ -59,8 +59,6 @@ if ($divecity->get_request_type() == 1) {
      */
     $pagetitle = $_lang['dive_cities'];
     $t->assign('pagetitle',$pagetitle);
-} elseif ($divecity->get_request_type() == 3) {
-    $divecity->get_overview_divers();
 } else {
     echo "strange...";
 }
@@ -75,6 +73,3 @@ if ($_config['embed_mode'] == TRUE) {
 } else {
     $t->display('divecity.tpl');
 }
-
-?>
-

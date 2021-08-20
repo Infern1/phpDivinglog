@@ -82,13 +82,10 @@
     <tr class="divedetails">
       <td colspan="4">
       {foreach from=$trips item=trip}
-        {if isset($multiuser_id)}
-        <a href="{$app_path}/divetrip.php{$sep1}{$multiuser_id}{$sep2}{$trip.ID}"
-title="{$dtrip_number_title}{$trip.ID} - {$trip.TripName}">{if $trip.TripName == ''}{$trip.ID}{else}{$trip.TripName}{/if}</a>{if !$trip@last}{if $comma_separated}{$comma_separator}{else}&nbsp;{/if}{/if}
-        {else}
+        
         <a href="{$app_path}/divetrip.php{$sep2}{$trip.ID}"
 title="{$dtrip_number_title}{$trip.ID} - {$trip.TripName}">{if $trip.TripName == ''}{$trip.ID}{else}{$trip.TripName}{/if}</a>{if !$trip@last}{if $comma_separated}{$comma_separator}{else}&nbsp;{/if}{/if}
-        {/if}
+        
       {/foreach}
       </td>
     </tr>
@@ -103,13 +100,10 @@ title="{$dtrip_number_title}{$trip.ID} - {$trip.TripName}">{if $trip.TripName ==
     <tr class="divedetails">
       <td colspan="4">
       {foreach from=$cities item=city}
-        {if isset($multiuser_id)}
-        <a href="{$app_path}/divecity.php{$sep1}{$multiuser_id}{$sep2}{$city.CityID}"
-title="{$dcity_number_title}{$city.CityID} - {$city.City}">{if $trip.City == ''}{$city.CityID}{else}{$city.City}{/if}</a>{if !$city@last}{if $comma_separated}{$comma_separator}{else}&nbsp;{/if}{/if}
-        {else}
+        
         <a href="{$app_path}/divecity.php{$sep2}{$city.CityID}"
 title="{$dcity_number_title}{$city.CityID} - {$city.City}">{if $city.City == ''}{$city.CityID}{else}{$city.City}{/if}</a>{if !$city@last}{if $comma_separated}{$comma_separator}{else}&nbsp;{/if}{/if}
-        {/if}
+        
       {/foreach}
       </td>
     </tr>
@@ -124,13 +118,10 @@ title="{$dcity_number_title}{$city.CityID} - {$city.City}">{if $city.City == ''}
     <tr class="divedetails">
       <td colspan="4">
       {foreach from=$sites item=site}
-        {if isset($multiuser_id)}
-        <a href="{$app_path}/divesite.php{$sep1}{$multiuser_id}{$sep2}{$site.PlaceID}"
-title="{$dsite_number_title}{$site.PlaceID}= {$site.Place}">{if $site.Place == ''}{$site.PlaceID}{else}{$site.Place}{/if}</a>{if !$site@last}{if $comma_separated}{$comma_separator}{else}&nbsp;{/if}{/if}
-        {else}
+        
         <a href="{$app_path}/divesite.php{$sep2}{$site.PlaceID}"
 title="{$dsite_number_title}{$site.PlaceID} - {$site.Place}">{if $site.Place == ''}{$site.PlaceID}{else}{$site.Place}{/if}</a>{if !$site@last}{if $comma_separated}{$comma_separator}{else}&nbsp;{/if}{/if}
-        {/if}
+        
       {/foreach}
       </td>
     </tr>
@@ -145,13 +136,10 @@ title="{$dsite_number_title}{$site.PlaceID} - {$site.Place}">{if $site.Place == 
     <tr class="divedetails">
       <td colspan="4">
       {foreach from=$dives item=dive}
-        {if isset($multiuser_id)}
-        <a href="{$app_path}/index.php{$sep1}{$multiuser_id}{$sep2}{$dive}"
-title="{$dlog_number_title}{$dive}">{$dive}</a>{if !$dive@last}{if $comma_separated}{$comma_separator}{else}&nbsp;{/if}{/if}
-        {else}
+        
         <a href="{$app_path}/index.php{$sep2}{$dive}"
 title="{$dlog_number_title}{$dive}">{$dive}</a>{if !$dive@last}{if $comma_separated}{$comma_separator}{else}&nbsp;{/if}{/if}
-        {/if}
+        
       {/foreach}
       </td>
     </tr>

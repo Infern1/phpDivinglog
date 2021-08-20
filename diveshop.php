@@ -65,9 +65,6 @@ if ($diveshop->get_request_type() == 1) {
     $pagetitle = $_lang['dive_shops'];
     $t->assign('pagetitle',$pagetitle);
 
-} elseif ($diveshop->get_request_type() == 3) {
-    $diveshop->get_overview_divers();
-
 } else {
     echo "strange...";
 }
@@ -82,6 +79,3 @@ if ($_config['embed_mode'] == TRUE) {
 } else {
     $t->display('diveshop.tpl');
 }
-
-?>
-

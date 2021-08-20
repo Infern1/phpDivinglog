@@ -48,10 +48,7 @@ if ($equipment->get_request_type() == 1) {
     $links->get_ovv_links();
     $equipment->get_equipment_overview();
 
-} elseif ($equipment->get_request_type() == 3) {
-    $equipment->get_overview_divers();
-
-} else {
+}  else {
     echo "strange...";
 }
 
@@ -65,4 +62,3 @@ if ($_config['embed_mode'] == TRUE) {
 } else {
     $t->display('equipment.tpl');
 }
-?>

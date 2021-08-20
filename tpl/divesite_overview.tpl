@@ -15,13 +15,8 @@
 <tbody>
 {section name=cell_data loop=$cells }
 <tr class="diveoverview">
-{if isset($multiuser_id)}
-<td><a href="{$app_path}/{$base_page}{$sep1}{$multiuser_id}{$sep2}{$cells[cell_data].ID}" 
-        title="{$cells[cell_data].Place} {$logbook_place_linktitle}">{$cells[cell_data].Place}</a></td>
-{else}
 <td><a href="{$app_path}/{$base_page}{$sep2}{$cells[cell_data].ID}" 
         title="{$cells[cell_data].place} {$logbook_place_linktitle}">{$cells[cell_data].Place}</a></td>
-{/if}
            <td>{$cells[cell_data].City}</td>
            <td>{$cells[cell_data].Country}</td>
 {if $cells[cell_data].MaxDepth != ''}

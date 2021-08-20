@@ -29,13 +29,8 @@ SUMMARY</div>
 <b><a href="{$app_path}/divecountry.php{$sep1}{$LastCountryID}" title="{$dcountry_number_title}{$LastCountryID} - {$LastCountry}">{$LastCountry}</a></b><br>
 {/if} 
 [<b>
-{if isset($multiuser_id)}
-<a href="{$app_path}/index.php{$sep1}{$multiuser_id}{$sep2}{$DivedateMaxNr}"
-title="{$dlog_number_title}{$DivedateMaxNr}">{$DivedateMaxNr}</a>
-{else}
 <a href="{$app_path}/index.php{$sep2}{$DivedateMaxNr}" 
  title="{$dlog_number_title}{$DivedateMaxNr}">{$DivedateMaxNr}</a>
-{/if}
 </b>]</p>
 
 {* Get the certification details *}

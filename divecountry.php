@@ -63,8 +63,6 @@ if ($divecountry->get_request_type() == 1) {
      */
     $pagetitle = $_lang['dive_countries'];
     $t->assign('pagetitle',$pagetitle);
-} elseif ($divecountry->get_request_type() == 3) {
-    $divecountry->get_overview_divers();
 } else {
     echo "strange...";
 }
@@ -79,6 +77,3 @@ if ($_config['embed_mode'] == TRUE) {
 } else {
     $t->display('divecountry.tpl');
 }
-
-?>
-

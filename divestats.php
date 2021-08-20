@@ -1,4 +1,5 @@
 <?php
+
 /** 
  * Filename: divestats.php
  * Function: This file displays the dive statistics for phpDivingLog.
@@ -13,10 +14,10 @@
  * 
  * For use with Diving Log by Sven Knoch - http://www.divinglog.de
  *
-*/
+ */
 
 $config_file = "./config.inc.php";
-require_once ($config_file);
+require_once($config_file);
 
 $request = new HandleRequest();
 $request->set_request_uri($_SERVER['REQUEST_URI']);
@@ -32,39 +33,17 @@ $divestats->set_divestats_info($request);
 $result = $divestats->get_divestats_info();
 global $_config;
 
-if ($request->get_multiuser()) {
-    $user_id = $request->get_user_id();
-    if (!empty($user_id)) {
-        // Display the Dive List
-        $links->get_ovv_links();
-        // Get the page header
-        $pagetitle = $_lang['dive_stats'];
-        $t->assign('pagetitle',$pagetitle);
-        $t->assign('colspanlinks','4');
-        // Dive Statistics
-        $divestats->set_all_statistics();
-        $app_info = new AppInfoi($request);
-        $app_info->SetAppInfo(); 
-        $user = new User();
-        $user->set_user_id($request->get_user_id());
-        set_config_table_prefix($user->get_table_prefix());
-        $dbinfo = parse_mysql_query('dbinfo.sql');
-        reset_config_table_prefix();
-    } else {
-        $divestats->get_overview_divers();
-    }
-} else {
-    // Display the Dive List
-    $links->get_ovv_links();
-    // Get the page header
-    $pagetitle = $_lang['dive_stats'];
-    $t->assign('pagetitle',$pagetitle);
-    $t->assign('colspanlinks','4');
-    // Dive Statistics
-    $divestats->set_all_statistics();
-    $app_info = new AppInfo($request);
-    $app_info->SetAppInfo(); 
-}
+
+// Display the Dive List
+$links->get_ovv_links();
+// Get the page header
+$pagetitle = $_lang['dive_stats'];
+$t->assign('pagetitle', $pagetitle);
+$t->assign('colspanlinks', '4');
+// Dive Statistics
+$divestats->set_all_statistics();
+$app_info = new AppInfo($request);
+$app_info->SetAppInfo();
 
 
 if ($_config['embed_mode'] == TRUE) {
@@ -75,4 +54,3 @@ if ($_config['embed_mode'] == TRUE) {
 } else {
     $t->display('divestats.tpl');
 }
-?>

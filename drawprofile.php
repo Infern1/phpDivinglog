@@ -75,15 +75,9 @@ $request = new HandleRequest();
 $request->set_request_uri($_SERVER['REQUEST_URI']);
 $request->set_file_depth(0);
 $request->handle_url();
-if($request->get_multiuser()){
-    //get the prefix for a user_id
-    $user = new User;
-    $user->set_user_id($request->get_user_id());
-    set_config_table_prefix($user->get_table_prefix());
+
     $globals['divenr'] = $request->get_dive_nr();
-} else {
-    $globals['divenr'] = $request->get_dive_nr();
-}
+
 $result = parse_mysql_query('onedive.sql');
 reset_config_table_prefix();
 $profile = $result['Profile'];

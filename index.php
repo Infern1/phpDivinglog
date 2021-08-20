@@ -71,8 +71,6 @@ if ($divelog->get_request_type() == 1) {
 } elseif($divelog->get_request_type() == 0) {
     $links->get_ovv_links();
     $divelog->get_dive_overview();
-} elseif($divelog->get_request_type() == 3) {
-    $divelog->get_overview_divers();
 } else {
     echo "shouldn't come here!";
     exit;
@@ -92,7 +90,3 @@ if($_config['embed_mode'] == TRUE){
 } else {
     $t->display('index.tpl');
 }
-
-?>
-
-

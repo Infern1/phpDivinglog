@@ -20,12 +20,12 @@ $_config['database_password'] = "password";
  * Define the connection type use mysqli for php5 (check if mysqli is installed), otherwise enter mysql
  * The driver mysqli is not used everywhere (planned)
  */
-$_config['database_type'] = "mysqli"; 
+$_config['database_type'] = "mysqli";
 
 /**
  * Enter prefix for single user mode (for multi user see below) 
  */
-$_config['table_prefix'] = "DL_"; 
+$_config['table_prefix'] = "DL_";
 
 /**
  *  language setting determines which language file is used
@@ -39,7 +39,7 @@ $_config['language'] = "english";
  *  date_default_timezone_set('Australia/Melbourne');
  *  See http://www.php.net/manual/en/timezones.php for the list of valid timezones
  */
-if(function_exists("date_default_timezone_set") and function_exists("date_default_timezone_get")) {
+if (function_exists("date_default_timezone_set") and function_exists("date_default_timezone_get")) {
   @date_default_timezone_set(@date_default_timezone_get());
 }
 
@@ -74,20 +74,6 @@ $_config['query_string'] = true;
  */
 $_config['embed_mode'] = false;
 
-/**
- * When multiuser is set to true, you need to define the table prefixes
- * Data for all the users should be in the same database
- */
-$_config['multiuser'] = false;
-
-/**
- * Define the table prefix for each user
- * $_config['user_prefix'][user_id] = 'table_prefix'
- * The user_id should start with 1 and can be defined. 
- */
-$_config['user_prefix'][1] = 'diver1';
-$_config['user_prefix'][2] = 'diver2';
-$_config['user_prefix'][3] = 'diver3';
 
 /**
  * number of items per page in the lists
@@ -132,36 +118,12 @@ $_config['comma_separated'] = true;
 $_config['comma_separator'] = ' |';
 
 /**
- * Enable thumbs  
- */
-$_config['divepics_preview'] = true;
-
-/**
- * Enable resizing of the uploaded pictures by GD
- * If set to false, full size images will be shown and the
- * thumbnails will be generated each time (cpu usage)
- */
-$_config['enable_resize'] = false;
-
-/**
- * Set this to true to use the new resize class from http://www.verot.net/php_class_upload.htm
- * Not fully tested, so this option is here temporarly
- */
-$_config['new_resize_class'] = false;
-
-/**
- * Max filesize of images which are resized, this setting is depending on your server
- * and php settings
- */
-$_config['max_resize_size'] = 1812000;
-
-/**
  * Set the maximum width and height of the thumbnails, which are created automaticly
  * Usually a 4:3 ratio, e.g. 100:75, 120:100 
  * Width and height are set in px
  */
-$_config['thumb-width'] = 100; 
-$_config['thumb-height'] = 75; 
+$_config['thumb-width'] = 100;
+$_config['thumb-height'] = 75;
 
 /**
  * Set the maximum width of the pictures in the gallery 
@@ -268,11 +230,11 @@ $_config['default_o2'] = "21";
 /**
  * ABS path to your website (no need to change normaly)
  */
-define('ABSPATH_DIVELOG', dirname(__FILE__).DIRECTORY_SEPARATOR);
-if ( !defined('ABSPATH') )
+define('ABSPATH_DIVELOG', dirname(__FILE__) . DIRECTORY_SEPARATOR);
+if (!defined('ABSPATH'))
 	define('ABSPATH', dirname(__FILE__) . '/');
 
-$_config['app_root']        = ABSPATH_DIVELOG;  
+$_config['app_root']        = ABSPATH_DIVELOG;
 
 /**
  * For debug purpose 

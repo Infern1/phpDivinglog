@@ -1,4 +1,5 @@
 <?php
+
 /** 
  * Filename: divegallery.php
  * Function: This file displays all images available to phpDivingLog.
@@ -9,10 +10,10 @@
  *
  * For use with Diving Log by Sven Knoch - http://www.divinglog.de
  *
-*/
+ */
 
 $config_file = "./config.inc.php";
-require_once ($config_file);
+require_once($config_file);
 
 $request = new HandleRequest();
 $request->set_request_uri($_SERVER['REQUEST_URI']);
@@ -26,45 +27,21 @@ $links = new TopLevelMenu($request);
 $divegallery = new DivePictures();
 $divegallery->set_divegallery_info($request);
 $result = $divegallery->get_divegallery_info();
-if($divegallery->resize_needed()){
-//echo "resizing....";
-$divegallery->resizer(1);
-}
-
 global $_config;
 
-if($request->get_multiuser()){
-    $user_id = $request->get_user_id();
-    if(!empty($user_id)){
-        // Display the Dive List
-        $links->get_ovv_links();
-        // Get the page header
-        $pagetitle = $_lang['dive_gallery'];
-        $t->assign('pagetitle',$pagetitle);
-        $t->assign('colspanlinks','4');
-        // Dive Statistics
-        $divegallery->set_all_dive_pictures();
-        $user = new User();
-        $user->set_user_id($request->get_user_id());
-        set_config_table_prefix($user->get_table_prefix());
-        $dbinfo = parse_mysql_query('dbinfo.sql');
-        reset_config_table_prefix();
-    } else {
-        $divestats->get_overview_divers();
-    }
-} else {
-    // Display the Dive List
-    $links->get_ovv_links();
-    // Get the page header
-    $pagetitle = $_lang['dive_gallery'];
-    $t->assign('pagetitle',$pagetitle);
-    $t->assign('colspanlinks','4');
-    // Dive Gallery
-    $divegallery->set_all_dive_pictures();
-    
-    //$dbinfo = parse_mysql_query('dbinfo.sql');
-}
-if($_config['embed_mode'] == TRUE){
+
+// Display the Dive List
+$links->get_ovv_links();
+// Get the page header
+$pagetitle = $_lang['dive_gallery'];
+$t->assign('pagetitle', $pagetitle);
+$t->assign('colspanlinks', '4');
+// Dive Gallery
+$divegallery->set_all_dive_pictures();
+
+//$dbinfo = parse_mysql_query('dbinfo.sql');
+
+if ($_config['embed_mode'] == TRUE) {
     // Get the HTML output and send it to the requesting
     include('header.php');
     $t->display('divegallery.tpl');
@@ -72,5 +49,3 @@ if($_config['embed_mode'] == TRUE){
 } else {
     $t->display('divegallery.tpl');
 }
-
-?>

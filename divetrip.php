@@ -61,8 +61,6 @@ if ($divetrip->get_request_type() == 1) {
      */
     $pagetitle = $_lang['dive_trips'];
     $t->assign('pagetitle',$pagetitle);
-} elseif ($divetrip->get_request_type() == 3) {
-    $divetrip->get_overview_divers();
 } else {
     echo "strange...";
 }
@@ -77,6 +75,3 @@ if ($_config['embed_mode'] == TRUE) {
 } else {
     $t->display('divetrip.tpl');
 }
-
-?>
-

@@ -10,7 +10,7 @@ h1 {
 
 div#content {
     text-align: left;
-    width: 625px;
+    width: 725px;
     margin-right: auto;
     margin-left: auto;
 }
@@ -195,6 +195,7 @@ table a:hover {
     color: #718ABE;
     text-decoration: underline !important;
 }
+
 
 /*
 tfoot th, tfoot td, thead td {
