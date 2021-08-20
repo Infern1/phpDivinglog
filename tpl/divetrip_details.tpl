@@ -57,7 +57,7 @@
           {foreach from=$image_link key=id item=i name=images}
             <a href="{$web_root}/{$i.img_url}" class="thum" title="{$i.img_title}">
               <img
-                src="{$web_root}/includes/imgd.php?src={$i.img_url}&width={$thumb_width}&height={$thumb_width}&crop-to-fit" />
+                src="{$web_root}/includes/imgp.php?src={$i.img_url}&width={$thumb_width}&height={$thumb_width}&crop-to-fit" />
             </a>
           {/foreach}
         </div>

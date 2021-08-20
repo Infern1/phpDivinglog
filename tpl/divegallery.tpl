@@ -29,7 +29,7 @@
         title='{$i.site_name} {$divepic_place_linktitle}'>{$i.site_name}</a> </h4><p> Dive Nr: <a href='{$app_path}/index.php{$sep2}{$i.dive_nr}'
           title='{$divepic_dive_number} {$i.dive_nr} {$divepic_dive_linktitle}'>{$i.dive_nr}</a></p>">
           <img
-            src="{$web_root}/includes/imgd.php?src={$i.img_url}&width={$thumb_width}&height={$thumb_width}&crop-to-fit" />
+            src="{$web_root}/includes/imgp.php?src={$i.img_url}&width={$thumb_width}&height={$thumb_width}&crop-to-fit" />
         </a>
 
         {$divepic_dive_number}

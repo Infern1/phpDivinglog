@@ -761,7 +761,7 @@
                   <a href="{$web_root}/{$i.img_url}" class="thum" data-sub-html="<h4>Location: <a href='{$app_path}/divesite.php{$sep2}{$dive_site_nr}'
                   title='{$dive_place} {$logbook_place_linktitle}'>{$dive_place}</a> </h4>">
                     <img
-                      src="{$web_root}/includes/imgd.php?src={$i.img_url}&width={$thumb_width}&height={$thumb_width}&crop-to-fit" />
+                      src="{$web_root}/includes/imgp.php?src={$i.img_url}&width={$thumb_width}&height={$thumb_width}&crop-to-fit" />
                   </a>
                 {/foreach}
               </p>
