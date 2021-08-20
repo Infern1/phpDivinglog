@@ -265,7 +265,7 @@ function check_number($number)
  * @param mixed $url
  * @param mixes $request_file_depth
  * @access public
- * return void
+ * @return array
  */
 function GetRequestVar($url, $request_file_depth = 0)
 {
@@ -312,36 +312,7 @@ function GetRequestVar($url, $request_file_depth = 0)
 	return $paginas;
 }
 
-/**
- * is__writable It can accept files or folders, but folders should end with a trailing slash! The function attempts to actually
- * write a file, so it will correctly return true when a file/folder can be written to when the user has ACL write access to it
- * 
- * @param mixed $path 
- * @access public
- * @return void
- */
-/*
-function is__writable($path) {
-	//will work in despite of Windows ACLs bug 
-	//NOTE: use a trailing slash for folders!!!
-	//see http://bugs.php.net/bug.php?id=27609
-	//see http://bugs.php.net/bug.php?id=30931
 
-	if ($path{strlen($path)-1}=='/') // recursively return a temporary file path
-		return is__writable($path.uniqid(mt_rand()).'.tmp');
-	else if (is_dir($path))
-		return is__writable($path.'/'.uniqid(mt_rand()).'.tmp');
-	// check tmp file for read/write capabilities
-	$rm = file_exists($path);
-	$f = @fopen($path, 'a');
-	if ($f===false)
-		return false;
-	fclose($f);
-	if (!$rm)
-		unlink($path);
-	return true;
-}
- */
 /**
  * function to override PHP's is_writable() which can occasionally be unreliable due to O/S and F/S differences
  * attempts to open the specified file for writing. Returns true if successful, false if not.
@@ -763,111 +734,6 @@ function reset_config_table_prefix()
 	//    unset($_config['table_prefix']);
 }
 
-/**
- * resize_image 
- * 
- * @param mixed $img 
- * @access public
- * @return void
- */
-function resize_image($img)
-{
-	global $_config;
-	$obj = new Thumbnail($img);
-	$obj->size_width($_config['pic-width']);
-	$obj->process();
-	$obj->save($img);
-}
-
-/**
- * resize_image_new uses new resize class 
- * 
- * @param mixed $img 
- * @access public
- * @return void
- */
-function resize_image_new($img)
-{
-	global $_config, $t;
-	$img = $_config['app_root'] . $img;
-
-	$handle = new Upload($img);
-	$handle->file_overwrite        = true;
-	$handle->image_resize          = true;
-	$handle->image_ratio           = true;
-	$handle->image_x               = $_config['pic-width'];
-
-	$handle->Process($_config['app_root'] . $_config['picpath_web']);
-	if ($handle->processed) {
-		//echo 'image resized';
-		//$handle->clean();
-	} else {
-		echo $handle->log;
-		echo 'error : ' . $handle->error;
-	}
-	$t->assign('resize', 1);
-	$t->assign('img', $img);
-	set_time_limit(30);
-}
-/**
- * make_thumb generates thumb with the Thumbnail class
- * 
- * @param mixed $img 
- * @param mixed $thumb 
- * @access public
- * @return void
- */
-function make_thumb($img, $thumb, $i = 0)
-{
-	global $_config, $t;
-	$obj = new Thumbnail($img);
-	$obj->size_auto($_config['thumb-width']);
-	$obj->process();
-	$t->assign('resize', 1);
-	$t->assign('img', $img);
-	set_time_limit(30);
-	$obj->save($thumb);
-	flush();
-	//    echo "Error". $obj->error_msg;
-}
-
-/**
- * make_thumb_new generates thumbnail with the class.upload class which is newer
- * 
- * @param mixed $img 
- * @param mixed $thumb 
- * @param int $i 
- * @access public
- * @return void
- */
-function make_thumb_new($img, $thumb, $i = 0)
-{
-	global $_config, $t;
-	$img = $_config['app_root'] . $img;
-
-	$handle = new Upload($img);
-	$handle->file_name_body_pre = 'thumb_';
-	$handle->file_overwrite        = true;
-	$handle->file_auto_rename     = false;
-	$handle->image_resize          = true;
-	$handle->image_ratio_fill      = true;
-	$handle->image_ratio           = true;
-	$handle->image_y               = $_config['thumb-height'];
-	$handle->image_x               = $_config['thumb-width'];
-
-	$handle->Process($_config['app_root'] . $_config['picpath_web']);
-	if ($handle->processed) {
-		//echo 'image resized';
-		//$handle->clean();
-	} else {
-		echo $handle->log;
-		echo 'error : ' . $handle->error;
-	}
-	$t->assign('resize', 1);
-	$t->assign('img', $img);
-	set_time_limit(30);
-}
-
 
 /**
  * count_all count non-empty elements in an array of any dimension
@@ -891,51 +757,56 @@ function count_all($arg)
 	}
 }
 
-
-/**
- * Rewritten by Nathan Codding - Feb 6, 2001
- * - Goes through the given string, and replaces xxxx://yyyy with an HTML <a> tag linking
- * 	to that URL
- * - Goes through the given string, and replaces www.xxxx.yyyy[zzzz] with an HTML <a> tag linking
- * 	to http://www.xxxx.yyyy[/zzzz]
- * - Goes through the given string, and replaces xxxx@yyyy with an HTML mailto: tag linking
- *	to that email address
- * - Only matches these 2 patterns either after a space, or at the beginning of a line
- *
- * Notes: the email one might get annoying - it's easy to make it more restrictive, though.. maybe
- * have it require something like xxxx@yyyy.zzzz or such. We'll see
- */
-function make_clickable($text)
+function _make_url_clickable_cb($matches)
 {
-	$text = preg_replace('#(script|about|applet|activex|chrome):#is', "\\1&#058;", $text);
+	$ret = '';
+	$url = $matches[2];
 
-	// pad it with a space so we can match things at the start of the 1st line.
-	$ret = ' ' . $text;
-
-	// matches an "xxxx://yyyy" URL at the start of a line, or after a space.
-	// xxxx can only be alpha characters.
-	// yyyy is anything up to the first space, newline, comma, double quote or <
-	$ret = preg_replace("#(^|[\n ])([\w]+?://[\w\#$%&~/.\-;:=,?@\[\]+]*)#is", "\\1<a href=\"\\2\" target=\"_blank\" title=\"\">\\2</a>", $ret);
-
-	// matches a "www|ftp.xxxx.yyyy[/zzzz]" kinda lazy URL thing
-	// Must contain at least 2 dots. xxxx contains either alphanum, or "-"
-	// zzzz is optional.. will contain everything up to the first space, newline, 
-	// comma, double quote or <.
-	$ret = preg_replace("#(^|[\n ])((www|ftp)\.[\w\#$%&~/.\-;:=,?@\[\]+]*)#is", "\\1<a href=\"http://\\2\" target=\"_blank\" title=\"\">\\2</a>", $ret);
-
-	// matches an email@domain type address at the start of a line, or after a space.
-	// Note: Only the followed chars are valid; alphanums, "-", "_" and or ".".
-	$ret = preg_replace("#(^|[\n ])([a-z0-9&\-_.]+?)@([\w\-]+\.([\w\-\.]+\.)*[\w]+)#i", "\\1<a href=\"mailto:\\2@\\3\" title=\"\">\\2@\\3</a>", $ret);
-
-	// Remove our padding..
-	$ret = substr($ret, 1);
-
-	// echo '<br>'.$text.'<br>';
-	// echo '<br>'.$ret.'<br>';
-
-	return ($ret);
+	if (empty($url))
+		return $matches[0];
+	// removed trailing [.,;:] from URL
+	if (in_array(substr($url, -1), array('.', ',', ';', ':')) === true) {
+		$ret = substr($url, -1);
+		$url = substr($url, 0, strlen($url) - 1);
+	}
+	return $matches[1] . "<a href=\"$url\" rel=\"nofollow\">$url</a>" . $ret;
 }
 
+function _make_web_ftp_clickable_cb($matches)
+{
+	$ret = '';
+	$dest = $matches[2];
+	$dest = 'http://' . $dest;
+
+	if (empty($dest))
+		return $matches[0];
+	// removed trailing [,;:] from URL
+	if (in_array(substr($dest, -1), array('.', ',', ';', ':')) === true) {
+		$ret = substr($dest, -1);
+		$dest = substr($dest, 0, strlen($dest) - 1);
+	}
+	return $matches[1] . "<a href=\"$dest\" rel=\"nofollow\">$dest</a>" . $ret;
+}
+
+function _make_email_clickable_cb($matches)
+{
+	$email = $matches[2] . '@' . $matches[3];
+	return $matches[1] . "<a href=\"mailto:$email\">$email</a>";
+}
+
+function make_clickable($ret)
+{
+	$ret = ' ' . $ret;
+	// in testing, using arrays here was found to be faster
+	$ret = preg_replace_callback('#([\s>])([\w]+?://[\w\\x80-\\xff\#$%&~/.\-;:=,?@\[\]+]*)#is', '_make_url_clickable_cb', $ret);
+	$ret = preg_replace_callback('#([\s>])((www|ftp)\.[\w\\x80-\\xff\#$%&~/.\-;:=,?@\[\]+]*)#is', '_make_web_ftp_clickable_cb', $ret);
+	$ret = preg_replace_callback('#([\s>])([.0-9a-z_+-]+)@(([0-9a-z-]+\.)+[0-9a-z]{2,})#i', '_make_email_clickable_cb', $ret);
+
+	// this one is not in an array because we need it to run last, for cleanup of accidental links within links
+	$ret = preg_replace("#(<a( [^>]+?>|>))<a [^>]+?>([^>]+?)</a></a>#i", "$1$3</a>", $ret);
+	$ret = trim($ret);
+	return $ret;
+}
 
 /**
  * WGS84 Distance Calculation
