@@ -4705,7 +4705,12 @@ class Divestats
         $this->depthrange[4] = $divestatsother['Count'];
         $this->depthrange5_per = round(($this->depthrange[4] / $this->end) * 100);
 
-        $this->divecert = parse_mysql_query('brevetlist.sql');
+        $cert = parse_mysql_query('brevetlist.sql');
+        if (isset($cert[0])) {
+            $this->divecert = $cert;
+        } else {
+            $this->divecert[] = $cert;
+        }
         $this->number_cert = $globals['sql_num_rows'];
     }
 
@@ -5054,7 +5059,7 @@ class Divestats
                 $t->assign('cert_number', $_lang['cert_number']);
                 $t->assign('cert_instructor', $_lang['cert_instructor']);
 
-                for ($i = 0; $i < count($divecert); $i++) {
+                for ($i = 0; $i < $this->number_cert; $i++) {
                     if (isset($divecert[$i]['Brevet']) && ($divecert[$i]['Brevet'] != "")) {
                         $Brevet = $divecert[$i]['Brevet'];
                     } else {
