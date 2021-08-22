@@ -855,7 +855,7 @@ class Divelog
         $globals['logid'] = $this->result['ID'];
         $this->userdefined = parse_mysql_query('userdefined.sql');
         $count = $globals['sql_num_rows'];
-        if ($count == '0') {
+        if ($count == 0) {
             $this->userdefined_count = 0;
         } else {
             $this->userdefined_count = 1;
@@ -4028,7 +4028,12 @@ class Divecountry
         } else {
             $cpage = $this->requested_page;
         }
-        $paged_data = parse_mysql_query('', $countrylist_query);
+        $paged_data_temp = parse_mysql_query('', $countrylist_query);
+        if (isset($paged_data_temp[0])) {
+            $paged_data = $paged_data_temp;
+        } else {
+            $paged_data[] = $paged_data_temp;
+        }
         $t->assign('cells', $paged_data);
     }
 }
