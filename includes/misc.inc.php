@@ -27,7 +27,7 @@ global $_config;
 function htmlentities_array($arr = array())
 {
 	$rs =  array();
-	while (list($key, $val) = each($arr)) {
+	foreach ($arr as $key => $val) {
 		if (is_array($val)) {
 			$rs[$key] = htmlentities_array($val);
 		} else {
@@ -189,7 +189,7 @@ function parse_mysql_query($filename, $sql_query = 0, $debug = false)
 		$connection = mysqli_connect($server, $username, $password, $db);
 		/* change character set to utf8 */
 		if (!mysqli_set_charset($connection, "utf8")) {
-			printf("Error loading character set utf8: %s\n", mysqli_error($link));
+			printf("Error loading character set utf8: %s\n", mysqli_error($connection));
 			exit();
 		}
 		if (mysqli_connect_errno()) {
@@ -335,6 +335,17 @@ function is__writeable($filepath, $make_unwritable = true)
 		}
 	}
 	return false;
+}
+
+/**
+ * attempts to make the specified file read-only
+ *
+ * @var string
+ * @return boolean
+ */
+function set_unwritable($filepath)
+{
+	return @chmod($filepath, 0444);
 }
 
 /**
@@ -740,7 +751,7 @@ function reset_config_table_prefix()
  * 
  * @param mixed $arg 
  * @access public
- * @return void
+ * @return int
  */
 function count_all($arg)
 {
@@ -859,7 +870,7 @@ function distInvVincenty($lat1, $lon1, $lat2, $lon2)
 		$lambda = $L + (1 - $C) * $f * $sinAlpha * ($sigma + $C * $sinSigma * ($cos2SigmaM + $C * $cosSigma * $cos_sqrt));
 	}
 	if ($iterLimit == 0) {
-		return NaN;
+		return "NaN";
 	}
 	// formula failed to converge 
 
@@ -879,7 +890,7 @@ function distInvVincenty($lat1, $lon1, $lat2, $lon2)
 
 
 
-function base_url($atRoot = FALSE, $atCore = FALSE, $parse = FALSE)
+function 	($atRoot = FALSE, $atCore = FALSE, $parse = FALSE)
 {
 	if (isset($_SERVER['HTTP_HOST'])) {
 		$http = isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) !== 'off' ? 'https' : 'http';
