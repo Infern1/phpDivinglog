@@ -169,12 +169,7 @@ function sql_file($filename)
  */
 function parse_mysql_query($filename, $sql_query = 0, $debug = false)
 {
-	global $_config, $globals;
-	$username = $_config['database_username'];
-	$password = $_config['database_password'];
-	$server = $_config['database_server'];
-	$db = $_config['database_db'];
-
+	global $_config, $globals, $wpdb;
 	$globals['sql_num_rows'] = 0;
 	$result = array();
 	if (($sql_query)) {
@@ -186,34 +181,14 @@ function parse_mysql_query($filename, $sql_query = 0, $debug = false)
 		if ($debug == true) {
 			//    echo "query is: $query <br>";
 		}
-		$connection = mysqli_connect($server, $username, $password, $db);
 		/* change character set to utf8 */
-		if (!mysqli_set_charset($connection, "utf8")) {
-			printf("Error loading character set utf8: %s\n", mysqli_error($connection));
-			exit();
-		}
-		if (mysqli_connect_errno()) {
-			printf("Connect failed: %s\n", mysqli_connect_error());
-			exit();
-		}
-		$server_query = mysqli_query($connection,  $query);
-		if (mysqli_errno($connection)) {
-			echo "<hr>\n<b>MySQL error " . mysqli_errno($connection) . ": " . mysqli_error($connection) . "\n:</b><br>\n";
-			echo "Query: $query <br><hr>";
-			exit;
-		}
-		$globals['sql_num_rows'] = mysqli_affected_rows($connection);
+    $wpdb->set_charset($wpdb->dbh, "utf8");
+    $res = $wpdb->get_results($query,ARRAY_A );
+    $globals['sql_num_rows'] = $wpdb->num_rows; //mysqli_affected_rows($connection);
 		if ($globals['sql_num_rows'] == 1) {
-			$result = mysqli_fetch_assoc($server_query);
+      $result = $res[0];
 		} else {
-			for ($i = 0; $query_output = mysqli_fetch_assoc($server_query); $i++) {
-				foreach ($query_output as $key => $val) {
-					if (is_string($val)) {
-						$query_output[$key] = $val;
-					}
-				}
-				$result[$i] = $query_output;
-			}
+      $result = $res;
 		}
 	}
 	return $result;
@@ -890,7 +865,7 @@ function distInvVincenty($lat1, $lon1, $lat2, $lon2)
 
 
 
-function 	($atRoot = FALSE, $atCore = FALSE, $parse = FALSE)
+function base_url($atRoot = FALSE, $atCore = FALSE, $parse = FALSE)
 {
 	if (isset($_SERVER['HTTP_HOST'])) {
 		$http = isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) !== 'off' ? 'https' : 'http';

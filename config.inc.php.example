@@ -17,12 +17,6 @@ $_config['database_username'] = "divelog";
 $_config['database_password'] = "password";
 
 /**
- * Define the connection type use mysqli for php5 (check if mysqli is installed), otherwise enter mysql
- * The driver mysqli is not used everywhere (planned)
- */
-$_config['database_type'] = "mysqli";
-
-/**
  * Enter prefix for single user mode (for multi user see below) 
  */
 $_config['table_prefix'] = "DL_";

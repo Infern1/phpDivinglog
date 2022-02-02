@@ -190,5 +190,38 @@ if (($_config['embed_mode'])) {
  */
 $_config['debug'] = false;
 
+
+define('WP_DEBUG', false);
+define('WP_DEBUG_DISPLAY', false);
+
+/**
+ * Load the database class file and instantiate the `$wpdb` global.
+ *
+ * @since 2.5.0
+ *
+ * @global wpdb $wpdb WordPress database abstraction object.
+ */
+function require_wp_db() {
+	global $wpdb , $_config;
+  require  ABSPATH_DIVELOG  . DIRECTORY_SEPARATOR .  'includes/wp-db.php';
+
+	if ( isset( $wpdb ) ) {
+		return;
+	}
+
+  $username = $_config['database_username'];
+	$password = $_config['database_password'];
+	$server = $_config['database_server'];
+	$db = $_config['database_db'];
+
+
+	$wpdb = new wpdb( $username, $password, $db, $server );
+}
+
+global $wpdb;
+// Include the wpdb class and, if present, a db.php database drop-in.
+require_wp_db();
+
+
 ## GLOBALS:  $db, $t
 session_start();
