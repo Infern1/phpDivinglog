@@ -72,3 +72,99 @@ td {
     padding: 0.75rem;
   }
 }
+
+.dive-overview-panel {
+  background: linear-gradient(180deg, #0b2134, #102a3f);
+  border: 1px solid #1e3b54;
+  border-radius: 18px;
+  color: #d8e6f2;
+  padding: 1rem;
+  box-shadow: 0 14px 30px rgba(7, 16, 27, 0.35);
+}
+
+.dive-overview-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.dive-overview-head h2 {
+  margin: 0;
+  color: #f3f8fd;
+  font-size: 1.45rem;
+}
+
+.dive-overview-controls {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.dive-overview-controls input,
+.dive-overview-controls select {
+  border: 1px solid #2c5877;
+  background: #0e2a41;
+  color: #d9e8f4;
+  border-radius: 10px;
+  padding: 0.55rem 0.75rem;
+}
+
+.dives-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.dives-table thead th {
+  background: #102f49;
+  color: #71d6ff;
+  border-bottom: 1px solid #284d68;
+  font-weight: 700;
+  padding: 0.75rem 0.8rem;
+}
+
+.dives-table tbody td {
+  background: rgba(15, 42, 64, 0.76);
+  color: #dbebf8;
+  border-bottom: 1px solid #21445f;
+  padding: 0.75rem 0.8rem;
+}
+
+.dives-table tbody tr:hover td {
+  background: rgba(26, 63, 92, 0.9);
+}
+
+.dive-col-number a {
+  color: #43c4ff;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.dive-col-when strong,
+.dive-col-when small {
+  display: block;
+}
+
+.dive-col-when small {
+  color: #9ec1da;
+}
+
+@media (max-width: 900px) {
+  .dive-overview-head {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .dive-overview-controls {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .dives-table {
+    display: block;
+    overflow-x: auto;
+  }
+}

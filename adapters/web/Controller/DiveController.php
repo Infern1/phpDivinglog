@@ -42,12 +42,28 @@ final readonly class DiveController
     }
 
     /**
-     * @return array{numbers:list<int>}
+     * @return array{dives:list<array<string, mixed>>}
      */
     public function overview(int $limit = 20, int $offset = 0): array
     {
+        $rows = [];
+
+        foreach ($this->dives->listOverview($limit, $offset) as $overview) {
+            $rows[] = [
+                'number' => $overview['number'],
+                'date' => $this->formatter->formatDate($overview['date_time']),
+                'time' => $overview['date_time']->format('H:i'),
+                'depth' => number_format($this->converter->depthToDisplay($overview['depth']), 1, ',', ''),
+                'depth_value' => round($this->converter->depthToDisplay($overview['depth']), 2),
+                'depth_label' => $this->converter->depthLabel(),
+                'duration' => $overview['duration'],
+                'timestamp' => $overview['date_time']->getTimestamp(),
+                'location' => $overview['location'],
+            ];
+        }
+
         return [
-            'numbers' => $this->dives->listNumbers($limit, $offset),
+            'dives' => $rows,
         ];
     }
 

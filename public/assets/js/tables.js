@@ -26,4 +26,44 @@
     rows.forEach((row) => body.appendChild(row));
     table.dataset.sortAsc = asc ? 'true' : 'false';
   }
+
+  const diveTable = document.querySelector('[data-dives-table]');
+  if (!diveTable) {
+    return;
+  }
+
+  const body = diveTable.tBodies[0];
+  const searchInput = document.getElementById('dives-search');
+  const sortSelect = document.getElementById('dives-sort');
+
+  function applyDiveFilters() {
+    const rows = Array.from(body.querySelectorAll('tr'));
+    const search = (searchInput?.value || '').trim().toLowerCase();
+    const sort = sortSelect?.value || 'newest';
+
+    rows.sort((a, b) => {
+      const tsA = Number(a.dataset.ts || 0);
+      const tsB = Number(b.dataset.ts || 0);
+      const depthA = Number(a.dataset.depth || 0);
+      const depthB = Number(b.dataset.depth || 0);
+      const durationA = Number(a.dataset.duration || 0);
+      const durationB = Number(b.dataset.duration || 0);
+
+      if (sort === 'oldest') return tsA - tsB;
+      if (sort === 'deepest') return depthB - depthA;
+      if (sort === 'longest') return durationB - durationA;
+      return tsB - tsA;
+    });
+
+    rows.forEach((row) => {
+      const haystack = `${row.dataset.location || ''} ${row.dataset.number || ''}`.toLowerCase();
+      const visible = search === '' || haystack.includes(search);
+      row.style.display = visible ? '' : 'none';
+      body.appendChild(row);
+    });
+  }
+
+  searchInput?.addEventListener('input', applyDiveFilters);
+  sortSelect?.addEventListener('change', applyDiveFilters);
+  applyDiveFilters();
 })();

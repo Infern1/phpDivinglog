@@ -33,8 +33,9 @@ final class WebSmokeTest extends TestCase
         $response = $this->request('/');
 
         self::assertSame(200, $response['status']);
-        self::assertStringContainsString('Dives', $response['body']);
-        self::assertStringContainsString('Dive #1', $response['body']);
+        self::assertStringContainsString('dives', $response['body']);
+        self::assertStringContainsString('data-dives-table', $response['body']);
+        self::assertStringContainsString('Search location, number...', $response['body']);
     }
 
     public function testDiveDetailRendersContent(): void

@@ -47,6 +47,9 @@ final readonly class DiveRepository
                 'profile_interval_seconds' => isset($row['ProfileInt']) ? (int) $row['ProfileInt'] : null,
                 'shop_id' => isset($row['ShopID']) ? (int) $row['ShopID'] : null,
                 'trip_id' => isset($row['TripID']) ? (int) $row['TripID'] : null,
+                'place_name' => isset($row['Place']) ? (string) $row['Place'] : null,
+                'city_name' => isset($row['City']) ? (string) $row['City'] : null,
+                'country_name' => isset($row['Country']) ? (string) $row['Country'] : null,
             ]
         );
     }
@@ -63,6 +66,34 @@ final readonly class DiveRepository
         $statement->execute();
 
         return array_map(static fn (array $row): int => (int) $row['Number'], $statement->fetchAll());
+    }
+
+    /**
+     * @return list<array{number:int,date_time:DateTimeImmutable,depth:float,duration:int,location:string}>
+     */
+    public function listOverview(int $limit, int $offset): array
+    {
+        $sql = sprintf('SELECT * FROM %sLogbook ORDER BY Number DESC LIMIT :limit OFFSET :offset', $this->tablePrefix);
+        $statement = $this->pdo->prepare($sql);
+        $statement->bindValue(':limit', $limit, PDO::PARAM_INT);
+        $statement->bindValue(':offset', $offset, PDO::PARAM_INT);
+        $statement->execute();
+
+        return array_map(function (array $row): array {
+            $locationParts = array_values(array_filter([
+                isset($row['Place']) ? trim((string) $row['Place']) : '',
+                isset($row['City']) ? trim((string) $row['City']) : '',
+                isset($row['Country']) ? trim((string) $row['Country']) : '',
+            ], static fn (string $value): bool => $value !== ''));
+
+            return [
+                'number' => (int) ($row['Number'] ?? 0),
+                'date_time' => $this->mapDateTime($row),
+                'depth' => (float) ($row['Depth'] ?? 0.0),
+                'duration' => (int) ($row['Divetime'] ?? 0),
+                'location' => $locationParts !== [] ? implode(', ', $locationParts) : '-',
+            ];
+        }, $statement->fetchAll());
     }
 
     /**
@@ -98,6 +129,9 @@ final readonly class DiveRepository
                     'profile_interval_seconds' => isset($row['ProfileInt']) ? (int) $row['ProfileInt'] : null,
                     'shop_id' => isset($row['ShopID']) ? (int) $row['ShopID'] : null,
                     'trip_id' => isset($row['TripID']) ? (int) $row['TripID'] : null,
+                    'place_name' => isset($row['Place']) ? (string) $row['Place'] : null,
+                    'city_name' => isset($row['City']) ? (string) $row['City'] : null,
+                    'country_name' => isset($row['Country']) ? (string) $row['Country'] : null,
                 ]
             );
         }, $statement->fetchAll());

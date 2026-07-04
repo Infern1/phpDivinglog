@@ -1,10 +1,46 @@
 {% extends 'layout.html.twig' %}
 
 {% block content %}
-  <h2>Dives</h2>
-  <ul>
-    {% for number in numbers %}
-      <li><a href="/dives/{{ number }}">Dive #{{ number }}</a></li>
-    {% endfor %}
-  </ul>
+  <section class="dive-overview-panel">
+    <div class="dive-overview-head">
+      <h2>{{ dives|length }} dives</h2>
+      <div class="dive-overview-controls">
+        <input id="dives-search" type="search" placeholder="Search location, number..." aria-label="Search dives">
+        <select id="dives-sort" aria-label="Sort dives">
+          <option value="newest">Newest first</option>
+          <option value="oldest">Oldest first</option>
+          <option value="deepest">Deepest first</option>
+          <option value="longest">Longest duration</option>
+        </select>
+      </div>
+    </div>
+
+    <table class="dives-table" data-dives-table>
+      <thead>
+        <tr>
+          <th scope="col">Nr.</th>
+          <th scope="col">When</th>
+          <th scope="col">Location / Site</th>
+          <th scope="col">Depth</th>
+          <th scope="col">Duration</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for dive in dives %}
+          <tr data-number="{{ dive.number }}" data-location="{{ dive.location|lower }}" data-ts="{{ dive.timestamp }}" data-depth="{{ dive.depth_value }}" data-duration="{{ dive.duration }}">
+            <td class="dive-col-number"><a href="/dives/{{ dive.number }}">{{ dive.number }}</a></td>
+            <td class="dive-col-when">
+              <strong>{{ dive.date }}</strong>
+              <small>{{ dive.time }}</small>
+            </td>
+            <td>{{ dive.location }}</td>
+            <td>{{ dive.depth }} {{ dive.depth_label }}</td>
+            <td>{{ dive.duration }} min</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </section>
+
+  <script src="/assets/js/tables.js" defer></script>
 {% endblock %}
