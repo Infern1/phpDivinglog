@@ -105,6 +105,21 @@ final readonly class DiveController
         $shop = is_int($shopId) && $shopId > 0 ? $this->shops->findById($shopId) : null;
         $trip = is_int($tripId) && $tripId > 0 ? $this->trips->findById($tripId) : null;
 
+        $logbookDives = array_map(
+            function (array $overview) use ($dive): array {
+                return [
+                    'number' => $overview['number'],
+                    'date' => $this->formatter->formatDate($overview['date_time']),
+                    'depth' => number_format($this->converter->depthToDisplay($overview['depth']), 1, ',', ''),
+                    'depth_label' => $this->converter->depthLabel(),
+                    'duration' => $overview['duration'],
+                    'location' => $overview['location'],
+                    'active' => $overview['number'] === $dive->number,
+                ];
+            },
+            $this->dives->listOverview(200, 0)
+        );
+
         return [
             'dive' => $dive,
             'depth_display' => $this->converter->depthToDisplay($dive->depthMax),
@@ -122,6 +137,9 @@ final readonly class DiveController
             'pictures' => $pictures,
             'tanks' => $tanks,
             'user_defined' => $this->userDefined->findByLogId($dive->logId),
+            'previous_dive_number' => $this->dives->findPreviousNumber($dive->number),
+            'next_dive_number' => $this->dives->findNextNumber($dive->number),
+            'logbook_dives' => $logbookDives,
         ];
     }
 }

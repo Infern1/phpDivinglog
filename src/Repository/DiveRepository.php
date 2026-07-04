@@ -104,6 +104,28 @@ final readonly class DiveRepository
         return is_array($row) ? (int) ($row['DiveCount'] ?? 0) : 0;
     }
 
+    public function findPreviousNumber(int $number): ?int
+    {
+        $sql = sprintf('SELECT Number FROM %sLogbook WHERE Number < :number ORDER BY Number DESC LIMIT 1', $this->tablePrefix);
+        $statement = $this->pdo->prepare($sql);
+        $statement->bindValue(':number', $number, PDO::PARAM_INT);
+        $statement->execute();
+        $row = $statement->fetch();
+
+        return is_array($row) ? (int) ($row['Number'] ?? 0) : null;
+    }
+
+    public function findNextNumber(int $number): ?int
+    {
+        $sql = sprintf('SELECT Number FROM %sLogbook WHERE Number > :number ORDER BY Number ASC LIMIT 1', $this->tablePrefix);
+        $statement = $this->pdo->prepare($sql);
+        $statement->bindValue(':number', $number, PDO::PARAM_INT);
+        $statement->execute();
+        $row = $statement->fetch();
+
+        return is_array($row) ? (int) ($row['Number'] ?? 0) : null;
+    }
+
     /**
      * @return list<Dive>
      */

@@ -146,6 +146,7 @@
       ctx.fillRect(0, 0, width, height);
 
       drawGrid();
+      drawSurfaceLine();
       drawAxes();
       drawSeries();
 
@@ -189,6 +190,26 @@
         ctx.fillStyle = '#647584';
         ctx.fillText(formatValue(value), 12, y + 4);
       });
+    }
+
+    function drawSurfaceLine() {
+      if (!config.invertY) {
+        return;
+      }
+
+      const y = yToPx(0);
+      ctx.save();
+      ctx.strokeStyle = '#86a9c3';
+      ctx.lineWidth = 1.2;
+      ctx.beginPath();
+      ctx.moveTo(padding.left, y);
+      ctx.lineTo(width - padding.right, y);
+      ctx.stroke();
+
+      ctx.fillStyle = '#3f647c';
+      ctx.font = '11px sans-serif';
+      ctx.fillText('Surface (0 m)', padding.left + 8, y + 14);
+      ctx.restore();
     }
 
     function drawSeries() {
