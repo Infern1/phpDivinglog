@@ -15,6 +15,8 @@
       </div>
     </div>
 
+    {% include 'partials/pagination.html.twig' with { pages: pages, currentPage: currentPage } %}
+
     <table class="dives-table" data-dives-table>
       <thead>
         <tr>
