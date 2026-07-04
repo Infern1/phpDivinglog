@@ -31,6 +31,22 @@ Quick Start
 - DB_DSN and DB_USER (preferred), or
 - DB_HOST, DB_PORT, DB_NAME, DB_USER, DB_PASSWORD
 
+`DB_DSN` examples:
+
+- TCP connection:
+
+  `DB_DSN="mysql:host=127.0.0.1;port=3306;dbname=divelog;charset=utf8mb4"`
+
+- Unix socket connection:
+
+  `DB_DSN="mysql:unix_socket=/var/run/mysqld/mysqld.sock;dbname=divelog;charset=utf8mb4"`
+
+Notes:
+
+- Keep `charset=utf8mb4` in DSN.
+- If `DB_DSN` is empty, the app builds it from `DB_HOST` + `DB_PORT` + `DB_NAME`.
+- `DB_USER` is always required.
+
 4) Ensure writable runtime directories
 
 - var/cache

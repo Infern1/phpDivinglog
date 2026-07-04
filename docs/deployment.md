@@ -23,6 +23,15 @@ This project supports both:
 2. Set database settings:
    - `DB_DSN` and `DB_USER` (preferred), or
    - `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`.
+
+`DB_DSN` format examples:
+
+- TCP:
+  - `mysql:host=127.0.0.1;port=3306;dbname=divelog;charset=utf8mb4`
+- Unix socket:
+  - `mysql:unix_socket=/var/run/mysqld/mysqld.sock;dbname=divelog;charset=utf8mb4`
+
+If `DB_DSN` is empty, the app builds DSN from `DB_HOST`, `DB_PORT`, and `DB_NAME`.
 3. Keep secrets out of VCS (`.env` is git-ignored).
 4. Set routing mode:
    - `APP_QUERY_STRING=false` for rewritten pretty URLs (recommended),

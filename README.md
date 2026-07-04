@@ -63,6 +63,11 @@ Important keys:
 
 Complete option list: `.env.example`.
 
+`DB_DSN` quick examples:
+
+- `mysql:host=127.0.0.1;port=3306;dbname=divelog;charset=utf8mb4`
+- `mysql:unix_socket=/var/run/mysqld/mysqld.sock;dbname=divelog;charset=utf8mb4`
+
 ## Entry points
 
 - Web UI: `public/index.php`
