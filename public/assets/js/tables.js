@@ -63,35 +63,75 @@
 
   const logbookPane = document.querySelector('[data-logbook-pane]');
   if (logbookPane instanceof HTMLElement) {
-    const storageKey = 'divelog:logbook-scroll-top';
+    const scrollKey = 'divelog:logbook-scroll-top';
+    const selectedKey = 'divelog:logbook-selected-dive';
 
-    const restoreScroll = () => {
-      const stored = window.sessionStorage.getItem(storageKey);
-      if (!stored) {
-        return;
-      }
-
-      const value = Number(stored);
-      if (Number.isFinite(value) && value >= 0) {
-        logbookPane.scrollTop = value;
+    const persistState = (selectedDive) => {
+      window.sessionStorage.setItem(scrollKey, String(logbookPane.scrollTop));
+      if (selectedDive) {
+        window.sessionStorage.setItem(selectedKey, selectedDive);
       }
     };
 
-    restoreScroll();
+    const restoreScroll = () => {
+      const stored = window.sessionStorage.getItem(scrollKey);
+      if (!stored) {
+        return false;
+      }
+
+      const value = Number(stored);
+      if (!Number.isFinite(value) || value < 0) {
+        return false;
+      }
+
+      logbookPane.scrollTop = value;
+      return true;
+    };
+
+    const selectedDive = window.sessionStorage.getItem(selectedKey);
+    const selectedItem = selectedDive
+      ? logbookPane.querySelector(`[data-dive-number="${selectedDive}"]`)
+      : null;
+
+    if (selectedItem instanceof HTMLElement) {
+      selectedItem.scrollIntoView({ block: 'center' });
+      requestAnimationFrame(() => {
+        persistState(selectedDive);
+      });
+    } else {
+      const restored = restoreScroll();
+      requestAnimationFrame(() => {
+        restoreScroll();
+        if (!restored) {
+          const activeItem = logbookPane.querySelector('.logbook-item.is-active');
+          if (activeItem instanceof HTMLElement) {
+            activeItem.scrollIntoView({ block: 'center' });
+          }
+        }
+      });
+      window.setTimeout(() => {
+        restoreScroll();
+      }, 120);
+    }
 
     logbookPane.addEventListener('scroll', () => {
-      window.sessionStorage.setItem(storageKey, String(logbookPane.scrollTop));
+      persistState();
     }, { passive: true });
 
     const links = logbookPane.querySelectorAll('[data-logbook-link]');
     links.forEach((link) => {
       link.addEventListener('click', () => {
-        window.sessionStorage.setItem(storageKey, String(logbookPane.scrollTop));
+        const selectedDive = link.closest('[data-dive-number]')?.getAttribute('data-dive-number') || undefined;
+        persistState(selectedDive);
       });
     });
 
     window.addEventListener('beforeunload', () => {
-      window.sessionStorage.setItem(storageKey, String(logbookPane.scrollTop));
+      persistState();
+    });
+
+    window.addEventListener('pagehide', () => {
+      persistState();
     });
   }
 })();
