@@ -36,6 +36,9 @@ final class WebSmokeTest extends TestCase
         self::assertStringContainsString('dives', $response['body']);
         self::assertStringContainsString('data-dives-table', $response['body']);
         self::assertStringContainsString('Search location, number...', $response['body']);
+        self::assertStringContainsString('name="q"', $response['body']);
+        self::assertStringContainsString('name="sort"', $response['body']);
+        self::assertStringContainsString('Apply', $response['body']);
     }
 
     public function testDiveDetailRendersContent(): void
@@ -44,7 +47,11 @@ final class WebSmokeTest extends TestCase
 
         self::assertSame(200, $response['status']);
         self::assertStringContainsString('Dive #1', $response['body']);
-        self::assertStringContainsString('Depth:', $response['body']);
+        self::assertStringContainsString('dive-hero-wide', $response['body']);
+        self::assertStringContainsString('Depth', $response['body']);
+        self::assertStringContainsString('Duration', $response['body']);
+        self::assertStringContainsString('Temp', $response['body']);
+        self::assertStringContainsString('Visibility', $response['body']);
         self::assertStringContainsString('Dive site:', $response['body']);
         self::assertStringContainsString('Blue Hole', $response['body']);
         self::assertStringContainsString('Ocean Dive Center', $response['body']);
@@ -57,8 +64,8 @@ final class WebSmokeTest extends TestCase
         self::assertStringContainsString('data-profile-live="rate"', $response['body']);
         self::assertStringContainsString('Logbook', $response['body']);
         self::assertStringContainsString('data-logbook-list', $response['body']);
-        self::assertStringContainsString('Previous dive', $response['body']);
-        self::assertStringContainsString('Next dive', $response['body']);
+        self::assertStringContainsString('dive-sequence-nav-top', $response['body']);
+        self::assertStringContainsString('aria-label="Next dive"', $response['body']);
         self::assertStringContainsString('/assets/js/profile-chart.js', $response['body']);
     }
 

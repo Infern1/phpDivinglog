@@ -44,13 +44,21 @@ final readonly class DiveController
     /**
      * @return array{dives:list<array<string, mixed>>}
      */
-    public function overview(int $page = 1, int $limit = 20): array
+    public function overview(int $page = 1, int $limit = 20, string $search = '', string $sort = 'newest'): array
     {
         $page = max(1, $page);
+        $search = trim($search);
+        $sort = in_array($sort, ['newest', 'oldest', 'deepest', 'longest'], true) ? $sort : 'newest';
+        $total = $this->dives->countAll($search);
+        $pages = max(1, (int) ceil($total / $limit));
+        if ($page > $pages) {
+            $page = $pages;
+        }
+
         $offset = ($page - 1) * $limit;
         $rows = [];
 
-        foreach ($this->dives->listOverview($limit, $offset) as $overview) {
+        foreach ($this->dives->listOverview($limit, $offset, $search, $sort) as $overview) {
             $rows[] = [
                 'number' => $overview['number'],
                 'date' => $this->formatter->formatDate($overview['date_time']),
@@ -64,13 +72,13 @@ final readonly class DiveController
             ];
         }
 
-        $total = $this->dives->countAll();
-        $pages = max(1, (int) ceil($total / $limit));
-
         return [
             'dives' => $rows,
             'currentPage' => $page,
             'pages' => $pages,
+            'search' => $search,
+            'sort' => $sort,
+            'totalDives' => $total,
         ];
     }
 
@@ -105,6 +113,31 @@ final readonly class DiveController
         $shop = is_int($shopId) && $shopId > 0 ? $this->shops->findById($shopId) : null;
         $trip = is_int($tripId) && $tripId > 0 ? $this->trips->findById($tripId) : null;
 
+        $relatedSiteName = $site?->name;
+        if (($relatedSiteName === null || $relatedSiteName === '') && is_string($dive->extra['place_name'] ?? null)) {
+            $relatedSiteName = trim((string) $dive->extra['place_name']);
+        }
+
+        $relatedCityName = $city?->name;
+        if (($relatedCityName === null || $relatedCityName === '') && is_string($dive->extra['city_name'] ?? null)) {
+            $relatedCityName = trim((string) $dive->extra['city_name']);
+        }
+
+        $relatedCountryName = $country?->name;
+        if (($relatedCountryName === null || $relatedCountryName === '') && is_string($dive->extra['country_name'] ?? null)) {
+            $relatedCountryName = trim((string) $dive->extra['country_name']);
+        }
+
+        $relatedShopName = $shop?->name;
+        if (($relatedShopName === null || $relatedShopName === '') && is_string($dive->extra['shop_name'] ?? null)) {
+            $relatedShopName = trim((string) $dive->extra['shop_name']);
+        }
+
+        $relatedTripName = $trip?->name;
+        if (($relatedTripName === null || $relatedTripName === '') && is_string($dive->extra['trip_name'] ?? null)) {
+            $relatedTripName = trim((string) $dive->extra['trip_name']);
+        }
+
         $logbookDives = array_map(
             function (array $overview) use ($dive): array {
                 return [
@@ -120,11 +153,34 @@ final readonly class DiveController
             $this->dives->listOverview(200, 0)
         );
 
+        $userDefined = $this->userDefined->findByLogId($dive->logId);
+        $visibilityDisplay = '-';
+        foreach ($userDefined as $field) {
+            if (strtolower($field->name) === 'visibility' && $field->value !== null && trim($field->value) !== '') {
+                $visibilityDisplay = trim($field->value);
+                break;
+            }
+        }
+
+        $locationParts = array_values(array_filter([$relatedCityName, $relatedCountryName], static fn (?string $value): bool => $value !== null && $value !== ''));
+        $locationDisplay = $locationParts !== [] ? implode(', ', $locationParts) : '-';
+        $startTime = $dive->dateTime->format('H:i');
+        $endTime = $dive->dateTime->modify(sprintf('+%d minutes', $dive->durationMinutes))->format('H:i');
+        $durationHours = intdiv($dive->durationMinutes, 60);
+        $durationRemainderMinutes = $dive->durationMinutes % 60;
+
         return [
             'dive' => $dive,
             'depth_display' => $this->converter->depthToDisplay($dive->depthMax),
             'depth_label' => $this->converter->depthLabel(),
             'date_display' => $this->formatter->formatDate($dive->dateTime),
+            'location_display' => $locationDisplay,
+            'start_time_display' => $startTime,
+            'end_time_display' => $endTime,
+            'duration_hours' => $durationHours,
+            'duration_minutes' => $durationRemainderMinutes,
+            'temperature_display' => $dive->waterTemp !== null ? $this->formatter->formatDecimal($dive->waterTemp, 0) . '°C' : '-',
+            'visibility_display' => $visibilityDisplay,
             'average_depth_display' => $metrics['averageDepthDisplay'],
             'sac_display' => $metrics['sacDisplay'],
             'dive_site' => $site,
@@ -132,11 +188,16 @@ final readonly class DiveController
             'dive_city' => $city,
             'dive_shop' => $shop,
             'dive_trip' => $trip,
+            'related_site_name' => $relatedSiteName,
+            'related_country_name' => $relatedCountryName,
+            'related_city_name' => $relatedCityName,
+            'related_shop_name' => $relatedShopName,
+            'related_trip_name' => $relatedTripName,
             'comment_html' => $this->rtf->toHtml((string) $dive->commentRtf),
             'buddies' => $this->buddies->findByIds($dive->buddyIds),
             'pictures' => $pictures,
             'tanks' => $tanks,
-            'user_defined' => $this->userDefined->findByLogId($dive->logId),
+            'user_defined' => $userDefined,
             'previous_dive_number' => $this->dives->findPreviousNumber($dive->number),
             'next_dive_number' => $this->dives->findNextNumber($dive->number),
             'logbook_dives' => $logbookDives,

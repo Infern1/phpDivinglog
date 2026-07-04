@@ -19,7 +19,7 @@ header,
 nav,
 main,
 footer {
-  max-width: 1000px;
+  max-width: 1360px;
   margin: 0 auto;
   padding: 1rem;
 }
@@ -102,12 +102,20 @@ td {
 }
 
 .dive-overview-controls input,
-.dive-overview-controls select {
+.dive-overview-controls select,
+.dive-overview-controls button {
   border: 1px solid #b8d0c5;
   background: #ffffff;
   color: #2b4a40;
   border-radius: 10px;
   padding: 0.55rem 0.75rem;
+}
+
+.dive-overview-controls button {
+  cursor: pointer;
+  background: #e6f1ec;
+  border-color: #a7c5b8;
+  font-weight: 600;
 }
 
 .dives-table {
@@ -209,14 +217,41 @@ td {
   padding: 1rem 1.2rem;
 }
 
+.dive-hero-wide {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.dive-hero-top {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.dive-hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.dive-hero-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
 .dive-hero h2 {
   margin: 0;
-  font-size: 1.6rem;
+  font-size: 2rem;
+  text-transform: uppercase;
 }
 
 .dive-hero p {
   margin: 0.2rem 0 0;
-  color: #6b8f82;
+  color: #4f7065;
 }
 
 .dive-hero-badge {
@@ -235,11 +270,31 @@ td {
   gap: 0.8rem;
 }
 
+.dive-metric-grid-hero {
+  width: 100%;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0;
+  border-top: 1px solid #d4e3dc;
+  padding-top: 0.75rem;
+}
+
 .dive-metric-card {
   background: #ffffff;
   border: 1px solid #d3e4dc;
   border-radius: 12px;
   padding: 0.8rem;
+}
+
+.dive-metric-card-hero {
+  border: 0;
+  border-right: 1px solid #d8e6e0;
+  border-radius: 0;
+  background: transparent;
+  padding: 0.25rem 0.8rem;
+}
+
+.dive-metric-card-hero:last-child {
+  border-right: 0;
 }
 
 .dive-metric-card h4 {
@@ -279,6 +334,23 @@ td {
   justify-content: space-between;
   gap: 0.5rem;
   margin-bottom: 0.8rem;
+}
+
+.dive-sequence-nav-top {
+  margin-bottom: 0;
+}
+
+.dive-sequence-nav-top .dive-sequence-link {
+  min-width: 42px;
+  min-height: 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #bcd2c9;
+  border-radius: 12px;
+  background: #e8f2ed;
+  font-size: 1.15rem;
+  line-height: 1;
 }
 
 .dive-sequence-link {
@@ -417,6 +489,23 @@ td {
     grid-template-columns: 1fr;
   }
 
+  .dive-metric-grid-hero {
+    grid-template-columns: 1fr;
+    gap: 0.3rem;
+    border-top: 0;
+    padding-top: 0;
+  }
+
+  .dive-metric-card-hero {
+    border-right: 0;
+    border-bottom: 1px solid #d8e6e0;
+    padding: 0.5rem 0;
+  }
+
+  .dive-metric-card-hero:last-child {
+    border-bottom: 0;
+  }
+
   .dive-detail-grid {
     grid-template-columns: 1fr;
   }
@@ -424,6 +513,25 @@ td {
   .dive-sequence-nav {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .dive-sequence-nav-top {
+    flex-direction: row;
+  }
+
+  .dive-hero-top,
+  .dive-hero-title-wrap {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .dive-hero-actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .dive-hero h2 {
+    font-size: 1.6rem;
   }
 
   .dive-hero {

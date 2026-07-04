@@ -71,10 +71,26 @@ final readonly class DiveRepository
     /**
      * @return list<array{number:int,date_time:DateTimeImmutable,depth:float,duration:int,location:string}>
      */
-    public function listOverview(int $limit, int $offset): array
+    public function listOverview(int $limit, int $offset, string $search = '', string $sort = 'newest'): array
     {
-        $sql = sprintf('SELECT * FROM %sLogbook ORDER BY Number DESC LIMIT :limit OFFSET :offset', $this->tablePrefix);
+        $search = trim($search);
+        $where = '';
+        if ($search !== '') {
+            $where = "WHERE (Number LIKE :search OR COALESCE(Place, '') LIKE :search OR COALESCE(City, '') LIKE :search OR COALESCE(Country, '') LIKE :search)";
+        }
+
+        $orderBy = match ($sort) {
+            'oldest' => 'ORDER BY Number ASC',
+            'deepest' => 'ORDER BY Depth DESC, Number DESC',
+            'longest' => 'ORDER BY Divetime DESC, Number DESC',
+            default => 'ORDER BY Number DESC',
+        };
+
+        $sql = sprintf('SELECT * FROM %sLogbook %s %s LIMIT :limit OFFSET :offset', $this->tablePrefix, $where, $orderBy);
         $statement = $this->pdo->prepare($sql);
+        if ($search !== '') {
+            $statement->bindValue(':search', '%' . $search . '%');
+        }
         $statement->bindValue(':limit', $limit, PDO::PARAM_INT);
         $statement->bindValue(':offset', $offset, PDO::PARAM_INT);
         $statement->execute();
@@ -96,10 +112,21 @@ final readonly class DiveRepository
         }, $statement->fetchAll());
     }
 
-    public function countAll(): int
+    public function countAll(string $search = ''): int
     {
-        $sql = sprintf('SELECT COUNT(*) AS DiveCount FROM %sLogbook', $this->tablePrefix);
-        $row = $this->pdo->query($sql)->fetch();
+        $search = trim($search);
+        $where = '';
+        if ($search !== '') {
+            $where = "WHERE (Number LIKE :search OR COALESCE(Place, '') LIKE :search OR COALESCE(City, '') LIKE :search OR COALESCE(Country, '') LIKE :search)";
+        }
+
+        $sql = sprintf('SELECT COUNT(*) AS DiveCount FROM %sLogbook %s', $this->tablePrefix, $where);
+        $statement = $this->pdo->prepare($sql);
+        if ($search !== '') {
+            $statement->bindValue(':search', '%' . $search . '%');
+        }
+        $statement->execute();
+        $row = $statement->fetch();
 
         return is_array($row) ? (int) ($row['DiveCount'] ?? 0) : 0;
     }

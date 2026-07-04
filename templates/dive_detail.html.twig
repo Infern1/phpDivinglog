@@ -2,46 +2,60 @@
 
 {% block content %}
   <section class="dive-detail-page">
-    <header class="dive-hero">
-      <div class="dive-hero-badge">Dive #{{ dive.number }}</div>
-      <div>
-        <h2>Dive #{{ dive.number }}</h2>
-        <p>{{ date_display }} · {{ dive.durationMinutes }} min</p>
-      </div>
-    </header>
+    <header class="dive-hero dive-hero-wide">
+      <div class="dive-hero-top">
+        <div class="dive-hero-title-wrap">
+          <div class="dive-hero-badge">Dive #{{ dive.number }}</div>
+          <div>
+            <h2>{{ related_site_name ?: ('Dive #' ~ dive.number) }}</h2>
+            <p>{{ location_display }} · {{ date_display }} · {{ start_time_display }} - {{ end_time_display }}</p>
+          </div>
+        </div>
 
-    <section class="dive-metric-grid">
-      <article class="dive-metric-card">
-        <h4>Depth:</h4>
-        <p>{{ depth_display }} {{ depth_label }}</p>
-      </article>
-      <article class="dive-metric-card">
-        <h4>Average depth</h4>
-        <p>{{ average_depth_display }}</p>
-      </article>
-      <article class="dive-metric-card">
-        <h4>SAC</h4>
-        <p>{{ sac_display }}</p>
-      </article>
-    </section>
+        <div class="dive-hero-actions">
+          <nav class="dive-sequence-nav dive-sequence-nav-top" aria-label="Dive sequence navigation">
+            {% if previous_dive_number %}
+              <a href="/dives/{{ previous_dive_number }}" class="dive-sequence-link" aria-label="Previous dive">←</a>
+            {% else %}
+              <span class="dive-sequence-link is-disabled" aria-disabled="true">←</span>
+            {% endif %}
+            {% if next_dive_number %}
+              <a href="/dives/{{ next_dive_number }}" class="dive-sequence-link" aria-label="Next dive">→</a>
+            {% else %}
+              <span class="dive-sequence-link is-disabled" aria-disabled="true">→</span>
+            {% endif %}
+          </nav>
+        </div>
+      </div>
+
+      <section class="dive-metric-grid dive-metric-grid-hero" aria-label="Dive summary metrics">
+        <article class="dive-metric-card dive-metric-card-hero">
+          <h4>Depth</h4>
+          <p>{{ depth_display }} {{ depth_label }}</p>
+        </article>
+        <article class="dive-metric-card dive-metric-card-hero">
+          <h4>Duration</h4>
+          <p>{{ duration_hours }}h {{ duration_minutes }}m</p>
+        </article>
+        <article class="dive-metric-card dive-metric-card-hero">
+          <h4>Temp</h4>
+          <p>{{ temperature_display }}</p>
+        </article>
+        <article class="dive-metric-card dive-metric-card-hero">
+          <h4>Visibility</h4>
+          <p>{{ visibility_display }}</p>
+        </article>
+        <article class="dive-metric-card dive-metric-card-hero">
+          <h4>SAC</h4>
+          <p>{{ sac_display }}</p>
+        </article>
+      </section>
+    </header>
 
     <section class="dive-layout-grid" data-detail-layout>
       <aside class="dive-logbook-column">
         <article class="dive-panel dive-logbook-panel">
           <h3>Logbook</h3>
-          <nav class="dive-sequence-nav" aria-label="Dive sequence navigation">
-            {% if previous_dive_number %}
-              <a href="/dives/{{ previous_dive_number }}" class="dive-sequence-link">← Previous dive</a>
-            {% else %}
-              <span class="dive-sequence-link is-disabled" aria-disabled="true">← Previous dive</span>
-            {% endif %}
-            {% if next_dive_number %}
-              <a href="/dives/{{ next_dive_number }}" class="dive-sequence-link">Next dive →</a>
-            {% else %}
-              <span class="dive-sequence-link is-disabled" aria-disabled="true">Next dive →</span>
-            {% endif %}
-          </nav>
-
           <ul class="logbook-list" data-logbook-list>
             {% for entry in logbook_dives %}
               <li class="logbook-item{% if entry.active %} is-active{% endif %}">
@@ -99,6 +113,8 @@
                   <dd>
                     {% if dive_site %}
                       <a href="/sites/{{ dive_site.id }}">{{ dive_site.name }}</a>
+                    {% elseif related_site_name %}
+                      {{ related_site_name }}
                     {% else %}
                       -
                     {% endif %}
@@ -109,6 +125,8 @@
                   <dd>
                     {% if dive_city %}
                       <a href="/cities/{{ dive_city.id }}">{{ dive_city.name }}</a>
+                    {% elseif related_city_name %}
+                      {{ related_city_name }}
                     {% else %}
                       -
                     {% endif %}
@@ -119,6 +137,8 @@
                   <dd>
                     {% if dive_country %}
                       <a href="/countries/{{ dive_country.id }}">{{ dive_country.name }}</a>
+                    {% elseif related_country_name %}
+                      {{ related_country_name }}
                     {% else %}
                       -
                     {% endif %}
@@ -129,6 +149,8 @@
                   <dd>
                     {% if dive_shop %}
                       <a href="/shops/{{ dive_shop.id }}">{{ dive_shop.name }}</a>
+                    {% elseif related_shop_name %}
+                      {{ related_shop_name }}
                     {% else %}
                       -
                     {% endif %}
@@ -139,6 +161,8 @@
                   <dd>
                     {% if dive_trip %}
                       <a href="/trips/{{ dive_trip.id }}">{{ dive_trip.name }}</a>
+                    {% elseif related_trip_name %}
+                      {{ related_trip_name }}
                     {% else %}
                       -
                     {% endif %}

@@ -3,19 +3,20 @@
 {% block content %}
   <section class="dive-overview-panel">
     <div class="dive-overview-head">
-      <h2>{{ dives|length }} dives</h2>
-      <div class="dive-overview-controls">
-        <input id="dives-search" type="search" placeholder="Search location, number..." aria-label="Search dives">
-        <select id="dives-sort" aria-label="Sort dives">
-          <option value="newest">Newest first</option>
-          <option value="oldest">Oldest first</option>
-          <option value="deepest">Deepest first</option>
-          <option value="longest">Longest duration</option>
+      <h2>{{ totalDives }} dives</h2>
+      <form class="dive-overview-controls" method="get" action="/">
+        <input id="dives-search" name="q" type="search" placeholder="Search location, number..." aria-label="Search dives" value="{{ search }}">
+        <select id="dives-sort" name="sort" aria-label="Sort dives">
+          <option value="newest"{% if sort == 'newest' %} selected{% endif %}>Newest first</option>
+          <option value="oldest"{% if sort == 'oldest' %} selected{% endif %}>Oldest first</option>
+          <option value="deepest"{% if sort == 'deepest' %} selected{% endif %}>Deepest first</option>
+          <option value="longest"{% if sort == 'longest' %} selected{% endif %}>Longest duration</option>
         </select>
-      </div>
+        <button type="submit">Apply</button>
+      </form>
     </div>
 
-    {% include 'partials/pagination.html.twig' with { pages: pages, currentPage: currentPage } %}
+    {% include 'partials/pagination.html.twig' with { pages: pages, currentPage: currentPage, search: search, sort: sort } %}
 
     <table class="dives-table" data-dives-table>
       <thead>
@@ -43,7 +44,7 @@
       </tbody>
     </table>
 
-    {% include 'partials/pagination.html.twig' with { pages: pages, currentPage: currentPage } %}
+    {% include 'partials/pagination.html.twig' with { pages: pages, currentPage: currentPage, search: search, sort: sort } %}
   </section>
 
   <script src="/assets/js/tables.js" defer></script>
