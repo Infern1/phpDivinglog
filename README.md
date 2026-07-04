@@ -24,6 +24,8 @@ For local test coverage parity:
 
 ## Installation
 
+For a concise setup checklist, see `INSTALL`.
+
 1. Install dependencies:
 
    `composer install`
