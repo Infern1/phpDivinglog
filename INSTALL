@@ -1,132 +1,53 @@
-INSTALLATION:
+phpDivingLog Installation
+=========================
 
-	Sorry, there is no installer. It is a manual process.
+This project now runs as a modernized PHP application with a Twig web adapter
+and a JSON API adapter.
 
+Requirements
+------------
 
-	THE BASICS
+- PHP 8.3+
+- Extensions: pdo, pdo_mysql, mbstring, json
+- Composer 2+
 
-	Do you have FTP software? You will need a decent FTP software
-	package to transfer files back and forth from your computer.
+Optional for local test parity:
 
-	Do you have a good Text Editor? You will nedd one to modify
-	some of the phpDivingLog files during installation, plus the 
-	MySQL Dump file you load into your web MySQL database.
+- pdo_sqlite
 
-	Do you have access to your web host Control Panel, or some 
-	other way to create a MySQL database and user? If not, you
-	may have to ask tour web host to do that for you.
+Quick Start
+-----------
 
-	Do you have access to phpMyAdmin, or some other way to
-	load data into a MySQL database?
+1) Install dependencies
 
+   composer install
 
-	BEGIN INSTALLATION
+2) Create runtime config
 
-1.	Create a MySQL database on your server, e.g. YOURNAME_divelog.
-	Create or assign a MySQL database username and password to the database
-	with ALL privileges.
+   cp .env.example .env
 
-2.	Edit the file config.inc.php and replace the values for...
-// database information
-$_config['database_server'] = "localhost";
-$_config['database_db'] = "your_database";
-$_config['database_username'] = "your_username";
-$_config['database_password'] = "your_password";
-	with the appropriate values for your database.
+3) Configure database settings in .env
 
-3.	If you are planning to use a language file other than
-	includes/languages/english.inc.php, then you will
-	also need to specify the language in the configuration file
-	includes/config.inc.php by changing the value for...
-// language setting determines which language file is used
-$_config['language'] = "english";
+- DB_DSN and DB_USER (preferred), or
+- DB_HOST, DB_PORT, DB_NAME, DB_USER, DB_PASSWORD
 
-4.	If you wish to have values display with imperial units values
-	instead of metric ones, you will need to edit the 'Unit Conversion'
-	values in the includes/config.inc.php file.
-	Set values to true if you want to convert from metric units 
-	to imperial units, or to false if values should be left as metric units. 
+4) Ensure writable runtime directories
 
-5.	You can change the templates in the tpl/ directory. Here you can
-	change phpDivinglog into your own taste.
+- var/cache
+- var/log
 
-6.	You can change the styles used to display values by
-	editing the CSS file includes/divelog.css.
+5) Configure your web server front controller routing
 
-7.	You may need to edit the file 
-	includes/jpgraph/src/jpg-config.inc
-	to set the cache and font directory values. 
+- public/index.php (web UI)
+- public/api.php (JSON API)
 
-	The files includes/jpgraph/src/jpg-config.inc and 
-        includes/jpgraph/src/jpg-config-linux.inc already
-	have the values used sucessfully on Linux based systems.
-DEFINE("CACHE_DIR","/tmp/jpgraph_cache/");
-DEFINE("TTF_DIR","includes/jpgraph/fonts/");
-DEFINE("MBTTF_DIR","includes/jpgraph/fonts/");
+For full deployment details and server examples, see:
 
-	The file includes/jpgraph/src/jpg-config-windows.inc 
-	has the values used on a Windows platform.
+- docs/deployment.md
 
-8.	Upload, via FTP, all of the files into a directory on 
-	your server. Example: /divelog. If you know your location
-	change config.inc.php according:
-    /**
-     * change this to your website url
-     */
-    $_config['web_root']        = 'http://www.mydivesite.com/divelog'; 
-    /**
-     * Your path where divelog is located
-     * EXAMPLE: http://www.foo.com/users/j/jo/john
-     * abs_url_path = /users/j/jo/john
-     * Nothing todo where phpdivinglog is installed on your harddrive!
-     */
-    $_config['abs_url_path']    = '/divelog'; 
+Quality Gate
+------------
 
-	Each web host has his/her own preference in naming 
-	folders for use in running a website.
-	You can have many files that don't even get shown to 
-	the public. The ones that are available for access via 
-	a browser are usually in a folder called something like: 
+Run all checks before release:
 
-	- /home/YOURNAME/public_html
-	or
-	- /var/www/YOURNAME/httpdocs
-	or
-	- /usr/accounts/a/b/YOURNAME/httpd
-	etc, etc, etc
-
-	If it's unclear where the publicly-accessible files are 
-	to be uploaded, talk to your webhost for assistance.
-
-	Typically on a Linux based server you would make sure
-	you set permissions on your directories to 755 and files
-	to 644 or 444, depending on your web server configuration.
-	The Linux commands to do this are:
-	  find divelog/ -type f -exec chmod 644 {} \;
-	  find divelog/ -type d -exec chmod 755 {} \;
-
-9.	Do a MySQL Dump from Diving Log 4.0.5
-	(http://www.divinglog.de/english/home/index.php)
-	On the 'General' tab...
-	  Logbook: Select all of your dives.
-	  Format: Select 'Structure and Data' and select "With 'DROP TABLE'".
-	  Tables: Select all tables.
-	On the 'Additional' tab...
-	  Typically you would just select 
-	    'Remove all pathnames (export only filenames)'
-	Click n 'Start Export'
-
-10.	Edit the dump file produced as required to change
-	the pathnames to images, if you were unable to achieve 
-	what you needed using the options on the 'Additonal' tab.
-	(See USAGE below for details.)
-
-11.	Use phpMyAdmin or similar to upload the data into your 
-	MySQL database.
-
-12.     phpDivingLog comes with three favicon.ico files:
-        - one based on the US dive flag
-        - one based on the international A dive flag
-        - the one used on the Diving Log web site
-        Just make the images/favicon.ico file the one you wish to use,
-        or replace it with one of your own.
+composer test && composer stan && composer cs
