@@ -17,3 +17,13 @@ RewriteRule ^.*$ public/index.php [QSA,L]
 # RewriteRule ^ - [L]
 # RewriteRule ^api(/.*)?$ api.php [QSA,L]
 # RewriteRule ^.*$ index.php [QSA,L]
+
+# Subfolder deployment example: https://example.com/divelog
+# (place this in the parent web root .htaccess when divelog lives under /divelog)
+#
+# RewriteEngine On
+# RewriteCond %{REQUEST_FILENAME} -f [OR]
+# RewriteCond %{REQUEST_FILENAME} -d
+# RewriteRule ^ - [L]
+# RewriteRule ^divelog/api(/.*)?$ divelog/public/api.php [QSA,L]
+# RewriteRule ^divelog/.*$ divelog/public/index.php [QSA,L]

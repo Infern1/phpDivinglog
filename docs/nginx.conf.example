@@ -41,3 +41,26 @@ server {
 #     fastcgi_pass unix:/run/php/php-fpm.sock;
 #   }
 # }
+
+# Subfolder deployment example: https://example.com/divelog
+# (main site stays elsewhere; phpDivingLog is mounted under /divelog)
+#
+# server {
+#   listen 80;
+#   server_name example.com;
+#   root /var/www;
+#
+#   location ^~ /divelog/api/ {
+#     try_files $uri $uri/ /divelog/public/api.php?$query_string;
+#   }
+#
+#   location ^~ /divelog/ {
+#     try_files $uri $uri/ /divelog/public/index.php?$query_string;
+#   }
+#
+#   location ~ \.php$ {
+#     include fastcgi_params;
+#     fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+#     fastcgi_pass unix:/run/php/php-fpm.sock;
+#   }
+# }
