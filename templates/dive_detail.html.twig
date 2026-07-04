@@ -6,7 +6,7 @@
       <div class="dive-hero-top">
         <div class="dive-hero-title-wrap">
           <div class="dive-hero-badge">Dive #{{ dive.number }}</div>
-          <div>
+          <div class="dive-hero-title-text">
             <h2>{{ related_site_name ?: ('Dive #' ~ dive.number) }}</h2>
             <p>{{ location_display }} · {{ date_display }} · {{ start_time_display }} - {{ end_time_display }}</p>
           </div>
@@ -34,6 +34,10 @@
           <p>{{ depth_display }} {{ depth_label }}</p>
         </article>
         <article class="dive-metric-card dive-metric-card-hero">
+          <h4>Avg depth</h4>
+          <p>{{ average_depth_display }}</p>
+        </article>
+        <article class="dive-metric-card dive-metric-card-hero">
           <h4>Duration</h4>
           <p>{{ duration_hours }}h {{ duration_minutes }}m</p>
         </article>
@@ -44,6 +48,18 @@
         <article class="dive-metric-card dive-metric-card-hero">
           <h4>Visibility</h4>
           <p>{{ visibility_display }}</p>
+        </article>
+        <article class="dive-metric-card dive-metric-card-hero">
+          <h4>Weather</h4>
+          <p>{{ weather_display }}</p>
+        </article>
+        <article class="dive-metric-card dive-metric-card-hero">
+          <h4>Weight</h4>
+          <p>{{ weight_display }}</p>
+        </article>
+        <article class="dive-metric-card dive-metric-card-hero">
+          <h4>Buddy</h4>
+          <p>{{ buddy_display }}</p>
         </article>
         <article class="dive-metric-card dive-metric-card-hero">
           <h4>SAC</h4>
@@ -88,6 +104,27 @@
             <article class="dive-panel">
               <h3>Comments</h3>
               <div>{{ comment_html|raw }}</div>
+            </article>
+
+            <article class="dive-panel">
+              <h3>Tanks</h3>
+              <div class="tanks-grid">
+                {% if tanks_display is empty %}
+                  <p class="tank-empty">No tank information recorded.</p>
+                {% else %}
+                  {% for tank in tanks_display %}
+                    <article class="tank-card">
+                      <h4>{{ tank.name }}</h4>
+                      <dl>
+                        <div><dt>Volume</dt><dd>{{ tank.volume }}</dd></div>
+                        <div><dt>Press. Start</dt><dd>{{ tank.pressure_start }}</dd></div>
+                        <div><dt>Press. End</dt><dd>{{ tank.pressure_end }}</dd></div>
+                        <div><dt>O2%</dt><dd>{{ tank.o2 }}</dd></div>
+                      </dl>
+                    </article>
+                  {% endfor %}
+                {% endif %}
+              </div>
             </article>
 
             <article class="dive-panel">

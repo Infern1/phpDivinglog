@@ -52,6 +52,13 @@ final class WebSmokeTest extends TestCase
         self::assertStringContainsString('Duration', $response['body']);
         self::assertStringContainsString('Temp', $response['body']);
         self::assertStringContainsString('Visibility', $response['body']);
+        self::assertStringContainsString('Avg depth', $response['body']);
+        self::assertStringContainsString('Weather', $response['body']);
+        self::assertStringContainsString('Weight', $response['body']);
+        self::assertStringContainsString('Buddy', $response['body']);
+        self::assertStringContainsString('Tanks', $response['body']);
+        self::assertStringContainsString('Main tank', $response['body']);
+        self::assertStringContainsString('Press. Start', $response['body']);
         self::assertStringContainsString('Dive site:', $response['body']);
         self::assertStringContainsString('Blue Hole', $response['body']);
         self::assertStringContainsString('Ocean Dive Center', $response['body']);

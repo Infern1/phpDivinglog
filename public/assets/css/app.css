@@ -225,33 +225,46 @@ td {
 
 .dive-hero-top {
   width: 100%;
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
+  column-gap: 1rem;
 }
 
 .dive-hero-actions {
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   gap: 0.75rem;
 }
 
 .dive-hero-title-wrap {
-  display: flex;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
   align-items: center;
   gap: 1rem;
+}
+
+.dive-hero-title-text {
+  min-width: 0;
 }
 
 .dive-hero h2 {
   margin: 0;
   font-size: 2rem;
   text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .dive-hero p {
   margin: 0.2rem 0 0;
   color: #4f7065;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .dive-hero-badge {
@@ -272,7 +285,7 @@ td {
 
 .dive-metric-grid-hero {
   width: 100%;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(9, minmax(0, 1fr));
   gap: 0;
   border-top: 1px solid #d4e3dc;
   padding-top: 0.75rem;
@@ -310,6 +323,11 @@ td {
   font-size: 1.45rem;
   font-weight: 700;
   color: #1f3f35;
+}
+
+.dive-metric-card-hero p {
+  font-size: 1.15rem;
+  line-height: 1.25;
 }
 
 .dive-layout-grid {
@@ -449,6 +467,47 @@ td {
   min-height: 1.2rem;
 }
 
+.tanks-grid {
+  display: grid;
+  gap: 0.8rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.tank-card {
+  border: 1px solid #d8e6e0;
+  border-radius: 12px;
+  background: #f8fcfa;
+  padding: 0.75rem;
+}
+
+.tank-card h4 {
+  margin: 0 0 0.55rem;
+  color: #126454;
+  font-size: 0.96rem;
+}
+
+.tank-card dl {
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.tank-card dt {
+  color: #5f8175;
+  font-size: 0.78rem;
+}
+
+.tank-card dd {
+  margin: 0.15rem 0 0;
+  font-weight: 700;
+}
+
+.tank-empty {
+  margin: 0;
+  color: #6f8880;
+}
+
 .dive-related-list {
   display: grid;
   gap: 0.7rem;
@@ -521,8 +580,16 @@ td {
 
   .dive-hero-top,
   .dive-hero-title-wrap {
+    display: flex;
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .dive-hero-title-text,
+  .dive-hero h2,
+  .dive-hero p {
+    width: 100%;
+    white-space: normal;
   }
 
   .dive-hero-actions {

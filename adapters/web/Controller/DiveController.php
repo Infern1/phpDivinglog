@@ -102,6 +102,7 @@ final readonly class DiveController
             $this->pictures->findByLogId($dive->logId)
         );
 
+        $buddies = $this->buddies->findByIds($dive->buddyIds);
         $tanks = $this->tanks->findByDiveNumber($dive->number);
         $metrics = $this->metrics->calculate($dive, $tanks);
 
@@ -155,10 +156,15 @@ final readonly class DiveController
 
         $userDefined = $this->userDefined->findByLogId($dive->logId);
         $visibilityDisplay = '-';
+        $weatherDisplay = '-';
         foreach ($userDefined as $field) {
-            if (strtolower($field->name) === 'visibility' && $field->value !== null && trim($field->value) !== '') {
+            $name = strtolower(trim($field->name));
+            if ($name === 'visibility' && $field->value !== null && trim($field->value) !== '') {
                 $visibilityDisplay = trim($field->value);
-                break;
+            }
+
+            if (($name === 'weather' || $name === 'weather condition') && $field->value !== null && trim($field->value) !== '') {
+                $weatherDisplay = trim($field->value);
             }
         }
 
@@ -168,6 +174,37 @@ final readonly class DiveController
         $endTime = $dive->dateTime->modify(sprintf('+%d minutes', $dive->durationMinutes))->format('H:i');
         $durationHours = intdiv($dive->durationMinutes, 60);
         $durationRemainderMinutes = $dive->durationMinutes % 60;
+        $averageDepthDisplay = $metrics['averageDepthDisplay'];
+
+        $buddyNames = array_map(
+            static fn (\PhpDivingLog\Model\Buddy $buddy): string => trim($buddy->firstName . ' ' . $buddy->lastName),
+            $buddies
+        );
+        $buddyNames = array_values(array_filter($buddyNames, static fn (string $name): bool => $name !== ''));
+
+        $weightDisplay = '-';
+        if ($dive->weight !== null) {
+            $weightDisplay = $this->formatter->formatDecimal($this->converter->weightToDisplay($dive->weight), 1)
+                . ' '
+                . $this->converter->weightLabel();
+        }
+
+        $tanksDisplay = [];
+        foreach ($tanks as $index => $tank) {
+            $tanksDisplay[] = [
+                'name' => $index === 0 ? 'Main tank' : 'Tank ' . ($index + 1),
+                'volume' => $tank->volume !== null
+                    ? $this->formatter->formatDecimal($this->converter->volumeToDisplay($tank->volume), 1) . ' ' . $this->converter->volumeLabel()
+                    : '-',
+                'pressure_start' => $tank->pressureStart !== null
+                    ? $this->formatter->formatDecimal($this->converter->pressureToDisplay($tank->pressureStart), 0) . ' ' . $this->converter->pressureLabel()
+                    : '-',
+                'pressure_end' => $tank->pressureEnd !== null
+                    ? $this->formatter->formatDecimal($this->converter->pressureToDisplay($tank->pressureEnd), 0) . ' ' . $this->converter->pressureLabel()
+                    : '-',
+                'o2' => $tank->o2 !== null ? $this->formatter->formatDecimal($tank->o2, 1) . '%' : '-',
+            ];
+        }
 
         return [
             'dive' => $dive,
@@ -179,9 +216,15 @@ final readonly class DiveController
             'end_time_display' => $endTime,
             'duration_hours' => $durationHours,
             'duration_minutes' => $durationRemainderMinutes,
-            'temperature_display' => $dive->waterTemp !== null ? $this->formatter->formatDecimal($dive->waterTemp, 0) . '°C' : '-',
+            'temperature_display' => $dive->waterTemp !== null
+                ? $this->formatter->formatDecimal($this->converter->temperatureToDisplay($dive->waterTemp), 0) . '°' . $this->converter->temperatureLabel()
+                : '-',
             'visibility_display' => $visibilityDisplay,
-            'average_depth_display' => $metrics['averageDepthDisplay'],
+            'weather_display' => $weatherDisplay,
+            'average_depth_display' => $averageDepthDisplay,
+            'weight_display' => $weightDisplay,
+            'buddy_display' => $buddyNames !== [] ? implode(', ', $buddyNames) : '-',
+            'tanks_display' => $tanksDisplay,
             'sac_display' => $metrics['sacDisplay'],
             'dive_site' => $site,
             'dive_country' => $country,
