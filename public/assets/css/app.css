@@ -283,6 +283,22 @@ td {
   color: #1f3f35;
 }
 
+#profile-chart,
+#profile-rate-chart {
+  width: 100%;
+  max-width: 700px;
+  height: auto;
+  cursor: crosshair;
+}
+
+#profile-chart-legend,
+#profile-rate-legend {
+  margin: 0.65rem 0 0;
+  font-size: 0.9rem;
+  color: #4d6a60;
+  min-height: 1.2rem;
+}
+
 .dive-related-list {
   display: grid;
   gap: 0.7rem;

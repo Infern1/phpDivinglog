@@ -30,13 +30,13 @@
         <article class="dive-panel">
           <h3>Dive profile</h3>
           <canvas id="profile-chart" data-dive-number="{{ dive.number }}" width="700" height="220"></canvas>
-          <p id="profile-chart-legend">Depth and average depth</p>
+          <p id="profile-chart-legend" data-profile-live="depth" aria-live="polite">Move over the chart to inspect depth values.</p>
         </article>
 
         <article class="dive-panel">
           <h3>Ascent / descent rates</h3>
           <canvas id="profile-rate-chart" data-dive-number="{{ dive.number }}" width="700" height="220"></canvas>
-          <p id="profile-rate-legend">Ascent and descent rates</p>
+          <p id="profile-rate-legend" data-profile-live="rate" aria-live="polite">Move over the chart to inspect rate values.</p>
         </article>
 
         <article class="dive-panel">

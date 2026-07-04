@@ -10,122 +10,325 @@
     return;
   }
 
-  fetch(`/profile/${diveNumber}`)
-    .then((response) => response.json())
+  const depthLegend = document.getElementById('profile-chart-legend');
+  const rateLegend = document.getElementById('profile-rate-legend');
+
+  fetch(`/profile/${encodeURIComponent(diveNumber)}`)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`Profile request failed with status ${response.status}`);
+      }
+      return response.json();
+    })
     .then((payload) => {
       if (!payload || !Array.isArray(payload.series)) {
-        return;
+        throw new Error('Invalid profile payload');
       }
 
-      drawChart(depthCanvas, {
-        title: `Depth (${payload.depthUnit || 'm'})`,
-        xLabel: 'Time (min)',
-        yLabel: payload.depthUnit || 'm',
-        series: [
-          { points: payload.series, valueKey: 'depth', color: '#0d6e6e', label: 'Depth' },
-          {
-            points: payload.averageSeries || [],
-            valueKey: 'depth',
-            color: '#9ea6ad',
-            label: 'Average depth',
-            dashed: true,
-          },
-        ],
-      });
+      createInteractiveChart(
+        depthCanvas,
+        {
+          title: `Depth (${payload.depthUnit || 'm'})`,
+          xLabel: 'Time (min)',
+          yLabel: payload.depthUnit || 'm',
+          series: [
+            { points: payload.series, valueKey: 'depth', color: '#0d6e6e', label: 'Depth' },
+            {
+              points: payload.averageSeries || [],
+              valueKey: 'depth',
+              color: '#9ea6ad',
+              label: 'Average depth',
+              dashed: true,
+            },
+          ],
+        },
+        depthLegend,
+      );
 
-      drawChart(rateCanvas, {
-        title: `Rates (${payload.rateUnit || 'm/min'})`,
-        xLabel: 'Time (min)',
-        yLabel: payload.rateUnit || 'm/min',
-        series: [
-          {
-            points: payload.ascentRateSeries || [],
-            valueKey: 'rate',
-            color: '#0a7f32',
-            label: 'Ascent',
-          },
-          {
-            points: payload.descentRateSeries || [],
-            valueKey: 'rate',
-            color: '#c2551a',
-            label: 'Descent',
-          },
-        ],
-      });
+      createInteractiveChart(
+        rateCanvas,
+        {
+          title: `Rates (${payload.rateUnit || 'm/min'})`,
+          xLabel: 'Time (min)',
+          yLabel: payload.rateUnit || 'm/min',
+          series: [
+            {
+              points: payload.ascentRateSeries || [],
+              valueKey: 'rate',
+              color: '#0a7f32',
+              label: 'Ascent',
+            },
+            {
+              points: payload.descentRateSeries || [],
+              valueKey: 'rate',
+              color: '#c2551a',
+              label: 'Descent',
+            },
+          ],
+        },
+        rateLegend,
+      );
+    })
+    .catch(() => {
+      if (depthLegend) {
+        depthLegend.textContent = 'Dive profile data could not be loaded.';
+      }
+      if (rateLegend) {
+        rateLegend.textContent = 'Rate profile data could not be loaded.';
+      }
     });
 
-  function drawChart(canvas, config) {
+  function createInteractiveChart(canvas, config, legendNode) {
     const ctx = canvas.getContext('2d');
     if (!ctx) {
       return;
     }
 
-    const width = canvas.width || 700;
-    const height = canvas.height || 220;
-    const padding = { top: 26, right: 16, bottom: 32, left: 48 };
+    const width = Number(canvas.getAttribute('width') || 700);
+    const height = Number(canvas.getAttribute('height') || 220);
+    const padding = { top: 28, right: 18, bottom: 34, left: 52 };
     const innerWidth = width - padding.left - padding.right;
     const innerHeight = height - padding.top - padding.bottom;
 
     const allPoints = config.series.flatMap((line) => line.points || []);
-    if (allPoints.length === 0) {
+    if (allPoints.length === 0 || innerWidth <= 0 || innerHeight <= 0) {
       return;
     }
 
-    const maxX = Math.max(...allPoints.map((point) => Number(point.minute || 0)), 1);
-    const maxY = Math.max(...allPoints.map((point) => Number(point[config.series[0].valueKey] || 0)), 1);
-    const safeMaxY = Math.max(
-      maxY,
-      ...config.series.flatMap((line) => (line.points || []).map((point) => Number(point[line.valueKey] || 0))),
+    const minuteStops = Array.from(
+      new Set(allPoints.map((point) => Number(point.minute || 0))),
+    ).sort((a, b) => a - b);
+
+    const maxX = Math.max(...minuteStops, 1);
+    const maxY = Math.max(
+      ...config.series.flatMap((line) =>
+        (line.points || []).map((point) => Number(point[line.valueKey] || 0)),
+      ),
       1,
     );
 
-    ctx.clearRect(0, 0, width, height);
-    ctx.fillStyle = '#ffffff';
-    ctx.fillRect(0, 0, width, height);
+    const baseLegend = config.series.map((line) => line.label).join(' and ');
+    setLegend(legendNode, baseLegend);
 
-    ctx.strokeStyle = '#d6dce1';
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.moveTo(padding.left, padding.top);
-    ctx.lineTo(padding.left, height - padding.bottom);
-    ctx.lineTo(width - padding.right, height - padding.bottom);
-    ctx.stroke();
+    let hoverMinute = null;
 
-    ctx.fillStyle = '#46515b';
-    ctx.font = '12px sans-serif';
-    ctx.fillText(config.title, padding.left, 14);
-    ctx.fillText(config.xLabel, width - padding.right - 70, height - 8);
-    ctx.fillText(config.yLabel, 8, padding.top + 2);
+    render();
 
-    config.series.forEach((line) => {
-      if (!Array.isArray(line.points) || line.points.length < 1) {
+    canvas.addEventListener('mousemove', (event) => {
+      const bounds = canvas.getBoundingClientRect();
+      if (bounds.width <= 0) {
         return;
       }
 
-      ctx.save();
-      ctx.strokeStyle = line.color;
-      ctx.lineWidth = 2;
-      if (line.dashed) {
-        ctx.setLineDash([6, 4]);
-      } else {
-        ctx.setLineDash([]);
+      const pointerX = ((event.clientX - bounds.left) / bounds.width) * width;
+      hoverMinute = pickNearestMinute(pointerX);
+      render();
+    });
+
+    canvas.addEventListener('mouseleave', () => {
+      hoverMinute = null;
+      render();
+      setLegend(legendNode, baseLegend);
+    });
+
+    function render() {
+      ctx.clearRect(0, 0, width, height);
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, width, height);
+
+      drawGrid();
+      drawAxes();
+      drawSeries();
+
+      if (hoverMinute !== null) {
+        drawHoverState(hoverMinute);
       }
+    }
+
+    function drawGrid() {
+      ctx.strokeStyle = '#e6ecef';
+      ctx.lineWidth = 1;
+
+      for (let tick = 0; tick <= 4; tick += 1) {
+        const y = padding.top + (tick / 4) * innerHeight;
+        ctx.beginPath();
+        ctx.moveTo(padding.left, y);
+        ctx.lineTo(width - padding.right, y);
+        ctx.stroke();
+      }
+    }
+
+    function drawAxes() {
+      ctx.strokeStyle = '#c7d2d8';
+      ctx.lineWidth = 1;
 
       ctx.beginPath();
-      line.points.forEach((point, index) => {
-        const minute = Number(point.minute || 0);
-        const value = Number(point[line.valueKey] || 0);
-        const x = padding.left + (minute / maxX) * innerWidth;
-        const y = height - padding.bottom - (value / safeMaxY) * innerHeight;
+      ctx.moveTo(padding.left, padding.top);
+      ctx.lineTo(padding.left, height - padding.bottom);
+      ctx.lineTo(width - padding.right, height - padding.bottom);
+      ctx.stroke();
 
-        if (index === 0) {
-          ctx.moveTo(x, y);
-        } else {
-          ctx.lineTo(x, y);
-        }
+      ctx.fillStyle = '#42505b';
+      ctx.font = '12px sans-serif';
+      ctx.fillText(config.title, padding.left, 15);
+      ctx.fillText(config.xLabel, width - padding.right - 74, height - 10);
+      ctx.fillText(config.yLabel, 9, padding.top + 2);
+
+      const yTicks = [0, maxY / 2, maxY];
+      yTicks.forEach((value) => {
+        const y = yToPx(value);
+        ctx.fillStyle = '#647584';
+        ctx.fillText(formatValue(value), 12, y + 4);
       });
+    }
+
+    function drawSeries() {
+      config.series.forEach((line) => {
+        const points = line.points || [];
+        if (points.length === 0) {
+          return;
+        }
+
+        ctx.save();
+        ctx.strokeStyle = line.color;
+        ctx.lineWidth = 2;
+        ctx.setLineDash(line.dashed ? [7, 4] : []);
+        ctx.beginPath();
+
+        points.forEach((point, index) => {
+          const x = xToPx(Number(point.minute || 0));
+          const y = yToPx(Number(point[line.valueKey] || 0));
+          if (index === 0) {
+            ctx.moveTo(x, y);
+          } else {
+            ctx.lineTo(x, y);
+          }
+        });
+
+        ctx.stroke();
+        ctx.restore();
+      });
+    }
+
+    function drawHoverState(minute) {
+      const x = xToPx(minute);
+      const sampled = config.series.map((line) => ({
+        line,
+        point: findNearestPoint(line.points || [], minute),
+      }));
+
+      ctx.save();
+      ctx.strokeStyle = '#6f7e89';
+      ctx.lineWidth = 1;
+      ctx.setLineDash([4, 4]);
+      ctx.beginPath();
+      ctx.moveTo(x, padding.top);
+      ctx.lineTo(x, height - padding.bottom);
       ctx.stroke();
       ctx.restore();
-    });
+
+      sampled.forEach(({ line, point }) => {
+        if (!point) {
+          return;
+        }
+
+        ctx.save();
+        ctx.fillStyle = line.color;
+        ctx.beginPath();
+        ctx.arc(xToPx(Number(point.minute || 0)), yToPx(Number(point[line.valueKey] || 0)), 3.5, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      });
+
+      const tooltipLines = [
+        `${config.xLabel}: ${formatValue(minute)} min`,
+        ...sampled.map(({ line, point }) => {
+          const value = point ? Number(point[line.valueKey] || 0) : 0;
+          return `${line.label}: ${formatValue(value)} ${config.yLabel}`;
+        }),
+      ];
+
+      drawTooltip(x, tooltipLines);
+      setLegend(
+        legendNode,
+        `${formatValue(minute)} min - ${sampled
+          .map(({ line, point }) => {
+            const value = point ? Number(point[line.valueKey] || 0) : 0;
+            return `${line.label}: ${formatValue(value)} ${config.yLabel}`;
+          })
+          .join(' | ')}`,
+      );
+    }
+
+    function drawTooltip(anchorX, lines) {
+      ctx.save();
+      ctx.font = '12px sans-serif';
+
+      const tooltipWidth = Math.max(...lines.map((line) => ctx.measureText(line).width), 120) + 18;
+      const tooltipHeight = lines.length * 18 + 10;
+
+      let left = anchorX + 12;
+      if (left + tooltipWidth > width - 4) {
+        left = anchorX - tooltipWidth - 12;
+      }
+
+      const top = padding.top + 8;
+
+      ctx.fillStyle = 'rgba(24, 34, 40, 0.9)';
+      ctx.strokeStyle = 'rgba(168, 188, 200, 0.55)';
+      ctx.lineWidth = 1;
+      ctx.fillRect(left, top, tooltipWidth, tooltipHeight);
+      ctx.strokeRect(left, top, tooltipWidth, tooltipHeight);
+
+      ctx.fillStyle = '#f5f9fc';
+      lines.forEach((line, index) => {
+        ctx.fillText(line, left + 8, top + 17 + index * 18);
+      });
+
+      ctx.restore();
+    }
+
+    function xToPx(minute) {
+      return padding.left + (minute / maxX) * innerWidth;
+    }
+
+    function yToPx(value) {
+      return height - padding.bottom - (value / maxY) * innerHeight;
+    }
+
+    function pickNearestMinute(pixelX) {
+      const unclampedMinute = ((pixelX - padding.left) / innerWidth) * maxX;
+      const minute = Math.min(Math.max(unclampedMinute, 0), maxX);
+
+      return minuteStops.reduce((closest, current) =>
+        Math.abs(current - minute) < Math.abs(closest - minute) ? current : closest,
+      );
+    }
+
+    function findNearestPoint(points, minute) {
+      if (points.length === 0) {
+        return null;
+      }
+
+      return points.reduce((closest, current) =>
+        Math.abs(Number(current.minute || 0) - minute) < Math.abs(Number(closest.minute || 0) - minute)
+          ? current
+          : closest,
+      );
+    }
+  }
+
+  function setLegend(node, text) {
+    if (node) {
+      node.textContent = text;
+    }
+  }
+
+  function formatValue(value) {
+    if (!Number.isFinite(value)) {
+      return '0';
+    }
+
+    return Number(value).toFixed(2).replace(/\.00$/, '');
   }
 })();
