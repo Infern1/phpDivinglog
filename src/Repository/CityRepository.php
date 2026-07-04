@@ -18,7 +18,7 @@ final readonly class CityRepository
      */
     public function list(int $limit = 200): array
     {
-        $sql = sprintf('SELECT CityID, CountryID, City, CityComment FROM %sCity ORDER BY City LIMIT :limit', $this->tablePrefix);
+        $sql = sprintf('SELECT * FROM %sCity ORDER BY City LIMIT :limit', $this->tablePrefix);
         $statement = $this->pdo->prepare($sql);
         $statement->bindValue(':limit', $limit, PDO::PARAM_INT);
         $statement->execute();
@@ -28,13 +28,34 @@ final readonly class CityRepository
 
     public function findById(int $id): ?City
     {
-        $sql = sprintf('SELECT CityID, CountryID, City, CityComment FROM %sCity WHERE CityID = :id', $this->tablePrefix);
-        $statement = $this->pdo->prepare($sql);
-        $statement->bindValue(':id', $id, PDO::PARAM_INT);
-        $statement->execute();
-        $row = $statement->fetch();
+        $row = $this->queryByIdColumn('CityID', $id);
+        if (!is_array($row)) {
+            $row = $this->queryByIdColumn('ID', $id);
+        }
 
         return is_array($row) ? $this->mapCity($row) : null;
+    }
+
+    /**
+     * @return array<string, mixed>|false
+     */
+    private function queryByIdColumn(string $column, int $id): array|false
+    {
+        $sql = sprintf('SELECT * FROM %sCity WHERE %s = :id', $this->tablePrefix, $column);
+
+        try {
+            $statement = $this->pdo->prepare($sql);
+            $statement->bindValue(':id', $id, PDO::PARAM_INT);
+            $statement->execute();
+            return $statement->fetch();
+        } catch (\PDOException $exception) {
+            $sqlState = $exception->errorInfo[0] ?? null;
+            if ($sqlState === '42S22' || ($sqlState === 'HY000' && str_contains(strtolower($exception->getMessage()), 'no such column'))) {
+                return false;
+            }
+
+            throw $exception;
+        }
     }
 
     /**
@@ -43,10 +64,10 @@ final readonly class CityRepository
     private function mapCity(array $row): City
     {
         return new City(
-            (int) ($row['CityID'] ?? 0),
+            (int) ($row['CityID'] ?? $row['ID'] ?? 0),
             (int) ($row['CountryID'] ?? 0),
             (string) ($row['City'] ?? ''),
-            isset($row['CityComment']) ? (string) $row['CityComment'] : null
+            isset($row['CityComment']) ? (string) $row['CityComment'] : (isset($row['Comments']) ? (string) $row['Comments'] : null)
         );
     }
 }

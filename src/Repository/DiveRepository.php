@@ -30,18 +30,18 @@ final readonly class DiveRepository
 
         return new Dive(
             (int) ($row['Number'] ?? 0),
-            (int) ($row['LogID'] ?? $row['Number'] ?? 0),
+            (int) ($row['LogID'] ?? $row['ID'] ?? $row['Number'] ?? 0),
             (int) ($row['PlaceID'] ?? 0),
             $dateTime,
             (float) ($row['Depth'] ?? 0.0),
             (int) ($row['Divetime'] ?? 0),
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            [],
+            isset($row['Watertemp']) ? (float) $row['Watertemp'] : null,
+            isset($row['Airtemp']) ? (float) $row['Airtemp'] : null,
+            isset($row['Weight']) ? (float) $row['Weight'] : null,
+            isset($row['PresS']) ? (float) $row['PresS'] : (isset($row['Pstart']) ? (float) $row['Pstart'] : null),
+            isset($row['PresE']) ? (float) $row['PresE'] : (isset($row['Pend']) ? (float) $row['Pend'] : null),
+            isset($row['Comments']) ? (string) $row['Comments'] : (isset($row['Comment']) ? (string) $row['Comment'] : null),
+            $this->parseBuddyIds(isset($row['BuddyIDs']) ? (string) $row['BuddyIDs'] : ''),
             [
                 'profile' => isset($row['Profile']) ? (string) $row['Profile'] : null,
                 'profile_interval_seconds' => isset($row['ProfileInt']) ? (int) $row['ProfileInt'] : null,
@@ -81,18 +81,18 @@ final readonly class DiveRepository
 
             return new Dive(
                 (int) ($row['Number'] ?? 0),
-                (int) ($row['LogID'] ?? $row['Number'] ?? 0),
+                (int) ($row['LogID'] ?? $row['ID'] ?? $row['Number'] ?? 0),
                 (int) ($row['PlaceID'] ?? 0),
                 $dateTime,
                 (float) ($row['Depth'] ?? 0.0),
                 (int) ($row['Divetime'] ?? 0),
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                [],
+                isset($row['Watertemp']) ? (float) $row['Watertemp'] : null,
+                isset($row['Airtemp']) ? (float) $row['Airtemp'] : null,
+                isset($row['Weight']) ? (float) $row['Weight'] : null,
+                isset($row['PresS']) ? (float) $row['PresS'] : (isset($row['Pstart']) ? (float) $row['Pstart'] : null),
+                isset($row['PresE']) ? (float) $row['PresE'] : (isset($row['Pend']) ? (float) $row['Pend'] : null),
+                isset($row['Comments']) ? (string) $row['Comments'] : (isset($row['Comment']) ? (string) $row['Comment'] : null),
+                $this->parseBuddyIds(isset($row['BuddyIDs']) ? (string) $row['BuddyIDs'] : ''),
                 [
                     'profile' => isset($row['Profile']) ? (string) $row['Profile'] : null,
                     'profile_interval_seconds' => isset($row['ProfileInt']) ? (int) $row['ProfileInt'] : null,
@@ -109,12 +109,30 @@ final readonly class DiveRepository
     private function mapDateTime(array $row): DateTimeImmutable
     {
         $dateValue = (string) ($row['Divedate'] ?? 'now');
-        $timeValue = (string) ($row['Divetime'] ?? '00:00:00');
+        $timeValue = (string) ($row['Entrytime'] ?? $row['Divetime'] ?? '00:00:00');
 
         if (!str_contains($timeValue, ':')) {
             $timeValue = '00:00:00';
         }
 
         return new DateTimeImmutable(trim($dateValue . ' ' . $timeValue));
+    }
+
+    /**
+     * @return list<int>
+     */
+    private function parseBuddyIds(string $raw): array
+    {
+        if ($raw === '') {
+            return [];
+        }
+
+        $parts = preg_split('/[^0-9]+/', $raw) ?: [];
+        $ids = array_map(
+            static fn (string $part): int => (int) $part,
+            array_filter($parts, static fn (string $part): bool => $part !== '')
+        );
+
+        return array_values(array_filter($ids, static fn (int $id): bool => $id > 0));
     }
 }

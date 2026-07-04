@@ -19,7 +19,7 @@ final readonly class EquipmentRepository
      */
     public function list(int $limit = 200): array
     {
-        $sql = sprintf('SELECT EquipmentID, Object, Manufacturer, DatePurchase, DateService, DateServiceWarning, Comment, Picture FROM %sEquipment ORDER BY Object LIMIT :limit', $this->tablePrefix);
+        $sql = sprintf('SELECT * FROM %sEquipment ORDER BY Object LIMIT :limit', $this->tablePrefix);
         $statement = $this->pdo->prepare($sql);
         $statement->bindValue(':limit', $limit, PDO::PARAM_INT);
         $statement->execute();
@@ -29,13 +29,34 @@ final readonly class EquipmentRepository
 
     public function findById(int $id): ?Equipment
     {
-        $sql = sprintf('SELECT EquipmentID, Object, Manufacturer, DatePurchase, DateService, DateServiceWarning, Comment, Picture FROM %sEquipment WHERE EquipmentID = :id', $this->tablePrefix);
-        $statement = $this->pdo->prepare($sql);
-        $statement->bindValue(':id', $id, PDO::PARAM_INT);
-        $statement->execute();
-        $row = $statement->fetch();
+        $row = $this->queryByIdColumn('EquipmentID', $id);
+        if (!is_array($row)) {
+            $row = $this->queryByIdColumn('ID', $id);
+        }
 
         return is_array($row) ? $this->mapEquipment($row) : null;
+    }
+
+    /**
+     * @return array<string, mixed>|false
+     */
+    private function queryByIdColumn(string $column, int $id): array|false
+    {
+        $sql = sprintf('SELECT * FROM %sEquipment WHERE %s = :id', $this->tablePrefix, $column);
+
+        try {
+            $statement = $this->pdo->prepare($sql);
+            $statement->bindValue(':id', $id, PDO::PARAM_INT);
+            $statement->execute();
+            return $statement->fetch();
+        } catch (\PDOException $exception) {
+            $sqlState = $exception->errorInfo[0] ?? null;
+            if ($sqlState === '42S22' || ($sqlState === 'HY000' && str_contains(strtolower($exception->getMessage()), 'no such column'))) {
+                return false;
+            }
+
+            throw $exception;
+        }
     }
 
     /**
@@ -44,14 +65,20 @@ final readonly class EquipmentRepository
     private function mapEquipment(array $row): Equipment
     {
         return new Equipment(
-            (int) ($row['EquipmentID'] ?? 0),
+            (int) ($row['EquipmentID'] ?? $row['ID'] ?? 0),
             (string) ($row['Object'] ?? ''),
             isset($row['Manufacturer']) ? (string) $row['Manufacturer'] : null,
-            isset($row['DatePurchase']) && $row['DatePurchase'] !== null ? new DateTimeImmutable((string) $row['DatePurchase']) : null,
-            isset($row['DateService']) && $row['DateService'] !== null ? new DateTimeImmutable((string) $row['DateService']) : null,
-            isset($row['DateServiceWarning']) && $row['DateServiceWarning'] !== null ? new DateTimeImmutable((string) $row['DateServiceWarning']) : null,
-            isset($row['Comment']) ? (string) $row['Comment'] : null,
-            isset($row['Picture']) ? (string) $row['Picture'] : null
+            isset($row['DatePurchase']) && $row['DatePurchase'] !== null
+                ? new DateTimeImmutable((string) $row['DatePurchase'])
+                : (isset($row['DateP']) && $row['DateP'] !== null ? new DateTimeImmutable((string) $row['DateP']) : null),
+            isset($row['DateService']) && $row['DateService'] !== null
+                ? new DateTimeImmutable((string) $row['DateService'])
+                : (isset($row['DateR']) && $row['DateR'] !== null ? new DateTimeImmutable((string) $row['DateR']) : null),
+            isset($row['DateServiceWarning']) && $row['DateServiceWarning'] !== null
+                ? new DateTimeImmutable((string) $row['DateServiceWarning'])
+                : (isset($row['DateRN']) && $row['DateRN'] !== null ? new DateTimeImmutable((string) $row['DateRN']) : null),
+            isset($row['Comment']) ? (string) $row['Comment'] : (isset($row['Comments']) ? (string) $row['Comments'] : null),
+            isset($row['Picture']) ? (string) $row['Picture'] : (isset($row['PhotoPath']) ? (string) $row['PhotoPath'] : null)
         );
     }
 }

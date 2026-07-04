@@ -21,13 +21,15 @@ final readonly class PictureRepository
         $rows = $this->queryByColumn('LogID', $logId);
         if ($rows === null) {
             $rows = $this->queryByColumn('Number', $logId) ?? [];
+        } elseif ($rows === []) {
+            $rows = $this->queryByColumn('Number', $logId) ?? [];
         }
 
         return array_map(
             static fn (array $row): Picture => new Picture(
-                (int) ($row['PictureID'] ?? 0),
+                (int) ($row['PictureID'] ?? $row['ID'] ?? 0),
                 (int) ($row['LogID'] ?? $row['Number'] ?? 0),
-                (string) ($row['Picture'] ?? ''),
+                (string) ($row['Picture'] ?? $row['Path'] ?? ''),
                 isset($row['Description']) ? (string) $row['Description'] : null,
             ),
             $rows
@@ -40,7 +42,7 @@ final readonly class PictureRepository
     private function queryByColumn(string $column, int $id): ?array
     {
         $sql = sprintf(
-            'SELECT * FROM %sPictures WHERE %s = :id ORDER BY PictureID',
+            'SELECT * FROM %sPictures WHERE %s = :id',
             $this->tablePrefix,
             $column
         );
@@ -51,7 +53,8 @@ final readonly class PictureRepository
             $statement->execute();
             return $statement->fetchAll();
         } catch (\PDOException $exception) {
-            if (($exception->errorInfo[0] ?? null) === '42S22') {
+            $sqlState = $exception->errorInfo[0] ?? null;
+            if ($sqlState === '42S22' || ($sqlState === 'HY000' && str_contains(strtolower($exception->getMessage()), 'no such column'))) {
                 return null;
             }
 

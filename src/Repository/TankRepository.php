@@ -18,21 +18,45 @@ final readonly class TankRepository
      */
     public function findByDiveNumber(int $diveNumber): array
     {
-        $sql = sprintf('SELECT TankID, Number, Volume, Pstart, Pend, O2 FROM %sTank WHERE Number = :number ORDER BY TankID', $this->tablePrefix);
-        $statement = $this->pdo->prepare($sql);
-        $statement->bindValue(':number', $diveNumber, PDO::PARAM_INT);
-        $statement->execute();
+        $rows = $this->queryByColumn('Number', $diveNumber);
+        if ($rows === null) {
+            $rows = $this->queryByColumn('LogID', $diveNumber) ?? [];
+        } elseif ($rows === []) {
+            $rows = $this->queryByColumn('LogID', $diveNumber) ?? [];
+        }
 
         return array_map(
             static fn (array $row): Tank => new Tank(
-                (int) ($row['TankID'] ?? 0),
-                (int) ($row['Number'] ?? 0),
-                isset($row['Volume']) ? (float) $row['Volume'] : null,
-                isset($row['Pstart']) ? (float) $row['Pstart'] : null,
-                isset($row['Pend']) ? (float) $row['Pend'] : null,
+                (int) ($row['TankID'] ?? $row['ID'] ?? 0),
+                (int) ($row['Number'] ?? $row['LogID'] ?? 0),
+                isset($row['Volume']) ? (float) $row['Volume'] : (isset($row['Tanksize']) ? (float) $row['Tanksize'] : null),
+                isset($row['Pstart']) ? (float) $row['Pstart'] : (isset($row['PresS']) ? (float) $row['PresS'] : null),
+                isset($row['Pend']) ? (float) $row['Pend'] : (isset($row['PresE']) ? (float) $row['PresE'] : null),
                 isset($row['O2']) ? (float) $row['O2'] : null,
             ),
-            $statement->fetchAll()
+            $rows
         );
+    }
+
+    /**
+     * @return list<array<string, mixed>>|null
+     */
+    private function queryByColumn(string $column, int $diveNumber): ?array
+    {
+        $sql = sprintf('SELECT * FROM %sTank WHERE %s = :number', $this->tablePrefix, $column);
+
+        try {
+            $statement = $this->pdo->prepare($sql);
+            $statement->bindValue(':number', $diveNumber, PDO::PARAM_INT);
+            $statement->execute();
+            return $statement->fetchAll();
+        } catch (\PDOException $exception) {
+            $sqlState = $exception->errorInfo[0] ?? null;
+            if ($sqlState === '42S22' || ($sqlState === 'HY000' && str_contains(strtolower($exception->getMessage()), 'no such column'))) {
+                return null;
+            }
+
+            throw $exception;
+        }
     }
 }
