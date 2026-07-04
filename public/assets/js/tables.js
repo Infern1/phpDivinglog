@@ -88,30 +88,21 @@
       return true;
     };
 
-    const selectedDive = window.sessionStorage.getItem(selectedKey);
-    const selectedItem = selectedDive
-      ? logbookPane.querySelector(`[data-dive-number="${selectedDive}"]`)
-      : null;
-
-    if (selectedItem instanceof HTMLElement) {
-      selectedItem.scrollIntoView({ block: 'center' });
+    const activeItem = logbookPane.querySelector('.logbook-item.is-active');
+    if (activeItem instanceof HTMLElement) {
+      const activeDive = activeItem.getAttribute('data-dive-number') || undefined;
+      activeItem.scrollIntoView({ block: 'center' });
       requestAnimationFrame(() => {
-        persistState(selectedDive);
-      });
-    } else {
-      const restored = restoreScroll();
-      requestAnimationFrame(() => {
-        restoreScroll();
-        if (!restored) {
-          const activeItem = logbookPane.querySelector('.logbook-item.is-active');
-          if (activeItem instanceof HTMLElement) {
-            activeItem.scrollIntoView({ block: 'center' });
-          }
-        }
+        persistState(activeDive);
       });
       window.setTimeout(() => {
-        restoreScroll();
+        persistState(activeDive);
       }, 120);
+    } else {
+      restoreScroll();
+      requestAnimationFrame(() => {
+        restoreScroll();
+      });
     }
 
     logbookPane.addEventListener('scroll', () => {
