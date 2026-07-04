@@ -103,7 +103,7 @@ final readonly class DiveController
         );
 
         $buddies = $this->buddies->findByIds($dive->buddyIds);
-        $tanks = $this->tanks->findByDiveNumber($dive->number);
+        $tanks = $this->tanks->findByDiveNumber($dive->number, $dive->logId);
         $metrics = $this->metrics->calculate($dive, $tanks);
 
         $site = $dive->placeId > 0 ? $this->sites->findById($dive->placeId) : null;
@@ -155,16 +155,30 @@ final readonly class DiveController
         );
 
         $userDefined = $this->userDefined->findByLogId($dive->logId);
-        $visibilityDisplay = '-';
-        $weatherDisplay = '-';
+        $visibilityDisplay = is_string($dive->extra['visibility'] ?? null) && trim((string) $dive->extra['visibility']) !== ''
+            ? trim((string) $dive->extra['visibility'])
+            : '-';
+        $weatherDisplay = is_string($dive->extra['weather'] ?? null) && trim((string) $dive->extra['weather']) !== ''
+            ? trim((string) $dive->extra['weather'])
+            : '-';
+        $sacFallbackDisplay = null;
         foreach ($userDefined as $field) {
             $name = strtolower(trim($field->name));
-            if ($name === 'visibility' && $field->value !== null && trim($field->value) !== '') {
-                $visibilityDisplay = trim($field->value);
+            $value = $field->value !== null ? trim($field->value) : '';
+            if ($value === '') {
+                continue;
             }
 
-            if (($name === 'weather' || $name === 'weather condition') && $field->value !== null && trim($field->value) !== '') {
-                $weatherDisplay = trim($field->value);
+            if ($visibilityDisplay === '-' && (str_contains($name, 'visi') || str_contains($name, 'sicht'))) {
+                $visibilityDisplay = $value;
+            }
+
+            if ($weatherDisplay === '-' && (str_contains($name, 'weather') || str_contains($name, 'meteo'))) {
+                $weatherDisplay = $value;
+            }
+
+            if ($sacFallbackDisplay === null && ($name === 'sac' || $name === 'rmv' || str_contains($name, 'sac') || str_contains($name, 'rmv'))) {
+                $sacFallbackDisplay = $value;
             }
         }
 
@@ -206,6 +220,11 @@ final readonly class DiveController
             ];
         }
 
+        $sacDisplay = $metrics['sacDisplay'];
+        if ($sacDisplay === '-' && $sacFallbackDisplay !== null) {
+            $sacDisplay = $sacFallbackDisplay;
+        }
+
         return [
             'dive' => $dive,
             'depth_display' => $this->converter->depthToDisplay($dive->depthMax),
@@ -228,7 +247,7 @@ final readonly class DiveController
             'weight_display' => $weightDisplay,
             'buddy_display' => $buddyNames !== [] ? implode(', ', $buddyNames) : '-',
             'tanks_display' => $tanksDisplay,
-            'sac_display' => $metrics['sacDisplay'],
+            'sac_display' => $sacDisplay,
             'dive_site' => $site,
             'dive_country' => $country,
             'dive_city' => $city,

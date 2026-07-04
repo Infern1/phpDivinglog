@@ -16,13 +16,15 @@ final readonly class TankRepository
     /**
      * @return list<Tank>
      */
-    public function findByDiveNumber(int $diveNumber): array
+    public function findByDiveNumber(int $diveNumber, ?int $logId = null): array
     {
         $rows = $this->queryByColumn('Number', $diveNumber);
-        if ($rows === null) {
-            $rows = $this->queryByColumn('LogID', $diveNumber) ?? [];
-        } elseif ($rows === []) {
-            $rows = $this->queryByColumn('LogID', $diveNumber) ?? [];
+        if ($rows === null || $rows === []) {
+            if ($logId !== null && $logId > 0) {
+                $rows = $this->queryByColumn('LogID', $logId) ?? [];
+            } else {
+                $rows = [];
+            }
         }
 
         return array_map(
