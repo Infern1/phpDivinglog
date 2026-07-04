@@ -1,5 +1,14 @@
 # WordPress shim guide (future)
 
+If WordPress and phpDivingLog share one domain, run phpDivingLog in a dedicated
+subfolder such as `/divelog` and route that prefix to phpDivingLog front
+controllers before WordPress catch-all rewrites.
+
+See:
+
+- `docs/nginx.conf.example`
+- `docs/apache-htaccess.example`
+
 The WordPress consumer is intentionally out of scope for this rewrite. To add it later,
 create a shortcode plugin that calls the standalone JSON API.
 

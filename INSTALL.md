@@ -62,6 +62,18 @@ Then use fallback URLs such as:
 - `/divelog/?type=dives&id=1`
 - `/divelog/?type=stats`
 
+WordPress coexistence note
+-------------------------
+
+If WordPress is installed at domain root and phpDivingLog is in `/divelog`, make
+sure `/divelog` rewrite rules are evaluated before WordPress catch-all rewrites.
+Otherwise requests are routed to WordPress `index.php` instead of phpDivingLog.
+
+See concrete examples in:
+
+- `docs/nginx.conf.example`
+- `docs/apache-htaccess.example`
+
 For full deployment details and server examples, see:
 
 - docs/deployment.md

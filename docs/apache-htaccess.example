@@ -27,3 +27,8 @@ RewriteRule ^.*$ public/index.php [QSA,L]
 # RewriteRule ^ - [L]
 # RewriteRule ^divelog/api(/.*)?$ divelog/public/api.php [QSA,L]
 # RewriteRule ^divelog/.*$ divelog/public/index.php [QSA,L]
+
+# WordPress coexistence note:
+# If WordPress runs at the domain root, keep the two `divelog/...` rules ABOVE
+# the standard WordPress rules (`RewriteRule . /index.php [L]`) so requests are
+# handled by phpDivingLog first.

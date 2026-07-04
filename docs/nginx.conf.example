@@ -45,6 +45,10 @@ server {
 # Subfolder deployment example: https://example.com/divelog
 # (main site stays elsewhere; phpDivingLog is mounted under /divelog)
 #
+# WordPress coexistence note:
+# Put the /divelog location blocks ABOVE your generic `location /` WordPress block
+# so requests are not rewritten to /index.php by WordPress.
+#
 # server {
 #   listen 80;
 #   server_name example.com;
@@ -62,5 +66,10 @@ server {
 #     include fastcgi_params;
 #     fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
 #     fastcgi_pass unix:/run/php/php-fpm.sock;
+#   }
+#
+#   # Typical WordPress fallback
+#   location / {
+#     try_files $uri $uri/ /index.php?$args;
 #   }
 # }

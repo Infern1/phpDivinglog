@@ -75,6 +75,18 @@ If subfolder rewrites are unavailable, set `APP_QUERY_STRING=true` and use:
 - `/divelog/?type=dives&id=1`
 - `/divelog/?type=stats`
 
+### WordPress at domain root + phpDivingLog in `/divelog`
+
+This is a common setup. The critical rule is precedence:
+
+- Match `/divelog` and `/divelog/api` before generic WordPress front-controller rules.
+- Otherwise WordPress rewrites those requests to its own `index.php`.
+
+Use the subfolder examples in:
+
+- `docs/nginx.conf.example`
+- `docs/apache-htaccess.example`
+
 ## Release process
 
 1. Run quality gates locally:
