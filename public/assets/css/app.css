@@ -168,3 +168,130 @@ td {
     overflow-x: auto;
   }
 }
+
+.dive-detail-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.dive-hero {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: linear-gradient(180deg, #0b2134, #102a3f);
+  border: 1px solid #1f3f59;
+  border-radius: 18px;
+  color: #e6f2fc;
+  padding: 1rem 1.2rem;
+}
+
+.dive-hero h2 {
+  margin: 0;
+  font-size: 1.6rem;
+}
+
+.dive-hero p {
+  margin: 0.2rem 0 0;
+  color: #abd1ea;
+}
+
+.dive-hero-badge {
+  background: linear-gradient(145deg, #19b6ef, #2087d1);
+  color: #f5fbff;
+  border-radius: 14px;
+  font-weight: 700;
+  padding: 0.55rem 0.85rem;
+  min-width: 104px;
+  text-align: center;
+}
+
+.dive-metric-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.8rem;
+}
+
+.dive-metric-card {
+  background: #f3f8fd;
+  border: 1px solid #d2dfeb;
+  border-radius: 12px;
+  padding: 0.8rem;
+}
+
+.dive-metric-card h4 {
+  margin: 0;
+  color: #52708a;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.dive-metric-card p {
+  margin: 0.35rem 0 0;
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: #0e2a41;
+}
+
+.dive-detail-grid {
+  display: grid;
+  grid-template-columns: 1.8fr 1fr;
+  gap: 1rem;
+}
+
+.dive-main-column,
+.dive-side-column {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.dive-panel {
+  background: #ffffff;
+  border: 1px solid #d7e4ef;
+  border-radius: 16px;
+  padding: 1rem;
+  box-shadow: 0 8px 20px rgba(13, 42, 66, 0.08);
+}
+
+.dive-panel h3 {
+  margin-top: 0;
+  color: #15344c;
+}
+
+.dive-related-list {
+  display: grid;
+  gap: 0.7rem;
+  margin: 0;
+}
+
+.dive-related-list div {
+  border-bottom: 1px solid #e6edf4;
+  padding-bottom: 0.55rem;
+}
+
+.dive-related-list dt {
+  color: #6586a0;
+  font-size: 0.88rem;
+}
+
+.dive-related-list dd {
+  margin: 0.2rem 0 0;
+  font-weight: 600;
+}
+
+@media (max-width: 900px) {
+  .dive-metric-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dive-detail-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dive-hero {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

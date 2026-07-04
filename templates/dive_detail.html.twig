@@ -1,86 +1,121 @@
 {% extends 'layout.html.twig' %}
 
 {% block content %}
-  <h2>Dive #{{ dive.number }}</h2>
-  <p>Date: {{ date_display }}</p>
-  <p>Depth: {{ depth_display }} {{ depth_label }}</p>
-  <p>Average depth: {{ average_depth_display }}</p>
-  <p>SAC: {{ sac_display }}</p>
+  <section class="dive-detail-page">
+    <header class="dive-hero">
+      <div class="dive-hero-badge">Dive #{{ dive.number }}</div>
+      <div>
+        <h2>Dive #{{ dive.number }}</h2>
+        <p>{{ date_display }} · {{ dive.durationMinutes }} min</p>
+      </div>
+    </header>
 
-  <section>
-    <h3>Related info</h3>
-    <ul>
-      <li>
-        Dive site:
-        {% if dive_site %}
-          <a href="/sites/{{ dive_site.id }}">{{ dive_site.name }}</a>
-        {% else %}
-          -
-        {% endif %}
-      </li>
-      <li>
-        City:
-        {% if dive_city %}
-          <a href="/cities/{{ dive_city.id }}">{{ dive_city.name }}</a>
-        {% else %}
-          -
-        {% endif %}
-      </li>
-      <li>
-        Country:
-        {% if dive_country %}
-          <a href="/countries/{{ dive_country.id }}">{{ dive_country.name }}</a>
-        {% else %}
-          -
-        {% endif %}
-      </li>
-      <li>
-        Shop:
-        {% if dive_shop %}
-          <a href="/shops/{{ dive_shop.id }}">{{ dive_shop.name }}</a>
-        {% else %}
-          -
-        {% endif %}
-      </li>
-      <li>
-        Trip:
-        {% if dive_trip %}
-          <a href="/trips/{{ dive_trip.id }}">{{ dive_trip.name }}</a>
-        {% else %}
-          -
-        {% endif %}
-      </li>
-    </ul>
-  </section>
+    <section class="dive-metric-grid">
+      <article class="dive-metric-card">
+        <h4>Depth:</h4>
+        <p>{{ depth_display }} {{ depth_label }}</p>
+      </article>
+      <article class="dive-metric-card">
+        <h4>Average depth</h4>
+        <p>{{ average_depth_display }}</p>
+      </article>
+      <article class="dive-metric-card">
+        <h4>SAC</h4>
+        <p>{{ sac_display }}</p>
+      </article>
+    </section>
 
-  <section>
-    <h3>Comments</h3>
-    <div>{{ comment_html|raw }}</div>
-  </section>
+    <section class="dive-detail-grid">
+      <div class="dive-main-column">
+        <article class="dive-panel">
+          <h3>Dive profile</h3>
+          <canvas id="profile-chart" data-dive-number="{{ dive.number }}" width="700" height="220"></canvas>
+          <p id="profile-chart-legend">Depth and average depth</p>
+        </article>
 
-  <section>
-    <h3>Pictures</h3>
-    <ul>
-      {% for picture in pictures %}
-        <li>
-          <a href="{{ picture.url }}" data-lightbox>
-            <img src="{{ picture.thumbUrl }}" alt="{{ picture.description|default('Dive image') }}">
-          </a>
-        </li>
-      {% endfor %}
-    </ul>
-  </section>
+        <article class="dive-panel">
+          <h3>Ascent / descent rates</h3>
+          <canvas id="profile-rate-chart" data-dive-number="{{ dive.number }}" width="700" height="220"></canvas>
+          <p id="profile-rate-legend">Ascent and descent rates</p>
+        </article>
 
-  <section>
-    <h3>Dive profile</h3>
-    <canvas id="profile-chart" data-dive-number="{{ dive.number }}" width="700" height="220"></canvas>
-    <p id="profile-chart-legend">Depth and average depth</p>
-  </section>
+        <article class="dive-panel">
+          <h3>Comments</h3>
+          <div>{{ comment_html|raw }}</div>
+        </article>
 
-  <section>
-    <h3>Ascent / descent rates</h3>
-    <canvas id="profile-rate-chart" data-dive-number="{{ dive.number }}" width="700" height="220"></canvas>
-    <p id="profile-rate-legend">Ascent and descent rates</p>
+        <article class="dive-panel">
+          <h3>Pictures</h3>
+          <ul class="gallery-grid">
+            {% for picture in pictures %}
+              <li>
+                <a href="{{ picture.url }}" data-lightbox>
+                  <img src="{{ picture.thumbUrl }}" alt="{{ picture.description|default('Dive image') }}">
+                </a>
+              </li>
+            {% endfor %}
+          </ul>
+        </article>
+      </div>
+
+      <aside class="dive-side-column">
+        <article class="dive-panel">
+          <h3>Related info</h3>
+          <dl class="dive-related-list">
+            <div>
+              <dt>Dive site:</dt>
+              <dd>
+                {% if dive_site %}
+                  <a href="/sites/{{ dive_site.id }}">{{ dive_site.name }}</a>
+                {% else %}
+                  -
+                {% endif %}
+              </dd>
+            </div>
+            <div>
+              <dt>City:</dt>
+              <dd>
+                {% if dive_city %}
+                  <a href="/cities/{{ dive_city.id }}">{{ dive_city.name }}</a>
+                {% else %}
+                  -
+                {% endif %}
+              </dd>
+            </div>
+            <div>
+              <dt>Country:</dt>
+              <dd>
+                {% if dive_country %}
+                  <a href="/countries/{{ dive_country.id }}">{{ dive_country.name }}</a>
+                {% else %}
+                  -
+                {% endif %}
+              </dd>
+            </div>
+            <div>
+              <dt>Shop:</dt>
+              <dd>
+                {% if dive_shop %}
+                  <a href="/shops/{{ dive_shop.id }}">{{ dive_shop.name }}</a>
+                {% else %}
+                  -
+                {% endif %}
+              </dd>
+            </div>
+            <div>
+              <dt>Trip:</dt>
+              <dd>
+                {% if dive_trip %}
+                  <a href="/trips/{{ dive_trip.id }}">{{ dive_trip.name }}</a>
+                {% else %}
+                  -
+                {% endif %}
+              </dd>
+            </div>
+          </dl>
+        </article>
+      </aside>
+    </section>
   </section>
 
   <script src="/assets/js/profile-chart.js" defer></script>
