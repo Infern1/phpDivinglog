@@ -16,7 +16,7 @@ final readonly class DiveRepository
 
     public function findByNumber(int $number): ?Dive
     {
-        $sql = sprintf('SELECT Number, LogID, PlaceID, ShopID, TripID, Divedate, Divetime, Depth, Profile, ProfileInt FROM %sLogbook WHERE Number = :number', $this->tablePrefix);
+        $sql = sprintf('SELECT * FROM %sLogbook WHERE Number = :number', $this->tablePrefix);
         $statement = $this->pdo->prepare($sql);
         $statement->bindValue(':number', $number, PDO::PARAM_INT);
         $statement->execute();
@@ -30,7 +30,7 @@ final readonly class DiveRepository
 
         return new Dive(
             (int) ($row['Number'] ?? 0),
-            (int) ($row['LogID'] ?? 0),
+            (int) ($row['LogID'] ?? $row['Number'] ?? 0),
             (int) ($row['PlaceID'] ?? 0),
             $dateTime,
             (float) ($row['Depth'] ?? 0.0),
@@ -70,7 +70,7 @@ final readonly class DiveRepository
      */
     public function listByPlace(int $placeId, int $limit = 200): array
     {
-        $sql = sprintf('SELECT Number, LogID, PlaceID, ShopID, TripID, Divedate, Divetime, Depth, Profile, ProfileInt FROM %sLogbook WHERE PlaceID = :placeId ORDER BY Number DESC LIMIT :limit', $this->tablePrefix);
+        $sql = sprintf('SELECT * FROM %sLogbook WHERE PlaceID = :placeId ORDER BY Number DESC LIMIT :limit', $this->tablePrefix);
         $statement = $this->pdo->prepare($sql);
         $statement->bindValue(':placeId', $placeId, PDO::PARAM_INT);
         $statement->bindValue(':limit', $limit, PDO::PARAM_INT);
@@ -81,7 +81,7 @@ final readonly class DiveRepository
 
             return new Dive(
                 (int) ($row['Number'] ?? 0),
-                (int) ($row['LogID'] ?? 0),
+                (int) ($row['LogID'] ?? $row['Number'] ?? 0),
                 (int) ($row['PlaceID'] ?? 0),
                 $dateTime,
                 (float) ($row['Depth'] ?? 0.0),

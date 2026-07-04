@@ -23,12 +23,16 @@ $requestUri = $_SERVER['REQUEST_URI'] ?? '/';
 $queryMode = $container['config']->queryStringMode();
 
 if ($queryMode) {
-    $type = (string) ($_GET['type'] ?? 'dives');
-    $id = isset($_GET['id']) && is_numeric($_GET['id']) ? (int) $_GET['id'] : null;
-    $match = [
-        'route' => $id === null ? $type . '.overview' : $type . '.detail',
-        'id' => $id,
-    ];
+    if (isset($_GET['type'])) {
+        $type = (string) $_GET['type'];
+        $id = isset($_GET['id']) && is_numeric($_GET['id']) ? (int) $_GET['id'] : null;
+        $match = [
+            'route' => $id === null ? $type . '.overview' : $type . '.detail',
+            'id' => $id,
+        ];
+    } else {
+        $match = $router->resolve($requestUri);
+    }
 } else {
     $match = $router->resolve($requestUri);
 }

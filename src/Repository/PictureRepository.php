@@ -18,19 +18,44 @@ final readonly class PictureRepository
      */
     public function findByLogId(int $logId): array
     {
-        $sql = sprintf('SELECT PictureID, LogID, Picture, Description FROM %sPictures WHERE LogID = :logId ORDER BY PictureID', $this->tablePrefix);
-        $statement = $this->pdo->prepare($sql);
-        $statement->bindValue(':logId', $logId, PDO::PARAM_INT);
-        $statement->execute();
+        $rows = $this->queryByColumn('LogID', $logId);
+        if ($rows === null) {
+            $rows = $this->queryByColumn('Number', $logId) ?? [];
+        }
 
         return array_map(
             static fn (array $row): Picture => new Picture(
                 (int) ($row['PictureID'] ?? 0),
-                (int) ($row['LogID'] ?? 0),
+                (int) ($row['LogID'] ?? $row['Number'] ?? 0),
                 (string) ($row['Picture'] ?? ''),
                 isset($row['Description']) ? (string) $row['Description'] : null,
             ),
-            $statement->fetchAll()
+            $rows
         );
+    }
+
+    /**
+     * @return list<array<string, mixed>>|null
+     */
+    private function queryByColumn(string $column, int $id): ?array
+    {
+        $sql = sprintf(
+            'SELECT * FROM %sPictures WHERE %s = :id ORDER BY PictureID',
+            $this->tablePrefix,
+            $column
+        );
+
+        try {
+            $statement = $this->pdo->prepare($sql);
+            $statement->bindValue(':id', $id, PDO::PARAM_INT);
+            $statement->execute();
+            return $statement->fetchAll();
+        } catch (\PDOException $exception) {
+            if (($exception->errorInfo[0] ?? null) === '42S22') {
+                return null;
+            }
+
+            throw $exception;
+        }
     }
 }
