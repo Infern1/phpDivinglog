@@ -50,18 +50,6 @@
           <p>{{ visibility_display }}</p>
         </article>
         <article class="dive-metric-card dive-metric-card-hero">
-          <h4>Weather</h4>
-          <p>{{ weather_display }}</p>
-        </article>
-        <article class="dive-metric-card dive-metric-card-hero">
-          <h4>Weight</h4>
-          <p>{{ weight_display }}</p>
-        </article>
-        <article class="dive-metric-card dive-metric-card-hero">
-          <h4>Buddy</h4>
-          <p>{{ buddy_display }}</p>
-        </article>
-        <article class="dive-metric-card dive-metric-card-hero">
           <h4>SAC</h4>
           <p>{{ sac_display }}</p>
         </article>
@@ -143,10 +131,10 @@
 
           <aside class="dive-side-column">
             <article class="dive-panel">
-              <h3>Related info</h3>
-              <dl class="dive-related-list">
-                <div>
-                  <dt>Dive site:</dt>
+              <h3>Details</h3>
+              <dl class="dive-details-grid">
+                <div class="dive-details-full">
+                  <dt>Dive site</dt>
                   <dd>
                     {% if dive_site %}
                       <a href="/sites/{{ dive_site.id }}">{{ dive_site.name }}</a>
@@ -157,53 +145,49 @@
                     {% endif %}
                   </dd>
                 </div>
-                <div>
-                  <dt>City:</dt>
-                  <dd>
-                    {% if dive_city %}
-                      <a href="/cities/{{ dive_city.id }}">{{ dive_city.name }}</a>
-                    {% elseif related_city_name %}
-                      {{ related_city_name }}
-                    {% else %}
-                      -
-                    {% endif %}
-                  </dd>
+                <div class="dive-details-full">
+                  <dt>Location</dt>
+                  <dd>{{ location_display }}</dd>
                 </div>
                 <div>
-                  <dt>Country:</dt>
-                  <dd>
-                    {% if dive_country %}
-                      <a href="/countries/{{ dive_country.id }}">{{ dive_country.name }}</a>
-                    {% elseif related_country_name %}
-                      {{ related_country_name }}
-                    {% else %}
-                      -
-                    {% endif %}
-                  </dd>
+                  <dt>Max. depth</dt>
+                  <dd>{{ depth_display }} {{ depth_label }}</dd>
                 </div>
                 <div>
-                  <dt>Shop:</dt>
-                  <dd>
-                    {% if dive_shop %}
-                      <a href="/shops/{{ dive_shop.id }}">{{ dive_shop.name }}</a>
-                    {% elseif related_shop_name %}
-                      {{ related_shop_name }}
-                    {% else %}
-                      -
-                    {% endif %}
-                  </dd>
+                  <dt>Avg. depth</dt>
+                  <dd>{{ average_depth_display }}</dd>
                 </div>
                 <div>
-                  <dt>Trip:</dt>
-                  <dd>
-                    {% if dive_trip %}
-                      <a href="/trips/{{ dive_trip.id }}">{{ dive_trip.name }}</a>
-                    {% elseif related_trip_name %}
-                      {{ related_trip_name }}
-                    {% else %}
-                      -
-                    {% endif %}
-                  </dd>
+                  <dt>Buddy</dt>
+                  <dd>{{ buddy_display }}</dd>
+                </div>
+                <div>
+                  <dt>Boat/Operator</dt>
+                  <dd>{% if dive_shop %}<a href="/shops/{{ dive_shop.id }}">{{ dive_shop.name }}</a>{% elseif related_shop_name %}{{ related_shop_name }}{% else %}-{% endif %}</dd>
+                </div>
+                <div>
+                  <dt>Weather</dt>
+                  <dd>{{ weather_display }}</dd>
+                </div>
+                <div>
+                  <dt>Weight</dt>
+                  <dd>{{ weight_display }}</dd>
+                </div>
+                <div>
+                  <dt>Trip</dt>
+                  <dd>{% if dive_trip %}<a href="/trips/{{ dive_trip.id }}">{{ dive_trip.name }}</a>{% elseif related_trip_name %}{{ related_trip_name }}{% else %}-{% endif %}</dd>
+                </div>
+                <div>
+                  <dt>Temp. Air</dt>
+                  <dd>{{ air_temperature_display }}</dd>
+                </div>
+                <div>
+                  <dt>Temp. max. d.</dt>
+                  <dd>{{ temperature_display }}</dd>
+                </div>
+                <div>
+                  <dt>Visibility</dt>
+                  <dd>{{ visibility_display }}</dd>
                 </div>
               </dl>
             </article>

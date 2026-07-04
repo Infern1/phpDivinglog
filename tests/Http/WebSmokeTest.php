@@ -35,6 +35,8 @@ final class WebSmokeTest extends TestCase
         self::assertSame(200, $response['status']);
         self::assertStringContainsString('dives', $response['body']);
         self::assertStringContainsString('data-dives-table', $response['body']);
+        self::assertStringContainsString('data-href="/dives/1"', $response['body']);
+        self::assertStringContainsString('role="link"', $response['body']);
         self::assertStringContainsString('Search location, number...', $response['body']);
         self::assertStringContainsString('name="q"', $response['body']);
         self::assertStringContainsString('name="sort"', $response['body']);
@@ -59,7 +61,10 @@ final class WebSmokeTest extends TestCase
         self::assertStringContainsString('Tanks', $response['body']);
         self::assertStringContainsString('Main tank', $response['body']);
         self::assertStringContainsString('Press. Start', $response['body']);
-        self::assertStringContainsString('Dive site:', $response['body']);
+        self::assertStringContainsString('Details', $response['body']);
+        self::assertStringContainsString('Dive site', $response['body']);
+        self::assertStringContainsString('Location', $response['body']);
+        self::assertStringContainsString('Temp. Air', $response['body']);
         self::assertStringContainsString('Blue Hole', $response['body']);
         self::assertStringContainsString('Ocean Dive Center', $response['body']);
         self::assertStringContainsString('Spring Bahamas', $response['body']);

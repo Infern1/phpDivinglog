@@ -28,14 +28,36 @@
   }
 
   const overviewControls = document.querySelector('.dive-overview-controls');
-  if (!overviewControls) {
-    return;
+  if (overviewControls) {
+    const sortSelect = document.getElementById('dives-sort');
+    sortSelect?.addEventListener('change', () => {
+      if (overviewControls instanceof HTMLFormElement) {
+        overviewControls.requestSubmit();
+      }
+    });
   }
 
-  const sortSelect = document.getElementById('dives-sort');
-  sortSelect?.addEventListener('change', () => {
-    if (overviewControls instanceof HTMLFormElement) {
-      overviewControls.requestSubmit();
+  const clickableRows = document.querySelectorAll('table[data-dives-table] tbody tr[data-href]');
+  clickableRows.forEach((row) => {
+    const href = row.getAttribute('data-href');
+    if (!href) {
+      return;
     }
+
+    row.addEventListener('click', (event) => {
+      const target = event.target;
+      if (target instanceof Element && target.closest('a, button, input, select, textarea')) {
+        return;
+      }
+
+      window.location.href = href;
+    });
+
+    row.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        window.location.href = href;
+      }
+    });
   });
 })();

@@ -219,6 +219,9 @@ final readonly class DiveController
             'temperature_display' => $dive->waterTemp !== null
                 ? $this->formatter->formatDecimal($this->converter->temperatureToDisplay($dive->waterTemp), 0) . '°' . $this->converter->temperatureLabel()
                 : '-',
+            'air_temperature_display' => $dive->airTemp !== null
+                ? $this->formatter->formatDecimal($this->converter->temperatureToDisplay($dive->airTemp), 0) . '°' . $this->converter->temperatureLabel()
+                : '-',
             'visibility_display' => $visibilityDisplay,
             'weather_display' => $weatherDisplay,
             'average_depth_display' => $averageDepthDisplay,
