@@ -60,4 +60,38 @@
       }
     });
   });
+
+  const logbookPane = document.querySelector('[data-logbook-pane]');
+  if (logbookPane instanceof HTMLElement) {
+    const storageKey = 'divelog:logbook-scroll-top';
+
+    const restoreScroll = () => {
+      const stored = window.sessionStorage.getItem(storageKey);
+      if (!stored) {
+        return;
+      }
+
+      const value = Number(stored);
+      if (Number.isFinite(value) && value >= 0) {
+        logbookPane.scrollTop = value;
+      }
+    };
+
+    restoreScroll();
+
+    logbookPane.addEventListener('scroll', () => {
+      window.sessionStorage.setItem(storageKey, String(logbookPane.scrollTop));
+    }, { passive: true });
+
+    const links = logbookPane.querySelectorAll('[data-logbook-link]');
+    links.forEach((link) => {
+      link.addEventListener('click', () => {
+        window.sessionStorage.setItem(storageKey, String(logbookPane.scrollTop));
+      });
+    });
+
+    window.addEventListener('beforeunload', () => {
+      window.sessionStorage.setItem(storageKey, String(logbookPane.scrollTop));
+    });
+  }
 })();

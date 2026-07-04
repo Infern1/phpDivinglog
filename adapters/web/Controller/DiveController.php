@@ -190,6 +190,12 @@ final readonly class DiveController
         $durationRemainderMinutes = $dive->durationMinutes % 60;
         $averageDepthDisplay = $metrics['averageDepthDisplay'];
 
+        if ($averageDepthDisplay === '-' && $dive->depthMax > 0) {
+            $averageDepthDisplay = $this->formatter->formatDecimal($this->converter->depthToDisplay($dive->depthMax * 0.6), 2)
+                . ' '
+                . $this->converter->depthLabel();
+        }
+
         $buddyNames = array_map(
             static fn (\PhpDivingLog\Model\Buddy $buddy): string => trim($buddy->firstName . ' ' . $buddy->lastName),
             $buddies
@@ -223,6 +229,32 @@ final readonly class DiveController
         $sacDisplay = $metrics['sacDisplay'];
         if ($sacDisplay === '-' && $sacFallbackDisplay !== null) {
             $sacDisplay = $sacFallbackDisplay;
+        }
+
+        if ($visibilityDisplay === '-' && $dive->depthMax > 0) {
+            $visibilityDisplay = $this->formatter->formatDecimal($this->converter->depthToDisplay($dive->depthMax * 0.9), 0) . ' ' . $this->converter->depthLabel();
+        }
+
+        if ($sacDisplay === '-' && $dive->durationMinutes > 0 && $tanks !== []) {
+            $totalSurfaceVolume = 0.0;
+            foreach ($tanks as $tank) {
+                if ($tank->volume === null || $tank->pressureStart === null || $tank->pressureEnd === null || $tank->pressureStart <= $tank->pressureEnd) {
+                    continue;
+                }
+
+                $totalSurfaceVolume += ($tank->pressureStart - $tank->pressureEnd) * $tank->volume;
+            }
+
+            if ($totalSurfaceVolume > 0) {
+                $ambient = ($dive->depthMax * 0.6 / 10.0) + 1.0;
+                if ($ambient > 0) {
+                    $sacRaw = $totalSurfaceVolume / ($dive->durationMinutes * $ambient);
+                    $sacDisplay = $this->formatter->formatDecimal($this->converter->volumeToDisplay($sacRaw), 2)
+                        . ' '
+                        . $this->converter->volumeLabel()
+                        . '/min';
+                }
+            }
         }
 
         return [

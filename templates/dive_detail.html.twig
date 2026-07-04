@@ -58,12 +58,12 @@
 
     <section class="dive-layout-grid" data-detail-layout>
       <aside class="dive-logbook-column">
-        <article class="dive-panel dive-logbook-panel">
+        <article class="dive-panel dive-logbook-panel" data-logbook-pane>
           <h3>Logbook</h3>
           <ul class="logbook-list" data-logbook-list>
             {% for entry in logbook_dives %}
-              <li class="logbook-item{% if entry.active %} is-active{% endif %}">
-                <a href="/dives/{{ entry.number }}" class="logbook-link" {% if entry.active %}aria-current="page"{% endif %}>
+              <li class="logbook-item{% if entry.active %} is-active{% endif %}" data-dive-number="{{ entry.number }}">
+                <a href="/dives/{{ entry.number }}" class="logbook-link" data-logbook-link {% if entry.active %}aria-current="page"{% endif %}>
                   <span class="logbook-number">#{{ entry.number }}</span>
                   <span class="logbook-meta">{{ entry.date }} · {{ entry.depth }} {{ entry.depth_label }}</span>
                   <span class="logbook-meta">{{ entry.duration }} min · {{ entry.location }}</span>

@@ -18,12 +18,26 @@ final readonly class TankRepository
      */
     public function findByDiveNumber(int $diveNumber, ?int $logId = null): array
     {
-        $rows = $this->queryByColumn('Number', $diveNumber);
-        if ($rows === null || $rows === []) {
-            if ($logId !== null && $logId > 0) {
-                $rows = $this->queryByColumn('LogID', $logId) ?? [];
-            } else {
-                $rows = [];
+        $candidates = [
+            ['Number', $diveNumber],
+            ['LogID', $diveNumber],
+        ];
+
+        if ($logId !== null && $logId > 0) {
+            $candidates[] = ['Number', $logId];
+            $candidates[] = ['LogID', $logId];
+        }
+
+        $rowsByKey = [];
+        foreach ($candidates as [$column, $value]) {
+            $rows = $this->queryByColumn($column, $value);
+            if ($rows === null || $rows === []) {
+                continue;
+            }
+
+            foreach ($rows as $row) {
+                $key = (string) ($row['TankID'] ?? $row['ID'] ?? md5(json_encode($row)));
+                $rowsByKey[$key] = $row;
             }
         }
 
@@ -36,7 +50,7 @@ final readonly class TankRepository
                 isset($row['Pend']) ? (float) $row['Pend'] : (isset($row['PresE']) ? (float) $row['PresE'] : null),
                 isset($row['O2']) ? (float) $row['O2'] : null,
             ),
-            $rows
+            array_values($rowsByKey)
         );
     }
 

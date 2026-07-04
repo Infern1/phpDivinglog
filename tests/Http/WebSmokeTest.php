@@ -75,7 +75,9 @@ final class WebSmokeTest extends TestCase
         self::assertStringContainsString('data-profile-live="depth"', $response['body']);
         self::assertStringContainsString('data-profile-live="rate"', $response['body']);
         self::assertStringContainsString('Logbook', $response['body']);
+        self::assertStringContainsString('data-logbook-pane', $response['body']);
         self::assertStringContainsString('data-logbook-list', $response['body']);
+        self::assertStringContainsString('data-logbook-link', $response['body']);
         self::assertStringContainsString('dive-sequence-nav-top', $response['body']);
         self::assertStringContainsString('aria-label="Next dive"', $response['body']);
         self::assertStringContainsString('/assets/js/profile-chart.js', $response['body']);

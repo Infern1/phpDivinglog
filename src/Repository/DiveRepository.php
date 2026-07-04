@@ -50,6 +50,9 @@ final readonly class DiveRepository
                 'place_name' => isset($row['Place']) ? (string) $row['Place'] : null,
                 'city_name' => isset($row['City']) ? (string) $row['City'] : null,
                 'country_name' => isset($row['Country']) ? (string) $row['Country'] : null,
+                'visibility' => $this->firstNonEmptyString($row, ['Visibility', 'Visib', 'Sicht', 'Viz']),
+                'weather' => $this->firstNonEmptyString($row, ['Weather', 'Condition', 'Conditions']),
+                'sac' => $this->firstNumeric($row, ['SAC', 'Sac', 'RMV', 'Rmv']),
             ]
         );
     }
@@ -189,6 +192,9 @@ final readonly class DiveRepository
                     'place_name' => isset($row['Place']) ? (string) $row['Place'] : null,
                     'city_name' => isset($row['City']) ? (string) $row['City'] : null,
                     'country_name' => isset($row['Country']) ? (string) $row['Country'] : null,
+                    'visibility' => $this->firstNonEmptyString($row, ['Visibility', 'Visib', 'Sicht', 'Viz']),
+                    'weather' => $this->firstNonEmptyString($row, ['Weather', 'Condition', 'Conditions']),
+                    'sac' => $this->firstNumeric($row, ['SAC', 'Sac', 'RMV', 'Rmv']),
                 ]
             );
         }, $statement->fetchAll());
@@ -207,6 +213,48 @@ final readonly class DiveRepository
         }
 
         return new DateTimeImmutable(trim($dateValue . ' ' . $timeValue));
+    }
+
+    /**
+     * @param array<string, mixed> $row
+     * @param list<string> $keys
+     */
+    private function firstNonEmptyString(array $row, array $keys): ?string
+    {
+        foreach ($keys as $key) {
+            if (!array_key_exists($key, $row)) {
+                continue;
+            }
+
+            $value = trim((string) $row[$key]);
+            if ($value !== '') {
+                return $value;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @param array<string, mixed> $row
+     * @param list<string> $keys
+     */
+    private function firstNumeric(array $row, array $keys): ?float
+    {
+        foreach ($keys as $key) {
+            if (!array_key_exists($key, $row)) {
+                continue;
+            }
+
+            $raw = trim((string) $row[$key]);
+            if ($raw === '' || !is_numeric($raw)) {
+                continue;
+            }
+
+            return (float) $raw;
+        }
+
+        return null;
     }
 
     /**

@@ -420,6 +420,10 @@ td {
   text-decoration: none;
 }
 
+.logbook-link[aria-current="page"] {
+  cursor: default;
+}
+
 .logbook-number {
   font-weight: 700;
   color: #0f6958;
