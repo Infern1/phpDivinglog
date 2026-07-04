@@ -44,8 +44,10 @@ final readonly class DiveController
     /**
      * @return array{dives:list<array<string, mixed>>}
      */
-    public function overview(int $limit = 20, int $offset = 0): array
+    public function overview(int $page = 1, int $limit = 20): array
     {
+        $page = max(1, $page);
+        $offset = ($page - 1) * $limit;
         $rows = [];
 
         foreach ($this->dives->listOverview($limit, $offset) as $overview) {
@@ -62,8 +64,13 @@ final readonly class DiveController
             ];
         }
 
+        $total = $this->dives->countAll();
+        $pages = max(1, (int) ceil($total / $limit));
+
         return [
             'dives' => $rows,
+            'currentPage' => $page,
+            'pages' => $pages,
         ];
     }
 

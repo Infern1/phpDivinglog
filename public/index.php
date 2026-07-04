@@ -85,8 +85,9 @@ if ($match['route'] === 'profile.detail' && $match['id'] !== null) {
 }
 
 if ($match['route'] === 'dives.overview') {
+    $page = isset($_GET['page']) && is_numeric($_GET['page']) ? max(1, (int) $_GET['page']) : 1;
     header('Content-Type: text/html; charset=UTF-8');
-    echo $renderer->render('dives_overview.html.twig', $diveController->overview());
+    echo $renderer->render('dives_overview.html.twig', $diveController->overview($page));
     return;
 }
 

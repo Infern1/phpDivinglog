@@ -96,6 +96,14 @@ final readonly class DiveRepository
         }, $statement->fetchAll());
     }
 
+    public function countAll(): int
+    {
+        $sql = sprintf('SELECT COUNT(*) AS DiveCount FROM %sLogbook', $this->tablePrefix);
+        $row = $this->pdo->query($sql)->fetch();
+
+        return is_array($row) ? (int) ($row['DiveCount'] ?? 0) : 0;
+    }
+
     /**
      * @return list<Dive>
      */
