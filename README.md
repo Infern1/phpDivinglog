@@ -24,7 +24,7 @@ For local test coverage parity:
 
 ## Installation
 
-For a concise setup checklist, see `INSTALL`.
+For a concise setup checklist, see `INSTALL.md`.
 
 1. Install dependencies:
 
