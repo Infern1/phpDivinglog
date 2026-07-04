@@ -228,7 +228,38 @@ final readonly class DiveController
 
         $sacDisplay = $metrics['sacDisplay'];
         if ($sacDisplay === '-' && $sacFallbackDisplay !== null) {
-            $sacDisplay = $sacFallbackDisplay;
+            $sacDisplay = $this->formatter->formatDecimal((float) $sacFallbackDisplay, 2)
+                . ' '
+                . $this->converter->volumeLabel()
+                . '/min';
+        }
+
+        $legacyVisibility = $dive->extra['visibility'] ?? null;
+        if ($visibilityDisplay === '-' && is_numeric($legacyVisibility)) {
+            $visibilityDisplay = $this->formatter->formatDecimal($this->converter->depthToDisplay((float) $legacyVisibility), 0) . ' ' . $this->converter->depthLabel();
+        }
+
+        if ($sacDisplay === '-' && is_numeric($dive->extra['sac'] ?? null)) {
+            $sacDisplay = $this->formatter->formatDecimal($this->converter->volumeToDisplay((float) $dive->extra['sac']), 2)
+                . ' '
+                . $this->converter->volumeLabel()
+                . '/min';
+        }
+
+        if ($sacDisplay === '-' && $dive->durationMinutes > 0) {
+            $tankSize = isset($dive->extra['tank_size']) && is_numeric($dive->extra['tank_size']) ? (float) $dive->extra['tank_size'] : null;
+            $presStart = $dive->pressureStart;
+            $presEnd = $dive->pressureEnd;
+            if ($tankSize !== null && $tankSize > 0 && $presStart !== null && $presEnd !== null && $presStart > $presEnd) {
+                $ambient = ($dive->depthMax * 0.6 / 10.0) + 1.0;
+                if ($ambient > 0) {
+                    $legacySacRaw = (($presStart - $presEnd) * $tankSize) / ($dive->durationMinutes * $ambient);
+                    $sacDisplay = $this->formatter->formatDecimal($this->converter->volumeToDisplay($legacySacRaw), 2)
+                        . ' '
+                        . $this->converter->volumeLabel()
+                        . '/min';
+                }
+            }
         }
 
         if ($visibilityDisplay === '-' && $dive->depthMax > 0) {

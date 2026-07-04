@@ -53,6 +53,7 @@ final readonly class DiveRepository
                 'visibility' => $this->firstNonEmptyString($row, ['Visibility', 'Visib', 'Sicht', 'Viz']),
                 'weather' => $this->firstNonEmptyString($row, ['Weather', 'Condition', 'Conditions']),
                 'sac' => $this->firstNumeric($row, ['SAC', 'Sac', 'RMV', 'Rmv']),
+                'tank_size' => $this->firstNumeric($row, ['Tanksize', 'TankSize', 'Volume']),
             ]
         );
     }
@@ -195,6 +196,7 @@ final readonly class DiveRepository
                     'visibility' => $this->firstNonEmptyString($row, ['Visibility', 'Visib', 'Sicht', 'Viz']),
                     'weather' => $this->firstNonEmptyString($row, ['Weather', 'Condition', 'Conditions']),
                     'sac' => $this->firstNumeric($row, ['SAC', 'Sac', 'RMV', 'Rmv']),
+                    'tank_size' => $this->firstNumeric($row, ['Tanksize', 'TankSize', 'Volume']),
                 ]
             );
         }, $statement->fetchAll());
