@@ -23,6 +23,7 @@ use PhpDivingLog\Support\DiveMetricsCalculator;
 use PhpDivingLog\Support\HtmlSanitizer;
 use PhpDivingLog\Support\MediaResolver;
 use PhpDivingLog\Support\RtfConverter;
+use PhpDivingLog\Support\ThumbnailGenerator;
 use PhpDivingLog\Support\Translator;
 use PhpDivingLog\Support\UnitConverter;
 
@@ -41,7 +42,14 @@ return [
         'formatter' => new Formatter($config),
         'diveMetrics' => new DiveMetricsCalculator(new UnitConverter($config), new Formatter($config)),
         'translator' => Translator::fromFiles($config->language(), dirname(__DIR__, 2) . '/resources/lang'),
-        'mediaResolver' => new MediaResolver($config),
+        'mediaResolver' => new MediaResolver(
+            $config,
+            new ThumbnailGenerator(
+                dirname(__DIR__, 2) . '/public',
+                $config->thumbWidth(),
+                $config->thumbHeight(),
+            ),
+        ),
         'rtfConverter' => new RtfConverter(new HtmlSanitizer()),
     ],
     'repositories' => [

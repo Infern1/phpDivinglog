@@ -6,8 +6,10 @@ namespace PhpDivingLog\Support;
 
 final readonly class MediaResolver
 {
-    public function __construct(private Config $config)
-    {
+    public function __construct(
+        private Config $config,
+        private ?ThumbnailGenerator $thumbnailGenerator = null,
+    ) {
     }
 
     public function pictureUrl(string $filename): string
@@ -17,7 +19,25 @@ final readonly class MediaResolver
 
     public function thumbUrl(string $filename): string
     {
-        return $this->resolveRelativePath($this->config->picPathWebThumb(), $filename);
+        $source = $this->resolveRelativePath($this->config->picPathWeb(), $filename);
+        if ($source === $this->config->picMissing()) {
+            return $source;
+        }
+
+        $thumb = $this->resolveRelativePath($this->config->picPathWebThumb(), $filename);
+        if ($thumb === $this->config->picMissing()) {
+            return $source;
+        }
+
+        if ($this->thumbnailGenerator === null) {
+            return $thumb;
+        }
+
+        if ($this->thumbnailGenerator->ensure($source, $thumb)) {
+            return $thumb;
+        }
+
+        return $source;
     }
 
     public function mapUrl(string $filename): string

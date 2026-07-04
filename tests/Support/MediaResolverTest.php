@@ -19,7 +19,7 @@ final class MediaResolverTest extends TestCase
         ]);
 
         $resolver = new MediaResolver($config);
-        self::assertSame('images/pictures/27_1.jpg', $resolver->pictureUrl('27_1.jpg'));
+        self::assertSame('/images/pictures/27_1.jpg', $resolver->pictureUrl('27_1.jpg'));
     }
 
     public function testRejectsTraversal(): void
@@ -31,6 +31,6 @@ final class MediaResolverTest extends TestCase
         ]);
 
         $resolver = new MediaResolver($config);
-        self::assertSame('images/icons8-no-image-50.png', $resolver->pictureUrl('../secret.jpg'));
+        self::assertSame('/images/icons8-no-image-50.png', $resolver->pictureUrl('../secret.jpg'));
     }
 }
