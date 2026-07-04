@@ -31,8 +31,16 @@
           title: `Depth (${payload.depthUnit || 'm'})`,
           xLabel: 'Time (min)',
           yLabel: payload.depthUnit || 'm',
+          invertY: true,
           series: [
-            { points: payload.series, valueKey: 'depth', color: '#0d6e6e', label: 'Depth' },
+            {
+              points: payload.series,
+              valueKey: 'depth',
+              color: '#0d6e6e',
+              label: 'Depth',
+              fillToSurface: true,
+              fillColor: 'rgba(156, 185, 214, 0.55)',
+            },
             {
               points: payload.averageSeries || [],
               valueKey: 'depth',
@@ -106,6 +114,7 @@
       ),
       1,
     );
+    const minY = 0;
 
     const baseLegend = config.series.map((line) => line.label).join(' and ');
     setLegend(legendNode, baseLegend);
@@ -187,6 +196,28 @@
         const points = line.points || [];
         if (points.length === 0) {
           return;
+        }
+
+        const firstX = xToPx(Number(points[0].minute || 0));
+        const lastX = xToPx(Number(points[points.length - 1].minute || 0));
+        const surfaceY = yToPx(0);
+
+        if (line.fillToSurface && config.invertY) {
+          ctx.save();
+          ctx.fillStyle = line.fillColor || 'rgba(156, 185, 214, 0.55)';
+          ctx.beginPath();
+          ctx.moveTo(firstX, surfaceY);
+
+          points.forEach((point) => {
+            const x = xToPx(Number(point.minute || 0));
+            const y = yToPx(Number(point[line.valueKey] || 0));
+            ctx.lineTo(x, y);
+          });
+
+          ctx.lineTo(lastX, surfaceY);
+          ctx.closePath();
+          ctx.fill();
+          ctx.restore();
         }
 
         ctx.save();
@@ -293,7 +324,12 @@
     }
 
     function yToPx(value) {
-      return height - padding.bottom - (value / maxY) * innerHeight;
+      const clamped = Math.min(Math.max(value, minY), maxY);
+      if (config.invertY) {
+        return padding.top + ((clamped - minY) / (maxY - minY || 1)) * innerHeight;
+      }
+
+      return height - padding.bottom - ((clamped - minY) / (maxY - minY || 1)) * innerHeight;
     }
 
     function pickNearestMinute(pixelX) {
