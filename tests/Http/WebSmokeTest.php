@@ -51,7 +51,7 @@ final class WebSmokeTest extends TestCase
         self::assertStringContainsString('Dive profile', $response['body']);
         self::assertStringContainsString('Ascent / descent rates', $response['body']);
         self::assertStringContainsString('profile-rate-chart', $response['body']);
-        self::assertStringContainsString('/public/assets/js/profile-chart.js', $response['body']);
+        self::assertStringContainsString('/assets/js/profile-chart.js', $response['body']);
     }
 
     public function testUnknownDiveReturnsNotFound(): void
