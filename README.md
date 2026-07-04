@@ -46,6 +46,9 @@ For a concise setup checklist, see `INSTALL.md`.
 
 See deployment details in `docs/deployment.md`.
 
+If you deploy under a subfolder (for example `https://example.com/divelog`),
+see the subfolder section in `INSTALL.md`.
+
 ## Runtime configuration
 
 All options are environment-driven via `src/Support/Config.php`.

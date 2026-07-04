@@ -41,6 +41,27 @@ Quick Start
 - public/index.php (web UI)
 - public/api.php (JSON API)
 
+Subfolder deployment example (`example.com/divelog`)
+----------------------------------------------------
+
+If the app is hosted under a URL subfolder, map that URL to the project's
+`public/` directory and keep rewrite rules enabled.
+
+Example target:
+
+- `https://example.com/divelog/` -> `<repo>/public/index.php`
+- `https://example.com/divelog/api/...` -> `<repo>/public/api.php`
+
+If your hosting panel cannot provide URL rewriting in a subfolder, set:
+
+- `APP_QUERY_STRING=true`
+
+Then use fallback URLs such as:
+
+- `/divelog/?type=dives`
+- `/divelog/?type=dives&id=1`
+- `/divelog/?type=stats`
+
 For full deployment details and server examples, see:
 
 - docs/deployment.md

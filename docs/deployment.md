@@ -56,6 +56,25 @@ When docroot cannot be changed to `public/`:
    - `/?type=dives&id=1`
    - `/?type=stats`
 
+## Subfolder deployment (`example.com/divelog`)
+
+When your app is served from a URL subfolder:
+
+1. Route that subfolder to the repository `public/` directory if possible.
+2. Keep front-controller rewrites enabled inside that subfolder.
+3. Ensure API routes in that subfolder resolve to `public/api.php`.
+
+Example URLs:
+
+- `https://example.com/divelog/` (web)
+- `https://example.com/divelog/api/dives` (API)
+
+If subfolder rewrites are unavailable, set `APP_QUERY_STRING=true` and use:
+
+- `/divelog/?type=dives`
+- `/divelog/?type=dives&id=1`
+- `/divelog/?type=stats`
+
 ## Release process
 
 1. Run quality gates locally:
