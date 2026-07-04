@@ -1,0 +1,87 @@
+{% extends 'layout.html.twig' %}
+
+{% block content %}
+  <h2>Dive #{{ dive.number }}</h2>
+  <p>Date: {{ date_display }}</p>
+  <p>Depth: {{ depth_display }} {{ depth_label }}</p>
+  <p>Average depth: {{ average_depth_display }}</p>
+  <p>SAC: {{ sac_display }}</p>
+
+  <section>
+    <h3>Related info</h3>
+    <ul>
+      <li>
+        Dive site:
+        {% if dive_site %}
+          <a href="/sites/{{ dive_site.id }}">{{ dive_site.name }}</a>
+        {% else %}
+          -
+        {% endif %}
+      </li>
+      <li>
+        City:
+        {% if dive_city %}
+          <a href="/cities/{{ dive_city.id }}">{{ dive_city.name }}</a>
+        {% else %}
+          -
+        {% endif %}
+      </li>
+      <li>
+        Country:
+        {% if dive_country %}
+          <a href="/countries/{{ dive_country.id }}">{{ dive_country.name }}</a>
+        {% else %}
+          -
+        {% endif %}
+      </li>
+      <li>
+        Shop:
+        {% if dive_shop %}
+          <a href="/shops/{{ dive_shop.id }}">{{ dive_shop.name }}</a>
+        {% else %}
+          -
+        {% endif %}
+      </li>
+      <li>
+        Trip:
+        {% if dive_trip %}
+          <a href="/trips/{{ dive_trip.id }}">{{ dive_trip.name }}</a>
+        {% else %}
+          -
+        {% endif %}
+      </li>
+    </ul>
+  </section>
+
+  <section>
+    <h3>Comments</h3>
+    <div>{{ comment_html|raw }}</div>
+  </section>
+
+  <section>
+    <h3>Pictures</h3>
+    <ul>
+      {% for picture in pictures %}
+        <li>
+          <a href="{{ picture.url }}" data-lightbox>
+            <img src="{{ picture.thumbUrl }}" alt="{{ picture.description|default('Dive image') }}">
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  </section>
+
+  <section>
+    <h3>Dive profile</h3>
+    <canvas id="profile-chart" data-dive-number="{{ dive.number }}" width="700" height="220"></canvas>
+    <p id="profile-chart-legend">Depth and average depth</p>
+  </section>
+
+  <section>
+    <h3>Ascent / descent rates</h3>
+    <canvas id="profile-rate-chart" data-dive-number="{{ dive.number }}" width="700" height="220"></canvas>
+    <p id="profile-rate-legend">Ascent and descent rates</p>
+  </section>
+
+  <script src="/public/assets/js/profile-chart.js" defer></script>
+{% endblock %}

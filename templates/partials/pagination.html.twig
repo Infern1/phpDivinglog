@@ -1,0 +1,7 @@
+{% if pages|default(1) > 1 %}
+  <div class="pagination">
+    {% for page in 1..pages %}
+      <a href="?page={{ page }}"{% if page == currentPage %} aria-current="page"{% endif %}>{{ page }}</a>
+    {% endfor %}
+  </div>
+{% endif %}

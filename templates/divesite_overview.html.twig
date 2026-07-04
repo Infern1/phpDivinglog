@@ -1,0 +1,10 @@
+{% extends 'layout.html.twig' %}
+
+{% block content %}
+  <h2>Dive Sites</h2>
+  <ul>
+    {% for site in sites %}
+      <li><a href="/sites/{{ site.id }}">{{ site.name }}</a></li>
+    {% endfor %}
+  </ul>
+{% endblock %}

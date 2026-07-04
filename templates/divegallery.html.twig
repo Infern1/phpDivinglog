@@ -1,0 +1,12 @@
+{% extends 'layout.html.twig' %}
+
+{% block content %}
+  <h2>Gallery</h2>
+  <div class="gallery-grid">
+    {% for picture in pictures %}
+      <a href="{{ picture.url }}" data-lightbox>
+        <img src="{{ picture.thumb }}" alt="{{ picture.description|default('Dive image') }}">
+      </a>
+    {% endfor %}
+  </div>
+{% endblock %}

@@ -1,0 +1,43 @@
+# Standalone mode (recommended): set root to public/
+server {
+  listen 80;
+  server_name example.com;
+  root /var/www/phpDivinglog/public;
+  index index.php;
+
+  location /api/ {
+    try_files $uri $uri/ /api.php?$query_string;
+  }
+
+  location / {
+    try_files $uri $uri/ /index.php?$query_string;
+  }
+
+  location ~ \.php$ {
+    include fastcgi_params;
+    fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+    fastcgi_pass unix:/run/php/php-fpm.sock;
+  }
+}
+
+# Shared-hosting style fallback when root must stay at repo root:
+#
+# server {
+#   listen 80;
+#   server_name example.com;
+#   root /var/www/phpDivinglog;
+#
+#   location /api/ {
+#     try_files $uri $uri/ /public/api.php?$query_string;
+#   }
+#
+#   location / {
+#     try_files $uri $uri/ /public/index.php?$query_string;
+#   }
+#
+#   location ~ \.php$ {
+#     include fastcgi_params;
+#     fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+#     fastcgi_pass unix:/run/php/php-fpm.sock;
+#   }
+# }

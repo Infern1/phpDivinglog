@@ -1,0 +1,8 @@
+{% extends 'layout.html.twig' %}
+
+{% block content %}
+  <h2>{{ city.name }}</h2>
+  {% if city.comment %}
+    <p>{{ city.comment }}</p>
+  {% endif %}
+{% endblock %}

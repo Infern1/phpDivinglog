@@ -1,0 +1,19 @@
+# Use in repo root when public/ cannot be the document root (shared hosting).
+RewriteEngine On
+
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+RewriteRule ^api(/.*)?$ public/api.php [QSA,L]
+RewriteRule ^.*$ public/index.php [QSA,L]
+
+# If your host allows DocumentRoot to point at public/, use this simpler variant
+# in public/.htaccess instead:
+#
+# RewriteEngine On
+# RewriteCond %{REQUEST_FILENAME} -f [OR]
+# RewriteCond %{REQUEST_FILENAME} -d
+# RewriteRule ^ - [L]
+# RewriteRule ^api(/.*)?$ api.php [QSA,L]
+# RewriteRule ^.*$ index.php [QSA,L]

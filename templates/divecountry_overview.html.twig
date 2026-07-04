@@ -1,0 +1,10 @@
+{% extends 'layout.html.twig' %}
+
+{% block content %}
+  <h2>Countries</h2>
+  <ul>
+    {% for country in countries %}
+      <li><a href="/countries/{{ country.id }}">{{ country.name }}</a></li>
+    {% endfor %}
+  </ul>
+{% endblock %}

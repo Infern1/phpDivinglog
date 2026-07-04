@@ -1,0 +1,11 @@
+{% extends 'layout.html.twig' %}
+
+{% block content %}
+  <h2>{{ item.object }}</h2>
+  {% if item.manufacturer %}
+    <p>Manufacturer: {{ item.manufacturer }}</p>
+  {% endif %}
+  {% if item.comment %}
+    <p>{{ item.comment }}</p>
+  {% endif %}
+{% endblock %}

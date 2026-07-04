@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ title|default('phpDivingLog') }}</title>
+  <link rel="stylesheet" href="/public/assets/css/app.css">
+</head>
+<body>
+  {% include 'partials/header.html.twig' %}
+  {% include 'partials/nav.html.twig' %}
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+  {% include 'partials/footer.html.twig' %}
+</body>
+</html>

@@ -1,0 +1,15 @@
+{% extends 'layout.html.twig' %}
+
+{% block content %}
+  <h2>Equipment</h2>
+  <ul>
+    {% for item in equipment %}
+      <li>
+        <a href="/equipment/{{ item.id }}">{{ item.object }}</a>
+        {% if item.serviceDueSoon %}
+          <strong>Service due soon</strong>
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+{% endblock %}

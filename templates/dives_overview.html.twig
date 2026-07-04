@@ -1,0 +1,10 @@
+{% extends 'layout.html.twig' %}
+
+{% block content %}
+  <h2>Dives</h2>
+  <ul>
+    {% for number in numbers %}
+      <li><a href="/dives/{{ number }}">Dive #{{ number }}</a></li>
+    {% endfor %}
+  </ul>
+{% endblock %}

@@ -3,3 +3,7 @@ compile/*
 cache/*
 !.gitignore
 /*.bak
+vendor/
+.env
+var/
+tests/fixtures/http-smoke.sqlite

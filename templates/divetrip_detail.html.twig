@@ -1,0 +1,14 @@
+{% extends 'layout.html.twig' %}
+
+{% block content %}
+  <h2>{{ trip.name }}</h2>
+  {% if trip.dateFrom %}
+    <p>From: {{ trip.dateFrom|date('Y-m-d') }}</p>
+  {% endif %}
+  {% if trip.dateTo %}
+    <p>To: {{ trip.dateTo|date('Y-m-d') }}</p>
+  {% endif %}
+  {% if trip.comment %}
+    <p>{{ trip.comment }}</p>
+  {% endif %}
+{% endblock %}

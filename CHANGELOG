@@ -1,179 +1,37 @@
-phpDivingLog v3.2 - 2021-08-20 - Rob Lensen
-    * Update Smarty latest version 
-    * Review a lot of PHP warnings and updated code accordingly
-    * Removed multiuser
-    * Changed to lightgallery from HighslideJS   
+phpDivingLog v4.0.0 - 2026-07-04
+    * Big-bang modernization release.
+    * Replaced legacy monolithic runtime with layered architecture:
+        - Core domain/repository layer in src/ (PhpDivingLog namespace)
+        - Standalone Twig web adapter (adapters/web + public/index.php)
+        - Standalone JSON API adapter (adapters/api + public/api.php)
+    * Added Composer project metadata, PSR-4 autoloading, and quality scripts.
+    * Added quality tool configuration:
+        - PHPUnit
+        - PHPStan
+        - PHP_CodeSniffer (PSR-12)
+    * Added environment-based typed configuration loader and .env.example.
+    * Added PDO connection factory with table-prefix validation.
+    * Added immutable DTO model layer and PDO repositories.
+    * Added support services:
+        - unit conversion
+        - formatting (dates/coords/decimals)
+        - translation loader/fallback
+        - RTF conversion + sanitizer
+        - media path resolver
+    * Added fixture-backed repository integration tests and HTTP smoke tests.
+    * Added deployment/testing/API/frontend docs under docs/.
+    * Removed retired legacy stack after parity verification:
+        - classes.inc.php
+        - root legacy controllers (index.php, divesite.php, divecountry.php, etc.)
+        - includes/ (Smarty/wp-db.php/jqPlot/img scripts)
+        - tpl/
+        - sql/
 
-phpDivingLog v3.1 - 2017-06-29 - Rob Lensen
-    * Update jqplot latest version
-    * Removed jpgraph
-    * Review a lot of PHP warnings and updated code accordingly
-    * Set default view to table, grid view is broken in newer versions of PHP
-    * Replaced mysql_* functions by mysqli_*
-    * Changed default config.inc.php to config.inc.php.example
-		* Massive clean-up, removed all not need libraries (MDB2,Pager,PEAR)
+    Intentionally retained:
+        - images/ static assets
+        - js/ project assets that are not required by the new runtime path
 
-phpDivingLog v3.0-alpha3 - 2011-10-24 - Lloyd Borrett and Rob Lensen
-    * Added tabs to dive details and dive statistics pages 
-    * Modified the calculation of imperial cylinder size to use working pressure if available
-    * Added Active to equipment overview listing
-    * Fixed formatting issues
-    * Fixed some bugs
-    * Added TODO file so we have an overview what has to be done
-    * Changed the parse_mysql query function so if just one result is there don't create an array
-    * Added the Divesite name to the gallery
-    * Added EXIF information to the dive photos
-    * Added display of dive cities/islands, dive shops/centres, dive trips/vacations and dive countries
-    * Made URLs and email addresses in dive/site/equipment/shop/trip comments clickable
-    * Added display of cylinder and supply type statistics
-    * Added display of multiple cylinder sets to dive details breathing tab
-    * Added calculation of END for Trimix dives
-    * Added pic indicator to equipment, shop and trip overview listings
-    * Added icons to equipment active/inactive fields
-    * Added display of user-defined fields to dive details
-    * Added display of page headings
-    * Comma separation of lists as a configuration option
-
-phpDivingLog v3.0-alpha2 - 2011-08-01 - Lloyd Borrett
-    * Added ability to display lots of additional values 
-    *   on the dive details, dive sites and dive equipment pages
-    * Added ability to show visibilty type as a set of images
-    * Added ability to show the dive site ratings as a set of images
-    * Added images to show if single or twin cylinders being used
-    * Added images to show if supply type is OC, SCR or CCR 
-    * Added default values for maxPPO2, O2 and datum
-    * Added in calculated values for MOD, EAD and exit time
-    * Added in display of an image for the back gas type
-    * Fixed some formatting issues
-
-phpDivingLog v3.0-alpha1 - 2011-07-24 - Lloyd Borrett
-    * Added ability to display photo descriptions on more images
-    * Ability to set the width and height of the thumbnails which is then used to display them
-    * Display program version and database version on statistics page
-    * Display average water temp on statistics page
-    * Display coldest, warmest and average air temp on statistics page
-    * Display number of no deco and no rep dives on statistics page
-    * Added the ability to display coordinates in different formats
-    * Fixed some formatting issues
-
-phpDivingLog v2.2 - 2010-03-28 - Rob Lensen
-    * Lots of changes
- 
-phpDivingLog v2.1 - 2008-03-28 - Rob Lensen
-    * Added the option the use query strings for hosts that don't support mod_rewrite
-    * Changed SAC calculation to read the divetime from the Divelog table
-    * Several UTF-8 fixes
-    * Jpgraph upgrade to 1.22
-    * Pear pager upgrade
-
-phpDivingLog v2.0 - 2007-12-03 - Rob Lensen
-    * Changed phpdivinglog to use smarty templates
-    * Added multiuser option, so one install can handle more divers
-    * Make phpDivinglog object oriented
-    * All code can viewed via PHPdoc
-    * New pie chart on dive depths overview
-    * Option to choose between a grid view or old fashioned table layout
-    * New pager for table layout
-    * Upgrade of jpgraph and lightbox
-    * Language fixes for different languages
-    * New url layout more easy for page indexing and linking
-    * Lots of other things, see http://rob.lensen.nu/WebSVN/ for all changes
-
-phpDivingLog v1.9 - 2007-06-25  - Lloyd Borrett (http://www.borrett.id.au)
-    * Added in support for a configurable table prefix.
-    * Added dive max depth table in Dive Statistics.
-    * Added drift, deep, cave, wreck and photo dive details in Dive Statistics.
-    * Added saltwater, freshwater and brackish dive details in Dive Statistics.
-    * Added repetitive and deco dive details in Dive Statistics.
-    * Added percentage values to shore, boat and night dives in Dive Statistics.
-    * Fixed display of Total Bottom Time in Dive Statistics.
-    * Fixed display of Rep Dive and Deco in Dive Log.
-
-2006-08-25 - Lloyd Borrett (http://www.borrett.id.au)
-
-Changes v1.8 - 2006-08-25 - Lloyd Borrett (http://www.borrett.id.au)
-	Changes to the dive profile graph:
-	* Added average depth to the dive profile chart. 
-	* Added descent and work warnings to the dive profile chart. 
-	* Better support for metric and imperial units in the dive profile chart. 
-	* Provided a default dive profile chart option that displays 
-          well when there is no background image. 
-	Improved the readme.txt file to add extra details about 
-	installation and usage.
-
-Changes v1.7 - 2006-08-21 - Lloyd Borrett (http://www.borrett.id.au)
-	Changed to support length, pressure, weight, temperature and weight
-	values being able to be displayed with imperial units of measurement.
-	Added support for the certification scans in divestats.php.
-	Added divesummary.php to allow the display of some summary details
-	on a standard .htm page.
-	Improved the handling of situations where there are no site, equipment etc. details.
-	Improved the display of more null values.
-	Cleaned up the HTML output.
-	Language file compare tool added.
-	Improved the readme.txt file to add extra details about 
-	installation and usage.
-
-Changes v1.6 - 2006-08-04 - Lloyd Borrett (http://www.borrett.id.au)
-	Sven Knoch released a minor update to Diving Log to fix a few bugs
-	in the MySQL Dump export option - (http://www.divinglog.de)
-	phpDivingLog has been updated to make use of these fixes.
-	phpDivingLog 1.6 WILL NOT WORK without the updated version of Diving Log.
-	Dive entry time is now displayed.
-	Dive site latitude and longitude values are now properly formatted.
-	Added link to Google Maps for dive site if we have the latitude and longitude.
-	Fixed bug in phpDivingLog to display correct dive site country.
-	Fixed bug where a dive site might have no matching country or city.
-	Added additional checking of argument values to prevent 
-	potential security problem.
-	Improved the display of some null values.
-	Improved the readme.txt file to add extra details about 
-	installation and usage.
-
-Changes v1.5 - 2006-07-26 - Lloyd Borrett (http://www.borrett.id.au)
-	German language file added by Sven Knoch - (http://www.divinglog.de)
-	Improved support for other languages.
-	JpGraph config file includes/jpgraph/src/jpg-config.inc changed
-	to have the values for a Linux system as the default. The files
-	jpg-config-linux.inc and jpg-config-windows.inc are examples of 
-	this file that worked on those platforms.
-	Improved the readme.txt file to add extra details about 
-	installation and usage.
-	Changed divestats.php to include a link to the phpDivingLog page at
-	http://www.borrett.id.au/interests/phpdivinglog.htm.
-	Cleaned up some code.
-
-Changes v1.4 - 2006-07-13 - Lloyd Borrett (http://www.borrett.id.au)
-	Danish language file added by Henrik Absalon - (http://www.absalon.org)
-	Added support for equipment listing, details and equipment photos.
-	Added support for location map images.
-	Added in a partial workaround for coordinate format problems.
-	Fixed links to dives at a given location.
-	Now showing no dive entry time instead of the bad value
-	that is passed by MySQL Dump.
-	Cleaned up some code.
-
-Changes v1.3 - 2006-07-12 - Lloyd Borrett (http://www.borrett.id.au)
-	Added support for dive pictures.
-	Added links to the other sections on each page.
-	Dive profile now shows depth scales for metres and feet.
-	Added link titles to links that didn't have them.
-	Moved CSS values into a CSS file.
-	Moved configuration values into a config file.
-	Moved language values into a languages file.
-	Cleaned up some code .
-
-Changes v1.2 - 2006-07-09 - Lloyd Borrett (http://www.borrett.id.au)
-	Added Diving Certifications.
-	Separated statistics into divestats.php.
-	Show program revisions on the statistics page.
-	Added Dive Sites as divesite.php.
-
-Changes v1.1 - 2006-07-07 - Lloyd Borrett (http://www.borrett.id.au)
-	Support for Diving Log 4.0.
-	Conversion to English.
-	Added in navigation links and extra details.
-
-Original version 1.0 created by Olaf van Zandwijk (http://enschede.vanzandwijk.net)
-
-
+    Potentially impacted legacy-only behaviors:
+        - direct execution of legacy root PHP entry files (removed)
+        - legacy Smarty template override/customization points (removed)
+        - legacy jqPlot/Highslide rendering paths (replaced by modern assets)

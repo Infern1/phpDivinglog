@@ -1,0 +1,10 @@
+{% extends 'layout.html.twig' %}
+
+{% block content %}
+  <h2>Cities</h2>
+  <ul>
+    {% for city in cities %}
+      <li><a href="/cities/{{ city.id }}">{{ city.name }}</a></li>
+    {% endfor %}
+  </ul>
+{% endblock %}

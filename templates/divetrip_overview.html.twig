@@ -1,0 +1,10 @@
+{% extends 'layout.html.twig' %}
+
+{% block content %}
+  <h2>Trips</h2>
+  <ul>
+    {% for trip in trips %}
+      <li><a href="/trips/{{ trip.id }}">{{ trip.name }}</a></li>
+    {% endfor %}
+  </ul>
+{% endblock %}

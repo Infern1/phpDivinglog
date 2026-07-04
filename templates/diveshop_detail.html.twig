@@ -1,0 +1,11 @@
+{% extends 'layout.html.twig' %}
+
+{% block content %}
+  <h2>{{ shop.name }}</h2>
+  {% if shop.shopType %}
+    <p>Type: {{ shop.shopType }}</p>
+  {% endif %}
+  {% if shop.comment %}
+    <p>{{ shop.comment }}</p>
+  {% endif %}
+{% endblock %}

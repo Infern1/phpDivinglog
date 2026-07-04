@@ -1,0 +1,8 @@
+{% extends 'layout.html.twig' %}
+
+{% block content %}
+  <h2>Dive Statistics</h2>
+  <p>Total dives: {{ stats.diveCount }}</p>
+  <p>Max depth: {{ stats.maxDepth }}</p>
+  <p>Average depth: {{ stats.avgDepth }}</p>
+{% endblock %}

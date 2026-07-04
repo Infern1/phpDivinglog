@@ -1,0 +1,14 @@
+{% extends 'layout.html.twig' %}
+
+{% block content %}
+  <h2>{{ site.name }}</h2>
+  {% if site.latitudeFormatted %}
+    <p>Latitude: {{ site.latitudeFormatted }}</p>
+  {% endif %}
+  {% if site.longitudeFormatted %}
+    <p>Longitude: {{ site.longitudeFormatted }}</p>
+  {% endif %}
+  {% if site.mapUrl %}
+    <img src="{{ site.mapUrl }}" alt="Map for {{ site.name }}">
+  {% endif %}
+{% endblock %}

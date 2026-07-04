@@ -1,0 +1,22 @@
+{
+  "filePath": ".spec-workflow/specs/app-modernization-2026/design.md",
+  "currentVersion": 2,
+  "snapshots": [
+    {
+      "version": 1,
+      "filename": "snapshot-001.json",
+      "timestamp": "2026-07-04T09:45:18.091Z",
+      "trigger": "initial",
+      "approvalId": "approval_1783158318073_qrx59796z",
+      "approvalTitle": "Design - app-modernization-2026"
+    },
+    {
+      "version": 2,
+      "filename": "snapshot-002.json",
+      "timestamp": "2026-07-04T09:47:17.316Z",
+      "trigger": "approved",
+      "approvalId": "approval_1783158318073_qrx59796z",
+      "approvalTitle": "Design - app-modernization-2026"
+    }
+  ]
+}
