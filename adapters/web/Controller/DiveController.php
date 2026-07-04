@@ -182,6 +182,8 @@ final readonly class DiveController
             }
         }
 
+        $visibilityDisplay = $this->mapVisibilityCodeToLabel($visibilityDisplay) ?? $visibilityDisplay;
+
         $locationParts = array_values(array_filter([$relatedCityName, $relatedCountryName], static fn (?string $value): bool => $value !== null && $value !== ''));
         $locationDisplay = $locationParts !== [] ? implode(', ', $locationParts) : '-';
         $startTime = $dive->dateTime->format('H:i');
@@ -330,5 +332,20 @@ final readonly class DiveController
             'next_dive_number' => $this->dives->findNextNumber($dive->number),
             'logbook_dives' => $logbookDives,
         ];
+    }
+
+    private function mapVisibilityCodeToLabel(string $value): ?string
+    {
+        $normalized = strtolower(trim($value));
+        if ($normalized === '') {
+            return null;
+        }
+
+        return match ($normalized) {
+            '1', 'good' => 'Good',
+            '2', 'average', 'avg', 'normal' => 'Average',
+            '3', 'bad', 'poor' => 'Bad',
+            default => null,
+        };
     }
 }
