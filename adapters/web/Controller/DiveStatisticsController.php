@@ -65,8 +65,8 @@ final readonly class DiveStatisticsController
                     'date' => $certification->date !== null ? $this->formatter->formatDate($certification->date) : null,
                     'cert_number' => $certification->certNumber,
                     'instructor' => $certification->instructor,
-                    'front_image_url' => $certification->frontImage !== null ? $this->media->userUrl($certification->frontImage) : null,
-                    'back_image_url' => $certification->backImage !== null ? $this->media->userUrl($certification->backImage) : null,
+                    'front_image_url' => $this->config->userShowPhoto() && $certification->frontImage !== null ? $this->media->userUrl($certification->frontImage) : null,
+                    'back_image_url' => $this->config->userShowPhoto() && $certification->backImage !== null ? $this->media->userUrl($certification->backImage) : null,
                 ];
             }
         }

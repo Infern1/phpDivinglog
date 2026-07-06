@@ -33,18 +33,48 @@ final readonly class CertificationRepository
      */
     private function fetchRows(): ?array
     {
-        $sql = sprintf('SELECT * FROM %sBrevet ORDER BY DateBrevet DESC', $this->tablePrefix);
+        $tableCandidates = ['Brevet', 'Certification', 'Certifications', 'Certificate', 'Certificates', 'Cert'];
 
-        try {
-            return $this->pdo->query($sql)->fetchAll();
-        } catch (\PDOException $exception) {
-            $sqlState = $exception->errorInfo[0] ?? null;
-            if ($sqlState === '42S02' || $sqlState === '42S22' || ($sqlState === 'HY000' && str_contains(strtolower($exception->getMessage()), 'no such table'))) {
-                return null;
+        foreach ($tableCandidates as $table) {
+            $sql = sprintf('SELECT * FROM %s%s', $this->tablePrefix, $table);
+
+            try {
+                $rows = $this->pdo->query($sql)->fetchAll();
+                if (!is_array($rows)) {
+                    return null;
+                }
+
+                usort($rows, function (array $a, array $b): int {
+                    $aDate = $this->parseDate($this->pickValue($a, ['DateBrevet', 'Date', 'CertDate', 'IssuedAt', 'IssueDate']));
+                    $bDate = $this->parseDate($this->pickValue($b, ['DateBrevet', 'Date', 'CertDate', 'IssuedAt', 'IssueDate']));
+
+                    if ($aDate === null && $bDate === null) {
+                        return 0;
+                    }
+
+                    if ($aDate === null) {
+                        return 1;
+                    }
+
+                    if ($bDate === null) {
+                        return -1;
+                    }
+
+                    return $bDate <=> $aDate;
+                });
+
+                return $rows;
+            } catch (\PDOException $exception) {
+                $sqlState = $exception->errorInfo[0] ?? null;
+                if ($sqlState === '42S02' || $sqlState === '42S22' || ($sqlState === 'HY000' && str_contains(strtolower($exception->getMessage()), 'no such table'))) {
+                    continue;
+                }
+
+                throw $exception;
             }
-
-            throw $exception;
         }
+
+        return null;
     }
 
     /**
@@ -55,11 +85,11 @@ final readonly class CertificationRepository
         return new Certification(
             $this->normalizedString($this->pickValue($row, ['Organisation', 'Organization', 'Org', 'Agency'])),
             $this->normalizedString($this->pickValue($row, ['Brevet', 'Certification', 'Cert', 'Title', 'Name'])),
-            $this->parseDate($this->pickValue($row, ['DateBrevet', 'Date', 'CertDate'])),
-            $this->normalizedString($this->pickValue($row, ['BrevetNr', 'BrevetNo', 'CertNr', 'CertNo', 'CertNumber', 'Number'])),
-            $this->normalizedString($this->pickValue($row, ['Instructor', 'DiveInstructor', 'Teacher'])),
-            $this->normalizedString($this->pickValue($row, ['Picture1', 'PictureFront', 'Picture', 'Image', 'CardFront'])),
-            $this->normalizedString($this->pickValue($row, ['Picture2', 'PictureBack', 'BackImage', 'CardBack'])),
+            $this->parseDate($this->pickValue($row, ['DateBrevet', 'Date', 'CertDate', 'IssuedAt', 'IssueDate'])),
+            $this->normalizedString($this->pickValue($row, ['BrevetNr', 'BrevetNo', 'CertNr', 'CertNo', 'CertNumber', 'Number', 'LicenseNo'])),
+            $this->normalizedString($this->pickValue($row, ['Instructor', 'DiveInstructor', 'Teacher', 'InstructorName'])),
+            $this->normalizedString($this->pickValue($row, ['Picture1', 'PictureFront', 'Picture', 'Image', 'CardFront', 'ImageFront'])),
+            $this->normalizedString($this->pickValue($row, ['Picture2', 'PictureBack', 'BackImage', 'CardBack', 'ImageBack'])),
         );
     }
 

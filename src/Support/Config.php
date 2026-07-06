@@ -129,6 +129,11 @@ final class Config
         return $this->values['user_show_certs'];
     }
 
+    public function userShowPhoto(): bool
+    {
+        return $this->values['user_show_photo'];
+    }
+
     public function appVersion(): string
     {
         return $this->values['app_version'];
