@@ -106,6 +106,37 @@ final class WebSmokeTest extends TestCase
         self::assertStringContainsString('Dive not found', $response['body']);
     }
 
+    public function testDiveDetailFullIncludesNavScript(): void
+    {
+        $response = $this->request('/dives/1');
+
+        self::assertSame(200, $response['status']);
+        self::assertStringContainsString('<!doctype html>', $response['body']);
+        self::assertStringContainsString('/assets/js/dive-detail-nav.js', $response['body']);
+        self::assertStringContainsString('data-dive-fragment', $response['body']);
+    }
+
+    public function testDiveDetailPartialReturnsFragmentOnly(): void
+    {
+        $response = $this->request('/dives/1', ['X-Requested-With' => 'XMLHttpRequest']);
+
+        self::assertSame(200, $response['status']);
+        self::assertStringContainsString('data-dive-fragment', $response['body']);
+        self::assertStringContainsString('data-dive-number="1"', $response['body']);
+        self::assertStringContainsString('dive-content-column', $response['body']);
+        self::assertStringNotContainsString('<!doctype html>', $response['body']);
+        self::assertStringNotContainsString('Primary navigation', $response['body']);
+        self::assertStringNotContainsString('/assets/js/dive-detail-nav.js', $response['body']);
+    }
+
+    public function testDiveDetailPartialUnknownReturnsNotFound(): void
+    {
+        $response = $this->request('/dives/9999', ['X-Requested-With' => 'XMLHttpRequest']);
+
+        self::assertSame(404, $response['status']);
+        self::assertStringContainsString('Dive not found', $response['body']);
+    }
+
     public function testSitesOverviewRenders(): void
     {
         $response = $this->request('/sites');
@@ -376,9 +407,10 @@ final class WebSmokeTest extends TestCase
     }
 
     /**
+     * @param array<string, string> $headers
      * @return array{status:int, body:string}
      */
-    private function request(string $uri): array
+    private function request(string $uri, array $headers = []): array
     {
         http_response_code(200);
 
@@ -386,6 +418,10 @@ final class WebSmokeTest extends TestCase
             'REQUEST_URI' => $uri,
             'REQUEST_METHOD' => 'GET',
         ];
+        foreach ($headers as $name => $value) {
+            $serverKey = 'HTTP_' . strtoupper(str_replace('-', '_', $name));
+            $_SERVER[$serverKey] = $value;
+        }
         $_GET = [];
 
         putenv('DB_DSN=sqlite:' . dirname(__DIR__) . '/fixtures/http-smoke.sqlite');

@@ -1,17 +1,6 @@
 (() => {
-  const depthCanvas = document.getElementById('profile-chart');
-  const rateCanvas = document.getElementById('profile-rate-chart');
-  if (!depthCanvas) {
-    return;
-  }
-
-  const diveNumber = depthCanvas.getAttribute('data-dive-number');
-  if (!diveNumber) {
-    return;
-  }
-
-  const depthLegend = document.getElementById('profile-chart-legend');
-  const rateLegend = document.getElementById('profile-rate-legend');
+  let currentCharts = [];
+  let themeBound = false;
 
   const themeColors = () => {
     if (window.DivlogChartTheme && typeof window.DivlogChartTheme.colors === 'function') {
@@ -34,89 +23,116 @@
     };
   };
 
-  fetch(`/profile/${encodeURIComponent(diveNumber)}`)
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error(`Profile request failed with status ${response.status}`);
-      }
-      return response.json();
-    })
-    .then((payload) => {
-      if (!payload || !Array.isArray(payload.series)) {
-        throw new Error('Invalid profile payload');
-      }
+  const init = (root) => {
+    const scope = root instanceof Element || root instanceof Document ? root : document;
+    const depthCanvas = scope.querySelector('#profile-chart');
+    if (!(depthCanvas instanceof HTMLCanvasElement)) {
+      return;
+    }
 
-      const depthChart = createInteractiveChart(
-        depthCanvas,
-        {
-          title: `Depth (${payload.depthUnit || 'm'})`,
-          xLabel: 'Time (min)',
-          yLabel: payload.depthUnit || 'm',
-          invertY: true,
-          series: [
-            {
-              points: payload.series,
-              valueKey: 'depth',
-              colorKey: 'depthMain',
-              label: 'Depth',
-              fillToSurface: true,
-              fillColorKey: 'depthFill',
-            },
-            {
-              points: payload.averageSeries || [],
-              valueKey: 'depth',
-              colorKey: 'depthAverage',
-              label: 'Average depth',
-              dashed: true,
-            },
-          ],
-        },
-        depthLegend,
-        themeColors,
-      );
+    const diveNumber = depthCanvas.getAttribute('data-dive-number');
+    if (!diveNumber) {
+      return;
+    }
 
-      const rateChart = rateCanvas
-        ? createInteractiveChart(
-            rateCanvas,
-            {
-              title: `Rates (${payload.rateUnit || 'm/min'})`,
-              xLabel: 'Time (min)',
-              yLabel: payload.rateUnit || 'm/min',
-              series: [
-                {
-                  points: payload.ascentRateSeries || [],
-                  valueKey: 'rate',
-                  colorKey: 'ascent',
-                  label: 'Ascent',
-                },
-                {
-                  points: payload.descentRateSeries || [],
-                  valueKey: 'rate',
-                  colorKey: 'descent',
-                  label: 'Descent',
-                },
-              ],
-            },
-            rateLegend,
-            themeColors,
-          )
-        : null;
+    const rateCanvas = scope.querySelector('#profile-rate-chart');
+    const depthLegend = scope.querySelector('#profile-chart-legend');
+    const rateLegend = scope.querySelector('#profile-rate-legend');
 
-      window.addEventListener('themechange', () => {
-        depthChart.redraw();
-        if (rateChart) {
-          rateChart.redraw();
+    fetch(`/profile/${encodeURIComponent(diveNumber)}`)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Profile request failed with status ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((payload) => {
+        if (!payload || !Array.isArray(payload.series)) {
+          throw new Error('Invalid profile payload');
+        }
+
+        const depthChart = createInteractiveChart(
+          depthCanvas,
+          {
+            title: `Depth (${payload.depthUnit || 'm'})`,
+            xLabel: 'Time (min)',
+            yLabel: payload.depthUnit || 'm',
+            invertY: true,
+            series: [
+              {
+                points: payload.series,
+                valueKey: 'depth',
+                colorKey: 'depthMain',
+                label: 'Depth',
+                fillToSurface: true,
+                fillColorKey: 'depthFill',
+              },
+              {
+                points: payload.averageSeries || [],
+                valueKey: 'depth',
+                colorKey: 'depthAverage',
+                label: 'Average depth',
+                dashed: true,
+              },
+            ],
+          },
+          depthLegend,
+          themeColors,
+        );
+
+        const rateChart = rateCanvas instanceof HTMLCanvasElement
+          ? createInteractiveChart(
+              rateCanvas,
+              {
+                title: `Rates (${payload.rateUnit || 'm/min'})`,
+                xLabel: 'Time (min)',
+                yLabel: payload.rateUnit || 'm/min',
+                series: [
+                  {
+                    points: payload.ascentRateSeries || [],
+                    valueKey: 'rate',
+                    colorKey: 'ascent',
+                    label: 'Ascent',
+                  },
+                  {
+                    points: payload.descentRateSeries || [],
+                    valueKey: 'rate',
+                    colorKey: 'descent',
+                    label: 'Descent',
+                  },
+                ],
+              },
+              rateLegend,
+              themeColors,
+            )
+          : null;
+
+        currentCharts = [depthChart, rateChart].filter(Boolean);
+
+        if (!themeBound) {
+          themeBound = true;
+          window.addEventListener('themechange', () => {
+            currentCharts.forEach((chart) => chart.redraw());
+          });
+        }
+      })
+      .catch(() => {
+        if (depthLegend) {
+          depthLegend.textContent = 'Dive profile data could not be loaded.';
+        }
+        if (rateLegend) {
+          rateLegend.textContent = 'Rate profile data could not be loaded.';
         }
       });
-    })
-    .catch(() => {
-      if (depthLegend) {
-        depthLegend.textContent = 'Dive profile data could not be loaded.';
-      }
-      if (rateLegend) {
-        rateLegend.textContent = 'Rate profile data could not be loaded.';
-      }
-    });
+  };
+
+  window.DivelogProfileChart = { init };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => init(document), { once: true });
+  } else {
+    init(document);
+  }
 
   function createInteractiveChart(canvas, config, legendNode, getTheme) {
     const ctx = canvas.getContext('2d');

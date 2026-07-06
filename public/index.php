@@ -116,8 +116,12 @@ if ($match['route'] === 'dives.detail' && $match['id'] !== null) {
         return;
     }
 
+    $requestedWith = $_SERVER['HTTP_X_REQUESTED_WITH'] ?? '';
+    $isPartial = strtolower((string) $requestedWith) === 'xmlhttprequest'
+        || (isset($_GET['partial']) && (string) $_GET['partial'] !== '' && (string) $_GET['partial'] !== '0');
+
     header('Content-Type: text/html; charset=UTF-8');
-    echo $renderer->render('dive_detail.html.twig', $payload);
+    echo $renderer->render($isPartial ? 'dive_detail_partial.html.twig' : 'dive_detail.html.twig', $payload);
     return;
 }
 
