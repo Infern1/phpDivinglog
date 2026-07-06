@@ -72,8 +72,8 @@ phpDivingLog v4.0.0 - 2026-07-04
         - sql/
 
     Intentionally retained:
-        - images/ static assets
-        - js/ project assets that are not required by the new runtime path
+        - public/images/ static assets
+        - public/assets/ runtime frontend assets
 
     Potentially impacted legacy-only behaviors:
         - direct execution of legacy root PHP entry files (removed)

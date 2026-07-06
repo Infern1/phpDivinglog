@@ -1,8 +1,67 @@
+# Keep this file tracked even when broad ignore rules match dotfiles.
 !.gitignore
-/*.bak
-vendor/
-!public/assets/vendor/
-!public/assets/vendor/**
+
+# Local configuration and secrets
 .env
-var/
+.env.*
+!.env.example
+config/local.php
+
+# Composer / PHP tooling
+/vendor/
+.phpunit.cache/
+.phpunit.result.cache
+.php-cs-fixer.cache
+.phpstan.cache
+/coverage/
+
+# Application/runtime output
+/var/
+/cache/
+/compile/
 tests/fixtures/http-smoke.sqlite
+tests/fixtures/*.sqlite
+tests/fixtures/*.sqlite3
+
+# Frontend package-manager output
+/node_modules/
+/npm-debug.log*
+/yarn-debug.log*
+/yarn-error.log*
+/pnpm-debug.log*
+
+# Generated release/build assets; keep committed vendored Beer CSS assets.
+/public/assets/vendor/*
+!/public/assets/vendor/beercss/
+!/public/assets/vendor/beercss/**
+/public/images/**/thumb/
+
+# Local IDE and agent/tool state
+/.claude/
+/.opencode/
+/.vscode/
+/.idea/
+/.mcp.json
+
+# Spec-workflow: keep steering docs and spec definitions in git,
+# ignore transient approval snapshots and per-task implementation logs.
+/.spec-workflow/approvals/
+/.spec-workflow/specs/**/Implementation Logs/
+
+# OS/editor scratch files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+/*.bak
+*.bak
+*.orig
+*.rej
+
+# Logs and temporary dumps
+*.log
+*.tmp
+*.temp
+*.sql.gz
+*.sql.zip

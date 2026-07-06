@@ -110,7 +110,7 @@ The following legacy stack has been retired in favor of the modernized architect
 - `tpl/`
 - `sql/`
 
-Static media assets under `images/` and frontend JS assets under `js/` remain available as project assets.
+Static media assets are served from `public/images/`, and frontend runtime assets are served from `public/assets/`.
 
 ## License
 
