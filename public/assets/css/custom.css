@@ -698,6 +698,65 @@ ignore
   max-height: 82vh;
 }
 
+.lightbox-toolbar {
+  margin: 0 0 0.35rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+}
+
+.lightbox-counter {
+  color: var(--on-surface, #1d1b20);
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.lightbox-close {
+  border: 0;
+  background: transparent;
+  color: var(--on-surface, #1d1b20);
+  font-size: 1.45rem;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.lightbox-stage {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.lightbox-nav {
+  border: 0;
+  border-radius: 999px;
+  width: 2.55rem;
+  height: 2.55rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.45rem;
+  cursor: pointer;
+  color: var(--on-surface, #1d1b20);
+  background: color-mix(in srgb, var(--surface-container, #f3edf7) 86%, transparent);
+}
+
+.lightbox-nav[hidden] {
+  display: none;
+}
+
+.lightbox-image {
+  justify-self: center;
+}
+
+.lightbox-caption {
+  margin: 0.45rem 0 0;
+  color: var(--on-surface, #1d1b20);
+  font-size: 0.95rem;
+  text-align: center;
+}
+
 .summary-shell {
   border-radius: 0.85rem;
   border: 1px solid #d6dde3;

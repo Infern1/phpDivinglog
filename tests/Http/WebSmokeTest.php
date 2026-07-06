@@ -93,6 +93,8 @@ final class WebSmokeTest extends TestCase
         self::assertStringContainsString('data-logbook-link', $response['body']);
         self::assertStringContainsString('dive-sequence-nav-top', $response['body']);
         self::assertStringContainsString('aria-label="Next dive"', $response['body']);
+        self::assertStringContainsString('class="gallery-grid" data-lightbox-group="dive-pictures"', $response['body']);
+        self::assertStringContainsString('/assets/js/lightbox.js', $response['body']);
         self::assertStringContainsString('/assets/js/profile-chart.js', $response['body']);
     }
 
