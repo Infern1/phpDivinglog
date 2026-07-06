@@ -118,11 +118,45 @@ final readonly class DiveSiteRepository
             $statement->bindValue(':countryId', $countryId, PDO::PARAM_INT);
             $statement->bindValue(':limit', $limit, PDO::PARAM_INT);
             $statement->execute();
-            return array_map([$this, 'mapSite'], $statement->fetchAll());
+            $rows = $statement->fetchAll();
+            if ($rows !== []) {
+                return array_map([$this, 'mapSite'], $rows);
+            }
+        } catch (\PDOException $exception) {
+            $sqlState = $exception->errorInfo[0] ?? null;
+            if (!($sqlState === '42S22' || ($sqlState === 'HY000' && str_contains(strtolower($exception->getMessage()), 'no such column')))) {
+                throw $exception;
+            }
+        }
+
+        $fallbackRows = $this->queryListByCountryFromLogbook('PlaceID', $countryId, $limit)
+            ?? $this->queryListByCountryFromLogbook('ID', $countryId, $limit)
+            ?? [];
+
+        return array_map([$this, 'mapSite'], $fallbackRows);
+    }
+
+    /**
+     * @return list<array<string, mixed>>|null
+     */
+    private function queryListByCountryFromLogbook(string $placeColumn, int $countryId, int $limit): ?array
+    {
+        $sql = sprintf(
+            'SELECT p.* FROM %1$sPlace p INNER JOIN %1$sLogbook l ON l.PlaceID = p.%2$s WHERE l.CountryID = :countryId GROUP BY p.%2$s ORDER BY p.Place LIMIT :limit',
+            $this->tablePrefix,
+            $placeColumn,
+        );
+
+        try {
+            $statement = $this->pdo->prepare($sql);
+            $statement->bindValue(':countryId', $countryId, PDO::PARAM_INT);
+            $statement->bindValue(':limit', $limit, PDO::PARAM_INT);
+            $statement->execute();
+            return $statement->fetchAll();
         } catch (\PDOException $exception) {
             $sqlState = $exception->errorInfo[0] ?? null;
             if ($sqlState === '42S22' || ($sqlState === 'HY000' && str_contains(strtolower($exception->getMessage()), 'no such column'))) {
-                return [];
+                return null;
             }
 
             throw $exception;
