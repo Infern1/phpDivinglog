@@ -1,6 +1,17 @@
-<section class="dive-summary">
+<section class="summary-shell">
   <h3>Dive Summary</h3>
-  <p>Total dives: {{ diveCount }}</p>
-  <p>Max depth: {{ maxDepth }}</p>
-  <p>Total duration: {{ totalDurationMinutes }} min</p>
+  <dl>
+    <div>
+      <dt>Total dives</dt>
+      <dd>{{ diveCount }}</dd>
+    </div>
+    <div>
+      <dt>Max depth</dt>
+      <dd>{{ maxDepth }}</dd>
+    </div>
+    <div>
+      <dt>Total duration</dt>
+      <dd>{{ totalDurationMinutes }} min</dd>
+    </div>
+  </dl>
 </section>

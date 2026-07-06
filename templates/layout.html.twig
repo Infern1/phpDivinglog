@@ -4,14 +4,54 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{{ title|default('phpDivingLog') }}</title>
-  <link rel="stylesheet" href="/assets/css/app.css">
+  <script>
+    (function () {
+      var key = 'divelog:theme';
+      var theme = 'light';
+      try {
+        var stored = window.localStorage.getItem(key);
+        if (stored === 'light' || stored === 'dark') {
+          theme = stored;
+        } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          theme = 'dark';
+        }
+      } catch (error) {
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          theme = 'dark';
+        }
+      }
+
+      var root = document.documentElement;
+      root.classList.remove('light', 'dark');
+      root.classList.add(theme);
+      root.setAttribute('data-theme', theme);
+
+      document.addEventListener('DOMContentLoaded', function () {
+        if (!document.body) {
+          return;
+        }
+        document.body.classList.remove('light', 'dark');
+        document.body.classList.add(theme);
+        document.body.setAttribute('data-theme', theme);
+      }, { once: true });
+    })();
+  </script>
+  <link rel="stylesheet" href="/assets/vendor/beercss/typography.css">
+  <link rel="stylesheet" href="/assets/vendor/beercss/beer.min.css">
+  <link rel="stylesheet" href="/assets/css/custom.css">
+  <script defer src="/assets/vendor/beercss/material-dynamic-colors.min.js"></script>
+  <script defer src="/assets/vendor/beercss/beer.min.js"></script>
+  <script defer src="/assets/js/chart-theme.js"></script>
+  <script defer src="/assets/js/theme.js"></script>
 </head>
 <body>
-  {% include 'partials/header.html.twig' %}
-  {% include 'partials/nav.html.twig' %}
-  <main>
-    {% block content %}{% endblock %}
-  </main>
-  {% include 'partials/footer.html.twig' %}
+  <div class="app-shell">
+    {% include 'partials/header.html.twig' %}
+    {% include 'partials/nav.html.twig' %}
+    <main id="content" class="app-main">
+      {% block content %}{% endblock %}
+    </main>
+    {% include 'partials/footer.html.twig' %}
+  </div>
 </body>
 </html>

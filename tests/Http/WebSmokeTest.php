@@ -41,6 +41,10 @@ final class WebSmokeTest extends TestCase
         self::assertStringContainsString('name="q"', $response['body']);
         self::assertStringContainsString('name="sort"', $response['body']);
         self::assertStringContainsString('Apply', $response['body']);
+        self::assertStringContainsString('/assets/vendor/beercss/beer.min.css', $response['body']);
+        self::assertStringContainsString('/assets/vendor/beercss/material-dynamic-colors.min.js', $response['body']);
+        self::assertStringContainsString('/assets/js/theme.js', $response['body']);
+        self::assertStringContainsString('data-theme-toggle', $response['body']);
     }
 
     public function testDiveDetailRendersContent(): void

@@ -1,8 +1,15 @@
 {% extends 'layout.html.twig' %}
 
 {% block content %}
-  <h2>{{ city.name }}</h2>
-  {% if city.comment %}
-    <p>{{ city.comment }}</p>
-  {% endif %}
+  <section class="dive-overview-panel">
+    <div class="dive-overview-head">
+      <h2>{{ city.name }}</h2>
+    </div>
+
+    <div class="entity-meta-grid">
+      {% if city.comment %}
+        <p><strong>Comment:</strong> {{ city.comment }}</p>
+      {% endif %}
+    </div>
+  </section>
 {% endblock %}

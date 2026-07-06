@@ -13,6 +13,27 @@
   const depthLegend = document.getElementById('profile-chart-legend');
   const rateLegend = document.getElementById('profile-rate-legend');
 
+  const themeColors = () => {
+    if (window.DivlogChartTheme && typeof window.DivlogChartTheme.colors === 'function') {
+      return window.DivlogChartTheme.colors();
+    }
+
+    return {
+      canvasBg: '#ffffff',
+      text: '#1f2937',
+      subtleText: '#5f6b76',
+      axis: '#cad5df',
+      grid: '#dde5eb',
+      depthMain: '#0d6e6e',
+      depthAverage: '#9ea6ad',
+      depthFill: 'rgba(156, 185, 214, 0.55)',
+      ascent: '#0a7f32',
+      descent: '#c2551a',
+      tooltipBg: 'rgba(24, 34, 40, 0.9)',
+      tooltipText: '#f5f9fc',
+    };
+  };
+
   fetch(`/profile/${encodeURIComponent(diveNumber)}`)
     .then((response) => {
       if (!response.ok) {
@@ -25,7 +46,7 @@
         throw new Error('Invalid profile payload');
       }
 
-      createInteractiveChart(
+      const depthChart = createInteractiveChart(
         depthCanvas,
         {
           title: `Depth (${payload.depthUnit || 'm'})`,
@@ -36,24 +57,25 @@
             {
               points: payload.series,
               valueKey: 'depth',
-              color: '#0d6e6e',
+              colorKey: 'depthMain',
               label: 'Depth',
               fillToSurface: true,
-              fillColor: 'rgba(156, 185, 214, 0.55)',
+              fillColorKey: 'depthFill',
             },
             {
               points: payload.averageSeries || [],
               valueKey: 'depth',
-              color: '#9ea6ad',
+              colorKey: 'depthAverage',
               label: 'Average depth',
               dashed: true,
             },
           ],
         },
         depthLegend,
+        themeColors,
       );
 
-      createInteractiveChart(
+      const rateChart = createInteractiveChart(
         rateCanvas,
         {
           title: `Rates (${payload.rateUnit || 'm/min'})`,
@@ -63,19 +85,25 @@
             {
               points: payload.ascentRateSeries || [],
               valueKey: 'rate',
-              color: '#0a7f32',
+              colorKey: 'ascent',
               label: 'Ascent',
             },
             {
               points: payload.descentRateSeries || [],
               valueKey: 'rate',
-              color: '#c2551a',
+              colorKey: 'descent',
               label: 'Descent',
             },
           ],
         },
         rateLegend,
+        themeColors,
       );
+
+      window.addEventListener('themechange', () => {
+        depthChart.redraw();
+        rateChart.redraw();
+      });
     })
     .catch(() => {
       if (depthLegend) {
@@ -86,10 +114,10 @@
       }
     });
 
-  function createInteractiveChart(canvas, config, legendNode) {
+  function createInteractiveChart(canvas, config, legendNode, getTheme) {
     const ctx = canvas.getContext('2d');
     if (!ctx) {
-      return;
+      return { redraw() {} };
     }
 
     const width = Number(canvas.getAttribute('width') || 700);
@@ -100,7 +128,7 @@
 
     const allPoints = config.series.flatMap((line) => line.points || []);
     if (allPoints.length === 0 || innerWidth <= 0 || innerHeight <= 0) {
-      return;
+      return { redraw() {} };
     }
 
     const minuteStops = Array.from(
@@ -121,6 +149,22 @@
 
     let hoverMinute = null;
 
+    const render = () => {
+      const palette = getTheme();
+      ctx.clearRect(0, 0, width, height);
+      ctx.fillStyle = palette.canvasBg;
+      ctx.fillRect(0, 0, width, height);
+
+      drawGrid(palette);
+      drawSurfaceLine(palette);
+      drawAxes(palette);
+      drawSeries(palette);
+
+      if (hoverMinute !== null) {
+        drawHoverState(hoverMinute, palette);
+      }
+    };
+
     render();
 
     canvas.addEventListener('mousemove', (event) => {
@@ -140,23 +184,8 @@
       setLegend(legendNode, baseLegend);
     });
 
-    function render() {
-      ctx.clearRect(0, 0, width, height);
-      ctx.fillStyle = '#ffffff';
-      ctx.fillRect(0, 0, width, height);
-
-      drawGrid();
-      drawSurfaceLine();
-      drawAxes();
-      drawSeries();
-
-      if (hoverMinute !== null) {
-        drawHoverState(hoverMinute);
-      }
-    }
-
-    function drawGrid() {
-      ctx.strokeStyle = '#e6ecef';
+    function drawGrid(palette) {
+      ctx.strokeStyle = palette.grid;
       ctx.lineWidth = 1;
 
       for (let tick = 0; tick <= 4; tick += 1) {
@@ -168,8 +197,8 @@
       }
     }
 
-    function drawAxes() {
-      ctx.strokeStyle = '#c7d2d8';
+    function drawAxes(palette) {
+      ctx.strokeStyle = palette.axis;
       ctx.lineWidth = 1;
 
       ctx.beginPath();
@@ -178,8 +207,8 @@
       ctx.lineTo(width - padding.right, height - padding.bottom);
       ctx.stroke();
 
-      ctx.fillStyle = '#42505b';
-      ctx.font = '12px sans-serif';
+      ctx.fillStyle = palette.text;
+      ctx.font = '12px Inter, sans-serif';
       ctx.fillText(config.title, padding.left, 15);
       ctx.fillText(config.xLabel, width - padding.right - 74, height - 10);
       ctx.fillText(config.yLabel, 9, padding.top + 2);
@@ -187,45 +216,47 @@
       const yTicks = [0, maxY / 2, maxY];
       yTicks.forEach((value) => {
         const y = yToPx(value);
-        ctx.fillStyle = '#647584';
+        ctx.fillStyle = palette.subtleText;
         ctx.fillText(formatValue(value), 12, y + 4);
       });
     }
 
-    function drawSurfaceLine() {
+    function drawSurfaceLine(palette) {
       if (!config.invertY) {
         return;
       }
 
       const y = yToPx(0);
       ctx.save();
-      ctx.strokeStyle = '#86a9c3';
+      ctx.strokeStyle = palette.axis;
       ctx.lineWidth = 1.2;
       ctx.beginPath();
       ctx.moveTo(padding.left, y);
       ctx.lineTo(width - padding.right, y);
       ctx.stroke();
 
-      ctx.fillStyle = '#3f647c';
-      ctx.font = '11px sans-serif';
+      ctx.fillStyle = palette.subtleText;
+      ctx.font = '11px Inter, sans-serif';
       ctx.fillText('Surface (0 m)', padding.left + 8, y + 14);
       ctx.restore();
     }
 
-    function drawSeries() {
+    function drawSeries(palette) {
       config.series.forEach((line) => {
         const points = line.points || [];
         if (points.length === 0) {
           return;
         }
 
+        const color = palette[line.colorKey] || line.color || palette.depthMain;
+        const fillColor = palette[line.fillColorKey] || line.fillColor || palette.depthFill;
         const firstX = xToPx(Number(points[0].minute || 0));
         const lastX = xToPx(Number(points[points.length - 1].minute || 0));
         const surfaceY = yToPx(0);
 
         if (line.fillToSurface && config.invertY) {
           ctx.save();
-          ctx.fillStyle = line.fillColor || 'rgba(156, 185, 214, 0.55)';
+          ctx.fillStyle = fillColor;
           ctx.beginPath();
           ctx.moveTo(firstX, surfaceY);
 
@@ -242,7 +273,7 @@
         }
 
         ctx.save();
-        ctx.strokeStyle = line.color;
+        ctx.strokeStyle = color;
         ctx.lineWidth = 2;
         ctx.setLineDash(line.dashed ? [7, 4] : []);
         ctx.beginPath();
@@ -262,7 +293,7 @@
       });
     }
 
-    function drawHoverState(minute) {
+    function drawHoverState(minute, palette) {
       const x = xToPx(minute);
       const sampled = config.series.map((line) => ({
         line,
@@ -270,7 +301,7 @@
       }));
 
       ctx.save();
-      ctx.strokeStyle = '#6f7e89';
+      ctx.strokeStyle = palette.subtleText;
       ctx.lineWidth = 1;
       ctx.setLineDash([4, 4]);
       ctx.beginPath();
@@ -285,7 +316,7 @@
         }
 
         ctx.save();
-        ctx.fillStyle = line.color;
+        ctx.fillStyle = palette[line.colorKey] || line.color || palette.depthMain;
         ctx.beginPath();
         ctx.arc(xToPx(Number(point.minute || 0)), yToPx(Number(point[line.valueKey] || 0)), 3.5, 0, Math.PI * 2);
         ctx.fill();
@@ -300,7 +331,7 @@
         }),
       ];
 
-      drawTooltip(x, tooltipLines);
+      drawTooltip(x, tooltipLines, palette);
       setLegend(
         legendNode,
         `${formatValue(minute)} min - ${sampled
@@ -312,9 +343,9 @@
       );
     }
 
-    function drawTooltip(anchorX, lines) {
+    function drawTooltip(anchorX, lines, palette) {
       ctx.save();
-      ctx.font = '12px sans-serif';
+      ctx.font = '12px Inter, sans-serif';
 
       const tooltipWidth = Math.max(...lines.map((line) => ctx.measureText(line).width), 120) + 18;
       const tooltipHeight = lines.length * 18 + 10;
@@ -326,13 +357,13 @@
 
       const top = padding.top + 8;
 
-      ctx.fillStyle = 'rgba(24, 34, 40, 0.9)';
-      ctx.strokeStyle = 'rgba(168, 188, 200, 0.55)';
+      ctx.fillStyle = palette.tooltipBg;
+      ctx.strokeStyle = palette.axis;
       ctx.lineWidth = 1;
       ctx.fillRect(left, top, tooltipWidth, tooltipHeight);
       ctx.strokeRect(left, top, tooltipWidth, tooltipHeight);
 
-      ctx.fillStyle = '#f5f9fc';
+      ctx.fillStyle = palette.tooltipText;
       lines.forEach((line, index) => {
         ctx.fillText(line, left + 8, top + 17 + index * 18);
       });
@@ -373,6 +404,8 @@
           : closest,
       );
     }
+
+    return { redraw: render };
   }
 
   function setLegend(node, text) {

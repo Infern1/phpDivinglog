@@ -1,7 +1,7 @@
 {% if pages|default(1) > 1 %}
-  <div class="pagination dive-pagination">
+  <nav class="dive-pagination" aria-label="Pagination">
     {% for page in 1..pages %}
       <a href="/?page={{ page }}{% if search is defined and search != '' %}&q={{ search|url_encode }}{% endif %}{% if sort is defined and sort != '' %}&sort={{ sort|url_encode }}{% endif %}"{% if page == currentPage %} aria-current="page"{% endif %}>{{ page }}</a>
     {% endfor %}
-  </div>
+  </nav>
 {% endif %}

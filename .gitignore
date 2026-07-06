@@ -4,6 +4,8 @@ cache/*
 !.gitignore
 /*.bak
 vendor/
+!public/assets/vendor/
+!public/assets/vendor/**
 .env
 var/
 tests/fixtures/http-smoke.sqlite

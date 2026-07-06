@@ -18,31 +18,33 @@
 
     {% include 'partials/pagination.html.twig' with { pages: pages, currentPage: currentPage, search: search, sort: sort } %}
 
-    <table class="dives-table" data-dives-table>
-      <thead>
-        <tr>
-          <th scope="col">Nr.</th>
-          <th scope="col">When</th>
-          <th scope="col">Location / Site</th>
-          <th scope="col">Depth</th>
-          <th scope="col">Duration</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for dive in dives %}
-          <tr data-number="{{ dive.number }}" data-location="{{ dive.location|lower }}" data-ts="{{ dive.timestamp }}" data-depth="{{ dive.depth_value }}" data-duration="{{ dive.duration }}" data-href="/dives/{{ dive.number }}" tabindex="0" role="link" aria-label="Open dive {{ dive.number }}">
-            <td class="dive-col-number"><a href="/dives/{{ dive.number }}">{{ dive.number }}</a></td>
-            <td class="dive-col-when">
-              <strong>{{ dive.date }}</strong>
-              <small>{{ dive.time }}</small>
-            </td>
-            <td>{{ dive.location }}</td>
-            <td>{{ dive.depth }} {{ dive.depth_label }}</td>
-            <td>{{ dive.duration }} min</td>
+    <div class="table-wrap">
+      <table class="dives-table" data-dives-table>
+        <thead>
+          <tr>
+            <th scope="col">Nr.</th>
+            <th scope="col">When</th>
+            <th scope="col">Location / Site</th>
+            <th scope="col">Depth</th>
+            <th scope="col">Duration</th>
           </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {% for dive in dives %}
+            <tr data-number="{{ dive.number }}" data-location="{{ dive.location|lower }}" data-ts="{{ dive.timestamp }}" data-depth="{{ dive.depth_value }}" data-duration="{{ dive.duration }}" data-href="/dives/{{ dive.number }}" tabindex="0" role="link" aria-label="Open dive {{ dive.number }}">
+              <td class="dive-col-number"><a href="/dives/{{ dive.number }}">{{ dive.number }}</a></td>
+              <td class="dive-col-when">
+                <strong>{{ dive.date }}</strong>
+                <small>{{ dive.time }}</small>
+              </td>
+              <td>{{ dive.location }}</td>
+              <td>{{ dive.depth }} {{ dive.depth_label }}</td>
+              <td>{{ dive.duration }} min</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
 
     {% include 'partials/pagination.html.twig' with { pages: pages, currentPage: currentPage, search: search, sort: sort } %}
   </section>
