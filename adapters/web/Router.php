@@ -26,6 +26,7 @@ final class Router
             'shops' => 'shops.overview',
             'trips' => 'trips.overview',
             'equipment' => 'equipment.overview',
+            'gallery' => 'gallery.overview',
             'stats' => 'stats.overview',
             'summary' => 'summary.overview',
         ];

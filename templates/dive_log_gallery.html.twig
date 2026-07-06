@@ -1,0 +1,36 @@
+{% extends 'layout.html.twig' %}
+
+{% block content %}
+  <section class="dive-overview-panel">
+    <div class="dive-overview-head">
+      <h2>Dive Log Gallery</h2>
+    </div>
+
+    {% if pictures is empty %}
+      <p class="entity-empty-message">No pictures found yet.</p>
+    {% else %}
+      <ul class="gallery-grid" data-lightbox-group="dive-log-gallery">
+        {% for picture in pictures %}
+          <li>
+            <a
+              href="{{ picture.url }}"
+              data-lightbox
+              data-dive-number="{{ picture.diveNumber }}"
+              data-diver="{{ picture.diver }}"
+              data-location="{{ picture.location }}"
+              data-site="{{ picture.site }}"
+              data-when="{{ picture.when }}"
+              data-dive-url="{{ picture.diveUrl }}"
+            >
+              <img src="{{ picture.thumb }}" alt="{{ picture.description|default('Dive image') }}">
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+
+      {% include 'partials/pagination.html.twig' with { pages: pages, currentPage: currentPage, basePath: '/gallery' } %}
+    {% endif %}
+  </section>
+
+  <script src="/assets/js/lightbox.js" defer></script>
+{% endblock %}

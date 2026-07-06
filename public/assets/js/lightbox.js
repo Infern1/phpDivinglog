@@ -13,6 +13,11 @@
     '  <img class="lightbox-image" alt="Preview">',
     '  <button type="button" class="lightbox-nav lightbox-next" aria-label="Next image" data-lightbox-next>›</button>',
     '</div>',
+    '<div class="lightbox-info" data-lightbox-info hidden>',
+    '  <p class="lightbox-info-title" data-lightbox-info-title></p>',
+    '  <p class="lightbox-info-meta" data-lightbox-info-meta></p>',
+    '  <a class="lightbox-info-link" data-lightbox-info-link href="#">view dive</a>',
+    '</div>',
     '<p class="lightbox-caption" data-lightbox-caption></p>',
   ].join('');
   document.body.appendChild(dialog);
@@ -21,6 +26,10 @@
   const caption = dialog.querySelector('[data-lightbox-caption]');
   const previousButton = dialog.querySelector('[data-lightbox-prev]');
   const nextButton = dialog.querySelector('[data-lightbox-next]');
+  const infoPanel = dialog.querySelector('[data-lightbox-info]');
+  const infoTitle = dialog.querySelector('[data-lightbox-info-title]');
+  const infoMeta = dialog.querySelector('[data-lightbox-info-meta]');
+  const infoLink = dialog.querySelector('[data-lightbox-info-link]');
 
   const allTriggers = () => Array.from(document.querySelectorAll('a[data-lightbox]'));
 
@@ -59,7 +68,7 @@
   let currentIndex = 0;
 
   const renderCurrentImage = () => {
-    if (!(image instanceof HTMLImageElement) || !(counter instanceof HTMLElement) || !(caption instanceof HTMLElement) || !(previousButton instanceof HTMLElement) || !(nextButton instanceof HTMLElement)) {
+    if (!(image instanceof HTMLImageElement) || !(counter instanceof HTMLElement) || !(caption instanceof HTMLElement) || !(previousButton instanceof HTMLElement) || !(nextButton instanceof HTMLElement) || !(infoPanel instanceof HTMLElement) || !(infoTitle instanceof HTMLElement) || !(infoMeta instanceof HTMLElement) || !(infoLink instanceof HTMLAnchorElement)) {
       return;
     }
 
@@ -73,6 +82,11 @@
       counter.hidden = true;
       previousButton.hidden = true;
       nextButton.hidden = true;
+      infoPanel.hidden = true;
+      infoTitle.textContent = '';
+      infoMeta.textContent = '';
+      infoLink.textContent = 'view dive';
+      infoLink.setAttribute('href', '#');
       return;
     }
 
@@ -88,6 +102,38 @@
     nextButton.hidden = !hasNavigation;
     counter.hidden = !hasNavigation;
     counter.textContent = hasNavigation ? `${currentIndex + 1} / ${currentGroup.length}` : '';
+
+    const diveNumber = (currentAnchor.getAttribute('data-dive-number') || '').trim();
+    if (diveNumber === '') {
+      infoPanel.hidden = true;
+      infoTitle.textContent = '';
+      infoMeta.textContent = '';
+      infoLink.textContent = 'view dive';
+      infoLink.setAttribute('href', '#');
+      return;
+    }
+
+    const diver = (currentAnchor.getAttribute('data-diver') || '').trim();
+    infoTitle.textContent = diver !== '' ? `Dive ${diveNumber} by ${diver}` : `Dive ${diveNumber}`;
+
+    const metaParts = [
+      (currentAnchor.getAttribute('data-location') || '').trim(),
+      (currentAnchor.getAttribute('data-site') || '').trim(),
+      (currentAnchor.getAttribute('data-when') || '').trim(),
+    ].filter((value) => value !== '');
+
+    infoMeta.textContent = metaParts.join(' | ');
+    const diveUrl = (currentAnchor.getAttribute('data-dive-url') || '').trim();
+    if (diveUrl !== '') {
+      infoLink.setAttribute('href', diveUrl);
+      infoLink.hidden = false;
+    } else {
+      infoLink.hidden = true;
+      infoLink.setAttribute('href', '#');
+    }
+
+    infoLink.textContent = 'view dive';
+    infoPanel.hidden = false;
   };
 
   const openLightbox = (anchor) => {

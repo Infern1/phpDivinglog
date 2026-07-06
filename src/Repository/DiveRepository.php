@@ -221,6 +221,60 @@ final readonly class DiveRepository
         return is_array($row) ? (int) ($row['DiveCount'] ?? 0) : 0;
     }
 
+    /**
+     * @param list<int> $logIds
+     * @return array<int, array{number:int,date_time:DateTimeImmutable,place_id:int,country_id:int,place_name:?string,city_name:?string,country_name:?string}>
+     */
+    public function findMetaByLogIds(array $logIds): array
+    {
+        if ($logIds === []) {
+            return [];
+        }
+
+        $ids = array_values(array_unique(array_filter(
+            array_map(static fn (mixed $value): int => (int) $value, $logIds),
+            static fn (int $value): bool => $value > 0
+        )));
+
+        if ($ids === []) {
+            return [];
+        }
+
+        $placeholders = implode(', ', array_fill(0, count($ids), '?'));
+        $sql = sprintf('SELECT * FROM %sLogbook WHERE LogID IN (%s)', $this->tablePrefix, $placeholders);
+        $statement = $this->pdo->prepare($sql);
+        foreach ($ids as $index => $id) {
+            $statement->bindValue($index + 1, $id, PDO::PARAM_INT);
+        }
+
+        $statement->execute();
+        $rows = $statement->fetchAll();
+
+        $metaByLogId = [];
+        foreach ($rows as $row) {
+            if (!is_array($row)) {
+                continue;
+            }
+
+            $logId = (int) ($row['LogID'] ?? $row['ID'] ?? 0);
+            if ($logId <= 0) {
+                continue;
+            }
+
+            $metaByLogId[$logId] = [
+                'number' => (int) ($row['Number'] ?? 0),
+                'date_time' => $this->mapDateTime($row),
+                'place_id' => (int) ($row['PlaceID'] ?? 0),
+                'country_id' => (int) ($row['CountryID'] ?? 0),
+                'place_name' => isset($row['Place']) ? TextNormalizer::normalizeLikelyMojibake(trim((string) $row['Place'])) : null,
+                'city_name' => isset($row['City']) ? TextNormalizer::normalizeLikelyMojibake(trim((string) $row['City'])) : null,
+                'country_name' => isset($row['Country']) ? TextNormalizer::normalizeLikelyMojibake(trim((string) $row['Country'])) : null,
+            ];
+        }
+
+        return $metaByLogId;
+    }
+
     public function findPreviousNumber(int $number): ?int
     {
         $sql = sprintf('SELECT Number FROM %sLogbook WHERE Number < :number ORDER BY Number DESC LIMIT 1', $this->tablePrefix);

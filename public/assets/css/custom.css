@@ -150,7 +150,7 @@ body {
 
 .app-nav {
   display: grid;
-  grid-template-columns: repeat(7, minmax(0, 1fr));
+  grid-template-columns: repeat(8, minmax(0, 1fr));
   gap: 0.4rem;
   padding: 0.4rem;
 }
@@ -757,6 +757,51 @@ ignore
   text-align: center;
 }
 
+.lightbox-info {
+  margin-top: 0.55rem;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid var(--outline-variant, #cac4d0);
+  border-radius: 0.7rem;
+  background: color-mix(in srgb, var(--surface-container, #f3edf7) 78%, transparent);
+  color: var(--on-surface, #1d1b20);
+  display: grid;
+  gap: 0.35rem;
+}
+
+.lightbox-info[hidden] {
+  display: none;
+}
+
+.lightbox-info-title {
+  margin: 0;
+  font-weight: 700;
+}
+
+.lightbox-info-meta {
+  margin: 0;
+  color: var(--on-surface-variant, #49454f);
+  font-size: 0.9rem;
+}
+
+.lightbox-info-link {
+  justify-self: start;
+  border: 1px solid var(--outline, #79747e);
+  border-radius: 999px;
+  padding: 0.25rem 0.6rem;
+  text-decoration: none;
+  color: rgb(var(--divelog-accent-rgb));
+  background: color-mix(in srgb, rgb(var(--divelog-accent-soft-rgb)) 44%, transparent);
+}
+
+.lightbox-info-link:focus-visible {
+  outline: 2px solid rgb(var(--divelog-accent-rgb));
+  outline-offset: 2px;
+}
+
+.lightbox-info-link[hidden] {
+  display: none;
+}
+
 .summary-shell {
   border-radius: 0.85rem;
   border: 1px solid #d6dde3;
@@ -864,7 +909,7 @@ ignore
     z-index: 20;
     border-radius: 1.2rem;
     backdrop-filter: blur(8px);
-    grid-template-columns: repeat(7, minmax(0, 1fr));
+    grid-template-columns: repeat(8, minmax(0, 1fr));
   }
 
   .app-nav a {

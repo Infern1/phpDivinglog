@@ -310,6 +310,19 @@ final class WebSmokeTest extends TestCase
         self::assertStringContainsString('Gallery', $response['body']);
     }
 
+    public function testGalleryOverviewRenders(): void
+    {
+        $response = $this->request('/gallery');
+
+        self::assertSame(200, $response['status']);
+        self::assertStringContainsString('Dive Log Gallery', $response['body']);
+        self::assertStringContainsString('class="gallery-grid" data-lightbox-group="dive-log-gallery"', $response['body']);
+        self::assertStringContainsString('data-dive-number="', $response['body']);
+        self::assertStringContainsString('data-dive-url="/dives/', $response['body']);
+        self::assertStringContainsString('/assets/js/lightbox.js', $response['body']);
+        self::assertStringContainsString('<a href="/gallery" data-nav-link>', $response['body']);
+    }
+
     public function testSummaryRenders(): void
     {
         $response = $this->request('/summary');

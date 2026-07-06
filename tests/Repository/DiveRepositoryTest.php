@@ -43,4 +43,27 @@ final class DiveRepositoryTest extends TestCase
         self::assertSame(1, $rows[0]['number']);
         self::assertSame('Blue Hole, Nassau, Bahamas', $rows[0]['location']);
     }
+
+    public function testFindMetaByLogIdsReturnsLogIdKeyedMetadata(): void
+    {
+        $repo = new DiveRepository($this->pdo, 'DL_');
+
+        $meta = $repo->findMetaByLogIds([10]);
+
+        self::assertArrayHasKey(10, $meta);
+        self::assertSame(1, $meta[10]['number']);
+        self::assertSame(100, $meta[10]['place_id']);
+        self::assertSame(5, $meta[10]['country_id']);
+        self::assertSame('Blue Hole', $meta[10]['place_name']);
+        self::assertSame('Nassau', $meta[10]['city_name']);
+        self::assertSame('Bahamas', $meta[10]['country_name']);
+        self::assertSame('2026-01-01 12:00:00', $meta[10]['date_time']->format('Y-m-d H:i:s'));
+    }
+
+    public function testFindMetaByLogIdsReturnsEmptyArrayForEmptyInput(): void
+    {
+        $repo = new DiveRepository($this->pdo, 'DL_');
+
+        self::assertSame([], $repo->findMetaByLogIds([]));
+    }
 }
