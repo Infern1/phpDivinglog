@@ -243,6 +243,10 @@ final readonly class DiveRepository
         $rows = $this->queryByIds('LogID', $ids);
         $idColumn = 'LogID';
         if ($rows === null) {
+            $rows = $this->queryByIds('ID', $ids);
+            $idColumn = 'ID';
+        }
+        if ($rows === null) {
             $rows = $this->queryByIds('Number', $ids);
             $idColumn = 'Number';
         }

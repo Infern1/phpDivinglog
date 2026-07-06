@@ -86,4 +86,23 @@ final class DiveRepositoryTest extends TestCase
         self::assertSame('Portugal', $meta[42]['country_name']);
         self::assertSame('2026-06-01 11:22:00', $meta[42]['date_time']->format('Y-m-d H:i:s'));
     }
+
+    public function testFindMetaByLogIdsFallsBackToIdWhenLogIdColumnMissing(): void
+    {
+        $pdo = new PDO('sqlite::memory:');
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $pdo->exec('CREATE TABLE DL_Logbook (ID INTEGER PRIMARY KEY, Number INTEGER, PlaceID INTEGER, CountryID INTEGER, Divedate TEXT, Entrytime TEXT, Place TEXT, City TEXT, Country TEXT)');
+        $pdo->exec("INSERT INTO DL_Logbook (ID, Number, PlaceID, CountryID, Divedate, Entrytime, Place, City, Country) VALUES (77, 5, 3, 4, '2026-07-01', '07:30:00', 'Wall', 'Hurghada', 'Egypt')");
+
+        $repo = new DiveRepository($pdo, 'DL_');
+        $meta = $repo->findMetaByLogIds([77]);
+
+        self::assertArrayHasKey(77, $meta);
+        self::assertSame(5, $meta[77]['number']);
+        self::assertSame(3, $meta[77]['place_id']);
+        self::assertSame(4, $meta[77]['country_id']);
+        self::assertSame('Wall', $meta[77]['place_name']);
+        self::assertSame('Hurghada', $meta[77]['city_name']);
+        self::assertSame('Egypt', $meta[77]['country_name']);
+    }
 }
