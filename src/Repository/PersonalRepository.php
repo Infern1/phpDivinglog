@@ -7,6 +7,7 @@ namespace PhpDivingLog\Repository;
 use PhpDivingLog\Model\Personal;
 use PhpDivingLog\Support\TextNormalizer;
 use PDO;
+use PDOException;
 
 final readonly class PersonalRepository
 {
@@ -16,8 +17,7 @@ final readonly class PersonalRepository
 
     public function getProfile(): ?Personal
     {
-        $sql = sprintf('SELECT Firstname, Lastname, Email, City, Country, Comment, Picture FROM %sPersonal LIMIT 1', $this->tablePrefix);
-        $row = $this->pdo->query($sql)->fetch();
+        $row = $this->fetchProfileRow();
 
         if (!is_array($row)) {
             return null;
@@ -32,5 +32,31 @@ final readonly class PersonalRepository
             isset($row['Comment']) ? TextNormalizer::normalizeLikelyMojibake((string) $row['Comment']) : null,
             isset($row['Picture']) ? (string) $row['Picture'] : null,
         );
+    }
+
+    /**
+     * @return array<string, mixed>|false
+     */
+    private function fetchProfileRow(): array|false
+    {
+        $queries = [
+            'SELECT Firstname, Lastname, Email, City, Country, Comment, Picture FROM %sPersonal LIMIT 1',
+            'SELECT Firstname, Lastname, Email, City, Country, Comments AS Comment, Picture FROM %sPersonal LIMIT 1',
+            'SELECT Firstname, Lastname, Email, City, Country, NULL AS Comment, Picture FROM %sPersonal LIMIT 1',
+        ];
+
+        foreach ($queries as $index => $template) {
+            $sql = sprintf($template, $this->tablePrefix);
+
+            try {
+                return $this->pdo->query($sql)->fetch();
+            } catch (PDOException $exception) {
+                if ($index === array_key_last($queries)) {
+                    throw $exception;
+                }
+            }
+        }
+
+        return false;
     }
 }
