@@ -24,6 +24,13 @@
             >
               <img src="{{ picture.thumb }}" alt="{{ picture.description|default('Dive image') }}">
             </a>
+            {% set siteLabel = picture.site|default('')|trim %}
+            {% set locationLabel = picture.location|default('')|trim %}
+            {% if siteLabel != '' or locationLabel != '' %}
+              <p class="gallery-thumb-meta">
+                {{ siteLabel }}{% if siteLabel != '' and locationLabel != '' %} &middot; {% endif %}{{ locationLabel }}
+              </p>
+            {% endif %}
           </li>
         {% endfor %}
       </ul>
