@@ -129,6 +129,7 @@ final class WebSmokeTest extends TestCase
         self::assertStringContainsString('Open in Google Maps', $response['body']);
         self::assertStringContainsString('Max depth:', $response['body']);
         self::assertStringContainsString('Water:', $response['body']);
+        self::assertStringContainsString('href="/images/maps/blue-hole-map.jpg" data-lightbox', $response['body']);
         self::assertStringContainsString('data-lightbox', $response['body']);
         self::assertStringContainsString('/assets/js/lightbox.js', $response['body']);
         self::assertStringContainsString('dive-100-a.jpg', $response['body']);

@@ -42,7 +42,9 @@
         <p><strong>Comment:</strong> {{ site.comment }}</p>
       {% endif %}
       {% if site.mapUrl %}
-        <img src="{{ site.mapUrl }}" alt="Map for {{ site.name }}" class="entity-image">
+        <a href="{{ site.mapUrl }}" data-lightbox>
+          <img src="{{ site.mapUrl }}" alt="Map for {{ site.name }}" class="entity-image">
+        </a>
       {% endif %}
     </div>
   </section>
