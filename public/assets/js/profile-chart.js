@@ -1,7 +1,7 @@
 (() => {
   const depthCanvas = document.getElementById('profile-chart');
   const rateCanvas = document.getElementById('profile-rate-chart');
-  if (!depthCanvas || !rateCanvas) {
+  if (!depthCanvas) {
     return;
   }
 
@@ -75,34 +75,38 @@
         themeColors,
       );
 
-      const rateChart = createInteractiveChart(
-        rateCanvas,
-        {
-          title: `Rates (${payload.rateUnit || 'm/min'})`,
-          xLabel: 'Time (min)',
-          yLabel: payload.rateUnit || 'm/min',
-          series: [
+      const rateChart = rateCanvas
+        ? createInteractiveChart(
+            rateCanvas,
             {
-              points: payload.ascentRateSeries || [],
-              valueKey: 'rate',
-              colorKey: 'ascent',
-              label: 'Ascent',
+              title: `Rates (${payload.rateUnit || 'm/min'})`,
+              xLabel: 'Time (min)',
+              yLabel: payload.rateUnit || 'm/min',
+              series: [
+                {
+                  points: payload.ascentRateSeries || [],
+                  valueKey: 'rate',
+                  colorKey: 'ascent',
+                  label: 'Ascent',
+                },
+                {
+                  points: payload.descentRateSeries || [],
+                  valueKey: 'rate',
+                  colorKey: 'descent',
+                  label: 'Descent',
+                },
+              ],
             },
-            {
-              points: payload.descentRateSeries || [],
-              valueKey: 'rate',
-              colorKey: 'descent',
-              label: 'Descent',
-            },
-          ],
-        },
-        rateLegend,
-        themeColors,
-      );
+            rateLegend,
+            themeColors,
+          )
+        : null;
 
       window.addEventListener('themechange', () => {
         depthChart.redraw();
-        rateChart.redraw();
+        if (rateChart) {
+          rateChart.redraw();
+        }
       });
     })
     .catch(() => {
