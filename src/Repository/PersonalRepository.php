@@ -7,7 +7,6 @@ namespace PhpDivingLog\Repository;
 use PhpDivingLog\Model\Personal;
 use PhpDivingLog\Support\TextNormalizer;
 use PDO;
-use PDOException;
 
 final readonly class PersonalRepository
 {
@@ -23,14 +22,22 @@ final readonly class PersonalRepository
             return null;
         }
 
+        $firstName = $this->stringOrNull($this->pickValue($row, ['Firstname', 'FirstName', 'Vorname']));
+        $lastName = $this->stringOrNull($this->pickValue($row, ['Lastname', 'LastName', 'Surname', 'Nachname']));
+        $email = $this->stringOrNull($this->pickValue($row, ['Email', 'EMail', 'Mail']));
+        $city = $this->stringOrNull($this->pickValue($row, ['City', 'Ort']));
+        $country = $this->stringOrNull($this->pickValue($row, ['Country', 'Land']));
+        $comment = $this->stringOrNull($this->pickValue($row, ['Comment', 'Comments', 'Remark', 'Remarks', 'Notes']));
+        $picture = $this->stringOrNull($this->pickValue($row, ['Picture', 'Photo', 'Image', 'Avatar']));
+
         return new Personal(
-            TextNormalizer::normalizeLikelyMojibake((string) ($row['Firstname'] ?? '')),
-            TextNormalizer::normalizeLikelyMojibake((string) ($row['Lastname'] ?? '')),
-            isset($row['Email']) ? (string) $row['Email'] : null,
-            isset($row['City']) ? TextNormalizer::normalizeLikelyMojibake((string) $row['City']) : null,
-            isset($row['Country']) ? TextNormalizer::normalizeLikelyMojibake((string) $row['Country']) : null,
-            isset($row['Comment']) ? TextNormalizer::normalizeLikelyMojibake((string) $row['Comment']) : null,
-            isset($row['Picture']) ? (string) $row['Picture'] : null,
+            TextNormalizer::normalizeLikelyMojibake($firstName ?? ''),
+            TextNormalizer::normalizeLikelyMojibake($lastName ?? ''),
+            $email,
+            $city !== null ? TextNormalizer::normalizeLikelyMojibake($city) : null,
+            $country !== null ? TextNormalizer::normalizeLikelyMojibake($country) : null,
+            $comment !== null ? TextNormalizer::normalizeLikelyMojibake($comment) : null,
+            $picture
         );
     }
 
@@ -39,24 +46,47 @@ final readonly class PersonalRepository
      */
     private function fetchProfileRow(): array|false
     {
-        $queries = [
-            'SELECT Firstname, Lastname, Email, City, Country, Comment, Picture FROM %sPersonal LIMIT 1',
-            'SELECT Firstname, Lastname, Email, City, Country, Comments AS Comment, Picture FROM %sPersonal LIMIT 1',
-            'SELECT Firstname, Lastname, Email, City, Country, NULL AS Comment, Picture FROM %sPersonal LIMIT 1',
-        ];
+        $sql = sprintf('SELECT * FROM %sPersonal LIMIT 1', $this->tablePrefix);
 
-        foreach ($queries as $index => $template) {
-            $sql = sprintf($template, $this->tablePrefix);
+        return $this->pdo->query($sql)->fetch();
+    }
 
-            try {
-                return $this->pdo->query($sql)->fetch();
-            } catch (PDOException $exception) {
-                if ($index === array_key_last($queries)) {
-                    throw $exception;
-                }
+    /**
+     * @param array<string, mixed> $row
+     * @param list<string> $preferredKeys
+     */
+    private function pickValue(array $row, array $preferredKeys): mixed
+    {
+        foreach ($preferredKeys as $key) {
+            if (array_key_exists($key, $row)) {
+                return $row[$key];
             }
         }
 
-        return false;
+        $normalized = [];
+        foreach ($row as $key => $value) {
+            if (is_string($key)) {
+                $normalized[strtolower($key)] = $value;
+            }
+        }
+
+        foreach ($preferredKeys as $key) {
+            $lookup = strtolower($key);
+            if (array_key_exists($lookup, $normalized)) {
+                return $normalized[$lookup];
+            }
+        }
+
+        return null;
+    }
+
+    private function stringOrNull(mixed $value): ?string
+    {
+        if ($value === null) {
+            return null;
+        }
+
+        $string = trim((string) $value);
+        return $string === '' ? null : $string;
     }
 }
