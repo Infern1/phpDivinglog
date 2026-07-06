@@ -5,13 +5,23 @@ declare(strict_types=1);
 namespace PhpDivingLog\Adapters\Web\Controller;
 
 use DateTimeImmutable;
+use PhpDivingLog\Repository\DiveRepository;
 use PhpDivingLog\Repository\EquipmentRepository;
 use PhpDivingLog\Support\Config;
+use PhpDivingLog\Support\Formatter;
+use PhpDivingLog\Support\MediaResolver;
+use PhpDivingLog\Support\UnitConverter;
 
 final readonly class EquipmentController
 {
-    public function __construct(private EquipmentRepository $equipment, private Config $config)
-    {
+    public function __construct(
+        private EquipmentRepository $equipment,
+        private DiveRepository $dives,
+        private Config $config,
+        private Formatter $formatter,
+        private UnitConverter $converter,
+        private MediaResolver $media,
+    ) {
     }
 
     /**
@@ -19,8 +29,14 @@ final readonly class EquipmentController
      */
     public function overview(): array
     {
+        $rows = $this->equipment->listWithDiveCounts();
+
         return [
-            'equipment' => array_map(fn ($item) => $this->mapEquipment($item), $this->equipment->list()),
+            'equipment' => array_map(function (array $row): array {
+                $mapped = $this->mapEquipment($row['item']);
+                $mapped['diveCount'] = $row['diveCount'];
+                return $mapped;
+            }, $rows),
         ];
     }
 
@@ -34,7 +50,14 @@ final readonly class EquipmentController
             return null;
         }
 
-        return ['item' => $this->mapEquipment($item)];
+        $diveRows = $this->dives->listOverviewByEquipment($id);
+        $dives = $this->mapDiveRows($diveRows ?? []);
+
+        return [
+            'item' => $this->mapEquipment($item),
+            'dives' => $dives,
+            'showDiveLinking' => $diveRows !== null,
+        ];
     }
 
     /**
@@ -55,6 +78,25 @@ final readonly class EquipmentController
             'serviceDueSoon' => $dueSoon,
             'comment' => $item->comment,
             'picture' => $item->picture,
+            'pictureUrl' => $item->picture !== null && $item->picture !== '' ? $this->media->equipmentUrl($item->picture) : null,
         ];
+    }
+
+    /**
+     * @param list<array{number:int,date_time:\DateTimeImmutable,depth:float,duration:int,location:string}> $rows
+     * @return list<array{number:int,date:string,depth:string,duration:int,location:string,url:string}>
+     */
+    private function mapDiveRows(array $rows): array
+    {
+        return array_map(function (array $row): array {
+            return [
+                'number' => $row['number'],
+                'date' => $this->formatter->formatDate($row['date_time']),
+                'depth' => $this->formatter->formatDecimal($this->converter->depthToDisplay($row['depth']), 1) . ' ' . $this->converter->depthLabel(),
+                'duration' => $row['duration'],
+                'location' => $row['location'],
+                'url' => '/dives/' . $row['number'],
+            ];
+        }, $rows);
     }
 }

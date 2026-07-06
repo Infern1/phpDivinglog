@@ -26,6 +26,41 @@ final readonly class DiveSiteRepository
         return array_map([$this, 'mapSite'], $statement->fetchAll());
     }
 
+    /**
+     * @return list<array{site:DiveSite,diveCount:int}>
+     */
+    public function listWithDiveCounts(int $limit = 500): array
+    {
+        $sql = sprintf(
+            'SELECT p.*, COUNT(l.Number) AS DiveCount FROM %1$sPlace p LEFT JOIN %1$sLogbook l ON l.PlaceID = p.PlaceID GROUP BY p.PlaceID ORDER BY p.Place LIMIT :limit',
+            $this->tablePrefix,
+        );
+
+        try {
+            $statement = $this->pdo->prepare($sql);
+            $statement->bindValue(':limit', $limit, PDO::PARAM_INT);
+            $statement->execute();
+            $rows = $statement->fetchAll();
+
+            return array_map(function (array $row): array {
+                return [
+                    'site' => $this->mapSite($row),
+                    'diveCount' => (int) ($row['DiveCount'] ?? 0),
+                ];
+            }, $rows);
+        } catch (\PDOException $exception) {
+            $sqlState = $exception->errorInfo[0] ?? null;
+            if ($sqlState === '42S22' || ($sqlState === 'HY000' && str_contains(strtolower($exception->getMessage()), 'no such column'))) {
+                return array_map(
+                    static fn (DiveSite $site): array => ['site' => $site, 'diveCount' => 0],
+                    $this->list($limit),
+                );
+            }
+
+            throw $exception;
+        }
+    }
+
     public function findById(int $id): ?DiveSite
     {
         $row = $this->queryByIdColumn('PlaceID', $id);
@@ -34,6 +69,29 @@ final readonly class DiveSiteRepository
         }
 
         return is_array($row) ? $this->mapSite($row) : null;
+    }
+
+    /**
+     * @return list<DiveSite>
+     */
+    public function listByCountry(int $countryId, int $limit = 500): array
+    {
+        $sql = sprintf('SELECT * FROM %sPlace WHERE CountryID = :countryId ORDER BY Place LIMIT :limit', $this->tablePrefix);
+
+        try {
+            $statement = $this->pdo->prepare($sql);
+            $statement->bindValue(':countryId', $countryId, PDO::PARAM_INT);
+            $statement->bindValue(':limit', $limit, PDO::PARAM_INT);
+            $statement->execute();
+            return array_map([$this, 'mapSite'], $statement->fetchAll());
+        } catch (\PDOException $exception) {
+            $sqlState = $exception->errorInfo[0] ?? null;
+            if ($sqlState === '42S22' || ($sqlState === 'HY000' && str_contains(strtolower($exception->getMessage()), 'no such column'))) {
+                return [];
+            }
+
+            throw $exception;
+        }
     }
 
     /**

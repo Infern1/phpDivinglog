@@ -9,6 +9,7 @@ use PhpDivingLog\Repository\CityRepository;
 use PhpDivingLog\Repository\CountryRepository;
 use PhpDivingLog\Repository\DiveRepository;
 use PhpDivingLog\Repository\DiveSiteRepository;
+use PhpDivingLog\Repository\DiveStatisticsRepository;
 use PhpDivingLog\Repository\EquipmentRepository;
 use PhpDivingLog\Repository\PersonalRepository;
 use PhpDivingLog\Repository\PictureRepository;
@@ -20,6 +21,7 @@ use PhpDivingLog\Repository\UserDefinedRepository;
 use PhpDivingLog\Support\Config;
 use PhpDivingLog\Support\Formatter;
 use PhpDivingLog\Support\DiveMetricsCalculator;
+use PhpDivingLog\Support\DiveStatisticsFormatter;
 use PhpDivingLog\Support\HtmlSanitizer;
 use PhpDivingLog\Support\MediaResolver;
 use PhpDivingLog\Support\RtfConverter;
@@ -41,6 +43,7 @@ return [
         'unitConverter' => new UnitConverter($config),
         'formatter' => new Formatter($config),
         'diveMetrics' => new DiveMetricsCalculator(new UnitConverter($config), new Formatter($config)),
+        'diveStatisticsFormatter' => new DiveStatisticsFormatter(new UnitConverter($config), new Formatter($config)),
         'translator' => Translator::fromFiles($config->language(), dirname(__DIR__, 2) . '/resources/lang'),
         'mediaResolver' => new MediaResolver(
             $config,
@@ -61,6 +64,7 @@ return [
         'trips' => new TripRepository($pdo, $prefix),
         'equipment' => new EquipmentRepository($pdo, $prefix),
         'stats' => new StatsRepository($pdo, $prefix),
+        'diveStatistics' => new DiveStatisticsRepository($pdo, $prefix),
         'buddies' => new BuddyRepository($pdo, $prefix),
         'pictures' => new PictureRepository($pdo, $prefix),
         'tanks' => new TankRepository($pdo, $prefix),

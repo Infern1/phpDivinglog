@@ -1,8 +1,45 @@
 {% extends 'layout.html.twig' %}
 
 {% block content %}
-  <h2>{{ country.name }}</h2>
-  {% if country.flagUrl %}
-    <img src="{{ country.flagUrl }}" alt="Flag of {{ country.name }}">
-  {% endif %}
+  <section class="dive-overview-panel">
+    <div class="dive-overview-head">
+      <h2>{{ country.name }}</h2>
+    </div>
+    {% if country.flagUrl %}
+      <img src="{{ country.flagUrl }}" alt="Flag of {{ country.name }}" class="entity-image entity-flag">
+    {% endif %}
+  </section>
+
+  <section class="dive-overview-panel">
+    <div class="dive-overview-head">
+      <h2>Dive sites</h2>
+    </div>
+    {% if sites is empty %}
+      <p class="entity-empty-message">No dive sites recorded for this country yet.</p>
+    {% else %}
+      <table class="dives-table" data-dives-table>
+        <thead>
+          <tr>
+            <th scope="col">Site</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for site in sites %}
+            <tr data-href="/sites/{{ site.id }}" tabindex="0" role="link" aria-label="Open site {{ site.name }}">
+              <td><a href="/sites/{{ site.id }}">{{ site.name }}</a></td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% endif %}
+  </section>
+
+  <section class="dive-overview-panel">
+    <div class="dive-overview-head">
+      <h2>Dives in this country</h2>
+    </div>
+    {% include 'partials/dive_rows.html.twig' with { dives: dives, empty_message: 'No dives recorded for this country yet.' } %}
+  </section>
+
+  <script src="/assets/js/tables.js" defer></script>
 {% endblock %}

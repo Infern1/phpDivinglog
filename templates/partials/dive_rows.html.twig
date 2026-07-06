@@ -1,0 +1,26 @@
+{% if dives is empty %}
+  <p class="entity-empty-message">{{ empty_message|default('No dives recorded yet.') }}</p>
+{% else %}
+  <table class="dives-table" data-dives-table>
+    <thead>
+      <tr>
+        <th scope="col">Nr.</th>
+        <th scope="col">Date</th>
+        <th scope="col">Depth</th>
+        <th scope="col">Duration</th>
+        <th scope="col">Location</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for dive in dives %}
+        <tr data-href="{{ dive.url }}" tabindex="0" role="link" aria-label="Open dive {{ dive.number }}">
+          <td><a href="{{ dive.url }}">{{ dive.number }}</a></td>
+          <td>{{ dive.date }}</td>
+          <td>{{ dive.depth }}</td>
+          <td>{{ dive.duration }} min</td>
+          <td>{{ dive.location }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endif %}

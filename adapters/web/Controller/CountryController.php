@@ -5,12 +5,22 @@ declare(strict_types=1);
 namespace PhpDivingLog\Adapters\Web\Controller;
 
 use PhpDivingLog\Repository\CountryRepository;
+use PhpDivingLog\Repository\DiveRepository;
+use PhpDivingLog\Repository\DiveSiteRepository;
+use PhpDivingLog\Support\Formatter;
 use PhpDivingLog\Support\MediaResolver;
+use PhpDivingLog\Support\UnitConverter;
 
 final readonly class CountryController
 {
-    public function __construct(private CountryRepository $countries, private MediaResolver $media)
-    {
+    public function __construct(
+        private CountryRepository $countries,
+        private DiveRepository $dives,
+        private DiveSiteRepository $sites,
+        private MediaResolver $media,
+        private Formatter $formatter,
+        private UnitConverter $converter,
+    ) {
     }
 
     /**
@@ -18,8 +28,14 @@ final readonly class CountryController
      */
     public function overview(): array
     {
+        $rows = $this->countries->listWithDiveCounts();
+
         return [
-            'countries' => array_map([$this, 'mapCountry'], $this->countries->list()),
+            'countries' => array_map(function (array $row): array {
+                $country = $this->mapCountry($row['country']);
+                $country['diveCount'] = $row['diveCount'];
+                return $country;
+            }, $rows),
         ];
     }
 
@@ -33,7 +49,11 @@ final readonly class CountryController
             return null;
         }
 
-        return ['country' => $this->mapCountry($country)];
+        return [
+            'country' => $this->mapCountry($country),
+            'sites' => array_map([$this, 'mapSite'], $this->sites->listByCountry($id)),
+            'dives' => $this->mapDiveRows($this->dives->listOverviewByCountry($id)),
+        ];
     }
 
     /**
@@ -47,5 +67,35 @@ final readonly class CountryController
             'name' => $country->name,
             'flagUrl' => $country->flagImage !== null ? $this->media->flagUrl($country->flagImage) : null,
         ];
+    }
+
+    /**
+     * @param object $site
+     * @return array<string, mixed>
+     */
+    private function mapSite(object $site): array
+    {
+        return [
+            'id' => $site->id,
+            'name' => $site->name,
+        ];
+    }
+
+    /**
+     * @param list<array{number:int,date_time:\DateTimeImmutable,depth:float,duration:int,location:string}> $rows
+     * @return list<array{number:int,date:string,depth:string,duration:int,location:string,url:string}>
+     */
+    private function mapDiveRows(array $rows): array
+    {
+        return array_map(function (array $row): array {
+            return [
+                'number' => $row['number'],
+                'date' => $this->formatter->formatDate($row['date_time']),
+                'depth' => $this->formatter->formatDecimal($this->converter->depthToDisplay($row['depth']), 1) . ' ' . $this->converter->depthLabel(),
+                'duration' => $row['duration'],
+                'location' => $row['location'],
+                'url' => '/dives/' . $row['number'],
+            ];
+        }, $rows);
     }
 }

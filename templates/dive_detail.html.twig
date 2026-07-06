@@ -150,6 +150,18 @@
                   <dd>{{ location_display }}</dd>
                 </div>
                 <div>
+                  <dt>Country</dt>
+                  <dd>
+                    {% if dive_country %}
+                      <a href="/countries/{{ dive_country.id }}">{{ dive_country.name }}</a>
+                    {% elseif related_country_name %}
+                      {{ related_country_name }}
+                    {% else %}
+                      -
+                    {% endif %}
+                  </dd>
+                </div>
+                <div>
                   <dt>Max. depth</dt>
                   <dd>{{ depth_display }} {{ depth_label }}</dd>
                 </div>

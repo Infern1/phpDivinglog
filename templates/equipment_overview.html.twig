@@ -1,15 +1,44 @@
 {% extends 'layout.html.twig' %}
 
 {% block content %}
-  <h2>Equipment</h2>
-  <ul>
-    {% for item in equipment %}
-      <li>
-        <a href="/equipment/{{ item.id }}">{{ item.object }}</a>
-        {% if item.serviceDueSoon %}
-          <strong>Service due soon</strong>
-        {% endif %}
-      </li>
-    {% endfor %}
-  </ul>
+  <section class="dive-overview-panel">
+    <div class="dive-overview-head">
+      <h2>Equipment</h2>
+    </div>
+
+    <table class="dives-table" data-dives-table>
+      <thead>
+        <tr>
+          <th scope="col">Item</th>
+          <th scope="col">Manufacturer</th>
+          <th scope="col">Dives</th>
+          <th scope="col">Service</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in equipment %}
+          <tr data-href="/equipment/{{ item.id }}" tabindex="0" role="link" aria-label="Open equipment {{ item.object }}">
+            <td><a href="/equipment/{{ item.id }}">{{ item.object }}</a></td>
+            <td>{{ item.manufacturer ?: '-' }}</td>
+            <td>
+              {% if item.diveCount is same as(null) %}
+                -
+              {% else %}
+                {{ item.diveCount }}
+              {% endif %}
+            </td>
+            <td>
+              {% if item.serviceDueSoon %}
+                <strong>Service due soon</strong>
+              {% else %}
+                -
+              {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </section>
+
+  <script src="/assets/js/tables.js" defer></script>
 {% endblock %}

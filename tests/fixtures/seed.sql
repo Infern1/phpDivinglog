@@ -1,7 +1,8 @@
-INSERT INTO DL_Logbook (Number, LogID, PlaceID, ShopID, TripID, Divedate, Divetime, Depth, Profile, ProfileInt)
+INSERT INTO DL_Logbook (Number, LogID, PlaceID, CountryID, ShopID, TripID, Divedate, Entrytime, Divetime, Depth, Watertemp, Airtemp, Entry, Divetype, Water, SupplyType, Deco, Rep, DblTank, EquipmentID, Place, City, Country, Profile, ProfileInt)
 VALUES
-  (1, 100, 10, 1, 1, '2026-01-01', '40', 18.2, '010000000000015000000000020000000000', 60),
-  (2, 101, 11, 2, 2, '2026-02-01', '50', 22.4, '012000000000018000000000024000000000', 60);
+  (1, 100, 10, 1, 1, 1, '2026-01-01', '09:10:00', 40, 18.0, 24.0, 27.0, 1, '3,8', 1, 0, 'False', 'False', 'False', 1, 'Blue Hole', 'Nassau', 'Bahamas', '010000000000015000000000020000000000', 60),
+  (2, 101, 11, 1, 2, 2, '2026-02-01', '10:30:00', 50, 22.4, 22.0, 25.0, 2, '4,5', 2, 1, 'True', 'True', 'True', 2, 'Coral Garden', 'Freeport', 'Bahamas', '012000000000018000000000024000000000', 60),
+  (3, 102, 10, 1, 1, 1, '2026-03-15', '08:15:00', 65, 41.0, 21.0, 24.0, 1, '6,7', 3, 2, 'False', 'True', 'True', 1, 'Blue Hole', 'Nassau', 'Bahamas', '015000000000030000000000010000000000', 60);
 
 INSERT INTO DL_Place (PlaceID, Place, CountryID, CityID, Latitude, Longitude, PlaceMap, PlaceComment)
 VALUES
@@ -26,12 +27,14 @@ VALUES
 INSERT INTO DL_Trip (TripID, TripName, DateFrom, DateTo, CountryID, ShopID, TripComment)
 VALUES
   (1, 'Spring Bahamas', '2026-01-01', '2026-01-07', 1, 1, 'Warm water week'),
-  (2, 'Reef Weekend', '2026-02-14', '2026-02-16', 1, 2, 'Quick getaway');
+  (2, 'Reef Weekend', '2026-02-14', '2026-02-16', 1, 2, 'Quick getaway'),
+  (3, 'No Dives Trip', '2026-04-01', '2026-04-03', 2, NULL, 'No diving this time');
 
 INSERT INTO DL_Equipment (EquipmentID, Object, Manufacturer, DatePurchase, DateService, DateServiceWarning, Comment, Picture)
 VALUES
   (1, 'Regulator', 'Apeks', '2024-06-01', '2026-07-15', '2026-06-15', 'Primary set', 'regulator.jpg'),
-  (2, 'BCD', 'Scubapro', '2023-03-20', '2026-12-01', '2026-11-01', 'Travel bcd', 'bcd.jpg');
+  (2, 'BCD', 'Scubapro', '2023-03-20', '2026-12-01', '2026-11-01', 'Travel bcd', 'bcd.jpg'),
+  (3, 'Computer', 'Shearwater', '2025-01-10', NULL, NULL, 'Spare computer', 'computer.jpg');
 
 INSERT INTO DL_Buddy (BuddyID, Firstname, Lastname, email, comment, Picture)
 VALUES

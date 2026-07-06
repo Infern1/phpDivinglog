@@ -64,6 +64,8 @@ final class WebSmokeTest extends TestCase
         self::assertStringContainsString('Details', $response['body']);
         self::assertStringContainsString('Dive site', $response['body']);
         self::assertStringContainsString('Location', $response['body']);
+        self::assertStringContainsString('Country', $response['body']);
+        self::assertStringContainsString('/countries/1', $response['body']);
         self::assertStringContainsString('Temp. Air', $response['body']);
         self::assertStringContainsString('Blue Hole', $response['body']);
         self::assertStringContainsString('Ocean Dive Center', $response['body']);
@@ -98,6 +100,8 @@ final class WebSmokeTest extends TestCase
         self::assertSame(200, $response['status']);
         self::assertStringContainsString('Dive Sites', $response['body']);
         self::assertStringContainsString('Blue Hole', $response['body']);
+        self::assertStringContainsString('data-href="/sites/10"', $response['body']);
+        self::assertStringContainsString('<td>2</td>', $response['body']);
     }
 
     public function testSiteDetailRenders(): void
@@ -106,6 +110,9 @@ final class WebSmokeTest extends TestCase
 
         self::assertSame(200, $response['status']);
         self::assertStringContainsString('Blue Hole', $response['body']);
+        self::assertStringContainsString('Dives at this site', $response['body']);
+        self::assertStringContainsString('data-href="/dives/1"', $response['body']);
+        self::assertStringContainsString('data-href="/dives/3"', $response['body']);
     }
 
     public function testSiteUnknownReturnsNotFound(): void
@@ -123,6 +130,8 @@ final class WebSmokeTest extends TestCase
         self::assertSame(200, $response['status']);
         self::assertStringContainsString('Countries', $response['body']);
         self::assertStringContainsString('Bahamas', $response['body']);
+        self::assertStringContainsString('data-href="/countries/1"', $response['body']);
+        self::assertStringContainsString('>3</td>', $response['body']);
     }
 
     public function testCountryDetailRenders(): void
@@ -131,6 +140,9 @@ final class WebSmokeTest extends TestCase
 
         self::assertSame(200, $response['status']);
         self::assertStringContainsString('Bahamas', $response['body']);
+        self::assertStringContainsString('Dives in this country', $response['body']);
+        self::assertStringContainsString('data-href="/sites/10"', $response['body']);
+        self::assertStringContainsString('data-href="/dives/2"', $response['body']);
     }
 
     public function testCountryUnknownReturnsNotFound(): void
@@ -198,6 +210,8 @@ final class WebSmokeTest extends TestCase
         self::assertSame(200, $response['status']);
         self::assertStringContainsString('Trips', $response['body']);
         self::assertStringContainsString('Spring Bahamas', $response['body']);
+        self::assertStringContainsString('data-href="/trips/1"', $response['body']);
+        self::assertStringContainsString('>2</td>', $response['body']);
     }
 
     public function testTripDetailRenders(): void
@@ -206,6 +220,9 @@ final class WebSmokeTest extends TestCase
 
         self::assertSame(200, $response['status']);
         self::assertStringContainsString('Spring Bahamas', $response['body']);
+        self::assertStringContainsString('Dives in this trip', $response['body']);
+        self::assertStringContainsString('data-href="/dives/1"', $response['body']);
+        self::assertStringContainsString('/countries/1', $response['body']);
     }
 
     public function testTripUnknownReturnsNotFound(): void
@@ -223,6 +240,7 @@ final class WebSmokeTest extends TestCase
         self::assertSame(200, $response['status']);
         self::assertStringContainsString('Equipment', $response['body']);
         self::assertStringContainsString('Regulator', $response['body']);
+        self::assertStringContainsString('data-href="/equipment/1"', $response['body']);
     }
 
     public function testEquipmentDetailRenders(): void
@@ -231,6 +249,8 @@ final class WebSmokeTest extends TestCase
 
         self::assertSame(200, $response['status']);
         self::assertStringContainsString('Regulator', $response['body']);
+        self::assertStringContainsString('Dives using this equipment', $response['body']);
+        self::assertStringContainsString('data-href="/dives/1"', $response['body']);
     }
 
     public function testEquipmentUnknownReturnsNotFound(): void
@@ -247,7 +267,11 @@ final class WebSmokeTest extends TestCase
 
         self::assertSame(200, $response['status']);
         self::assertStringContainsString('Dive Statistics', $response['body']);
-        self::assertStringContainsString('Total dives:', $response['body']);
+        self::assertStringContainsString('Total dives', $response['body']);
+        self::assertStringContainsString('Depth distribution', $response['body']);
+        self::assertStringContainsString('id="stats-depth-chart"', $response['body']);
+        self::assertStringContainsString('data-depth-distribution=', $response['body']);
+        self::assertStringContainsString('No-deco dives', $response['body']);
     }
 
     public function testGalleryRenders(): void

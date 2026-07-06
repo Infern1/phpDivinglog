@@ -1,0 +1,22 @@
+{
+  "filePath": ".spec-workflow/specs/dive-entity-linking-and-statistics/requirements.md",
+  "currentVersion": 2,
+  "snapshots": [
+    {
+      "version": 1,
+      "filename": "snapshot-001.json",
+      "timestamp": "2026-07-04T19:28:58.567Z",
+      "trigger": "initial",
+      "approvalId": "approval_1783193338551_j4seovypz",
+      "approvalTitle": "Requirements: Dive entity linking and statistics"
+    },
+    {
+      "version": 2,
+      "filename": "snapshot-002.json",
+      "timestamp": "2026-07-04T19:29:44.099Z",
+      "trigger": "approved",
+      "approvalId": "approval_1783193338551_j4seovypz",
+      "approvalTitle": "Requirements: Dive entity linking and statistics"
+    }
+  ]
+}

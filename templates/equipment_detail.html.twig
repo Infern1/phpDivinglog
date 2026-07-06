@@ -1,11 +1,34 @@
 {% extends 'layout.html.twig' %}
 
 {% block content %}
-  <h2>{{ item.object }}</h2>
-  {% if item.manufacturer %}
-    <p>Manufacturer: {{ item.manufacturer }}</p>
-  {% endif %}
-  {% if item.comment %}
-    <p>{{ item.comment }}</p>
+  <section class="dive-overview-panel">
+    <div class="dive-overview-head">
+      <h2>{{ item.object }}</h2>
+    </div>
+
+    <div class="entity-meta-grid">
+      {% if item.manufacturer %}
+        <p><strong>Manufacturer:</strong> {{ item.manufacturer }}</p>
+      {% endif %}
+      {% if item.serviceDate %}
+        <p><strong>Service date:</strong> {{ item.serviceDate|date('Y-m-d') }}</p>
+      {% endif %}
+      {% if item.comment %}
+        <p><strong>Comment:</strong> {{ item.comment }}</p>
+      {% endif %}
+      {% if item.pictureUrl %}
+        <img src="{{ item.pictureUrl }}" alt="Equipment image for {{ item.object }}" class="entity-image">
+      {% endif %}
+    </div>
+  </section>
+
+  {% if showDiveLinking %}
+    <section class="dive-overview-panel">
+      <div class="dive-overview-head">
+        <h2>Dives using this equipment</h2>
+      </div>
+      {% include 'partials/dive_rows.html.twig' with { dives: dives, empty_message: 'No dives linked to this equipment.' } %}
+    </section>
+    <script src="/assets/js/tables.js" defer></script>
   {% endif %}
 {% endblock %}

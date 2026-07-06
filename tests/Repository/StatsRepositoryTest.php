@@ -18,7 +18,7 @@ final class StatsRepositoryTest extends TestCase
 
         $pdo = new PDO('sqlite::memory:');
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $pdo->exec('CREATE TABLE DL_Logbook (Divedate TEXT, Divetime INTEGER, Depth REAL)');
+        $pdo->exec('CREATE TABLE DL_Logbook (Divedate TEXT, Divetime INTEGER, Depth REAL, Watertemp REAL, Airtemp REAL)');
         $pdo->exec("INSERT INTO DL_Logbook (Divedate, Divetime, Depth) VALUES ('2026-01-01', 40, 20.5), ('2026-02-01', 50, 25.5)");
 
         $repo = new StatsRepository($pdo, 'DL_');

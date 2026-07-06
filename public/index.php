@@ -8,11 +8,11 @@ use PhpDivingLog\Adapters\Web\Controller\CityController;
 use PhpDivingLog\Adapters\Web\Controller\CountryController;
 use PhpDivingLog\Adapters\Web\Controller\DiveController;
 use PhpDivingLog\Adapters\Web\Controller\DiveSiteController;
+use PhpDivingLog\Adapters\Web\Controller\DiveStatisticsController;
 use PhpDivingLog\Adapters\Web\Controller\EquipmentController;
 use PhpDivingLog\Adapters\Web\Controller\GalleryController;
 use PhpDivingLog\Adapters\Web\Controller\ProfileController;
 use PhpDivingLog\Adapters\Web\Controller\ShopController;
-use PhpDivingLog\Adapters\Web\Controller\StatsController;
 use PhpDivingLog\Adapters\Web\Controller\SummaryController;
 use PhpDivingLog\Adapters\Web\Controller\TripController;
 
@@ -60,13 +60,13 @@ $diveController = new DiveController(
 );
 
 $profileController = new ProfileController($repositories['dives'], $services['unitConverter']);
-$siteController = new DiveSiteController($repositories['diveSites'], $services['formatter'], $services['mediaResolver']);
-$countryController = new CountryController($repositories['countries'], $services['mediaResolver']);
+$siteController = new DiveSiteController($repositories['diveSites'], $repositories['dives'], $services['formatter'], $services['unitConverter'], $services['mediaResolver']);
+$countryController = new CountryController($repositories['countries'], $repositories['dives'], $repositories['diveSites'], $services['mediaResolver'], $services['formatter'], $services['unitConverter']);
 $cityController = new CityController($repositories['cities']);
 $shopController = new ShopController($repositories['shops']);
-$tripController = new TripController($repositories['trips']);
-$equipmentController = new EquipmentController($repositories['equipment'], $container['config']);
-$statsController = new StatsController($repositories['stats']);
+$tripController = new TripController($repositories['trips'], $repositories['dives'], $services['formatter'], $services['unitConverter']);
+$equipmentController = new EquipmentController($repositories['equipment'], $repositories['dives'], $container['config'], $services['formatter'], $services['unitConverter'], $services['mediaResolver']);
+$statsController = new DiveStatisticsController($repositories['diveStatistics'], $services['diveStatisticsFormatter'], $services['formatter'], $services['unitConverter']);
 $galleryController = new GalleryController($repositories['pictures'], $services['mediaResolver']);
 $summaryController = new SummaryController($repositories['stats']);
 

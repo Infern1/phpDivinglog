@@ -99,21 +99,104 @@ final readonly class DiveRepository
         $statement->bindValue(':offset', $offset, PDO::PARAM_INT);
         $statement->execute();
 
-        return array_map(function (array $row): array {
-            $locationParts = array_values(array_filter([
-                isset($row['Place']) ? trim((string) $row['Place']) : '',
-                isset($row['City']) ? trim((string) $row['City']) : '',
-                isset($row['Country']) ? trim((string) $row['Country']) : '',
-            ], static fn (string $value): bool => $value !== ''));
+        return array_map([$this, 'mapOverviewRow'], $statement->fetchAll());
+    }
 
-            return [
-                'number' => (int) ($row['Number'] ?? 0),
-                'date_time' => $this->mapDateTime($row),
-                'depth' => (float) ($row['Depth'] ?? 0.0),
-                'duration' => (int) ($row['Divetime'] ?? 0),
-                'location' => $locationParts !== [] ? implode(', ', $locationParts) : '-',
-            ];
-        }, $statement->fetchAll());
+    /**
+     * @return list<array{number:int,date_time:DateTimeImmutable,depth:float,duration:int,location:string}>
+     */
+    public function listOverviewByPlace(int $placeId, int $limit = 500): array
+    {
+        $sql = sprintf('SELECT * FROM %sLogbook WHERE PlaceID = :id ORDER BY Number DESC LIMIT :limit', $this->tablePrefix);
+        $statement = $this->pdo->prepare($sql);
+        $statement->bindValue(':id', $placeId, PDO::PARAM_INT);
+        $statement->bindValue(':limit', $limit, PDO::PARAM_INT);
+        $statement->execute();
+
+        return array_map([$this, 'mapOverviewRow'], $statement->fetchAll());
+    }
+
+    /**
+     * @return list<array{number:int,date_time:DateTimeImmutable,depth:float,duration:int,location:string}>
+     */
+    public function listOverviewByTrip(int $tripId, int $limit = 500): array
+    {
+        $sql = sprintf('SELECT * FROM %sLogbook WHERE TripID = :id ORDER BY Number DESC LIMIT :limit', $this->tablePrefix);
+
+        try {
+            $statement = $this->pdo->prepare($sql);
+            $statement->bindValue(':id', $tripId, PDO::PARAM_INT);
+            $statement->bindValue(':limit', $limit, PDO::PARAM_INT);
+            $statement->execute();
+            return array_map([$this, 'mapOverviewRow'], $statement->fetchAll());
+        } catch (\PDOException $exception) {
+            if ($this->isMissingColumn($exception)) {
+                return [];
+            }
+
+            throw $exception;
+        }
+    }
+
+    /**
+     * @return list<array{number:int,date_time:DateTimeImmutable,depth:float,duration:int,location:string}>
+     */
+    public function listOverviewByCountry(int $countryId, int $limit = 500): array
+    {
+        $directSql = sprintf('SELECT * FROM %sLogbook WHERE CountryID = :id ORDER BY Number DESC LIMIT :limit', $this->tablePrefix);
+
+        try {
+            $statement = $this->pdo->prepare($directSql);
+            $statement->bindValue(':id', $countryId, PDO::PARAM_INT);
+            $statement->bindValue(':limit', $limit, PDO::PARAM_INT);
+            $statement->execute();
+            return array_map([$this, 'mapOverviewRow'], $statement->fetchAll());
+        } catch (\PDOException $exception) {
+            if (!$this->isMissingColumn($exception)) {
+                throw $exception;
+            }
+        }
+
+        $joinSql = sprintf(
+            'SELECT l.* FROM %1$sLogbook l INNER JOIN %1$sPlace p ON p.PlaceID = l.PlaceID WHERE p.CountryID = :id ORDER BY l.Number DESC LIMIT :limit',
+            $this->tablePrefix
+        );
+
+        try {
+            $statement = $this->pdo->prepare($joinSql);
+            $statement->bindValue(':id', $countryId, PDO::PARAM_INT);
+            $statement->bindValue(':limit', $limit, PDO::PARAM_INT);
+            $statement->execute();
+            return array_map([$this, 'mapOverviewRow'], $statement->fetchAll());
+        } catch (\PDOException $exception) {
+            if ($this->isMissingColumn($exception)) {
+                return [];
+            }
+
+            throw $exception;
+        }
+    }
+
+    /**
+     * @return list<array{number:int,date_time:DateTimeImmutable,depth:float,duration:int,location:string}>|null
+     */
+    public function listOverviewByEquipment(int $equipmentId, int $limit = 500): ?array
+    {
+        $sql = sprintf('SELECT * FROM %sLogbook WHERE EquipmentID = :id ORDER BY Number DESC LIMIT :limit', $this->tablePrefix);
+
+        try {
+            $statement = $this->pdo->prepare($sql);
+            $statement->bindValue(':id', $equipmentId, PDO::PARAM_INT);
+            $statement->bindValue(':limit', $limit, PDO::PARAM_INT);
+            $statement->execute();
+            return array_map([$this, 'mapOverviewRow'], $statement->fetchAll());
+        } catch (\PDOException $exception) {
+            if ($this->isMissingColumn($exception)) {
+                return null;
+            }
+
+            throw $exception;
+        }
     }
 
     public function countAll(string $search = ''): int
@@ -257,6 +340,33 @@ final readonly class DiveRepository
         }
 
         return null;
+    }
+
+    /**
+     * @param array<string, mixed> $row
+     * @return array{number:int,date_time:DateTimeImmutable,depth:float,duration:int,location:string}
+     */
+    private function mapOverviewRow(array $row): array
+    {
+        $locationParts = array_values(array_filter([
+            isset($row['Place']) ? trim((string) $row['Place']) : '',
+            isset($row['City']) ? trim((string) $row['City']) : '',
+            isset($row['Country']) ? trim((string) $row['Country']) : '',
+        ], static fn (string $value): bool => $value !== ''));
+
+        return [
+            'number' => (int) ($row['Number'] ?? 0),
+            'date_time' => $this->mapDateTime($row),
+            'depth' => (float) ($row['Depth'] ?? 0.0),
+            'duration' => (int) ($row['Divetime'] ?? 0),
+            'location' => $locationParts !== [] ? implode(', ', $locationParts) : '-',
+        ];
+    }
+
+    private function isMissingColumn(\PDOException $exception): bool
+    {
+        $sqlState = $exception->errorInfo[0] ?? null;
+        return $sqlState === '42S22' || ($sqlState === 'HY000' && str_contains(strtolower($exception->getMessage()), 'no such column'));
     }
 
     /**

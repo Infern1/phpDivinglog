@@ -26,6 +26,53 @@ final readonly class CountryRepository
         return array_map([$this, 'mapCountry'], $statement->fetchAll());
     }
 
+    /**
+     * @return list<array{country:Country,diveCount:int}>
+     */
+    public function listWithDiveCounts(int $limit = 500): array
+    {
+        $directSql = sprintf(
+            'SELECT c.*, COUNT(l.Number) AS DiveCount FROM %1$sCountry c LEFT JOIN %1$sLogbook l ON l.CountryID = c.CountryID GROUP BY c.CountryID ORDER BY c.Country LIMIT :limit',
+            $this->tablePrefix,
+        );
+
+        try {
+            $statement = $this->pdo->prepare($directSql);
+            $statement->bindValue(':limit', $limit, PDO::PARAM_INT);
+            $statement->execute();
+            return $this->mapCountryCountRows($statement->fetchAll());
+        } catch (\PDOException $exception) {
+            if (!$this->isMissingColumn($exception)) {
+                throw $exception;
+            }
+        }
+
+        $joinSql = sprintf(
+            'SELECT c.*, COUNT(l.Number) AS DiveCount ' .
+            'FROM %1$sCountry c ' .
+            'LEFT JOIN %1$sPlace p ON p.CountryID = c.CountryID ' .
+            'LEFT JOIN %1$sLogbook l ON l.PlaceID = p.PlaceID ' .
+            'GROUP BY c.CountryID ORDER BY c.Country LIMIT :limit',
+            $this->tablePrefix,
+        );
+
+        try {
+            $statement = $this->pdo->prepare($joinSql);
+            $statement->bindValue(':limit', $limit, PDO::PARAM_INT);
+            $statement->execute();
+            return $this->mapCountryCountRows($statement->fetchAll());
+        } catch (\PDOException $exception) {
+            if ($this->isMissingColumn($exception)) {
+                return array_map(
+                    static fn (Country $country): array => ['country' => $country, 'diveCount' => 0],
+                    $this->list($limit),
+                );
+            }
+
+            throw $exception;
+        }
+    }
+
     public function findById(int $id): ?Country
     {
         $row = $this->queryByIdColumn('CountryID', $id);
@@ -68,5 +115,25 @@ final readonly class CountryRepository
             (string) ($row['Country'] ?? ''),
             isset($row['FlagImage']) ? (string) $row['FlagImage'] : (isset($row['FlagPath']) ? (string) $row['FlagPath'] : null)
         );
+    }
+
+    /**
+     * @param list<array<string, mixed>> $rows
+     * @return list<array{country:Country,diveCount:int}>
+     */
+    private function mapCountryCountRows(array $rows): array
+    {
+        return array_map(function (array $row): array {
+            return [
+                'country' => $this->mapCountry($row),
+                'diveCount' => (int) ($row['DiveCount'] ?? 0),
+            ];
+        }, $rows);
+    }
+
+    private function isMissingColumn(\PDOException $exception): bool
+    {
+        $sqlState = $exception->errorInfo[0] ?? null;
+        return $sqlState === '42S22' || ($sqlState === 'HY000' && str_contains(strtolower($exception->getMessage()), 'no such column'));
     }
 }

@@ -1,14 +1,33 @@
 {% extends 'layout.html.twig' %}
 
 {% block content %}
-  <h2>{{ site.name }}</h2>
-  {% if site.latitudeFormatted %}
-    <p>Latitude: {{ site.latitudeFormatted }}</p>
-  {% endif %}
-  {% if site.longitudeFormatted %}
-    <p>Longitude: {{ site.longitudeFormatted }}</p>
-  {% endif %}
-  {% if site.mapUrl %}
-    <img src="{{ site.mapUrl }}" alt="Map for {{ site.name }}">
-  {% endif %}
+  <section class="dive-overview-panel">
+    <div class="dive-overview-head">
+      <h2>{{ site.name }}</h2>
+    </div>
+
+    <div class="entity-meta-grid">
+      {% if site.latitudeFormatted %}
+        <p><strong>Latitude:</strong> {{ site.latitudeFormatted }}</p>
+      {% endif %}
+      {% if site.longitudeFormatted %}
+        <p><strong>Longitude:</strong> {{ site.longitudeFormatted }}</p>
+      {% endif %}
+      {% if site.comment %}
+        <p><strong>Comment:</strong> {{ site.comment }}</p>
+      {% endif %}
+      {% if site.mapUrl %}
+        <img src="{{ site.mapUrl }}" alt="Map for {{ site.name }}" class="entity-image">
+      {% endif %}
+    </div>
+  </section>
+
+  <section class="dive-overview-panel">
+    <div class="dive-overview-head">
+      <h2>Dives at this site</h2>
+    </div>
+    {% include 'partials/dive_rows.html.twig' with { dives: dives, empty_message: 'No dives recorded for this site yet.' } %}
+  </section>
+
+  <script src="/assets/js/tables.js" defer></script>
 {% endblock %}
