@@ -48,6 +48,7 @@ final readonly class DiveRepository
                 'profile_interval_seconds' => isset($row['ProfileInt']) ? (int) $row['ProfileInt'] : null,
                 'shop_id' => isset($row['ShopID']) ? (int) $row['ShopID'] : null,
                 'trip_id' => isset($row['TripID']) ? (int) $row['TripID'] : null,
+                'country_id' => isset($row['CountryID']) ? (int) $row['CountryID'] : null,
                 'place_name' => isset($row['Place']) ? (string) $row['Place'] : null,
                 'city_name' => isset($row['City']) ? (string) $row['City'] : null,
                 'country_name' => isset($row['Country']) ? (string) $row['Country'] : null,
@@ -241,6 +242,64 @@ final readonly class DiveRepository
         return is_array($row) ? (int) ($row['Number'] ?? 0) : null;
     }
 
+    public function maxDepthByPlace(int $placeId): ?float
+    {
+        $sql = sprintf('SELECT MAX(Depth) AS MaxDepth FROM %sLogbook WHERE PlaceID = :placeId', $this->tablePrefix);
+
+        try {
+            $statement = $this->pdo->prepare($sql);
+            $statement->bindValue(':placeId', $placeId, PDO::PARAM_INT);
+            $statement->execute();
+            $row = $statement->fetch();
+            if (!is_array($row) || !isset($row['MaxDepth']) || !is_numeric((string) $row['MaxDepth'])) {
+                return null;
+            }
+
+            return (float) $row['MaxDepth'];
+        } catch (\PDOException $exception) {
+            if ($this->isMissingColumn($exception)) {
+                return null;
+            }
+
+            throw $exception;
+        }
+    }
+
+    /**
+     * @return list<string>
+     */
+    public function waterTypesByPlace(int $placeId): array
+    {
+        $sql = sprintf('SELECT DISTINCT Water FROM %sLogbook WHERE PlaceID = :placeId ORDER BY Water ASC', $this->tablePrefix);
+
+        try {
+            $statement = $this->pdo->prepare($sql);
+            $statement->bindValue(':placeId', $placeId, PDO::PARAM_INT);
+            $statement->execute();
+            $rows = $statement->fetchAll();
+        } catch (\PDOException $exception) {
+            if ($this->isMissingColumn($exception)) {
+                return [];
+            }
+
+            throw $exception;
+        }
+
+        $labels = [];
+        foreach ($rows as $row) {
+            if (!is_array($row) || !isset($row['Water']) || !is_numeric((string) $row['Water'])) {
+                continue;
+            }
+
+            $label = $this->mapWaterTypeCode((int) $row['Water']);
+            if ($label !== null) {
+                $labels[] = $label;
+            }
+        }
+
+        return array_values(array_unique($labels));
+    }
+
     /**
      * @return list<Dive>
      */
@@ -274,6 +333,7 @@ final readonly class DiveRepository
                     'profile_interval_seconds' => isset($row['ProfileInt']) ? (int) $row['ProfileInt'] : null,
                     'shop_id' => isset($row['ShopID']) ? (int) $row['ShopID'] : null,
                     'trip_id' => isset($row['TripID']) ? (int) $row['TripID'] : null,
+                    'country_id' => isset($row['CountryID']) ? (int) $row['CountryID'] : null,
                     'place_name' => isset($row['Place']) ? (string) $row['Place'] : null,
                     'city_name' => isset($row['City']) ? (string) $row['City'] : null,
                     'country_name' => isset($row['Country']) ? (string) $row['Country'] : null,
@@ -368,6 +428,16 @@ final readonly class DiveRepository
     {
         $sqlState = $exception->errorInfo[0] ?? null;
         return $sqlState === '42S22' || ($sqlState === 'HY000' && str_contains(strtolower($exception->getMessage()), 'no such column'));
+    }
+
+    private function mapWaterTypeCode(int $code): ?string
+    {
+        return match ($code) {
+            1 => 'Salt',
+            2 => 'Fresh',
+            3 => 'Brackish',
+            default => null,
+        };
     }
 
     /**

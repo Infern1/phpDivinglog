@@ -80,6 +80,53 @@
         </dl>
       </article>
 
+      {% if certification_rows is not empty %}
+        <article class="dive-panel stats-panel-wide">
+          <h3>Certifications</h3>
+          <div class="certifications-grid">
+            {% for cert in certification_rows %}
+              <article class="cert-card">
+                <dl class="stats-kv-grid cert-kv-grid">
+                  {% if cert.organisation %}
+                    <div><dt>Organisation</dt><dd>{{ cert.organisation }}</dd></div>
+                  {% endif %}
+                  {% if cert.certification %}
+                    <div><dt>Certification</dt><dd>{{ cert.certification }}</dd></div>
+                  {% endif %}
+                  {% if cert.date %}
+                    <div><dt>Date</dt><dd>{{ cert.date }}</dd></div>
+                  {% endif %}
+                  {% if cert.cert_number %}
+                    <div><dt>Cert. #</dt><dd>{{ cert.cert_number }}</dd></div>
+                  {% endif %}
+                  {% if cert.instructor %}
+                    <div><dt>Instructor</dt><dd>{{ cert.instructor }}</dd></div>
+                  {% endif %}
+                </dl>
+                {% if cert.front_image_url or cert.back_image_url %}
+                  <ul class="gallery-grid cert-gallery-grid">
+                    {% if cert.front_image_url %}
+                      <li>
+                        <a href="{{ cert.front_image_url }}" data-lightbox>
+                          <img src="{{ cert.front_image_url }}" alt="{{ cert.certification|default('Certification') }} front">
+                        </a>
+                      </li>
+                    {% endif %}
+                    {% if cert.back_image_url %}
+                      <li>
+                        <a href="{{ cert.back_image_url }}" data-lightbox>
+                          <img src="{{ cert.back_image_url }}" alt="{{ cert.certification|default('Certification') }} back">
+                        </a>
+                      </li>
+                    {% endif %}
+                  </ul>
+                {% endif %}
+              </article>
+            {% endfor %}
+          </div>
+        </article>
+      {% endif %}
+
       <article class="dive-panel stats-panel-wide">
         <h3>Depth distribution</h3>
         <canvas id="stats-depth-chart" width="700" height="320" data-depth-distribution='{{ depth_distribution_json|e('html_attr') }}'></canvas>
@@ -93,4 +140,5 @@
   </section>
 
   <script src="/assets/js/stats-chart.js" defer></script>
+  <script src="/assets/js/lightbox.js" defer></script>
 {% endblock %}

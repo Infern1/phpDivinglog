@@ -84,12 +84,6 @@
             </article>
 
             <article class="dive-panel">
-              <h3>Ascent / descent rates</h3>
-              <canvas id="profile-rate-chart" data-dive-number="{{ dive.number }}" width="700" height="220"></canvas>
-              <p id="profile-rate-legend" data-profile-live="rate" aria-live="polite">Move over the chart to inspect rate values.</p>
-            </article>
-
-            <article class="dive-panel">
               <h3>Comments</h3>
               <div>{{ comment_html|raw }}</div>
             </article>
@@ -154,6 +148,8 @@
                   <dd>
                     {% if dive_country %}
                       <a href="/countries/{{ dive_country.id }}">{{ dive_country.name }}</a>
+                    {% elseif dive.countryId is defined and dive.countryId > 0 and related_country_name %}
+                      <a href="/countries/{{ dive.countryId }}">{{ related_country_name }}</a>
                     {% elseif related_country_name %}
                       {{ related_country_name }}
                     {% else %}

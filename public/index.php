@@ -68,13 +68,13 @@ $diveController = new DiveController(
 );
 
 $profileController = new ProfileController($repositories['dives'], $services['unitConverter']);
-$siteController = new DiveSiteController($repositories['diveSites'], $repositories['dives'], $services['formatter'], $services['unitConverter'], $services['mediaResolver']);
+$siteController = new DiveSiteController($repositories['diveSites'], $repositories['dives'], $repositories['pictures'], $services['formatter'], $services['unitConverter'], $services['mediaResolver']);
 $countryController = new CountryController($repositories['countries'], $repositories['dives'], $repositories['diveSites'], $services['mediaResolver'], $services['formatter'], $services['unitConverter']);
 $cityController = new CityController($repositories['cities']);
 $shopController = new ShopController($repositories['shops']);
 $tripController = new TripController($repositories['trips'], $repositories['dives'], $services['formatter'], $services['unitConverter']);
 $equipmentController = new EquipmentController($repositories['equipment'], $repositories['dives'], $container['config'], $services['formatter'], $services['unitConverter'], $services['mediaResolver']);
-$statsController = new DiveStatisticsController($repositories['diveStatistics'], $services['diveStatisticsFormatter'], $services['formatter'], $services['unitConverter']);
+$statsController = new DiveStatisticsController($repositories['diveStatistics'], $repositories['certifications'], $services['diveStatisticsFormatter'], $services['formatter'], $services['unitConverter'], $services['mediaResolver'], $container['config']);
 $galleryController = new GalleryController($repositories['pictures'], $services['mediaResolver']);
 $summaryController = new SummaryController($repositories['stats']);
 

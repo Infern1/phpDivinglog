@@ -4,18 +4,24 @@ declare(strict_types=1);
 
 namespace PhpDivingLog\Adapters\Web\Controller;
 
+use PhpDivingLog\Repository\CertificationRepository;
 use PhpDivingLog\Repository\DiveStatisticsRepository;
+use PhpDivingLog\Support\Config;
 use PhpDivingLog\Support\DiveStatisticsFormatter;
 use PhpDivingLog\Support\Formatter;
+use PhpDivingLog\Support\MediaResolver;
 use PhpDivingLog\Support\UnitConverter;
 
 final readonly class DiveStatisticsController
 {
     public function __construct(
         private DiveStatisticsRepository $statistics,
+        private CertificationRepository $certifications,
         private DiveStatisticsFormatter $statisticsFormatter,
         private Formatter $formatter,
         private UnitConverter $converter,
+        private MediaResolver $media,
+        private Config $config,
     ) {
     }
 
@@ -49,6 +55,21 @@ final readonly class DiveStatisticsController
             ['label' => 'SCR dives', 'value' => $this->statisticsFormatter->percentageLabel($stats->classifications['scr'] ?? null, $stats->totalDives)],
             ['label' => 'CCR dives', 'value' => $this->statisticsFormatter->percentageLabel($stats->classifications['ccr'] ?? null, $stats->totalDives)],
         ];
+
+        $certificationRows = [];
+        if ($this->config->userShowCerts()) {
+            foreach ($this->certifications->listAll() as $certification) {
+                $certificationRows[] = [
+                    'organisation' => $certification->organisation,
+                    'certification' => $certification->certification,
+                    'date' => $certification->date !== null ? $this->formatter->formatDate($certification->date) : null,
+                    'cert_number' => $certification->certNumber,
+                    'instructor' => $certification->instructor,
+                    'front_image_url' => $certification->frontImage !== null ? $this->media->userUrl($certification->frontImage) : null,
+                    'back_image_url' => $certification->backImage !== null ? $this->media->userUrl($certification->backImage) : null,
+                ];
+            }
+        }
 
         return [
             'total_dives' => $stats->totalDives,
@@ -90,6 +111,7 @@ final readonly class DiveStatisticsController
                 'average' => $this->statisticsFormatter->temperature($stats->airTemp['avg']),
             ],
             'classification_rows' => $classificationRows,
+            'certification_rows' => $certificationRows,
             'depth_distribution' => $depthDistribution,
             'depth_distribution_json' => json_encode($depthDistribution, JSON_THROW_ON_ERROR),
             'depth_distribution_unit' => $this->converter->depthLabel(),

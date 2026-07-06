@@ -59,6 +59,10 @@ final readonly class DiveController
         $rows = [];
 
         foreach ($this->dives->listOverview($limit, $offset, $search, $sort) as $overview) {
+            $dive = $this->dives->findByNumber($overview['number']);
+            $profileRaw = is_string($dive?->extra['profile'] ?? null) ? trim((string) $dive->extra['profile']) : '';
+            $hasPhotos = $dive !== null && $dive->logId > 0 && $this->pictures->findByLogId($dive->logId) !== [];
+
             $rows[] = [
                 'number' => $overview['number'],
                 'date' => $this->formatter->formatDate($overview['date_time']),
@@ -69,6 +73,8 @@ final readonly class DiveController
                 'duration' => $overview['duration'],
                 'timestamp' => $overview['date_time']->getTimestamp(),
                 'location' => $overview['location'],
+                'has_profile' => $profileRaw !== '',
+                'has_photos' => $hasPhotos,
             ];
         }
 
@@ -107,7 +113,12 @@ final readonly class DiveController
         $metrics = $this->metrics->calculate($dive, $tanks);
 
         $site = $dive->placeId > 0 ? $this->sites->findById($dive->placeId) : null;
-        $country = $site !== null && $site->countryId !== null ? $this->countries->findById($site->countryId) : null;
+        $countryId = $site?->countryId;
+        if (($countryId === null || $countryId <= 0) && is_int($dive->extra['country_id'] ?? null) && (int) $dive->extra['country_id'] > 0) {
+            $countryId = (int) $dive->extra['country_id'];
+        }
+
+        $country = $countryId !== null && $countryId > 0 ? $this->countries->findById($countryId) : null;
         $city = $site !== null && $site->cityId !== null ? $this->cities->findById($site->cityId) : null;
         $shopId = $dive->extra['shop_id'] ?? null;
         $tripId = $dive->extra['trip_id'] ?? null;

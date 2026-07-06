@@ -4,6 +4,18 @@
   <section class="dive-overview-panel">
     <div class="dive-overview-head">
       <h2>{{ site.name }}</h2>
+      <nav class="dive-sequence-nav" aria-label="Site sequence navigation">
+        {% if previous_site_id %}
+          <a href="/sites/{{ previous_site_id }}" class="dive-sequence-link" aria-label="Previous site">←</a>
+        {% else %}
+          <span class="dive-sequence-link is-disabled" aria-disabled="true">←</span>
+        {% endif %}
+        {% if next_site_id %}
+          <a href="/sites/{{ next_site_id }}" class="dive-sequence-link" aria-label="Next site">→</a>
+        {% else %}
+          <span class="dive-sequence-link is-disabled" aria-disabled="true">→</span>
+        {% endif %}
+      </nav>
     </div>
 
     <div class="entity-meta-grid">
@@ -12,6 +24,19 @@
       {% endif %}
       {% if site.longitudeFormatted %}
         <p><strong>Longitude:</strong> {{ site.longitudeFormatted }}</p>
+      {% endif %}
+      {% if site.latitude is not null and site.longitude is not null %}
+        <p>
+          <a href="https://www.google.com/maps/search/?api=1&query={{ site.latitude }},{{ site.longitude }}" target="_blank" rel="noopener noreferrer">
+            Open in Google Maps
+          </a>
+        </p>
+      {% endif %}
+      {% if max_depth_display %}
+        <p><strong>Max depth:</strong> {{ max_depth_display }}</p>
+      {% endif %}
+      {% if water_types_display %}
+        <p><strong>Water:</strong> {{ water_types_display }}</p>
       {% endif %}
       {% if site.comment %}
         <p><strong>Comment:</strong> {{ site.comment }}</p>
@@ -29,5 +54,23 @@
     {% include 'partials/dive_rows.html.twig' with { dives: dives, empty_message: 'No dives recorded for this site yet.' } %}
   </section>
 
+  {% if pictures is not empty %}
+    <section class="dive-overview-panel">
+      <div class="dive-overview-head">
+        <h2>Pictures</h2>
+      </div>
+      <ul class="gallery-grid">
+        {% for picture in pictures %}
+          <li>
+            <a href="{{ picture.url }}" data-lightbox>
+              <img src="{{ picture.thumbUrl }}" alt="{{ picture.description|default('Dive image') }}">
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </section>
+  {% endif %}
+
   <script src="/assets/js/tables.js" defer></script>
+  <script src="/assets/js/lightbox.js" defer></script>
 {% endblock %}

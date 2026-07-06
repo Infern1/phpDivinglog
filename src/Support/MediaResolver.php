@@ -50,6 +50,11 @@ final readonly class MediaResolver
         return $this->resolveRelativePath($this->config->flagPathWeb(), $filename);
     }
 
+    public function userUrl(string $filename): string
+    {
+        return $this->resolveRelativePath($this->config->userPathWeb(), $filename);
+    }
+
     public function equipmentUrl(string $filename): string
     {
         return $this->resolveRelativePath($this->config->equipPathWeb(), $filename);

@@ -7,6 +7,7 @@ use PhpDivingLog\Repository\AppInfoRepository;
 use PhpDivingLog\Repository\BuddyRepository;
 use PhpDivingLog\Repository\CityRepository;
 use PhpDivingLog\Repository\CountryRepository;
+use PhpDivingLog\Repository\CertificationRepository;
 use PhpDivingLog\Repository\DiveRepository;
 use PhpDivingLog\Repository\DiveSiteRepository;
 use PhpDivingLog\Repository\DiveStatisticsRepository;
@@ -59,6 +60,7 @@ return [
         'dives' => new DiveRepository($pdo, $prefix),
         'diveSites' => new DiveSiteRepository($pdo, $prefix),
         'countries' => new CountryRepository($pdo, $prefix),
+        'certifications' => new CertificationRepository($pdo, $prefix),
         'cities' => new CityRepository($pdo, $prefix),
         'shops' => new ShopRepository($pdo, $prefix),
         'trips' => new TripRepository($pdo, $prefix),

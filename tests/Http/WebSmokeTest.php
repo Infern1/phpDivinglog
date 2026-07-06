@@ -40,6 +40,8 @@ final class WebSmokeTest extends TestCase
         self::assertStringContainsString('Search location, number...', $response['body']);
         self::assertStringContainsString('name="q"', $response['body']);
         self::assertStringContainsString('name="sort"', $response['body']);
+        self::assertStringContainsString('show_chart', $response['body']);
+        self::assertStringContainsString('photo_camera', $response['body']);
         self::assertStringContainsString('Apply', $response['body']);
         self::assertStringContainsString('/assets/vendor/beercss/beer.min.css', $response['body']);
         self::assertStringContainsString('/assets/vendor/beercss/material-dynamic-colors.min.js', $response['body']);
@@ -74,16 +76,17 @@ final class WebSmokeTest extends TestCase
         self::assertStringContainsString('Location', $response['body']);
         self::assertStringContainsString('Country', $response['body']);
         self::assertStringContainsString('/countries/1', $response['body']);
+        self::assertStringContainsString('<dt>Country</dt>', $response['body']);
         self::assertStringContainsString('Temp. Air', $response['body']);
         self::assertStringContainsString('Blue Hole', $response['body']);
         self::assertStringContainsString('Ocean Dive Center', $response['body']);
         self::assertStringContainsString('Spring Bahamas', $response['body']);
         self::assertStringContainsString('Dive profile', $response['body']);
-        self::assertStringContainsString('Ascent / descent rates', $response['body']);
         self::assertStringContainsString('profile-chart', $response['body']);
-        self::assertStringContainsString('profile-rate-chart', $response['body']);
         self::assertStringContainsString('data-profile-live="depth"', $response['body']);
-        self::assertStringContainsString('data-profile-live="rate"', $response['body']);
+        self::assertStringNotContainsString('Ascent / descent rates', $response['body']);
+        self::assertStringNotContainsString('profile-rate-chart', $response['body']);
+        self::assertStringNotContainsString('data-profile-live="rate"', $response['body']);
         self::assertStringContainsString('Logbook', $response['body']);
         self::assertStringContainsString('data-logbook-pane', $response['body']);
         self::assertStringContainsString('data-logbook-list', $response['body']);
@@ -119,6 +122,16 @@ final class WebSmokeTest extends TestCase
         self::assertSame(200, $response['status']);
         self::assertStringContainsString('Blue Hole', $response['body']);
         self::assertStringContainsString('Dives at this site', $response['body']);
+        self::assertStringContainsString('aria-label="Site sequence navigation"', $response['body']);
+        self::assertStringContainsString('aria-label="Next site"', $response['body']);
+        self::assertStringContainsString('/sites/11', $response['body']);
+        self::assertStringContainsString('dive-sequence-link is-disabled', $response['body']);
+        self::assertStringContainsString('Open in Google Maps', $response['body']);
+        self::assertStringContainsString('Max depth:', $response['body']);
+        self::assertStringContainsString('Water:', $response['body']);
+        self::assertStringContainsString('data-lightbox', $response['body']);
+        self::assertStringContainsString('/assets/js/lightbox.js', $response['body']);
+        self::assertStringContainsString('dive-100-a.jpg', $response['body']);
         self::assertStringContainsString('data-href="/dives/1"', $response['body']);
         self::assertStringContainsString('data-href="/dives/3"', $response['body']);
     }
@@ -276,6 +289,10 @@ final class WebSmokeTest extends TestCase
         self::assertSame(200, $response['status']);
         self::assertStringContainsString('Dive Statistics', $response['body']);
         self::assertStringContainsString('Total dives', $response['body']);
+        self::assertStringContainsString('Certifications', $response['body']);
+        self::assertStringContainsString('Divemaster', $response['body']);
+        self::assertStringContainsString('DM-491969', $response['body']);
+        self::assertStringContainsString('cert-divemaster-front.jpg', $response['body']);
         self::assertStringContainsString('Depth distribution', $response['body']);
         self::assertStringContainsString('id="stats-depth-chart"', $response['body']);
         self::assertStringContainsString('data-depth-distribution=', $response['body']);
@@ -332,12 +349,14 @@ final class WebSmokeTest extends TestCase
 
         $schema = file_get_contents($fixturesPath . '/schema.sql');
         $seed = file_get_contents($fixturesPath . '/seed.sql');
-        if ($schema === false || $seed === false) {
+        $certs = file_get_contents($fixturesPath . '/certs.sql');
+        if ($schema === false || $seed === false || $certs === false) {
             self::fail('Could not load SQL fixtures.');
         }
 
         $pdo->exec($schema);
         $pdo->exec($seed);
+        $pdo->exec($certs);
     }
 
     /**

@@ -6,6 +6,7 @@ namespace PhpDivingLog\Adapters\Web\Controller;
 
 use PhpDivingLog\Repository\DiveSiteRepository;
 use PhpDivingLog\Repository\DiveRepository;
+use PhpDivingLog\Repository\PictureRepository;
 use PhpDivingLog\Support\Formatter;
 use PhpDivingLog\Support\MediaResolver;
 use PhpDivingLog\Support\UnitConverter;
@@ -15,6 +16,7 @@ final readonly class DiveSiteController
     public function __construct(
         private DiveSiteRepository $sites,
         private DiveRepository $dives,
+        private PictureRepository $pictures,
         private Formatter $formatter,
         private UnitConverter $converter,
         private MediaResolver $media
@@ -47,9 +49,31 @@ final readonly class DiveSiteController
             return null;
         }
 
+        $maxDepth = $this->dives->maxDepthByPlace($id);
+        $waterTypes = $this->dives->waterTypesByPlace($id);
+        $diveRows = $this->dives->listOverviewByPlace($id);
+        $pictures = [];
+
+        foreach ($this->dives->listByPlace($id) as $dive) {
+            foreach ($this->pictures->findByLogId($dive->logId) as $picture) {
+                $pictures[] = [
+                    'url' => $this->media->pictureUrl($picture->filename),
+                    'thumbUrl' => $this->media->thumbUrl($picture->filename),
+                    'description' => $picture->description,
+                ];
+            }
+        }
+
         return [
             'site' => $this->mapSite($site),
-            'dives' => $this->mapDiveRows($this->dives->listOverviewByPlace($id)),
+            'dives' => $this->mapDiveRows($diveRows),
+            'previous_site_id' => $this->sites->findPreviousId($id),
+            'next_site_id' => $this->sites->findNextId($id),
+            'max_depth_display' => $maxDepth !== null
+                ? $this->formatter->formatDecimal($this->converter->depthToDisplay($maxDepth), 1) . ' ' . $this->converter->depthLabel()
+                : null,
+            'water_types_display' => $waterTypes !== [] ? implode(' / ', $waterTypes) : null,
+            'pictures' => $pictures,
         ];
     }
 

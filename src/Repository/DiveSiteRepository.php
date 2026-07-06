@@ -86,6 +86,26 @@ final readonly class DiveSiteRepository
         return is_array($row) ? $this->mapSite($row) : null;
     }
 
+    public function findPreviousId(int $id): ?int
+    {
+        $value = $this->queryAdjacentId('PlaceID', '<', 'DESC', $id);
+        if ($value !== null) {
+            return $value;
+        }
+
+        return $this->queryAdjacentId('ID', '<', 'DESC', $id);
+    }
+
+    public function findNextId(int $id): ?int
+    {
+        $value = $this->queryAdjacentId('PlaceID', '>', 'ASC', $id);
+        if ($value !== null) {
+            return $value;
+        }
+
+        return $this->queryAdjacentId('ID', '>', 'ASC', $id);
+    }
+
     /**
      * @return list<DiveSite>
      */
@@ -125,6 +145,44 @@ final readonly class DiveSiteRepository
             $sqlState = $exception->errorInfo[0] ?? null;
             if ($sqlState === '42S22' || ($sqlState === 'HY000' && str_contains(strtolower($exception->getMessage()), 'no such column'))) {
                 return false;
+            }
+
+            throw $exception;
+        }
+    }
+
+    private function queryAdjacentId(string $column, string $operator, string $order, int $id): ?int
+    {
+        if (!in_array($column, ['PlaceID', 'ID'], true)) {
+            return null;
+        }
+
+        if (!in_array($operator, ['<', '>'], true)) {
+            return null;
+        }
+
+        if (!in_array($order, ['ASC', 'DESC'], true)) {
+            return null;
+        }
+
+        $sql = sprintf(
+            'SELECT %1$s FROM %2$sPlace WHERE %1$s %3$s :id ORDER BY %1$s %4$s LIMIT 1',
+            $column,
+            $this->tablePrefix,
+            $operator,
+            $order,
+        );
+
+        try {
+            $statement = $this->pdo->prepare($sql);
+            $statement->bindValue(':id', $id, PDO::PARAM_INT);
+            $statement->execute();
+            $value = $statement->fetchColumn();
+            return $value === false ? null : (int) $value;
+        } catch (\PDOException $exception) {
+            $sqlState = $exception->errorInfo[0] ?? null;
+            if ($sqlState === '42S22' || ($sqlState === 'HY000' && str_contains(strtolower($exception->getMessage()), 'no such column'))) {
+                return null;
             }
 
             throw $exception;
