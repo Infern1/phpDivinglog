@@ -1,7 +1,7 @@
 <header class="app-header" role="banner">
   <a class="app-brand" href="/" aria-label="Go to dives overview">
     <span class="material-symbols-outlined" aria-hidden="true">scuba_diving</span>
-    <span>phpDivingLog</span>
+    <span>{{ app_name|default('phpDivingLog') }}</span>
   </a>
   <div class="app-theme-controls">
     <label class="app-palette-switch" for="palette-select">

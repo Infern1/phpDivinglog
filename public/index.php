@@ -37,9 +37,17 @@ if ($queryMode) {
     $match = $router->resolve($requestUri);
 }
 
-$renderer = new TwigRenderer(dirname(__DIR__) . '/templates', dirname(__DIR__) . '/var/cache/twig');
 $repositories = $container['repositories'];
 $services = $container['services'];
+$profile = $repositories['personal']->getProfile();
+$displayName = trim(($profile?->firstName ?? '') . ' ' . ($profile?->lastName ?? ''));
+$appName = $displayName !== '' ? $displayName . ' Dive Log' : 'phpDivingLog';
+
+$renderer = new TwigRenderer(
+    dirname(__DIR__) . '/templates',
+    dirname(__DIR__) . '/var/cache/twig',
+    ['app_name' => $appName]
+);
 
 $diveController = new DiveController(
     $repositories['dives'],

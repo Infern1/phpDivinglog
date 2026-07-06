@@ -11,7 +11,10 @@ final readonly class TwigRenderer
 {
     private Environment $twig;
 
-    public function __construct(string $templatesPath, string $cachePath)
+    /**
+     * @param array<string, mixed> $globals
+     */
+    public function __construct(string $templatesPath, string $cachePath, array $globals = [])
     {
         $loader = new FilesystemLoader($templatesPath);
         $this->twig = new Environment($loader, [
@@ -19,6 +22,10 @@ final readonly class TwigRenderer
             'auto_reload' => true,
             'autoescape' => 'html',
         ]);
+
+        foreach ($globals as $name => $value) {
+            $this->twig->addGlobal($name, $value);
+        }
     }
 
     /**

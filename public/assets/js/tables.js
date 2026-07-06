@@ -88,10 +88,16 @@
       return true;
     };
 
+    const centerActiveItem = (item) => {
+      const maxScroll = Math.max(0, logbookPane.scrollHeight - logbookPane.clientHeight);
+      const target = item.offsetTop - (logbookPane.clientHeight / 2) + (item.offsetHeight / 2);
+      logbookPane.scrollTop = Math.min(maxScroll, Math.max(0, target));
+    };
+
     const activeItem = logbookPane.querySelector('.logbook-item.is-active');
     if (activeItem instanceof HTMLElement) {
       const activeDive = activeItem.getAttribute('data-dive-number') || undefined;
-      activeItem.scrollIntoView({ block: 'center' });
+      centerActiveItem(activeItem);
       requestAnimationFrame(() => {
         persistState(activeDive);
       });
