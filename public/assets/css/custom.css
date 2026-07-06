@@ -390,6 +390,8 @@ ignore
 .dive-metric-grid {
   display: grid;
   gap: 0.55rem;
+  align-items: stretch;
+  grid-auto-rows: 1fr;
 }
 
 .dive-metric-grid-hero {

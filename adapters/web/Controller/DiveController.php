@@ -239,6 +239,29 @@ final readonly class DiveController
             ];
         }
 
+        if ($tanksDisplay === []) {
+            $inlineTankSize = isset($dive->extra['tank_size']) && is_numeric($dive->extra['tank_size'])
+                ? (float) $dive->extra['tank_size']
+                : null;
+            $inlineO2 = isset($dive->extra['o2']) && is_numeric($dive->extra['o2']) ? (float) $dive->extra['o2'] : null;
+
+            if ($inlineTankSize !== null || $dive->pressureStart !== null || $dive->pressureEnd !== null || $inlineO2 !== null) {
+                $tanksDisplay[] = [
+                    'name' => 'Main tank',
+                    'volume' => $inlineTankSize !== null
+                        ? $this->formatter->formatDecimal($this->converter->volumeToDisplay($inlineTankSize), 1) . ' ' . $this->converter->volumeLabel()
+                        : '-',
+                    'pressure_start' => $dive->pressureStart !== null
+                        ? $this->formatter->formatDecimal($this->converter->pressureToDisplay($dive->pressureStart), 0) . ' ' . $this->converter->pressureLabel()
+                        : '-',
+                    'pressure_end' => $dive->pressureEnd !== null
+                        ? $this->formatter->formatDecimal($this->converter->pressureToDisplay($dive->pressureEnd), 0) . ' ' . $this->converter->pressureLabel()
+                        : '-',
+                    'o2' => $inlineO2 !== null ? $this->formatter->formatDecimal($inlineO2, 1) . '%' : '-',
+                ];
+            }
+        }
+
         $sacDisplay = $metrics['sacDisplay'];
         if ($sacDisplay === '-' && $sacFallbackDisplay !== null) {
             $sacDisplay = $this->formatter->formatDecimal((float) $sacFallbackDisplay, 2)
