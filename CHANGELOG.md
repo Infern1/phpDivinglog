@@ -2,6 +2,34 @@
 
 All notable changes to phpDivingLog are documented in this file.
 
+## v4.1.2 — 2026-07-06
+
+### Seamless dive detail navigation (in-place AJAX)
+- Switching dives (Logbook sidebar and prev/next arrows) now swaps the detail content in place
+  instead of a full page reload — no jump to top, window and sidebar scroll positions preserved.
+- The address bar, page title, sidebar active item, and prev/next arrows always reflect the shown
+  dive; browser Back/Forward restores the correct dive in place.
+- Direct load, refresh, and deep links still render the full server-side page (progressive
+  enhancement); with JavaScript disabled, navigation falls back to normal full-page loads.
+- Any fetch/server error during a swap falls back gracefully to a full-page navigation.
+
+### Implementation
+- Factored the dive detail body into a shared partial (`templates/partials/dive_detail_content.html.twig`)
+  used by both the full page and a new bare fragment template (`dive_detail_partial.html.twig`).
+- Added a partial-vs-full dispatch in the front controller (`X-Requested-With: XMLHttpRequest`,
+  with a `?partial=1` fallback); 404 handling shared with the full page.
+- Added `public/assets/js/dive-detail-nav.js` (dependency-free) to intercept navigation, fetch the
+  fragment, swap the hero and content column, update chrome/history, and re-initialize dynamic content.
+- Refactored `profile-chart.js` into an idempotent `window.DivelogProfileChart.init()` so the dive
+  profile chart re-initializes after each swap (single guarded `themechange` listener); the pictures
+  lightbox already works via event delegation.
+- Removed the earlier reload-based scroll-restore workaround now that swapping is seamless.
+
+### Tests
+- Extended the HTTP smoke-test helper to send request headers.
+- Added smoke tests for the partial fragment (shell absent), the full page (includes the nav script),
+  and partial not-found; full gate green (`composer test && composer stan && composer cs`).
+
 ## v4.1.1 — 2026-07-06
 
 ### Dive log gallery (new aggregate photo view)
