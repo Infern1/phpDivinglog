@@ -131,4 +131,31 @@
       persistState();
     });
   }
+
+  const detailLayout = document.querySelector('[data-detail-layout]');
+  if (detailLayout instanceof HTMLElement) {
+    const windowScrollKey = 'divelog:dive-window-scroll';
+    const navFlagKey = 'divelog:dive-nav';
+
+    if (window.sessionStorage.getItem(navFlagKey) === '1') {
+      window.sessionStorage.removeItem(navFlagKey);
+      const stored = Number(window.sessionStorage.getItem(windowScrollKey));
+      if (Number.isFinite(stored) && stored > 0) {
+        const applyScroll = () => window.scrollTo(0, stored);
+        applyScroll();
+        requestAnimationFrame(applyScroll);
+        window.setTimeout(applyScroll, 120);
+      }
+    }
+
+    const markNavigation = () => {
+      window.sessionStorage.setItem(windowScrollKey, String(window.scrollY));
+      window.sessionStorage.setItem(navFlagKey, '1');
+    };
+
+    const navLinks = document.querySelectorAll('[data-logbook-link], .dive-sequence-nav a');
+    navLinks.forEach((link) => {
+      link.addEventListener('click', markNavigation);
+    });
+  }
 })();
