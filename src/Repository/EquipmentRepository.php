@@ -6,6 +6,7 @@ namespace PhpDivingLog\Repository;
 
 use DateTimeImmutable;
 use PhpDivingLog\Model\Equipment;
+use PhpDivingLog\Support\TextNormalizer;
 use PDO;
 
 final readonly class EquipmentRepository
@@ -99,8 +100,8 @@ final readonly class EquipmentRepository
     {
         return new Equipment(
             (int) ($row['EquipmentID'] ?? $row['ID'] ?? 0),
-            (string) ($row['Object'] ?? ''),
-            isset($row['Manufacturer']) ? (string) $row['Manufacturer'] : null,
+            TextNormalizer::normalizeLikelyMojibake((string) ($row['Object'] ?? '')),
+            isset($row['Manufacturer']) ? TextNormalizer::normalizeLikelyMojibake((string) $row['Manufacturer']) : null,
             isset($row['DatePurchase']) && $row['DatePurchase'] !== null
                 ? new DateTimeImmutable((string) $row['DatePurchase'])
                 : (isset($row['DateP']) && $row['DateP'] !== null ? new DateTimeImmutable((string) $row['DateP']) : null),
@@ -110,7 +111,9 @@ final readonly class EquipmentRepository
             isset($row['DateServiceWarning']) && $row['DateServiceWarning'] !== null
                 ? new DateTimeImmutable((string) $row['DateServiceWarning'])
                 : (isset($row['DateRN']) && $row['DateRN'] !== null ? new DateTimeImmutable((string) $row['DateRN']) : null),
-            isset($row['Comment']) ? (string) $row['Comment'] : (isset($row['Comments']) ? (string) $row['Comments'] : null),
+            isset($row['Comment'])
+                ? TextNormalizer::normalizeLikelyMojibake((string) $row['Comment'])
+                : (isset($row['Comments']) ? TextNormalizer::normalizeLikelyMojibake((string) $row['Comments']) : null),
             isset($row['Picture']) ? (string) $row['Picture'] : (isset($row['PhotoPath']) ? (string) $row['PhotoPath'] : null)
         );
     }

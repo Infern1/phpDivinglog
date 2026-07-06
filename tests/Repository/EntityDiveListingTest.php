@@ -74,6 +74,58 @@ final class EntityDiveListingTest extends TestCase
         self::assertSame(0, $countries[1]['diveCount']);
     }
 
+    public function testSiteDiveCountsFallbackToPlaceIdOnLogbookWhenPlaceUsesIdColumn(): void
+    {
+        $pdo = new PDO('sqlite::memory:');
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $pdo->exec('CREATE TABLE DL_Place (ID INTEGER PRIMARY KEY, Place TEXT)');
+        $pdo->exec('CREATE TABLE DL_Logbook (Number INTEGER PRIMARY KEY, PlaceID INTEGER)');
+        $pdo->exec("INSERT INTO DL_Place (ID, Place) VALUES (10, 'Blue Hole'), (11, 'Coral Garden')");
+        $pdo->exec('INSERT INTO DL_Logbook (Number, PlaceID) VALUES (1, 10), (2, 10), (3, 11)');
+
+        $repo = new DiveSiteRepository($pdo, 'DL_');
+        $sites = $repo->listWithDiveCounts();
+
+        self::assertCount(2, $sites);
+        self::assertSame('Blue Hole', $sites[0]['site']->name);
+        self::assertSame(2, $sites[0]['diveCount']);
+        self::assertSame('Coral Garden', $sites[1]['site']->name);
+        self::assertSame(1, $sites[1]['diveCount']);
+    }
+
+    public function testCountryDiveCountsFallbackWhenCountryUsesIdColumn(): void
+    {
+        $pdo = new PDO('sqlite::memory:');
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $pdo->exec('CREATE TABLE DL_Country (ID INTEGER PRIMARY KEY, Country TEXT)');
+        $pdo->exec('CREATE TABLE DL_Logbook (Number INTEGER PRIMARY KEY, CountryID INTEGER)');
+        $pdo->exec("INSERT INTO DL_Country (ID, Country) VALUES (1, 'Bahamas'), (2, 'Egypt')");
+        $pdo->exec('INSERT INTO DL_Logbook (Number, CountryID) VALUES (1, 1), (2, 1), (3, 2)');
+
+        $repo = new CountryRepository($pdo, 'DL_');
+        $countries = $repo->listWithDiveCounts();
+
+        self::assertCount(2, $countries);
+        self::assertSame('Bahamas', $countries[0]['country']->name);
+        self::assertSame(2, $countries[0]['diveCount']);
+        self::assertSame('Egypt', $countries[1]['country']->name);
+        self::assertSame(1, $countries[1]['diveCount']);
+    }
+
+    public function testCountryNameMojibakeIsNormalized(): void
+    {
+        $pdo = new PDO('sqlite::memory:');
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $pdo->exec('CREATE TABLE DL_Country (CountryID INTEGER PRIMARY KEY, Country TEXT, FlagImage TEXT)');
+        $pdo->exec("INSERT INTO DL_Country (CountryID, Country, FlagImage) VALUES (1, 'AustraliÃ«', NULL)");
+
+        $repo = new CountryRepository($pdo, 'DL_');
+        $countries = $repo->list();
+
+        self::assertCount(1, $countries);
+        self::assertSame('Australië', $countries[0]->name);
+    }
+
     public function testTripListWithDiveCounts(): void
     {
         $tripRepo = new TripRepository($this->pdo, 'DL_');

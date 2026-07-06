@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PhpDivingLog\Repository;
 
 use PhpDivingLog\Model\UserDefinedField;
+use PhpDivingLog\Support\TextNormalizer;
 use PDO;
 
 final readonly class UserDefinedRepository
@@ -46,8 +47,8 @@ final readonly class UserDefinedRepository
                             ? new UserDefinedField(
                                 (int) ($row['UserdefinedID'] ?? $row['ID'] ?? 0),
                                 (int) ($row['LogID'] ?? $row['Number'] ?? 0),
-                                (string) $row['Name'],
-                                isset($row['Value']) ? (string) $row['Value'] : null,
+                                TextNormalizer::normalizeLikelyMojibake((string) $row['Name']),
+                                isset($row['Value']) ? TextNormalizer::normalizeLikelyMojibake((string) $row['Value']) : null,
                             )
                             : null,
                         $rows
@@ -85,8 +86,8 @@ final readonly class UserDefinedRepository
                 $items[] = new UserDefinedField(
                     ($baseId * 100) + $index,
                     $rowLogId,
-                    $label,
-                    $value
+                    TextNormalizer::normalizeLikelyMojibake($label),
+                    TextNormalizer::normalizeLikelyMojibake($value)
                 );
                 $index++;
             }

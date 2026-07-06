@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PhpDivingLog\Repository;
 
 use PhpDivingLog\Model\Buddy;
+use PhpDivingLog\Support\TextNormalizer;
 use PDO;
 
 final readonly class BuddyRepository
@@ -68,10 +69,12 @@ final readonly class BuddyRepository
     {
         return new Buddy(
             (int) ($row['BuddyID'] ?? $row['ID'] ?? 0),
-            (string) ($row['Firstname'] ?? $row['FirstName'] ?? ''),
-            (string) ($row['Lastname'] ?? $row['LastName'] ?? ''),
+            TextNormalizer::normalizeLikelyMojibake((string) ($row['Firstname'] ?? $row['FirstName'] ?? '')),
+            TextNormalizer::normalizeLikelyMojibake((string) ($row['Lastname'] ?? $row['LastName'] ?? '')),
             isset($row['email']) ? (string) $row['email'] : (isset($row['Email']) ? (string) $row['Email'] : null),
-            isset($row['comment']) ? (string) $row['comment'] : (isset($row['Comments']) ? (string) $row['Comments'] : null),
+            isset($row['comment'])
+                ? TextNormalizer::normalizeLikelyMojibake((string) $row['comment'])
+                : (isset($row['Comments']) ? TextNormalizer::normalizeLikelyMojibake((string) $row['Comments']) : null),
             isset($row['Picture']) ? (string) $row['Picture'] : (isset($row['PhotoPath']) ? (string) $row['PhotoPath'] : null),
         );
     }

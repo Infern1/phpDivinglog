@@ -7,6 +7,7 @@ namespace PhpDivingLog\Repository;
 use DateTimeImmutable;
 use PhpDivingLog\Model\Trip;
 use PDO;
+use PhpDivingLog\Support\TextNormalizer;
 
 final readonly class TripRepository
 {
@@ -132,7 +133,7 @@ final readonly class TripRepository
     {
         return new Trip(
             (int) ($row['TripID'] ?? $row['ID'] ?? 0),
-            (string) ($row['TripName'] ?? ''),
+            TextNormalizer::normalizeLikelyMojibake((string) ($row['TripName'] ?? '')),
             isset($row['DateFrom']) && $row['DateFrom'] !== null
                 ? new DateTimeImmutable((string) $row['DateFrom'])
                 : (isset($row['StartDate']) && $row['StartDate'] !== null ? new DateTimeImmutable((string) $row['StartDate']) : null),
@@ -141,7 +142,9 @@ final readonly class TripRepository
                 : (isset($row['EndDate']) && $row['EndDate'] !== null ? new DateTimeImmutable((string) $row['EndDate']) : null),
             isset($row['CountryID']) ? (int) $row['CountryID'] : null,
             isset($row['ShopID']) ? (int) $row['ShopID'] : null,
-            isset($row['TripComment']) ? (string) $row['TripComment'] : (isset($row['Comments']) ? (string) $row['Comments'] : null)
+            isset($row['TripComment'])
+                ? TextNormalizer::normalizeLikelyMojibake((string) $row['TripComment'])
+                : (isset($row['Comments']) ? TextNormalizer::normalizeLikelyMojibake((string) $row['Comments']) : null)
         );
     }
 

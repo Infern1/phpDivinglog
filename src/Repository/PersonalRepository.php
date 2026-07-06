@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PhpDivingLog\Repository;
 
 use PhpDivingLog\Model\Personal;
+use PhpDivingLog\Support\TextNormalizer;
 use PDO;
 
 final readonly class PersonalRepository
@@ -23,12 +24,12 @@ final readonly class PersonalRepository
         }
 
         return new Personal(
-            (string) ($row['Firstname'] ?? ''),
-            (string) ($row['Lastname'] ?? ''),
+            TextNormalizer::normalizeLikelyMojibake((string) ($row['Firstname'] ?? '')),
+            TextNormalizer::normalizeLikelyMojibake((string) ($row['Lastname'] ?? '')),
             isset($row['Email']) ? (string) $row['Email'] : null,
-            isset($row['City']) ? (string) $row['City'] : null,
-            isset($row['Country']) ? (string) $row['Country'] : null,
-            isset($row['Comment']) ? (string) $row['Comment'] : null,
+            isset($row['City']) ? TextNormalizer::normalizeLikelyMojibake((string) $row['City']) : null,
+            isset($row['Country']) ? TextNormalizer::normalizeLikelyMojibake((string) $row['Country']) : null,
+            isset($row['Comment']) ? TextNormalizer::normalizeLikelyMojibake((string) $row['Comment']) : null,
             isset($row['Picture']) ? (string) $row['Picture'] : null,
         );
     }

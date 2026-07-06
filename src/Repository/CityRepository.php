@@ -6,6 +6,7 @@ namespace PhpDivingLog\Repository;
 
 use PhpDivingLog\Model\City;
 use PDO;
+use PhpDivingLog\Support\TextNormalizer;
 
 final readonly class CityRepository
 {
@@ -66,8 +67,10 @@ final readonly class CityRepository
         return new City(
             (int) ($row['CityID'] ?? $row['ID'] ?? 0),
             (int) ($row['CountryID'] ?? 0),
-            (string) ($row['City'] ?? ''),
-            isset($row['CityComment']) ? (string) $row['CityComment'] : (isset($row['Comments']) ? (string) $row['Comments'] : null)
+            TextNormalizer::normalizeLikelyMojibake((string) ($row['City'] ?? '')),
+            isset($row['CityComment'])
+                ? TextNormalizer::normalizeLikelyMojibake((string) $row['CityComment'])
+                : (isset($row['Comments']) ? TextNormalizer::normalizeLikelyMojibake((string) $row['Comments']) : null)
         );
     }
 }

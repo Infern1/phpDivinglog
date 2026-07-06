@@ -106,7 +106,7 @@ final readonly class DiveStatisticsRepository
      */
     private function aggregateOptionalFloatColumn(string $column): array
     {
-        $sql = sprintf('SELECT MIN(%1$s) AS MinValue, MAX(%1$s) AS MaxValue, AVG(%1$s) AS AvgValue FROM %2$sLogbook', $column, $this->tablePrefix);
+        $sql = sprintf('SELECT MIN(%1$s) AS MinResult, MAX(%1$s) AS MaxResult, AVG(%1$s) AS AvgResult FROM %2$sLogbook', $column, $this->tablePrefix);
 
         try {
             $row = $this->pdo->query($sql)->fetch(PDO::FETCH_ASSOC);
@@ -115,9 +115,9 @@ final readonly class DiveStatisticsRepository
             }
 
             return [
-                'min' => $this->toFloatOrNull($row['MinValue'] ?? null),
-                'max' => $this->toFloatOrNull($row['MaxValue'] ?? null),
-                'avg' => $this->toFloatOrNull($row['AvgValue'] ?? null),
+                'min' => $this->toFloatOrNull($row['MinResult'] ?? null),
+                'max' => $this->toFloatOrNull($row['MaxResult'] ?? null),
+                'avg' => $this->toFloatOrNull($row['AvgResult'] ?? null),
             ];
         } catch (\PDOException $exception) {
             if ($this->isMissingColumn($exception)) {

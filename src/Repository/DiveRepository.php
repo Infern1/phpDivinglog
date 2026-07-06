@@ -7,6 +7,7 @@ namespace PhpDivingLog\Repository;
 use DateTimeImmutable;
 use PhpDivingLog\Model\Dive;
 use PDO;
+use PhpDivingLog\Support\TextNormalizer;
 
 final readonly class DiveRepository
 {
@@ -313,7 +314,7 @@ final readonly class DiveRepository
 
             $value = trim((string) $row[$key]);
             if ($value !== '') {
-                return $value;
+                return TextNormalizer::normalizeLikelyMojibake($value);
             }
         }
 
@@ -349,9 +350,9 @@ final readonly class DiveRepository
     private function mapOverviewRow(array $row): array
     {
         $locationParts = array_values(array_filter([
-            isset($row['Place']) ? trim((string) $row['Place']) : '',
-            isset($row['City']) ? trim((string) $row['City']) : '',
-            isset($row['Country']) ? trim((string) $row['Country']) : '',
+            isset($row['Place']) ? trim(TextNormalizer::normalizeLikelyMojibake((string) $row['Place'])) : '',
+            isset($row['City']) ? trim(TextNormalizer::normalizeLikelyMojibake((string) $row['City'])) : '',
+            isset($row['Country']) ? trim(TextNormalizer::normalizeLikelyMojibake((string) $row['Country'])) : '',
         ], static fn (string $value): bool => $value !== ''));
 
         return [

@@ -6,6 +6,7 @@ namespace PhpDivingLog\Repository;
 
 use PhpDivingLog\Model\DiveSite;
 use PDO;
+use PhpDivingLog\Support\TextNormalizer;
 
 final readonly class DiveSiteRepository
 {
@@ -31,30 +32,44 @@ final readonly class DiveSiteRepository
      */
     public function listWithDiveCounts(int $limit = 500): array
     {
+        $rows = $this->queryListWithDiveCounts('PlaceID', $limit)
+            ?? $this->queryListWithDiveCounts('ID', $limit);
+
+        if ($rows === null) {
+            return array_map(
+                static fn (DiveSite $site): array => ['site' => $site, 'diveCount' => 0],
+                $this->list($limit),
+            );
+        }
+
+        return array_map(function (array $row): array {
+            return [
+                'site' => $this->mapSite($row),
+                'diveCount' => (int) ($row['DiveCount'] ?? 0),
+            ];
+        }, $rows);
+    }
+
+    /**
+     * @return list<array<string, mixed>>|null
+     */
+    private function queryListWithDiveCounts(string $placeColumn, int $limit): ?array
+    {
         $sql = sprintf(
-            'SELECT p.*, COUNT(l.Number) AS DiveCount FROM %1$sPlace p LEFT JOIN %1$sLogbook l ON l.PlaceID = p.PlaceID GROUP BY p.PlaceID ORDER BY p.Place LIMIT :limit',
+            'SELECT p.*, COUNT(l.PlaceID) AS DiveCount FROM %1$sPlace p LEFT JOIN %1$sLogbook l ON l.PlaceID = p.%2$s GROUP BY p.%2$s ORDER BY p.Place LIMIT :limit',
             $this->tablePrefix,
+            $placeColumn,
         );
 
         try {
             $statement = $this->pdo->prepare($sql);
             $statement->bindValue(':limit', $limit, PDO::PARAM_INT);
             $statement->execute();
-            $rows = $statement->fetchAll();
-
-            return array_map(function (array $row): array {
-                return [
-                    'site' => $this->mapSite($row),
-                    'diveCount' => (int) ($row['DiveCount'] ?? 0),
-                ];
-            }, $rows);
+            return $statement->fetchAll();
         } catch (\PDOException $exception) {
             $sqlState = $exception->errorInfo[0] ?? null;
             if ($sqlState === '42S22' || ($sqlState === 'HY000' && str_contains(strtolower($exception->getMessage()), 'no such column'))) {
-                return array_map(
-                    static fn (DiveSite $site): array => ['site' => $site, 'diveCount' => 0],
-                    $this->list($limit),
-                );
+                return null;
             }
 
             throw $exception;
@@ -123,13 +138,15 @@ final readonly class DiveSiteRepository
     {
         return new DiveSite(
             (int) ($row['PlaceID'] ?? $row['ID'] ?? 0),
-            (string) ($row['Place'] ?? ''),
+            TextNormalizer::normalizeLikelyMojibake((string) ($row['Place'] ?? '')),
             isset($row['CountryID']) ? (int) $row['CountryID'] : null,
             isset($row['CityID']) ? (int) $row['CityID'] : null,
             isset($row['Latitude']) ? (float) $row['Latitude'] : (isset($row['Lat']) ? (float) $row['Lat'] : null),
             isset($row['Longitude']) ? (float) $row['Longitude'] : (isset($row['Lon']) ? (float) $row['Lon'] : null),
             isset($row['PlaceMap']) ? (string) $row['PlaceMap'] : (isset($row['MapPath']) ? (string) $row['MapPath'] : null),
-            isset($row['PlaceComment']) ? (string) $row['PlaceComment'] : (isset($row['Comments']) ? (string) $row['Comments'] : null)
+            isset($row['PlaceComment'])
+                ? TextNormalizer::normalizeLikelyMojibake((string) $row['PlaceComment'])
+                : (isset($row['Comments']) ? TextNormalizer::normalizeLikelyMojibake((string) $row['Comments']) : null)
         );
     }
 }

@@ -6,6 +6,7 @@ namespace PhpDivingLog\Repository;
 
 use PhpDivingLog\Model\Shop;
 use PDO;
+use PhpDivingLog\Support\TextNormalizer;
 
 final readonly class ShopRepository
 {
@@ -66,10 +67,12 @@ final readonly class ShopRepository
         return new Shop(
             (int) ($row['ShopID'] ?? $row['ID'] ?? 0),
             (int) ($row['CountryID'] ?? 0),
-            (string) ($row['ShopName'] ?? ''),
-            isset($row['ShopType']) ? (string) $row['ShopType'] : null,
-            isset($row['City']) ? (string) $row['City'] : null,
-            isset($row['ShopComment']) ? (string) $row['ShopComment'] : (isset($row['Comments']) ? (string) $row['Comments'] : null)
+            TextNormalizer::normalizeLikelyMojibake((string) ($row['ShopName'] ?? '')),
+            isset($row['ShopType']) ? TextNormalizer::normalizeLikelyMojibake((string) $row['ShopType']) : null,
+            isset($row['City']) ? TextNormalizer::normalizeLikelyMojibake((string) $row['City']) : null,
+            isset($row['ShopComment'])
+                ? TextNormalizer::normalizeLikelyMojibake((string) $row['ShopComment'])
+                : (isset($row['Comments']) ? TextNormalizer::normalizeLikelyMojibake((string) $row['Comments']) : null)
         );
     }
 }

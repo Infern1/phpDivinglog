@@ -6,6 +6,7 @@ namespace PhpDivingLog\Repository;
 
 use PhpDivingLog\Model\Country;
 use PDO;
+use PhpDivingLog\Support\TextNormalizer;
 
 final readonly class CountryRepository
 {
@@ -31,42 +32,72 @@ final readonly class CountryRepository
      */
     public function listWithDiveCounts(int $limit = 500): array
     {
-        $directSql = sprintf(
-            'SELECT c.*, COUNT(l.Number) AS DiveCount FROM %1$sCountry c LEFT JOIN %1$sLogbook l ON l.CountryID = c.CountryID GROUP BY c.CountryID ORDER BY c.Country LIMIT :limit',
-            $this->tablePrefix,
-        );
+        $rows = $this->queryDirectCountryCounts('CountryID', $limit)
+            ?? $this->queryDirectCountryCounts('ID', $limit)
+            ?? $this->queryPlaceBasedCountryCounts('CountryID', 'PlaceID', $limit)
+            ?? $this->queryPlaceBasedCountryCounts('CountryID', 'ID', $limit)
+            ?? $this->queryPlaceBasedCountryCounts('ID', 'PlaceID', $limit)
+            ?? $this->queryPlaceBasedCountryCounts('ID', 'ID', $limit);
 
-        try {
-            $statement = $this->pdo->prepare($directSql);
-            $statement->bindValue(':limit', $limit, PDO::PARAM_INT);
-            $statement->execute();
-            return $this->mapCountryCountRows($statement->fetchAll());
-        } catch (\PDOException $exception) {
-            if (!$this->isMissingColumn($exception)) {
-                throw $exception;
-            }
+        if ($rows === null) {
+            return array_map(
+                static fn (Country $country): array => ['country' => $country, 'diveCount' => 0],
+                $this->list($limit),
+            );
         }
 
-        $joinSql = sprintf(
-            'SELECT c.*, COUNT(l.Number) AS DiveCount ' .
-            'FROM %1$sCountry c ' .
-            'LEFT JOIN %1$sPlace p ON p.CountryID = c.CountryID ' .
-            'LEFT JOIN %1$sLogbook l ON l.PlaceID = p.PlaceID ' .
-            'GROUP BY c.CountryID ORDER BY c.Country LIMIT :limit',
+        return $this->mapCountryCountRows($rows);
+    }
+
+    /**
+     * @return list<array<string, mixed>>|null
+     */
+    private function queryDirectCountryCounts(string $countryColumn, int $limit): ?array
+    {
+        $sql = sprintf(
+            'SELECT c.*, COUNT(l.Number) AS DiveCount FROM %1$sCountry c LEFT JOIN %1$sLogbook l ON l.CountryID = c.%2$s GROUP BY c.%2$s ORDER BY c.Country LIMIT :limit',
             $this->tablePrefix,
+            $countryColumn,
         );
 
         try {
-            $statement = $this->pdo->prepare($joinSql);
+            $statement = $this->pdo->prepare($sql);
             $statement->bindValue(':limit', $limit, PDO::PARAM_INT);
             $statement->execute();
-            return $this->mapCountryCountRows($statement->fetchAll());
+            return $statement->fetchAll();
         } catch (\PDOException $exception) {
             if ($this->isMissingColumn($exception)) {
-                return array_map(
-                    static fn (Country $country): array => ['country' => $country, 'diveCount' => 0],
-                    $this->list($limit),
-                );
+                return null;
+            }
+
+            throw $exception;
+        }
+    }
+
+    /**
+     * @return list<array<string, mixed>>|null
+     */
+    private function queryPlaceBasedCountryCounts(string $countryColumn, string $placeColumn, int $limit): ?array
+    {
+        $sql = sprintf(
+            'SELECT c.*, COUNT(l.Number) AS DiveCount ' .
+            'FROM %1$sCountry c ' .
+            'LEFT JOIN %1$sPlace p ON p.CountryID = c.%2$s ' .
+            'LEFT JOIN %1$sLogbook l ON l.PlaceID = p.%3$s ' .
+            'GROUP BY c.%2$s ORDER BY c.Country LIMIT :limit',
+            $this->tablePrefix,
+            $countryColumn,
+            $placeColumn,
+        );
+
+        try {
+            $statement = $this->pdo->prepare($sql);
+            $statement->bindValue(':limit', $limit, PDO::PARAM_INT);
+            $statement->execute();
+            return $statement->fetchAll();
+        } catch (\PDOException $exception) {
+            if ($this->isMissingColumn($exception)) {
+                return null;
             }
 
             throw $exception;
@@ -112,7 +143,7 @@ final readonly class CountryRepository
     {
         return new Country(
             (int) ($row['CountryID'] ?? $row['ID'] ?? 0),
-            (string) ($row['Country'] ?? ''),
+            TextNormalizer::normalizeLikelyMojibake((string) ($row['Country'] ?? '')),
             isset($row['FlagImage']) ? (string) $row['FlagImage'] : (isset($row['FlagPath']) ? (string) $row['FlagPath'] : null)
         );
     }
