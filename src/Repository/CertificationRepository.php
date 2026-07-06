@@ -33,7 +33,7 @@ final readonly class CertificationRepository
      */
     private function fetchRows(): ?array
     {
-        $tableCandidates = ['Brevet', 'Certification', 'Certifications', 'Certificate', 'Certificates', 'Cert'];
+        $tableCandidates = ['Brevets', 'Brevet', 'Certification', 'Certifications', 'Certificate', 'Certificates', 'Cert'];
 
         foreach ($tableCandidates as $table) {
             $sql = sprintf('SELECT * FROM %s%s', $this->tablePrefix, $table);
@@ -45,8 +45,8 @@ final readonly class CertificationRepository
                 }
 
                 usort($rows, function (array $a, array $b): int {
-                    $aDate = $this->parseDate($this->pickValue($a, ['DateBrevet', 'Date', 'CertDate', 'IssuedAt', 'IssueDate']));
-                    $bDate = $this->parseDate($this->pickValue($b, ['DateBrevet', 'Date', 'CertDate', 'IssuedAt', 'IssueDate']));
+                    $aDate = $this->parseDate($this->pickValue($a, ['CertDate', 'DateBrevet', 'Date', 'IssuedAt', 'IssueDate']));
+                    $bDate = $this->parseDate($this->pickValue($b, ['CertDate', 'DateBrevet', 'Date', 'IssuedAt', 'IssueDate']));
 
                     if ($aDate === null && $bDate === null) {
                         return 0;
@@ -83,13 +83,13 @@ final readonly class CertificationRepository
     private function mapCertification(array $row): Certification
     {
         return new Certification(
-            $this->normalizedString($this->pickValue($row, ['Organisation', 'Organization', 'Org', 'Agency'])),
+            $this->normalizedString($this->pickValue($row, ['Org', 'Organisation', 'Organization', 'Agency'])),
             $this->normalizedString($this->pickValue($row, ['Brevet', 'Certification', 'Cert', 'Title', 'Name'])),
-            $this->parseDate($this->pickValue($row, ['DateBrevet', 'Date', 'CertDate', 'IssuedAt', 'IssueDate'])),
-            $this->normalizedString($this->pickValue($row, ['BrevetNr', 'BrevetNo', 'CertNr', 'CertNo', 'CertNumber', 'Number', 'LicenseNo'])),
+            $this->parseDate($this->pickValue($row, ['CertDate', 'DateBrevet', 'Date', 'IssuedAt', 'IssueDate'])),
+            $this->normalizedString($this->pickValue($row, ['Number', 'BrevetNr', 'BrevetNo', 'CertNr', 'CertNo', 'CertNumber', 'LicenseNo'])),
             $this->normalizedString($this->pickValue($row, ['Instructor', 'DiveInstructor', 'Teacher', 'InstructorName'])),
-            $this->normalizedString($this->pickValue($row, ['Picture1', 'PictureFront', 'Picture', 'Image', 'CardFront', 'ImageFront'])),
-            $this->normalizedString($this->pickValue($row, ['Picture2', 'PictureBack', 'BackImage', 'CardBack', 'ImageBack'])),
+            $this->normalizedString($this->pickValue($row, ['Scan1Path', 'Picture1', 'PictureFront', 'Picture', 'Image', 'CardFront', 'ImageFront'])),
+            $this->normalizedString($this->pickValue($row, ['Scan2Path', 'Picture2', 'PictureBack', 'BackImage', 'CardBack', 'ImageBack'])),
         );
     }
 
