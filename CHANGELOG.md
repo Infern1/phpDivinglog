@@ -2,6 +2,41 @@
 
 All notable changes to phpDivingLog are documented in this file.
 
+## v4.1.1 — 2026-07-06
+
+### Dive log gallery (new aggregate photo view)
+- Added a new paginated Dive Log Gallery at `/gallery` (while preserving per-dive gallery at `/gallery/{id}`).
+- Added `templates/dive_log_gallery.html.twig` with lightbox-enabled thumbnails and pagination.
+- Added per-thumbnail contextual labels (site + location), e.g. `Nakayukui · Japan, Okinawa`.
+- Added a primary navigation link for Gallery.
+
+### Lightbox enhancements
+- Added grouped previous/next navigation and keyboard arrow support across gallery images.
+- Added an in-dialog dive info block for aggregate gallery photos:
+  - line 1: `Dive <number> by <diver>`
+  - line 2: `Location | Divesite | When`
+  - deep link: `view dive`
+- Added responsive dialog/image sizing so large images use available viewport space more effectively.
+
+### Data/repository compatibility hardening
+- Extended `PictureRepository` pagination with schema fallbacks for legacy columns:
+  - supports `PictureID` and fallback `ID`
+  - supports `LogID` and fallback `Number`
+- Extended `DiveRepository::findMetaByLogIds()` with legacy-safe lookup fallback order:
+  - `LogID` → `ID` → `Number`
+- Prevented SQL fatal errors on mixed/older Diving Log schemas where canonical columns are absent.
+
+### Reuse and wiring
+- Extended `GalleryController` with aggregate overview view-model composition (count/page slice + batched metadata).
+- Added `PictureRepository::countAll()` and `findPage()`.
+- Added `DiveRepository::findMetaByLogIds()` for batched metadata resolution (no N+1 lookups).
+- Generalized shared pagination partial with optional `basePath`.
+
+### Tests and verification
+- Added repository tests for picture pagination/counting and metadata fallback behavior across schema variants.
+- Added HTTP smoke test coverage for `/gallery` rendering contract and nav discoverability.
+- Quality gates green: `composer test && composer stan && composer cs` (with existing PHPUnit deprecations unchanged).
+
 ## v4.1.0 — 2026-07-06
 
 ### UI framework migration to Beer CSS (Material Design 3)
