@@ -3,14 +3,26 @@
     <span class="material-symbols-outlined" aria-hidden="true">scuba_diving</span>
     <span>phpDivingLog</span>
   </a>
-  <button
-    type="button"
-    class="app-theme-toggle"
-    data-theme-toggle
-    aria-pressed="false"
-    aria-label="Switch to dark theme"
-  >
-    <span class="material-symbols-outlined" data-theme-icon aria-hidden="true">dark_mode</span>
-    <span data-theme-label>Dark</span>
-  </button>
+  <div class="app-theme-controls">
+    <label class="app-palette-switch" for="palette-select">
+      <span class="material-symbols-outlined" aria-hidden="true">palette</span>
+      <span class="app-palette-label">Palette</span>
+      <select id="palette-select" data-palette-toggle aria-label="Color palette">
+        <option value="reef">Reef</option>
+        <option value="sunset">Sunset</option>
+        <option value="kelp">Kelp</option>
+        <option value="abyss">Abyss</option>
+      </select>
+    </label>
+    <button
+      type="button"
+      class="app-theme-toggle"
+      data-theme-toggle
+      aria-pressed="false"
+      aria-label="Switch to dark theme"
+    >
+      <span class="material-symbols-outlined" data-theme-icon aria-hidden="true">dark_mode</span>
+      <span data-theme-label>Dark</span>
+    </button>
+  </div>
 </header>

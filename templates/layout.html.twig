@@ -6,14 +6,23 @@
   <title>{{ title|default('phpDivingLog') }}</title>
   <script>
     (function () {
-      var key = 'divelog:theme';
+      var themeKey = 'divelog:theme';
+      var paletteKey = 'divelog:palette';
+      var palettes = ['reef', 'sunset', 'kelp', 'abyss'];
       var theme = 'light';
+      var palette = 'reef';
+
       try {
-        var stored = window.localStorage.getItem(key);
-        if (stored === 'light' || stored === 'dark') {
-          theme = stored;
+        var storedTheme = window.localStorage.getItem(themeKey);
+        if (storedTheme === 'light' || storedTheme === 'dark') {
+          theme = storedTheme;
         } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
           theme = 'dark';
+        }
+
+        var storedPalette = window.localStorage.getItem(paletteKey);
+        if (storedPalette && palettes.indexOf(storedPalette) !== -1) {
+          palette = storedPalette;
         }
       } catch (error) {
         if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
@@ -25,6 +34,7 @@
       root.classList.remove('light', 'dark');
       root.classList.add(theme);
       root.setAttribute('data-theme', theme);
+      root.setAttribute('data-palette', palette);
 
       document.addEventListener('DOMContentLoaded', function () {
         if (!document.body) {
@@ -33,6 +43,7 @@
         document.body.classList.remove('light', 'dark');
         document.body.classList.add(theme);
         document.body.setAttribute('data-theme', theme);
+        document.body.setAttribute('data-palette', palette);
       }, { once: true });
     })();
   </script>

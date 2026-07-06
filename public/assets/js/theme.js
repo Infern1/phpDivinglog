@@ -1,5 +1,7 @@
 (() => {
-  const STORAGE_KEY = 'divelog:theme';
+  const THEME_STORAGE_KEY = 'divelog:theme';
+  const PALETTE_STORAGE_KEY = 'divelog:palette';
+  const PALETTES = ['reef', 'sunset', 'kelp', 'abyss'];
   const root = document.documentElement;
 
   const safeGetItem = (key) => {
@@ -19,7 +21,7 @@
   };
 
   const preferredTheme = () => {
-    const stored = safeGetItem(STORAGE_KEY);
+    const stored = safeGetItem(THEME_STORAGE_KEY);
     if (stored === 'light' || stored === 'dark') {
       return stored;
     }
@@ -35,6 +37,20 @@
     return 'light';
   };
 
+  const preferredPalette = () => {
+    const stored = safeGetItem(PALETTE_STORAGE_KEY);
+    if (stored && PALETTES.includes(stored)) {
+      return stored;
+    }
+
+    const fromDom = root.dataset.palette;
+    if (fromDom && PALETTES.includes(fromDom)) {
+      return fromDom;
+    }
+
+    return 'reef';
+  };
+
   const applyTheme = (theme) => {
     const next = theme === 'dark' ? 'dark' : 'light';
     root.classList.remove('light', 'dark');
@@ -46,7 +62,14 @@
     return next;
   };
 
-  const updateToggle = (theme) => {
+  const applyPalette = (palette) => {
+    const next = PALETTES.includes(palette) ? palette : 'reef';
+    root.setAttribute('data-palette', next);
+    document.body?.setAttribute('data-palette', next);
+    return next;
+  };
+
+  const updateThemeToggle = (theme) => {
     const toggle = document.querySelector('[data-theme-toggle]');
     if (!(toggle instanceof HTMLButtonElement)) {
       return;
@@ -68,6 +91,15 @@
     if (text) {
       text.textContent = isDark ? 'Light' : 'Dark';
     }
+  };
+
+  const updatePaletteToggle = (palette) => {
+    const select = document.querySelector('[data-palette-toggle]');
+    if (!(select instanceof HTMLSelectElement)) {
+      return;
+    }
+
+    select.value = PALETTES.includes(palette) ? palette : 'reef';
   };
 
   const highlightActiveNav = () => {
@@ -94,18 +126,36 @@
     });
   };
 
+  const dispatchThemeChange = (theme, palette) => {
+    window.dispatchEvent(new CustomEvent('themechange', { detail: { theme, palette } }));
+  };
+
   const setTheme = (requestedTheme, shouldPersist) => {
-    const applied = applyTheme(requestedTheme);
+    const appliedTheme = applyTheme(requestedTheme);
+    const appliedPalette = applyPalette(preferredPalette());
     if (shouldPersist) {
-      safeSetItem(STORAGE_KEY, applied);
+      safeSetItem(THEME_STORAGE_KEY, appliedTheme);
     }
-    updateToggle(applied);
-    window.dispatchEvent(new CustomEvent('themechange', { detail: { theme: applied } }));
+    updateThemeToggle(appliedTheme);
+    updatePaletteToggle(appliedPalette);
+    dispatchThemeChange(appliedTheme, appliedPalette);
+  };
+
+  const setPalette = (requestedPalette, shouldPersist) => {
+    const appliedPalette = applyPalette(requestedPalette);
+    const appliedTheme = root.classList.contains('dark') ? 'dark' : 'light';
+    if (shouldPersist) {
+      safeSetItem(PALETTE_STORAGE_KEY, appliedPalette);
+    }
+    updatePaletteToggle(appliedPalette);
+    dispatchThemeChange(appliedTheme, appliedPalette);
   };
 
   document.addEventListener('DOMContentLoaded', () => {
-    const initial = root.dataset.theme || preferredTheme();
-    setTheme(initial, false);
+    const initialTheme = root.dataset.theme || preferredTheme();
+    const initialPalette = root.dataset.palette || preferredPalette();
+    applyPalette(initialPalette);
+    setTheme(initialTheme, false);
     highlightActiveNav();
 
     const toggle = document.querySelector('[data-theme-toggle]');
@@ -116,11 +166,18 @@
       });
     }
 
+    const paletteSelect = document.querySelector('[data-palette-toggle]');
+    if (paletteSelect instanceof HTMLSelectElement) {
+      paletteSelect.addEventListener('change', () => {
+        setPalette(paletteSelect.value, true);
+      });
+    }
+
     if (typeof window.matchMedia === 'function') {
       try {
         const media = window.matchMedia('(prefers-color-scheme: dark)');
         media.addEventListener('change', (event) => {
-          const stored = safeGetItem(STORAGE_KEY);
+          const stored = safeGetItem(THEME_STORAGE_KEY);
           if (stored === 'light' || stored === 'dark') {
             return;
           }
