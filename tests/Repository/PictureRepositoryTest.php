@@ -53,4 +53,25 @@ final class PictureRepositoryTest extends TestCase
         self::assertSame(1, $secondPage[1]->id);
         self::assertSame(100, $secondPage[1]->logId);
     }
+
+    public function testFindPageFallsBackWhenPictureIdColumnIsMissing(): void
+    {
+        $pdo = new PDO('sqlite::memory:');
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $pdo->exec('CREATE TABLE DL_Pictures (ID INTEGER PRIMARY KEY, Number INTEGER, Picture TEXT, Description TEXT)');
+        $pdo->exec("INSERT INTO DL_Pictures (ID, Number, Picture, Description) VALUES (1, 100, 'dive-100-a.jpg', 'Shark pass')");
+        $pdo->exec("INSERT INTO DL_Pictures (ID, Number, Picture, Description) VALUES (2, 102, 'dive-102-a.jpg', 'Drop-off')");
+        $pdo->exec("INSERT INTO DL_Pictures (ID, Number, Picture, Description) VALUES (3, 101, 'dive-101-a.jpg', 'Sunbeams')");
+
+        $repository = new PictureRepository($pdo, 'DL_');
+        $rows = $repository->findPage(3, 0);
+
+        self::assertCount(3, $rows);
+        self::assertSame(2, $rows[0]->id);
+        self::assertSame(102, $rows[0]->logId);
+        self::assertSame(3, $rows[1]->id);
+        self::assertSame(101, $rows[1]->logId);
+        self::assertSame(1, $rows[2]->id);
+        self::assertSame(100, $rows[2]->logId);
+    }
 }

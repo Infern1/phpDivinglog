@@ -43,17 +43,15 @@ final readonly class PictureRepository
      */
     public function findPage(int $limit, int $offset): array
     {
-        $sql = sprintf(
-            'SELECT * FROM %sPictures ORDER BY LogID DESC, PictureID DESC LIMIT :limit OFFSET :offset',
-            $this->tablePrefix
-        );
+        $rows = $this->queryPage('LogID DESC, PictureID DESC', $limit, $offset);
+        if ($rows === null) {
+            $rows = $this->queryPage('LogID DESC, ID DESC', $limit, $offset);
+        }
+        if ($rows === null) {
+            $rows = $this->queryPage('Number DESC, ID DESC', $limit, $offset) ?? [];
+        }
 
-        $statement = $this->pdo->prepare($sql);
-        $statement->bindValue(':limit', $limit, PDO::PARAM_INT);
-        $statement->bindValue(':offset', $offset, PDO::PARAM_INT);
-        $statement->execute();
-
-        return array_map([$this, 'mapPicture'], $statement->fetchAll());
+        return array_map([$this, 'mapPicture'], $rows);
     }
 
     /**
@@ -70,6 +68,33 @@ final readonly class PictureRepository
         try {
             $statement = $this->pdo->prepare($sql);
             $statement->bindValue(':id', $id, PDO::PARAM_INT);
+            $statement->execute();
+            return $statement->fetchAll();
+        } catch (\PDOException $exception) {
+            $sqlState = $exception->errorInfo[0] ?? null;
+            if ($sqlState === '42S22' || ($sqlState === 'HY000' && str_contains(strtolower($exception->getMessage()), 'no such column'))) {
+                return null;
+            }
+
+            throw $exception;
+        }
+    }
+
+    /**
+     * @return list<array<string, mixed>>|null
+     */
+    private function queryPage(string $orderBy, int $limit, int $offset): ?array
+    {
+        $sql = sprintf(
+            'SELECT * FROM %sPictures ORDER BY %s LIMIT :limit OFFSET :offset',
+            $this->tablePrefix,
+            $orderBy
+        );
+
+        try {
+            $statement = $this->pdo->prepare($sql);
+            $statement->bindValue(':limit', $limit, PDO::PARAM_INT);
+            $statement->bindValue(':offset', $offset, PDO::PARAM_INT);
             $statement->execute();
             return $statement->fetchAll();
         } catch (\PDOException $exception) {
