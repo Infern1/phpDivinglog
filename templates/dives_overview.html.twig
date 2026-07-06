@@ -1,0 +1,63 @@
+{% extends 'layout.html.twig' %}
+
+{% block content %}
+  <section class="dive-overview-panel">
+    <div class="dive-overview-head">
+      <h2>{{ totalDives }} dives</h2>
+      <form class="dive-overview-controls" method="get" action="/">
+        <input id="dives-search" name="q" type="search" placeholder="Search location, number..." aria-label="Search dives" value="{{ search }}">
+        <select id="dives-sort" name="sort" aria-label="Sort dives">
+          <option value="newest"{% if sort == 'newest' %} selected{% endif %}>Newest first</option>
+          <option value="oldest"{% if sort == 'oldest' %} selected{% endif %}>Oldest first</option>
+          <option value="deepest"{% if sort == 'deepest' %} selected{% endif %}>Deepest first</option>
+          <option value="longest"{% if sort == 'longest' %} selected{% endif %}>Longest duration</option>
+        </select>
+        <button type="submit">Apply</button>
+      </form>
+    </div>
+
+    {% include 'partials/pagination.html.twig' with { pages: pages, currentPage: currentPage, search: search, sort: sort } %}
+
+    <div class="table-wrap">
+      <table class="dives-table" data-dives-table>
+        <thead>
+          <tr>
+            <th scope="col">Nr.</th>
+            <th scope="col">When</th>
+            <th scope="col">Location / Site</th>
+            <th scope="col">Depth</th>
+            <th scope="col">Duration</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for dive in dives %}
+            <tr data-number="{{ dive.number }}" data-location="{{ dive.location|lower }}" data-ts="{{ dive.timestamp }}" data-depth="{{ dive.depth_value }}" data-duration="{{ dive.duration }}" data-href="/dives/{{ dive.number }}" tabindex="0" role="link" aria-label="Open dive {{ dive.number }}">
+              <td class="dive-col-number">
+                <a href="/dives/{{ dive.number }}">{{ dive.number }}</a>
+                <span class="dive-row-icons" aria-label="Dive media indicators">
+                  {% if dive.has_profile %}
+                    <span class="material-symbols-outlined" title="Has profile" aria-label="Has profile">show_chart</span>
+                  {% endif %}
+                  {% if dive.has_photos %}
+                    <span class="material-symbols-outlined" title="Has photos" aria-label="Has photos">photo_camera</span>
+                  {% endif %}
+                </span>
+              </td>
+              <td class="dive-col-when">
+                <strong>{{ dive.date }}</strong>
+                <small>{{ dive.time }}</small>
+              </td>
+              <td>{{ dive.location }}</td>
+              <td>{{ dive.depth }} {{ dive.depth_label }}</td>
+              <td>{{ dive.duration }} min</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    {% include 'partials/pagination.html.twig' with { pages: pages, currentPage: currentPage, search: search, sort: sort } %}
+  </section>
+
+  <script src="/assets/js/tables.js" defer></script>
+{% endblock %}

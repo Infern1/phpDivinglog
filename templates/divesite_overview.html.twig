@@ -1,0 +1,38 @@
+{% extends 'layout.html.twig' %}
+
+{% block content %}
+  <section class="dive-overview-panel">
+    <div class="dive-overview-head">
+      <h2>Dive Sites</h2>
+    </div>
+
+    <div class="table-wrap">
+      <table class="dives-table" data-dives-table data-sortable>
+        <thead>
+          <tr>
+            <th scope="col">Site</th>
+            <th scope="col">Coordinates</th>
+            <th scope="col">Dives</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for site in sites %}
+            <tr data-href="/sites/{{ site.id }}" tabindex="0" role="link" aria-label="Open site {{ site.name }}">
+              <td><a href="/sites/{{ site.id }}">{{ site.name }}</a></td>
+              <td>
+                {% if site.latitudeFormatted and site.longitudeFormatted %}
+                  {{ site.latitudeFormatted }}, {{ site.longitudeFormatted }}
+                {% else %}
+                  -
+                {% endif %}
+              </td>
+              <td>{{ site.diveCount }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <script src="/assets/js/tables.js" defer></script>
+{% endblock %}

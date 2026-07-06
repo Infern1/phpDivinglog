@@ -1,0 +1,144 @@
+{% extends 'layout.html.twig' %}
+
+{% block content %}
+  <section class="dive-overview-panel">
+    <div class="dive-overview-head">
+      <h2>Dive Statistics</h2>
+    </div>
+
+    <section class="stats-grid">
+      <article class="dive-panel">
+        <h3>Overview</h3>
+        <dl class="stats-kv-grid">
+          <div><dt>Total dives</dt><dd>{{ total_dives }}</dd></div>
+          <div>
+            <dt>First dive</dt>
+            <dd>
+              {% if first_dive.number %}
+                <a href="/dives/{{ first_dive.number }}">{{ first_dive.date }} (#{{ first_dive.number }})</a>
+              {% else %}
+                {{ first_dive.date }}
+              {% endif %}
+            </dd>
+          </div>
+          <div>
+            <dt>Last dive</dt>
+            <dd>
+              {% if last_dive.number %}
+                <a href="/dives/{{ last_dive.number }}">{{ last_dive.date }} (#{{ last_dive.number }})</a>
+              {% else %}
+                {{ last_dive.date }}
+              {% endif %}
+            </dd>
+          </div>
+          <div><dt>Total bottom time</dt><dd>{{ bottom_time }}</dd></div>
+        </dl>
+      </article>
+
+      <article class="dive-panel">
+        <h3>Dive time</h3>
+        <dl class="stats-kv-grid">
+          <div><dt>Longest</dt><dd>{% if dive_time.longest_number %}<a href="/dives/{{ dive_time.longest_number }}">{{ dive_time.longest }}</a>{% else %}{{ dive_time.longest }}{% endif %}</dd></div>
+          <div><dt>Shortest</dt><dd>{% if dive_time.shortest_number %}<a href="/dives/{{ dive_time.shortest_number }}">{{ dive_time.shortest }}</a>{% else %}{{ dive_time.shortest }}{% endif %}</dd></div>
+          <div><dt>Average</dt><dd>{{ dive_time.average }}</dd></div>
+        </dl>
+      </article>
+
+      <article class="dive-panel">
+        <h3>Depth</h3>
+        <dl class="stats-kv-grid">
+          <div><dt>Deepest</dt><dd>{% if depth.deepest_number %}<a href="/dives/{{ depth.deepest_number }}">{{ depth.deepest }}</a>{% else %}{{ depth.deepest }}{% endif %}</dd></div>
+          <div><dt>Shallowest</dt><dd>{% if depth.shallowest_number %}<a href="/dives/{{ depth.shallowest_number }}">{{ depth.shallowest }}</a>{% else %}{{ depth.shallowest }}{% endif %}</dd></div>
+          <div><dt>Average</dt><dd>{{ depth.average }}</dd></div>
+        </dl>
+      </article>
+
+      <article class="dive-panel">
+        <h3>Water temperature</h3>
+        <dl class="stats-kv-grid">
+          <div><dt>Coldest</dt><dd>{% if water_temp.coldest_number %}<a href="/dives/{{ water_temp.coldest_number }}">{{ water_temp.coldest }}</a>{% else %}{{ water_temp.coldest }}{% endif %}</dd></div>
+          <div><dt>Warmest</dt><dd>{% if water_temp.warmest_number %}<a href="/dives/{{ water_temp.warmest_number }}">{{ water_temp.warmest }}</a>{% else %}{{ water_temp.warmest }}{% endif %}</dd></div>
+          <div><dt>Average</dt><dd>{{ water_temp.average }}</dd></div>
+        </dl>
+      </article>
+
+      <article class="dive-panel">
+        <h3>Air temperature</h3>
+        <dl class="stats-kv-grid">
+          <div><dt>Coldest</dt><dd>{% if air_temp.coldest_number %}<a href="/dives/{{ air_temp.coldest_number }}">{{ air_temp.coldest }}</a>{% else %}{{ air_temp.coldest }}{% endif %}</dd></div>
+          <div><dt>Warmest</dt><dd>{% if air_temp.warmest_number %}<a href="/dives/{{ air_temp.warmest_number }}">{{ air_temp.warmest }}</a>{% else %}{{ air_temp.warmest }}{% endif %}</dd></div>
+          <div><dt>Average</dt><dd>{{ air_temp.average }}</dd></div>
+        </dl>
+      </article>
+
+      <article class="dive-panel stats-panel-wide">
+        <h3>Classifications</h3>
+        <dl class="stats-kv-grid">
+          {% for row in classification_rows %}
+            <div><dt>{{ row.label }}</dt><dd>{{ row.value }}</dd></div>
+          {% endfor %}
+        </dl>
+      </article>
+
+      {% if certification_rows is not empty %}
+        <article class="dive-panel stats-panel-wide">
+          <h3>Certifications</h3>
+          <div class="certifications-grid">
+            {% for cert in certification_rows %}
+              <article class="cert-card">
+                <dl class="stats-kv-grid cert-kv-grid">
+                  {% if cert.organisation %}
+                    <div><dt>Organisation</dt><dd>{{ cert.organisation }}</dd></div>
+                  {% endif %}
+                  {% if cert.certification %}
+                    <div><dt>Certification</dt><dd>{{ cert.certification }}</dd></div>
+                  {% endif %}
+                  {% if cert.date %}
+                    <div><dt>Date</dt><dd>{{ cert.date }}</dd></div>
+                  {% endif %}
+                  {% if cert.cert_number %}
+                    <div><dt>Cert. #</dt><dd>{{ cert.cert_number }}</dd></div>
+                  {% endif %}
+                  {% if cert.instructor %}
+                    <div><dt>Instructor</dt><dd>{{ cert.instructor }}</dd></div>
+                  {% endif %}
+                </dl>
+                {% if cert.front_image_url or cert.back_image_url %}
+                  <ul class="gallery-grid cert-gallery-grid">
+                    {% if cert.front_image_url %}
+                      <li>
+                        <a href="{{ cert.front_image_url }}" data-lightbox>
+                          <img src="{{ cert.front_image_url }}" alt="{{ cert.certification|default('Certification') }} front">
+                        </a>
+                      </li>
+                    {% endif %}
+                    {% if cert.back_image_url %}
+                      <li>
+                        <a href="{{ cert.back_image_url }}" data-lightbox>
+                          <img src="{{ cert.back_image_url }}" alt="{{ cert.certification|default('Certification') }} back">
+                        </a>
+                      </li>
+                    {% endif %}
+                  </ul>
+                {% endif %}
+              </article>
+            {% endfor %}
+          </div>
+        </article>
+      {% endif %}
+
+      <article class="dive-panel stats-panel-wide">
+        <h3>Depth distribution</h3>
+        <canvas id="stats-depth-chart" width="700" height="320" data-depth-distribution='{{ depth_distribution_json|e('html_attr') }}'></canvas>
+        <ul class="stats-depth-legend">
+          {% for bucket in depth_distribution %}
+            <li><strong>{{ bucket.label }}</strong>: {{ bucket.count }} ({{ bucket.percent }}%)</li>
+          {% endfor %}
+        </ul>
+      </article>
+    </section>
+  </section>
+
+  <script src="/assets/js/stats-chart.js" defer></script>
+  <script src="/assets/js/lightbox.js" defer></script>
+{% endblock %}

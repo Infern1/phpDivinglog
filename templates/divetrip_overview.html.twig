@@ -1,0 +1,37 @@
+{% extends 'layout.html.twig' %}
+
+{% block content %}
+  <section class="dive-overview-panel">
+    <div class="dive-overview-head">
+      <h2>Trips</h2>
+    </div>
+
+    <div class="table-wrap">
+      <table class="dives-table" data-dives-table data-sortable>
+        <thead>
+          <tr>
+            <th scope="col">Trip</th>
+            <th scope="col">Dates</th>
+            <th scope="col">Dives</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in trips %}
+            {% set trip = row.trip %}
+            <tr data-href="/trips/{{ trip.id }}" tabindex="0" role="link" aria-label="Open trip {{ trip.name }}">
+              <td><a href="/trips/{{ trip.id }}">{{ trip.name }}</a></td>
+              <td>
+                {% if trip.dateFrom %}{{ trip.dateFrom|date('Y-m-d') }}{% else %}-{% endif %}
+                -
+                {% if trip.dateTo %}{{ trip.dateTo|date('Y-m-d') }}{% else %}-{% endif %}
+              </td>
+              <td>{{ row.diveCount }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <script src="/assets/js/tables.js" defer></script>
+{% endblock %}

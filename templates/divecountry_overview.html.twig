@@ -1,0 +1,38 @@
+{% extends 'layout.html.twig' %}
+
+{% block content %}
+  <section class="dive-overview-panel">
+    <div class="dive-overview-head">
+      <h2>Countries</h2>
+    </div>
+
+    <div class="table-wrap">
+      <table class="dives-table" data-dives-table data-sortable>
+        <thead>
+          <tr>
+            <th scope="col">Country</th>
+            <th scope="col">Flag</th>
+            <th scope="col">Dives</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for country in countries %}
+            <tr data-href="/countries/{{ country.id }}" tabindex="0" role="link" aria-label="Open country {{ country.name }}">
+              <td><a href="/countries/{{ country.id }}">{{ country.name }}</a></td>
+              <td>
+                {% if country.flagUrl %}
+                  <img src="{{ country.flagUrl }}" alt="Flag of {{ country.name }}" class="country-flag-inline">
+                {% else %}
+                  -
+                {% endif %}
+              </td>
+              <td>{{ country.diveCount }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <script src="/assets/js/tables.js" defer></script>
+{% endblock %}

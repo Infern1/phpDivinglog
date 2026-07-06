@@ -1,0 +1,18 @@
+{% extends 'layout.html.twig' %}
+
+{% block content %}
+  <section class="dive-overview-panel">
+    <div class="dive-overview-head">
+      <h2>{{ shop.name }}</h2>
+    </div>
+
+    <div class="entity-meta-grid">
+      {% if shop.shopType %}
+        <p><strong>Type:</strong> {{ shop.shopType }}</p>
+      {% endif %}
+      {% if shop.comment %}
+        <p><strong>Comment:</strong> {{ shop.comment }}</p>
+      {% endif %}
+    </div>
+  </section>
+{% endblock %}

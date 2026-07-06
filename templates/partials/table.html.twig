@@ -1,0 +1,20 @@
+<div class="table-wrap">
+  <table class="dives-table" data-sortable>
+    <thead>
+      <tr>
+        {% for heading in headings %}
+          <th scope="col">{{ heading }}</th>
+        {% endfor %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in rows %}
+        <tr>
+          {% for value in row %}
+            <td>{{ value }}</td>
+          {% endfor %}
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>

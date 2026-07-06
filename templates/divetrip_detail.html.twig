@@ -1,0 +1,35 @@
+{% extends 'layout.html.twig' %}
+
+{% block content %}
+  <section class="dive-overview-panel">
+    <div class="dive-overview-head">
+      <h2>{{ trip.name }}</h2>
+    </div>
+    <div class="entity-meta-grid">
+      {% if trip.dateFrom %}
+        <p><strong>From:</strong> {{ trip.dateFrom|date('Y-m-d') }}</p>
+      {% endif %}
+      {% if trip.dateTo %}
+        <p><strong>To:</strong> {{ trip.dateTo|date('Y-m-d') }}</p>
+      {% endif %}
+      {% if trip.countryId %}
+        <p><strong>Country:</strong> <a href="/countries/{{ trip.countryId }}">Open country</a></p>
+      {% endif %}
+      {% if trip.shopId %}
+        <p><strong>Shop:</strong> <a href="/shops/{{ trip.shopId }}">Open shop</a></p>
+      {% endif %}
+      {% if trip.comment %}
+        <p><strong>Comment:</strong> {{ trip.comment }}</p>
+      {% endif %}
+    </div>
+  </section>
+
+  <section class="dive-overview-panel">
+    <div class="dive-overview-head">
+      <h2>Dives in this trip</h2>
+    </div>
+    {% include 'partials/dive_rows.html.twig' with { dives: dives, empty_message: 'No dives recorded for this trip yet.' } %}
+  </section>
+
+  <script src="/assets/js/tables.js" defer></script>
+{% endblock %}

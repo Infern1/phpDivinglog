@@ -1,0 +1,211 @@
+{% extends 'layout.html.twig' %}
+
+{% block content %}
+  <section class="dive-detail-page">
+    <header class="dive-hero dive-overview-panel dive-hero-wide">
+      <div class="dive-hero-top">
+        <div class="dive-hero-title-wrap">
+          <div class="dive-hero-badge">Dive #{{ dive.number }}</div>
+          <div class="dive-hero-title-text">
+            <h2>{{ related_site_name ?: ('Dive #' ~ dive.number) }}</h2>
+            <p>{{ location_display }} · {{ date_display }} · {{ start_time_display }} - {{ end_time_display }}</p>
+          </div>
+        </div>
+
+        <div class="dive-hero-actions">
+          <nav class="dive-sequence-nav dive-sequence-nav-top" aria-label="Dive sequence navigation">
+            {% if previous_dive_number %}
+              <a href="/dives/{{ previous_dive_number }}" class="dive-sequence-link" aria-label="Previous dive">←</a>
+            {% else %}
+              <span class="dive-sequence-link is-disabled" aria-disabled="true">←</span>
+            {% endif %}
+            {% if next_dive_number %}
+              <a href="/dives/{{ next_dive_number }}" class="dive-sequence-link" aria-label="Next dive">→</a>
+            {% else %}
+              <span class="dive-sequence-link is-disabled" aria-disabled="true">→</span>
+            {% endif %}
+          </nav>
+        </div>
+      </div>
+
+      <section class="dive-metric-grid dive-metric-grid-hero" aria-label="Dive summary metrics">
+        <article class="dive-metric-card dive-metric-card-hero">
+          <h4>Depth</h4>
+          <p>{{ depth_display }} {{ depth_label }}</p>
+        </article>
+        <article class="dive-metric-card dive-metric-card-hero">
+          <h4>Avg depth</h4>
+          <p>{{ average_depth_display }}</p>
+        </article>
+        <article class="dive-metric-card dive-metric-card-hero">
+          <h4>Duration</h4>
+          <p>{{ duration_hours }}h {{ duration_minutes }}m</p>
+        </article>
+        <article class="dive-metric-card dive-metric-card-hero">
+          <h4>Temp</h4>
+          <p>{{ temperature_display }}</p>
+        </article>
+        <article class="dive-metric-card dive-metric-card-hero">
+          <h4>Visibility</h4>
+          <p>{{ visibility_display }}</p>
+        </article>
+        <article class="dive-metric-card dive-metric-card-hero">
+          <h4>SAC</h4>
+          <p>{{ sac_display }}</p>
+        </article>
+      </section>
+    </header>
+
+    <section class="dive-layout-grid" data-detail-layout>
+      <aside class="dive-logbook-column">
+        <article class="dive-panel dive-logbook-panel" data-logbook-pane>
+          <h3>Logbook</h3>
+          <ul class="logbook-list" data-logbook-list>
+            {% for entry in logbook_dives %}
+              <li class="logbook-item{% if entry.active %} is-active{% endif %}" data-dive-number="{{ entry.number }}">
+                <a href="/dives/{{ entry.number }}" class="logbook-link" data-logbook-link {% if entry.active %}aria-current="page"{% endif %}>
+                  <span class="logbook-number">#{{ entry.number }}</span>
+                  <span class="logbook-meta">{{ entry.date }} · {{ entry.depth }} {{ entry.depth_label }}</span>
+                  <span class="logbook-meta">{{ entry.duration }} min · {{ entry.location }}</span>
+                </a>
+              </li>
+            {% endfor %}
+          </ul>
+        </article>
+      </aside>
+
+      <div class="dive-content-column">
+        <section class="dive-detail-grid">
+          <div class="dive-main-column">
+            <article class="dive-panel">
+              <h3>Dive profile</h3>
+              <canvas id="profile-chart" data-dive-number="{{ dive.number }}" width="700" height="220"></canvas>
+              <p id="profile-chart-legend" data-profile-live="depth" aria-live="polite">Move over the chart to inspect depth values.</p>
+            </article>
+
+            <article class="dive-panel">
+              <h3>Comments</h3>
+              <div>{{ comment_html|raw }}</div>
+            </article>
+
+            <article class="dive-panel">
+              <h3>Tanks</h3>
+              <div class="tanks-grid">
+                {% if tanks_display is empty %}
+                  <p class="tank-empty">No tank information recorded.</p>
+                {% else %}
+                  {% for tank in tanks_display %}
+                    <article class="tank-card">
+                      <h4>{{ tank.name }}</h4>
+                      <dl>
+                        <div><dt>Volume</dt><dd>{{ tank.volume }}</dd></div>
+                        <div><dt>Press. Start</dt><dd>{{ tank.pressure_start }}</dd></div>
+                        <div><dt>Press. End</dt><dd>{{ tank.pressure_end }}</dd></div>
+                        <div><dt>O2%</dt><dd>{{ tank.o2 }}</dd></div>
+                      </dl>
+                    </article>
+                  {% endfor %}
+                {% endif %}
+              </div>
+            </article>
+
+            <article class="dive-panel">
+              <h3>Pictures</h3>
+              <ul class="gallery-grid">
+                {% for picture in pictures %}
+                  <li>
+                    <a href="{{ picture.url }}" data-lightbox>
+                      <img src="{{ picture.thumbUrl }}" alt="{{ picture.description|default('Dive image') }}">
+                    </a>
+                  </li>
+                {% endfor %}
+              </ul>
+            </article>
+          </div>
+
+          <aside class="dive-side-column">
+            <article class="dive-panel">
+              <h3>Details</h3>
+              <dl class="dive-details-grid">
+                <div class="dive-details-full">
+                  <dt>Dive site</dt>
+                  <dd>
+                    {% if dive_site %}
+                      <a href="/sites/{{ dive_site.id }}">{{ dive_site.name }}</a>
+                    {% elseif related_site_name %}
+                      {{ related_site_name }}
+                    {% else %}
+                      -
+                    {% endif %}
+                  </dd>
+                </div>
+                <div class="dive-details-full">
+                  <dt>Location</dt>
+                  <dd>{{ location_display }}</dd>
+                </div>
+                <div>
+                  <dt>Country</dt>
+                  <dd>
+                    {% if dive_country %}
+                      <a href="/countries/{{ dive_country.id }}">{{ dive_country.name }}</a>
+                    {% elseif dive.countryId is defined and dive.countryId > 0 and related_country_name %}
+                      <a href="/countries/{{ dive.countryId }}">{{ related_country_name }}</a>
+                    {% elseif related_country_name %}
+                      {{ related_country_name }}
+                    {% else %}
+                      -
+                    {% endif %}
+                  </dd>
+                </div>
+                <div>
+                  <dt>Max. depth</dt>
+                  <dd>{{ depth_display }} {{ depth_label }}</dd>
+                </div>
+                <div>
+                  <dt>Avg. depth</dt>
+                  <dd>{{ average_depth_display }}</dd>
+                </div>
+                <div>
+                  <dt>Buddy</dt>
+                  <dd>{{ buddy_display }}</dd>
+                </div>
+                <div>
+                  <dt>Boat/Operator</dt>
+                  <dd>{% if dive_shop %}<a href="/shops/{{ dive_shop.id }}">{{ dive_shop.name }}</a>{% elseif related_shop_name %}{{ related_shop_name }}{% else %}-{% endif %}</dd>
+                </div>
+                <div>
+                  <dt>Weather</dt>
+                  <dd>{{ weather_display }}</dd>
+                </div>
+                <div>
+                  <dt>Weight</dt>
+                  <dd>{{ weight_display }}</dd>
+                </div>
+                <div>
+                  <dt>Trip</dt>
+                  <dd>{% if dive_trip %}<a href="/trips/{{ dive_trip.id }}">{{ dive_trip.name }}</a>{% elseif related_trip_name %}{{ related_trip_name }}{% else %}-{% endif %}</dd>
+                </div>
+                <div>
+                  <dt>Temp. Air</dt>
+                  <dd>{{ air_temperature_display }}</dd>
+                </div>
+                <div>
+                  <dt>Temp. max. d.</dt>
+                  <dd>{{ temperature_display }}</dd>
+                </div>
+                <div>
+                  <dt>Visibility</dt>
+                  <dd>{{ visibility_display }}</dd>
+                </div>
+              </dl>
+            </article>
+          </aside>
+        </section>
+      </div>
+    </section>
+  </section>
+
+  <script src="/assets/js/tables.js" defer></script>
+  <script src="/assets/js/profile-chart.js" defer></script>
+  <script src="/assets/js/lightbox.js" defer></script>
+{% endblock %}
