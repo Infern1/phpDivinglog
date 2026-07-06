@@ -240,15 +240,15 @@ final readonly class DiveRepository
             return [];
         }
 
-        $placeholders = implode(', ', array_fill(0, count($ids), '?'));
-        $sql = sprintf('SELECT * FROM %sLogbook WHERE LogID IN (%s)', $this->tablePrefix, $placeholders);
-        $statement = $this->pdo->prepare($sql);
-        foreach ($ids as $index => $id) {
-            $statement->bindValue($index + 1, $id, PDO::PARAM_INT);
+        $rows = $this->queryByIds('LogID', $ids);
+        $idColumn = 'LogID';
+        if ($rows === null) {
+            $rows = $this->queryByIds('Number', $ids);
+            $idColumn = 'Number';
         }
-
-        $statement->execute();
-        $rows = $statement->fetchAll();
+        if ($rows === null) {
+            return [];
+        }
 
         $metaByLogId = [];
         foreach ($rows as $row) {
@@ -256,7 +256,7 @@ final readonly class DiveRepository
                 continue;
             }
 
-            $logId = (int) ($row['LogID'] ?? $row['ID'] ?? 0);
+            $logId = (int) ($row[$idColumn] ?? $row['LogID'] ?? $row['Number'] ?? $row['ID'] ?? 0);
             if ($logId <= 0) {
                 continue;
             }
@@ -273,6 +273,32 @@ final readonly class DiveRepository
         }
 
         return $metaByLogId;
+    }
+
+    /**
+     * @param list<int> $ids
+     * @return list<array<string, mixed>>|null
+     */
+    private function queryByIds(string $column, array $ids): ?array
+    {
+        $placeholders = implode(', ', array_fill(0, count($ids), '?'));
+        $sql = sprintf('SELECT * FROM %sLogbook WHERE %s IN (%s)', $this->tablePrefix, $column, $placeholders);
+
+        try {
+            $statement = $this->pdo->prepare($sql);
+            foreach ($ids as $index => $id) {
+                $statement->bindValue($index + 1, $id, PDO::PARAM_INT);
+            }
+
+            $statement->execute();
+            return $statement->fetchAll();
+        } catch (\PDOException $exception) {
+            if ($this->isMissingColumn($exception)) {
+                return null;
+            }
+
+            throw $exception;
+        }
     }
 
     public function findPreviousNumber(int $number): ?int
