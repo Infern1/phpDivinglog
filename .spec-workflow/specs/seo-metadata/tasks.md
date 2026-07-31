@@ -202,7 +202,7 @@
   - _Requirements: 8.1, 8.2, 8.3, 8.4_
   - _Prompt: Implement the task for spec seo-metadata, first run spec-workflow-guide to get the workflow guide then implement the task: Role: QA Engineer with PHPUnit HTTP smoke testing expertise | Task: Extend tests/Http/WebSmokeTest.php per requirement 8 with tests asserting: (1) two distinct seeded dives (and two distinct seeded sites) produce different title, meta description, and canonical URL values; (2) a dive detail page's application/ld+json block parses as JSON and contains @type=WebPage with url/name matching the page's canonical/title; (3) canonical URL form differs correctly between a query-string-mode fixture and a path-mode fixture; (4) with APP_SEO_ENABLED=false the noindex meta appears and no canonical/JSON-LD block appears; (5) GET /summary always includes noindex regardless of the flag | Restrictions: Reuse the existing request() helper and fixtures; do not add new tooling or a JS test runner; keep each test isolated and deterministic | Success: All new tests pass under `composer test` and would fail if per-page uniqueness, JSON-LD validity, canonical mode-awareness, or the opt-out regressed. Set the task to [-] in tasks.md before starting, log the implementation with log-implementation after completion, then mark it [x]._
 
-- [-] 20. Verify the full gate and perform the manual structured-data validation pass
+- [x] 20. Verify the full gate and perform the manual structured-data validation pass
   - Files: none (verification task)
   - Run `composer test && composer stan && composer cs`. Manually: view-source a representative
     sample (dives overview, a dive detail, a dive-site detail, the stats page, the gallery) and
