@@ -37,7 +37,11 @@ final readonly class TripController
                 ];
             }, $rows),
             'title' => 'Dive Trips',
-            'meta_description' => sprintf('Browse %d dive %s logged in this logbook.', $total, $total === 1 ? 'trip' : 'trips'),
+            'meta_description' => $this->descriptionTruncator->truncate(sprintf(
+                'Browse %d dive %s logged in this logbook, each with its dates and number of dives.',
+                $total,
+                $total === 1 ? 'trip' : 'trips'
+            )),
         ];
     }
 

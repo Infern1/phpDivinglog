@@ -41,7 +41,11 @@ final readonly class EquipmentController
                 return $mapped;
             }, $rows),
             'title' => 'Equipment',
-            'meta_description' => sprintf('Browse %d equipment %s logged in this logbook.', $total, $total === 1 ? 'item' : 'items'),
+            'meta_description' => $this->descriptionTruncator->truncate(sprintf(
+                'Browse %d equipment %s logged in this logbook, each with manufacturer, type, and service due dates.',
+                $total,
+                $total === 1 ? 'item' : 'items'
+            )),
         ];
     }
 

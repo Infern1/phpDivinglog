@@ -204,9 +204,42 @@ body {
   margin-bottom: 0.9rem;
 }
 
+.dive-overview-head h1,
 .dive-overview-head h2,
-.dive-panel h3 {
+.dive-panel h2 {
   margin: 0;
+}
+
+.dive-404-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 3rem 1.5rem;
+  text-align: center;
+}
+
+.dive-404-icon {
+  font-size: 4rem;
+  color: var(--primary, #6750a4);
+}
+
+.dive-404-panel h1 {
+  margin: 0;
+}
+
+.dive-404-lede {
+  max-width: 32rem;
+  font-size: 1.05rem;
+}
+
+.dive-404-panel p {
+  max-width: 32rem;
+  color: var(--on-surface-variant, #49454f);
+}
+
+.dive-404-panel .button {
+  margin-top: 0.6rem;
 }
 
 .dive-overview-controls {
@@ -341,7 +374,7 @@ ignore
   min-width: 0;
 }
 
-.dive-hero h2 {
+.dive-hero h1 {
   margin: 0;
   font-size: clamp(1.35rem, 1.8vw, 1.95rem);
 }
@@ -409,7 +442,7 @@ ignore
   background: color-mix(in srgb, var(--surface-container-high, #ece6f0) 80%, transparent);
 }
 
-.dive-metric-card h4 {
+.dive-metric-card .dive-metric-label {
   margin: 0;
   font-size: 0.78rem;
   letter-spacing: 0.03em;
@@ -439,7 +472,7 @@ ignore
   overflow: auto;
 }
 
-.dive-logbook-panel h3 {
+.dive-logbook-panel h2 {
   position: sticky;
   top: 0;
   z-index: 2;
@@ -530,7 +563,7 @@ ignore
   padding: 0.7rem;
 }
 
-.tank-card h4 {
+.tank-card h3 {
   margin: 0 0 0.5rem;
 }
 
@@ -828,7 +861,7 @@ ignore
   padding: 0.9rem;
 }
 
-.summary-shell h3 {
+.summary-shell h1 {
   margin-top: 0;
 }
 

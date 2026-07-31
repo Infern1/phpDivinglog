@@ -40,7 +40,11 @@ final readonly class CountryController
                 return $country;
             }, $rows),
             'title' => 'Countries',
-            'meta_description' => sprintf('Browse %d %s logged in this logbook.', $total, $total === 1 ? 'country' : 'countries'),
+            'meta_description' => $this->descriptionTruncator->truncate(sprintf(
+                'Browse %d %s logged in this logbook, each with its dive sites, flag, and total number of dives.',
+                $total,
+                $total === 1 ? 'country' : 'countries'
+            )),
         ];
     }
 

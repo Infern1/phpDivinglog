@@ -26,7 +26,11 @@ final readonly class CityController
         return [
             'cities' => $cities,
             'title' => 'Cities',
-            'meta_description' => sprintf('Browse %d %s logged in this logbook.', $total, $total === 1 ? 'city' : 'cities'),
+            'meta_description' => $this->descriptionTruncator->truncate(sprintf(
+                'Browse %d %s featured in this dive log, each a logged diving destination.',
+                $total,
+                $total === 1 ? 'city' : 'cities'
+            )),
         ];
     }
 

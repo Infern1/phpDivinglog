@@ -26,7 +26,11 @@ final readonly class ShopController
         return [
             'shops' => $shops,
             'title' => 'Dive Shops',
-            'meta_description' => sprintf('Browse %d dive %s logged in this logbook.', $total, $total === 1 ? 'shop' : 'shops'),
+            'meta_description' => $this->descriptionTruncator->truncate(sprintf(
+                'Browse %d dive %s logged in this logbook, each with its location and shop type.',
+                $total,
+                $total === 1 ? 'shop' : 'shops'
+            )),
         ];
     }
 

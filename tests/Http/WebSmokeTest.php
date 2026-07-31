@@ -103,7 +103,8 @@ final class WebSmokeTest extends TestCase
         $response = $this->request('/dives/9999');
 
         self::assertSame(404, $response['status']);
-        self::assertStringContainsString('Dive not found', $response['body']);
+        self::assertStringContainsString('Your Buddy Isn\'t Here', $response['body']);
+        self::assertStringContainsString('<meta name="robots" content="noindex,nofollow">', $response['body']);
     }
 
     public function testDiveDetailFullIncludesNavScript(): void
@@ -134,7 +135,7 @@ final class WebSmokeTest extends TestCase
         $response = $this->request('/dives/9999', ['X-Requested-With' => 'XMLHttpRequest']);
 
         self::assertSame(404, $response['status']);
-        self::assertStringContainsString('Dive not found', $response['body']);
+        self::assertStringContainsString('Your Buddy Isn\'t Here', $response['body']);
     }
 
     public function testSitesOverviewRenders(): void
@@ -175,7 +176,7 @@ final class WebSmokeTest extends TestCase
         $response = $this->request('/sites/9999');
 
         self::assertSame(404, $response['status']);
-        self::assertStringContainsString('Site not found', $response['body']);
+        self::assertStringContainsString('Your Buddy Isn\'t Here', $response['body']);
     }
 
     public function testCountriesOverviewRenders(): void
@@ -205,7 +206,7 @@ final class WebSmokeTest extends TestCase
         $response = $this->request('/countries/9999');
 
         self::assertSame(404, $response['status']);
-        self::assertStringContainsString('Country not found', $response['body']);
+        self::assertStringContainsString('Your Buddy Isn\'t Here', $response['body']);
     }
 
     public function testCitiesOverviewRenders(): void
@@ -230,7 +231,7 @@ final class WebSmokeTest extends TestCase
         $response = $this->request('/cities/9999');
 
         self::assertSame(404, $response['status']);
-        self::assertStringContainsString('City not found', $response['body']);
+        self::assertStringContainsString('Your Buddy Isn\'t Here', $response['body']);
     }
 
     public function testShopsOverviewRenders(): void
@@ -255,7 +256,7 @@ final class WebSmokeTest extends TestCase
         $response = $this->request('/shops/9999');
 
         self::assertSame(404, $response['status']);
-        self::assertStringContainsString('Shop not found', $response['body']);
+        self::assertStringContainsString('Your Buddy Isn\'t Here', $response['body']);
     }
 
     public function testTripsOverviewRenders(): void
@@ -285,7 +286,7 @@ final class WebSmokeTest extends TestCase
         $response = $this->request('/trips/9999');
 
         self::assertSame(404, $response['status']);
-        self::assertStringContainsString('Trip not found', $response['body']);
+        self::assertStringContainsString('Your Buddy Isn\'t Here', $response['body']);
     }
 
     public function testEquipmentOverviewRenders(): void
@@ -313,7 +314,17 @@ final class WebSmokeTest extends TestCase
         $response = $this->request('/equipment/9999');
 
         self::assertSame(404, $response['status']);
-        self::assertStringContainsString('Equipment not found', $response['body']);
+        self::assertStringContainsString('Your Buddy Isn\'t Here', $response['body']);
+    }
+
+    public function testUnmatchedRouteReturnsThemed404Page(): void
+    {
+        $response = $this->request('/this-page-definitely-does-not-exist');
+
+        self::assertSame(404, $response['status']);
+        self::assertStringContainsString('Your Buddy Isn\'t Here', $response['body']);
+        self::assertStringContainsString('Ascend to the Surface', $response['body']);
+        self::assertStringContainsString('<meta name="robots" content="noindex,nofollow">', $response['body']);
     }
 
     public function testStatsOverviewRenders(): void
@@ -518,6 +529,59 @@ final class WebSmokeTest extends TestCase
         self::assertStringContainsString('Dive Summary', $enabledResponse['body']);
         self::assertStringContainsString('Dive Summary', $disabledResponse['body']);
         self::assertSame($enabledResponse['body'], $disabledResponse['body']);
+    }
+
+    public function testSitemapXmlListsAllPagesWhenBaseUrlConfigured(): void
+    {
+        $response = $this->request('/sitemap.xml', [], ['APP_URL' => 'https://dives.example.com']);
+
+        self::assertSame(200, $response['status']);
+
+        $document = new \DOMDocument();
+        self::assertTrue($document->loadXML($response['body']));
+        self::assertStringContainsString('<loc>https://dives.example.com/</loc>', $response['body']);
+        self::assertStringContainsString('<loc>https://dives.example.com/dives/1</loc>', $response['body']);
+        self::assertStringContainsString('<loc>https://dives.example.com/sites/10</loc>', $response['body']);
+        self::assertStringContainsString('<loc>https://dives.example.com/gallery</loc>', $response['body']);
+    }
+
+    public function testSitemapXmlReturns404WhenBaseUrlNotConfigured(): void
+    {
+        // The default test environment doesn't set APP_URL.
+        $response = $this->request('/sitemap.xml');
+
+        self::assertSame(404, $response['status']);
+    }
+
+    public function testSitemapXmlReturns404WhenSeoDisabled(): void
+    {
+        $response = $this->request('/sitemap.xml', [], [
+            'APP_URL' => 'https://dives.example.com',
+            'APP_SEO_ENABLED' => 'false',
+        ]);
+
+        self::assertSame(404, $response['status']);
+    }
+
+    public function testRobotsTxtReferencesSitemapWhenSeoEnabled(): void
+    {
+        $response = $this->request('/robots.txt', [], ['APP_URL' => 'https://dives.example.com']);
+
+        self::assertSame(200, $response['status']);
+        self::assertStringContainsString('Allow: /', $response['body']);
+        self::assertStringContainsString('Sitemap: https://dives.example.com/sitemap.xml', $response['body']);
+    }
+
+    public function testRobotsTxtDisallowsAllWhenSeoDisabled(): void
+    {
+        $response = $this->request('/robots.txt', [], [
+            'APP_URL' => 'https://dives.example.com',
+            'APP_SEO_ENABLED' => 'false',
+        ]);
+
+        self::assertSame(200, $response['status']);
+        self::assertStringContainsString('Disallow: /', $response['body']);
+        self::assertStringNotContainsString('Sitemap:', $response['body']);
     }
 
     private function seedFixtureDatabase(): void

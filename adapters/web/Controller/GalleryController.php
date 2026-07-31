@@ -128,7 +128,11 @@ final readonly class GalleryController
             'pages' => $pages,
             'total' => $total,
             'title' => $currentPage > 1 ? sprintf('Dive Log Gallery — Page %d', $currentPage) : 'Dive Log Gallery',
-            'meta_description' => sprintf('Browse %d photo%s across the logbook.', $total, $total === 1 ? '' : 's'),
+            'meta_description' => $this->descriptionTruncator->truncate(sprintf(
+                'Browse %d photo%s across the logbook, each linked to its dive, site, and date — click any photo for full details.',
+                $total,
+                $total === 1 ? '' : 's'
+            )),
         ];
     }
 }

@@ -2,6 +2,68 @@
 
 All notable changes to phpDivingLog are documented in this file.
 
+## v4.2.1 — 2026-08-01
+
+### Fixes (surfaced by a real SEO audit against the v4.2.0 release)
+- Fixed a canonical-link bug: in query-string mode (`APP_QUERY_STRING=true`, the default), the
+  dives overview always canonicalized to `?type=dives` even when reached at the bare site root
+  `/` — the audit tool flagged this as "the specified canonical link points to a different page"
+  because it crawled `/` but got a canonical pointing elsewhere. `CanonicalUrlBuilder` now applies
+  the same root special-case in both routing modes, so `/` self-canonicalizes correctly.
+- Fixed the site-wide heading structure: no page had an `<h1>`, and the dive detail page skipped
+  straight from `<h2>` to `<h4>` for its stat-card labels. Every page now has exactly one `<h1>`
+  (the page's main title) with clean, unskipped nesting down to `<h2>`/`<h3>` for sub-sections.
+  The six dive-detail stat-card labels (Depth, Avg depth, Duration, Temp, Visibility, SAC) were
+  demoted from `<h4>` to plain labels (`<p class="dive-metric-label">`), since they were never
+  real document-outline headings — just small in-component labels — and using heading tags for
+  them was itself an accessibility anti-pattern (six spurious "headings" in a row).
+- Updated `custom.css` heading selectors to match (`.dive-overview-head`, `.dive-hero`,
+  `.dive-panel`, `.dive-logbook-panel`, `.tank-card`, `.summary-shell`); visual appearance is
+  unchanged, only the underlying tag semantics.
+- Added a dynamic XML sitemap at `/sitemap.xml` (every dive/site/country/city/shop/trip/equipment
+  overview and detail page, plus stats and the gallery overview), built with the same
+  `CanonicalUrlBuilder` already used for canonical links so sitemap entries always match. Skipped
+  when `APP_SEO_ENABLED=false` or no public base URL is configured.
+- Added a dynamic `/robots.txt` that references the sitemap (`Sitemap: <base>/sitemap.xml`) when
+  SEO is enabled, or disallows all crawling (`Disallow: /`) when `APP_SEO_ENABLED=false`, keeping
+  the two in sync with each other and with the rest of the SEO opt-out.
+- Fixed two vendored-asset console errors: `material-dynamic-colors.min.js` and `beer.min.js` are
+  ES modules but were loaded as classic scripts (`Uncaught SyntaxError: Unexpected token 'export'`)
+  — now loaded with `type="module"`. Also removed a duplicate, non-`fonts/`-prefixed font `url()`
+  left over from an earlier vendor patch that 404'd on every page load for all four Material
+  Symbols weights (outlined/rounded/sharp/subset); the working `fonts/`-prefixed reference already
+  covered the actual font loading, so the broken duplicate was simply dead weight.
+- Every page's `<title>` (and matching WebPage schema `name`) now carries the site's identity as
+  a suffix, e.g. `All Dives — Robin Diver Dive Log` instead of just `All Dives`. Applied centrally
+  in `public/index.php`'s render pipeline rather than in each controller, so it stays
+  automatically in sync with the `<title>` tag and the JSON-LD `name` field. The specific, unique
+  part of the title comes first and the site name last, so search results (which truncate long
+  titles) keep the most useful part visible even when the site-name suffix gets cut off. The
+  in-place AJAX dive-navigation title (`data-dive-title`, set as `document.title` when switching
+  dives without a full page reload) was updated to match, so the browser tab title stays
+  consistent whether a dive page is reached via a fresh load or via prev/next navigation. When
+  the SEO opt-out (`APP_SEO_ENABLED=false`) is active, titles still fall back to the site name
+  alone with no dangling separator.
+- Enriched meta descriptions across every overview page (dives, sites, countries, cities, shops,
+  trips, equipment, gallery), which previously were thin one-liners like "Browse 202 logged
+  dives." (24 characters) — a real SEO check flagged this as well under the ~120–160 character
+  range search engines display. Descriptions now describe what each page actually offers (e.g.
+  "Browse 202 logged dives with site, depth, duration, and date for every entry — searchable and
+  sortable by newest, deepest, or longest."). The dive-detail description also gained duration
+  and buddy names when available, and the stats-page description gained the logbook's first/last
+  dive date range. A few detail pages (city, country) were left as-is since there's no further
+  truthful content to add without new database queries. Title tags were deliberately left alone
+  — they're already concise and informative, and padding them just to hit a target length would
+  be counter to Google's own guidance against keyword-stuffed titles.
+- Fixed the footer's GitHub link, which pointed at `github.com/phpdivinglog/phpdivinglog` (likely
+  a 404) instead of the project's actual repository, `github.com/Infern1/phpDivinglog`. Also
+  aligned the Composer package name (`composer.json`'s internal identifier, not a link) from
+  `phpdivinglog/phpdivinglog` to `infern1/phpdivinglog` for consistency.
+- Added a proper, on-brand 404 page (previously just a plain-text "Not found") used consistently
+  for every not-found case — unknown routes and missing dives/sites/countries/cities/shops/
+  trips/equipment alike. Marked `noindex,nofollow` (both the `<meta>` tag and an `X-Robots-Tag`
+  header) since a 404 is never real content, regardless of the SEO opt-out setting.
+
 ## v4.2.0 — 2026-07-31
 
 ### SEO metadata (unique title, description, canonical, WebPage schema)

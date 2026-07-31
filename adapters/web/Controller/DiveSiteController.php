@@ -40,7 +40,11 @@ final readonly class DiveSiteController
                 return $site;
             }, $rows),
             'title' => 'Dive Sites',
-            'meta_description' => sprintf('Browse %d dive %s logged in this logbook.', $total, $total === 1 ? 'site' : 'sites'),
+            'meta_description' => $this->descriptionTruncator->truncate(sprintf(
+                'Browse %d dive %s logged in this logbook, each with its dive count, water type, and maximum depth recorded.',
+                $total,
+                $total === 1 ? 'site' : 'sites'
+            )),
         ];
     }
 

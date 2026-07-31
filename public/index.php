@@ -13,14 +13,66 @@ use PhpDivingLog\Adapters\Web\Controller\EquipmentController;
 use PhpDivingLog\Adapters\Web\Controller\GalleryController;
 use PhpDivingLog\Adapters\Web\Controller\ProfileController;
 use PhpDivingLog\Adapters\Web\Controller\ShopController;
+use PhpDivingLog\Adapters\Web\Controller\SitemapController;
 use PhpDivingLog\Adapters\Web\Controller\SummaryController;
 use PhpDivingLog\Adapters\Web\Controller\TripController;
 
 $container = require dirname(__DIR__) . '/adapters/web/bootstrap.php';
+$repositories = $container['repositories'];
+$services = $container['services'];
 
 $router = new Router();
 $requestUri = $_SERVER['REQUEST_URI'] ?? '/';
+$requestPath = (string) (parse_url($requestUri, PHP_URL_PATH) ?? '/');
 $queryMode = $container['config']->queryStringMode();
+
+if ($requestPath === '/robots.txt') {
+    header('Content-Type: text/plain; charset=UTF-8');
+
+    if (!$container['config']->seoEnabled()) {
+        echo "User-agent: *\nDisallow: /\n";
+        return;
+    }
+
+    $baseUrl = rtrim($container['config']->appUrl(), '/');
+    echo "User-agent: *\nAllow: /\n";
+    if ($baseUrl !== '') {
+        echo "Sitemap: {$baseUrl}/sitemap.xml\n";
+    }
+    return;
+}
+
+if ($requestPath === '/sitemap.xml') {
+    if (!$container['config']->seoEnabled()) {
+        http_response_code(404);
+        header('Content-Type: text/plain; charset=UTF-8');
+        echo 'Not found';
+        return;
+    }
+
+    $sitemapController = new SitemapController(
+        $repositories['dives'],
+        $repositories['diveSites'],
+        $repositories['countries'],
+        $repositories['cities'],
+        $repositories['shops'],
+        $repositories['trips'],
+        $repositories['equipment'],
+        $services['canonicalUrlBuilder']
+    );
+
+    $xml = $sitemapController->render();
+    if ($xml === null) {
+        http_response_code(404);
+        header('Content-Type: text/plain; charset=UTF-8');
+        echo 'Sitemap unavailable: APP_URL is not configured.';
+        return;
+    }
+
+    header('Content-Type: application/xml; charset=UTF-8');
+    echo $xml;
+    return;
+}
 
 if ($queryMode) {
     if (isset($_GET['type'])) {
@@ -37,8 +89,6 @@ if ($queryMode) {
     $match = $router->resolve($requestUri);
 }
 
-$repositories = $container['repositories'];
-$services = $container['services'];
 $profile = $repositories['personal']->getProfile();
 $displayName = trim(($profile?->firstName ?? '') . ' ' . ($profile?->lastName ?? ''));
 $appName = $displayName !== '' ? $displayName . ' Dive Log' : 'phpDivingLog';
@@ -54,7 +104,15 @@ $seoContextBuilder = $services['pageSeoContextBuilder'];
 /**
  * @param array<string, mixed> $payload
  */
-$renderPage = static function (string $template, array $payload, string $route, ?int $id) use ($renderer, $seoContextBuilder): string {
+$renderPage = static function (string $template, array $payload, string $route, ?int $id) use ($renderer, $seoContextBuilder, $appName): string {
+    $pageTitle = $payload['title'] ?? null;
+    if (is_string($pageTitle) && $pageTitle !== '') {
+        // Every page's <title> and WebPage schema `name` carry the site's identity as a
+        // suffix (e.g. "All Dives — Robin Diver Dive Log"), so search results and browser
+        // tabs stay legible without every controller needing to know the site name itself.
+        $payload['title'] = $pageTitle . ' — ' . $appName;
+    }
+
     $overrides = $seoContextBuilder->build($route, $id, $_GET, $payload['title'] ?? null, $payload['meta_description'] ?? null);
 
     if (isset($overrides['robots']) && $overrides['robots'] !== '') {
@@ -64,6 +122,16 @@ $renderPage = static function (string $template, array $payload, string $route, 
     }
 
     return $renderer->render($template, array_merge($payload, $overrides));
+};
+
+$renderNotFound = static function () use ($renderer, $appName): string {
+    // Never indexed, regardless of the SEO opt-out -- a 404 page is not content.
+    header('X-Robots-Tag: noindex,nofollow');
+
+    return $renderer->render('404.html.twig', [
+        'title' => 'Page Not Found — ' . $appName,
+        'robots' => 'noindex,nofollow',
+    ]);
 };
 
 $diveController = new DiveController(
@@ -130,8 +198,8 @@ if ($match['route'] === 'dives.detail' && $match['id'] !== null) {
     $payload = $diveController->detail($match['id']);
     if ($payload === null) {
         http_response_code(404);
-        header('Content-Type: text/plain; charset=UTF-8');
-        echo 'Dive not found';
+        header('Content-Type: text/html; charset=UTF-8');
+        echo $renderNotFound();
         return;
     }
 
@@ -154,8 +222,8 @@ if ($match['route'] === 'sites.detail' && $match['id'] !== null) {
     $payload = $siteController->detail($match['id']);
     if ($payload === null) {
         http_response_code(404);
-        header('Content-Type: text/plain; charset=UTF-8');
-        echo 'Site not found';
+        header('Content-Type: text/html; charset=UTF-8');
+        echo $renderNotFound();
         return;
     }
 
@@ -174,8 +242,8 @@ if ($match['route'] === 'countries.detail' && $match['id'] !== null) {
     $payload = $countryController->detail($match['id']);
     if ($payload === null) {
         http_response_code(404);
-        header('Content-Type: text/plain; charset=UTF-8');
-        echo 'Country not found';
+        header('Content-Type: text/html; charset=UTF-8');
+        echo $renderNotFound();
         return;
     }
 
@@ -194,8 +262,8 @@ if ($match['route'] === 'cities.detail' && $match['id'] !== null) {
     $payload = $cityController->detail($match['id']);
     if ($payload === null) {
         http_response_code(404);
-        header('Content-Type: text/plain; charset=UTF-8');
-        echo 'City not found';
+        header('Content-Type: text/html; charset=UTF-8');
+        echo $renderNotFound();
         return;
     }
 
@@ -214,8 +282,8 @@ if ($match['route'] === 'shops.detail' && $match['id'] !== null) {
     $payload = $shopController->detail($match['id']);
     if ($payload === null) {
         http_response_code(404);
-        header('Content-Type: text/plain; charset=UTF-8');
-        echo 'Shop not found';
+        header('Content-Type: text/html; charset=UTF-8');
+        echo $renderNotFound();
         return;
     }
 
@@ -234,8 +302,8 @@ if ($match['route'] === 'trips.detail' && $match['id'] !== null) {
     $payload = $tripController->detail($match['id']);
     if ($payload === null) {
         http_response_code(404);
-        header('Content-Type: text/plain; charset=UTF-8');
-        echo 'Trip not found';
+        header('Content-Type: text/html; charset=UTF-8');
+        echo $renderNotFound();
         return;
     }
 
@@ -254,8 +322,8 @@ if ($match['route'] === 'equipment.detail' && $match['id'] !== null) {
     $payload = $equipmentController->detail($match['id']);
     if ($payload === null) {
         http_response_code(404);
-        header('Content-Type: text/plain; charset=UTF-8');
-        echo 'Equipment not found';
+        header('Content-Type: text/html; charset=UTF-8');
+        echo $renderNotFound();
         return;
     }
 
@@ -291,11 +359,11 @@ if ($match['route'] === 'summary.overview') {
 
 if ($match['route'] === 'not-found' || $match['route'] === 'profile.overview') {
     http_response_code(404);
-    header('Content-Type: text/plain; charset=UTF-8');
-    echo 'Not found';
+    header('Content-Type: text/html; charset=UTF-8');
+    echo $renderNotFound();
     return;
 }
 
 http_response_code(404);
-header('Content-Type: text/plain; charset=UTF-8');
-echo 'Not found';
+header('Content-Type: text/html; charset=UTF-8');
+echo $renderNotFound();

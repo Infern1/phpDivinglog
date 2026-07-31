@@ -48,8 +48,28 @@ final class CanonicalUrlBuilderTest extends TestCase
         $builder = $this->builder(['APP_QUERY_STRING' => 'true']);
 
         self::assertSame(
-            'https://dives.example.com/?type=dives',
+            'https://dives.example.com/?type=sites',
+            $builder->build('sites.overview', null, 1)
+        );
+    }
+
+    public function testQueryStringModeDivesOverviewPageOneCollapsesToRoot(): void
+    {
+        $builder = $this->builder(['APP_QUERY_STRING' => 'true']);
+
+        self::assertSame(
+            'https://dives.example.com/',
             $builder->build('dives.overview', null, 1)
+        );
+    }
+
+    public function testQueryStringModeDivesOverviewBeyondPageOneUsesTypeParam(): void
+    {
+        $builder = $this->builder(['APP_QUERY_STRING' => 'true']);
+
+        self::assertSame(
+            'https://dives.example.com/?type=dives&page=2',
+            $builder->build('dives.overview', null, 2)
         );
     }
 

@@ -53,7 +53,16 @@ final readonly class CanonicalUrlBuilder
         $isOverview = $kind === 'overview';
         $includePage = $isOverview && $page > 1;
 
+        // dives.overview page 1 is also reachable at the bare root (Router::resolve() treats an
+        // empty path the same as /dives), in both routing modes -- canonicalize to it so the
+        // root URL and its ?type=dives / /dives equivalents don't compete as duplicate content.
+        $isDivesRootPageOne = $isOverview && $resource === 'dives' && $page <= 1;
+
         if ($this->config->queryStringMode()) {
+            if ($isDivesRootPageOne) {
+                return $base . '/';
+            }
+
             $params = ['type' => $resource];
             if ($id !== null) {
                 $params['id'] = $id;
@@ -66,12 +75,7 @@ final readonly class CanonicalUrlBuilder
             return $base . '/?' . http_build_query($params);
         }
 
-        if ($isOverview) {
-            $path = ($resource === 'dives' && $page <= 1) ? '/' : '/' . $segment;
-        } else {
-            $path = '/' . $segment . '/' . $id;
-        }
-
+        $path = $isDivesRootPageOne ? '/' : ($isOverview ? '/' . $segment : '/' . $segment . '/' . $id);
         $query = $includePage ? '?page=' . $page : '';
 
         return $base . $path . $query;

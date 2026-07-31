@@ -76,13 +76,22 @@ final readonly class DiveStatisticsController
         $bottomTime = $this->statisticsFormatter->bottomTime($stats->totalBottomTimeMinutes);
         $deepestDepth = $this->statisticsFormatter->depth($stats->depth['max']);
 
-        $description = sprintf(
-            'Aggregate diving statistics: %d logged %s, %s total bottom time, deepest dive %s.',
+        $descriptionParts = [sprintf(
+            'Aggregate diving statistics: %d logged %s',
             $stats->totalDives,
-            $stats->totalDives === 1 ? 'dive' : 'dives',
-            $bottomTime,
-            $deepestDepth
-        );
+            $stats->totalDives === 1 ? 'dive' : 'dives'
+        )];
+        if ($stats->firstDiveDate !== null && $stats->lastDiveDate !== null) {
+            $descriptionParts[] = sprintf(
+                'from %s to %s.',
+                $this->formatter->formatDate($stats->firstDiveDate),
+                $this->formatter->formatDate($stats->lastDiveDate)
+            );
+        } else {
+            $descriptionParts[count($descriptionParts) - 1] .= '.';
+        }
+        $descriptionParts[] = sprintf('%s total bottom time, deepest dive %s.', $bottomTime, $deepestDepth);
+        $description = implode(' ', $descriptionParts);
 
         return [
             'total_dives' => $stats->totalDives,

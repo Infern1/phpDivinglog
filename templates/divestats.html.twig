@@ -3,12 +3,12 @@
 {% block content %}
   <section class="dive-overview-panel">
     <div class="dive-overview-head">
-      <h2>Dive Statistics</h2>
+      <h1>Dive Statistics</h1>
     </div>
 
     <section class="stats-grid">
       <article class="dive-panel">
-        <h3>Overview</h3>
+        <h2>Overview</h2>
         <dl class="stats-kv-grid">
           <div><dt>Total dives</dt><dd>{{ total_dives }}</dd></div>
           <div>
@@ -36,7 +36,7 @@
       </article>
 
       <article class="dive-panel">
-        <h3>Dive time</h3>
+        <h2>Dive time</h2>
         <dl class="stats-kv-grid">
           <div><dt>Longest</dt><dd>{% if dive_time.longest_number %}<a href="/dives/{{ dive_time.longest_number }}">{{ dive_time.longest }}</a>{% else %}{{ dive_time.longest }}{% endif %}</dd></div>
           <div><dt>Shortest</dt><dd>{% if dive_time.shortest_number %}<a href="/dives/{{ dive_time.shortest_number }}">{{ dive_time.shortest }}</a>{% else %}{{ dive_time.shortest }}{% endif %}</dd></div>
@@ -45,7 +45,7 @@
       </article>
 
       <article class="dive-panel">
-        <h3>Depth</h3>
+        <h2>Depth</h2>
         <dl class="stats-kv-grid">
           <div><dt>Deepest</dt><dd>{% if depth.deepest_number %}<a href="/dives/{{ depth.deepest_number }}">{{ depth.deepest }}</a>{% else %}{{ depth.deepest }}{% endif %}</dd></div>
           <div><dt>Shallowest</dt><dd>{% if depth.shallowest_number %}<a href="/dives/{{ depth.shallowest_number }}">{{ depth.shallowest }}</a>{% else %}{{ depth.shallowest }}{% endif %}</dd></div>
@@ -54,7 +54,7 @@
       </article>
 
       <article class="dive-panel">
-        <h3>Water temperature</h3>
+        <h2>Water temperature</h2>
         <dl class="stats-kv-grid">
           <div><dt>Coldest</dt><dd>{% if water_temp.coldest_number %}<a href="/dives/{{ water_temp.coldest_number }}">{{ water_temp.coldest }}</a>{% else %}{{ water_temp.coldest }}{% endif %}</dd></div>
           <div><dt>Warmest</dt><dd>{% if water_temp.warmest_number %}<a href="/dives/{{ water_temp.warmest_number }}">{{ water_temp.warmest }}</a>{% else %}{{ water_temp.warmest }}{% endif %}</dd></div>
@@ -63,7 +63,7 @@
       </article>
 
       <article class="dive-panel">
-        <h3>Air temperature</h3>
+        <h2>Air temperature</h2>
         <dl class="stats-kv-grid">
           <div><dt>Coldest</dt><dd>{% if air_temp.coldest_number %}<a href="/dives/{{ air_temp.coldest_number }}">{{ air_temp.coldest }}</a>{% else %}{{ air_temp.coldest }}{% endif %}</dd></div>
           <div><dt>Warmest</dt><dd>{% if air_temp.warmest_number %}<a href="/dives/{{ air_temp.warmest_number }}">{{ air_temp.warmest }}</a>{% else %}{{ air_temp.warmest }}{% endif %}</dd></div>
@@ -72,7 +72,7 @@
       </article>
 
       <article class="dive-panel stats-panel-wide">
-        <h3>Classifications</h3>
+        <h2>Classifications</h2>
         <dl class="stats-kv-grid">
           {% for row in classification_rows %}
             <div><dt>{{ row.label }}</dt><dd>{{ row.value }}</dd></div>
@@ -82,7 +82,7 @@
 
       {% if certification_rows is not empty %}
         <article class="dive-panel stats-panel-wide">
-          <h3>Certifications</h3>
+          <h2>Certifications</h2>
           <div class="certifications-grid">
             {% for cert in certification_rows %}
               <article class="cert-card">
@@ -128,7 +128,7 @@
       {% endif %}
 
       <article class="dive-panel stats-panel-wide">
-        <h3>Depth distribution</h3>
+        <h2>Depth distribution</h2>
         <canvas id="stats-depth-chart" width="700" height="320" data-depth-distribution='{{ depth_distribution_json|e('html_attr') }}'></canvas>
         <ul class="stats-depth-legend">
           {% for bucket in depth_distribution %}

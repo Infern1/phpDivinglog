@@ -1,10 +1,10 @@
-<div data-dive-fragment data-dive-number="{{ dive.number }}" data-dive-title="{{ related_site_name ?: ('Dive #' ~ dive.number) }}">
+<div data-dive-fragment data-dive-number="{{ dive.number }}" data-dive-title="{{ related_site_name ?: ('Dive #' ~ dive.number) }} — {{ app_name }}">
   <header class="dive-hero dive-overview-panel dive-hero-wide">
     <div class="dive-hero-top">
       <div class="dive-hero-title-wrap">
         <div class="dive-hero-badge">Dive #{{ dive.number }}</div>
         <div class="dive-hero-title-text">
-          <h2>{{ related_site_name ?: ('Dive #' ~ dive.number) }}</h2>
+          <h1>{{ related_site_name ?: ('Dive #' ~ dive.number) }}</h1>
           <p>{{ location_display }} · {{ date_display }} · {{ start_time_display }} - {{ end_time_display }}</p>
         </div>
       </div>
@@ -27,27 +27,27 @@
 
     <section class="dive-metric-grid dive-metric-grid-hero" aria-label="Dive summary metrics">
       <article class="dive-metric-card dive-metric-card-hero">
-        <h4>Depth</h4>
+        <p class="dive-metric-label">Depth</p>
         <p>{{ depth_display }} {{ depth_label }}</p>
       </article>
       <article class="dive-metric-card dive-metric-card-hero">
-        <h4>Avg depth</h4>
+        <p class="dive-metric-label">Avg depth</p>
         <p>{{ average_depth_display }}</p>
       </article>
       <article class="dive-metric-card dive-metric-card-hero">
-        <h4>Duration</h4>
+        <p class="dive-metric-label">Duration</p>
         <p>{{ duration_hours }}h {{ duration_minutes }}m</p>
       </article>
       <article class="dive-metric-card dive-metric-card-hero">
-        <h4>Temp</h4>
+        <p class="dive-metric-label">Temp</p>
         <p>{{ temperature_display }}</p>
       </article>
       <article class="dive-metric-card dive-metric-card-hero">
-        <h4>Visibility</h4>
+        <p class="dive-metric-label">Visibility</p>
         <p>{{ visibility_display }}</p>
       </article>
       <article class="dive-metric-card dive-metric-card-hero">
-        <h4>SAC</h4>
+        <p class="dive-metric-label">SAC</p>
         <p>{{ sac_display }}</p>
       </article>
     </section>
@@ -56,7 +56,7 @@
   <section class="dive-layout-grid" data-detail-layout>
     <aside class="dive-logbook-column">
       <article class="dive-panel dive-logbook-panel" data-logbook-pane>
-        <h3>Logbook</h3>
+        <h2>Logbook</h2>
         <ul class="logbook-list" data-logbook-list>
           {% for entry in logbook_dives %}
             <li class="logbook-item{% if entry.active %} is-active{% endif %}" data-dive-number="{{ entry.number }}">
@@ -75,25 +75,25 @@
       <section class="dive-detail-grid">
         <div class="dive-main-column">
           <article class="dive-panel">
-            <h3>Dive profile</h3>
+            <h2>Dive profile</h2>
             <canvas id="profile-chart" data-dive-number="{{ dive.number }}" width="700" height="220"></canvas>
             <p id="profile-chart-legend" data-profile-live="depth" aria-live="polite">Move over the chart to inspect depth values.</p>
           </article>
 
           <article class="dive-panel">
-            <h3>Comments</h3>
+            <h2>Comments</h2>
             <div>{{ comment_html|raw }}</div>
           </article>
 
           <article class="dive-panel">
-            <h3>Tanks</h3>
+            <h2>Tanks</h2>
             <div class="tanks-grid">
               {% if tanks_display is empty %}
                 <p class="tank-empty">No tank information recorded.</p>
               {% else %}
                 {% for tank in tanks_display %}
                   <article class="tank-card">
-                    <h4>{{ tank.name }}</h4>
+                    <h3>{{ tank.name }}</h3>
                     <dl>
                       <div><dt>Volume</dt><dd>{{ tank.volume }}</dd></div>
                       <div><dt>Press. Start</dt><dd>{{ tank.pressure_start }}</dd></div>
@@ -107,7 +107,7 @@
           </article>
 
           <article class="dive-panel">
-            <h3>Pictures</h3>
+            <h2>Pictures</h2>
             <ul class="gallery-grid" data-lightbox-group="dive-pictures">
               {% for picture in pictures %}
                 <li>
@@ -122,7 +122,7 @@
 
         <aside class="dive-side-column">
           <article class="dive-panel">
-            <h3>Details</h3>
+            <h2>Details</h2>
             <dl class="dive-details-grid">
               <div class="dive-details-full">
                 <dt>Dive site</dt>

@@ -1,0 +1,17 @@
+{% extends 'layout.html.twig' %}
+
+{% block content %}
+  <section class="dive-overview-panel dive-404-panel">
+    <span class="material-symbols-outlined dive-404-icon" aria-hidden="true">scuba_diving</span>
+    <h1>404 — Your Buddy Isn't Here</h1>
+    <p class="dive-404-lede">
+      You did a buddy check before this dive, right? Because whatever you were looking for has
+      drifted off with the current, sunk into an unlogged wreck, or never existed at all.
+    </p>
+    <p>
+      Dive computer readout: depth 404&nbsp;m, visibility zero, air supply questionable. Time to
+      abort the dive and make a safe, controlled ascent.
+    </p>
+    <a href="/" class="button">Ascend to the Surface</a>
+  </section>
+{% endblock %}
