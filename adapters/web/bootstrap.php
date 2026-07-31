@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use PhpDivingLog\Adapters\Web\Router;
 use PhpDivingLog\Database\Connection;
 use PhpDivingLog\Repository\AppInfoRepository;
 use PhpDivingLog\Repository\BuddyRepository;
@@ -26,6 +27,10 @@ use PhpDivingLog\Support\DiveStatisticsFormatter;
 use PhpDivingLog\Support\HtmlSanitizer;
 use PhpDivingLog\Support\MediaResolver;
 use PhpDivingLog\Support\RtfConverter;
+use PhpDivingLog\Support\Seo\CanonicalUrlBuilder;
+use PhpDivingLog\Support\Seo\DescriptionTruncator;
+use PhpDivingLog\Support\Seo\PageSeoContextBuilder;
+use PhpDivingLog\Support\Seo\WebPageSchemaBuilder;
 use PhpDivingLog\Support\ThumbnailGenerator;
 use PhpDivingLog\Support\Translator;
 use PhpDivingLog\Support\UnitConverter;
@@ -55,6 +60,14 @@ return [
             ),
         ),
         'rtfConverter' => new RtfConverter(new HtmlSanitizer()),
+        'descriptionTruncator' => new DescriptionTruncator(),
+        'canonicalUrlBuilder' => new CanonicalUrlBuilder($config, Router::RESOURCE_SEGMENTS),
+        'webPageSchemaBuilder' => new WebPageSchemaBuilder(),
+        'pageSeoContextBuilder' => new PageSeoContextBuilder(
+            $config,
+            new CanonicalUrlBuilder($config, Router::RESOURCE_SEGMENTS),
+            new WebPageSchemaBuilder()
+        ),
     ],
     'repositories' => [
         'dives' => new DiveRepository($pdo, $prefix),

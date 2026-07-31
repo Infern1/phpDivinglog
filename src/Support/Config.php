@@ -51,6 +51,7 @@ final class Config
             'app_name' => self::asString($values, 'APP_NAME'),
             'app_version' => self::asString($values, 'APP_VERSION'),
             'app_url' => self::asString($values, 'APP_URL'),
+            'seo_enabled' => self::asBool($values, 'APP_SEO_ENABLED'),
             'dlog_url' => self::asString($values, 'DLOG_URL'),
             'dlog_version' => self::asString($values, 'DLOG_VERSION'),
 
@@ -139,9 +140,19 @@ final class Config
         return $this->values['app_version'];
     }
 
+    /**
+     * The public, internet-facing base URL of this deployment (scheme + host, no trailing
+     * slash). Used to build absolute canonical links and schema.org URLs — not a link to the
+     * upstream phpDivingLog project.
+     */
     public function appUrl(): string
     {
         return $this->values['app_url'];
+    }
+
+    public function seoEnabled(): bool
+    {
+        return $this->values['seo_enabled'];
     }
 
     public function appEnvironment(): string
@@ -315,7 +326,8 @@ final class Config
         return [
             'APP_NAME' => 'phpDivingLog',
             'APP_VERSION' => '3.2',
-            'APP_URL' => 'https://github.com/Infern1/phpDivinglog',
+            'APP_URL' => '',
+            'APP_SEO_ENABLED' => 'true',
             'DLOG_URL' => 'http://www.divinglog.de/',
             'DLOG_VERSION' => '6.0.22',
 

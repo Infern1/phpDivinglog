@@ -4,6 +4,18 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{{ title|default(app_name|default('phpDivingLog')) }}</title>
+  {% if meta_description is defined and meta_description %}
+  <meta name="description" content="{{ meta_description }}">
+  {% endif %}
+  {% if robots is defined and robots %}
+  <meta name="robots" content="{{ robots }}">
+  {% endif %}
+  {% if canonical_url is defined and canonical_url %}
+  <link rel="canonical" href="{{ canonical_url }}">
+  {% endif %}
+  {% if schema_json is defined and schema_json %}
+  <script type="application/ld+json">{{ schema_json|raw }}</script>
+  {% endif %}
   <link rel="icon" href="/images/favicon.ico" sizes="any">
   <script>
     (function () {

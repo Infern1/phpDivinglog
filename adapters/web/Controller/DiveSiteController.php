@@ -9,6 +9,7 @@ use PhpDivingLog\Repository\DiveRepository;
 use PhpDivingLog\Repository\PictureRepository;
 use PhpDivingLog\Support\Formatter;
 use PhpDivingLog\Support\MediaResolver;
+use PhpDivingLog\Support\Seo\DescriptionTruncator;
 use PhpDivingLog\Support\UnitConverter;
 
 final readonly class DiveSiteController
@@ -19,7 +20,8 @@ final readonly class DiveSiteController
         private PictureRepository $pictures,
         private Formatter $formatter,
         private UnitConverter $converter,
-        private MediaResolver $media
+        private MediaResolver $media,
+        private DescriptionTruncator $descriptionTruncator
     ) {
     }
 
@@ -29,6 +31,7 @@ final readonly class DiveSiteController
     public function overview(): array
     {
         $rows = $this->sites->listWithDiveCounts();
+        $total = count($rows);
 
         return [
             'sites' => array_map(function (array $row): array {
@@ -36,6 +39,8 @@ final readonly class DiveSiteController
                 $site['diveCount'] = $row['diveCount'];
                 return $site;
             }, $rows),
+            'title' => 'Dive Sites',
+            'meta_description' => sprintf('Browse %d dive %s logged in this logbook.', $total, $total === 1 ? 'site' : 'sites'),
         ];
     }
 
@@ -64,16 +69,35 @@ final readonly class DiveSiteController
             }
         }
 
+        $maxDepthDisplay = $maxDepth !== null
+            ? $this->formatter->formatDecimal($this->converter->depthToDisplay($maxDepth), 1) . ' ' . $this->converter->depthLabel()
+            : null;
+        $waterTypesDisplay = $waterTypes !== [] ? implode(' / ', $waterTypes) : null;
+        $diveCount = count($diveRows);
+
+        $descriptionParts = [sprintf(
+            '%s is a dive site with %d logged %s.',
+            $site->name,
+            $diveCount,
+            $diveCount === 1 ? 'dive' : 'dives'
+        )];
+        if ($maxDepthDisplay !== null) {
+            $descriptionParts[] = sprintf('Maximum depth %s.', $maxDepthDisplay);
+        }
+        if ($waterTypesDisplay !== null) {
+            $descriptionParts[] = sprintf('Water type: %s.', $waterTypesDisplay);
+        }
+
         return [
             'site' => $this->mapSite($site),
             'dives' => $this->mapDiveRows($diveRows),
             'previous_site_id' => $this->sites->findPreviousId($id),
             'next_site_id' => $this->sites->findNextId($id),
-            'max_depth_display' => $maxDepth !== null
-                ? $this->formatter->formatDecimal($this->converter->depthToDisplay($maxDepth), 1) . ' ' . $this->converter->depthLabel()
-                : null,
-            'water_types_display' => $waterTypes !== [] ? implode(' / ', $waterTypes) : null,
+            'max_depth_display' => $maxDepthDisplay,
+            'water_types_display' => $waterTypesDisplay,
             'pictures' => $pictures,
+            'title' => sprintf('%s — Dive Site', $site->name),
+            'meta_description' => $this->descriptionTruncator->truncate(implode(' ', $descriptionParts)),
         ];
     }
 

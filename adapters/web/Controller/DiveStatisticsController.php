@@ -10,6 +10,7 @@ use PhpDivingLog\Support\Config;
 use PhpDivingLog\Support\DiveStatisticsFormatter;
 use PhpDivingLog\Support\Formatter;
 use PhpDivingLog\Support\MediaResolver;
+use PhpDivingLog\Support\Seo\DescriptionTruncator;
 use PhpDivingLog\Support\UnitConverter;
 
 final readonly class DiveStatisticsController
@@ -22,6 +23,7 @@ final readonly class DiveStatisticsController
         private UnitConverter $converter,
         private MediaResolver $media,
         private Config $config,
+        private DescriptionTruncator $descriptionTruncator,
     ) {
     }
 
@@ -71,6 +73,17 @@ final readonly class DiveStatisticsController
             }
         }
 
+        $bottomTime = $this->statisticsFormatter->bottomTime($stats->totalBottomTimeMinutes);
+        $deepestDepth = $this->statisticsFormatter->depth($stats->depth['max']);
+
+        $description = sprintf(
+            'Aggregate diving statistics: %d logged %s, %s total bottom time, deepest dive %s.',
+            $stats->totalDives,
+            $stats->totalDives === 1 ? 'dive' : 'dives',
+            $bottomTime,
+            $deepestDepth
+        );
+
         return [
             'total_dives' => $stats->totalDives,
             'first_dive' => [
@@ -81,7 +94,7 @@ final readonly class DiveStatisticsController
                 'date' => $stats->lastDiveDate !== null ? $this->formatter->formatDate($stats->lastDiveDate) : '-',
                 'number' => $stats->lastDiveNumber,
             ],
-            'bottom_time' => $this->statisticsFormatter->bottomTime($stats->totalBottomTimeMinutes),
+            'bottom_time' => $bottomTime,
             'dive_time' => [
                 'longest' => $this->statisticsFormatter->duration($stats->diveTime['max']),
                 'longest_number' => $stats->diveTime['maxNumber'],
@@ -90,7 +103,7 @@ final readonly class DiveStatisticsController
                 'average' => $this->statisticsFormatter->duration($stats->diveTime['avg'] !== null ? (int) round($stats->diveTime['avg']) : null),
             ],
             'depth' => [
-                'deepest' => $this->statisticsFormatter->depth($stats->depth['max']),
+                'deepest' => $deepestDepth,
                 'deepest_number' => $stats->depth['maxNumber'],
                 'shallowest' => $this->statisticsFormatter->depth($stats->depth['min']),
                 'shallowest_number' => $stats->depth['minNumber'],
@@ -115,6 +128,8 @@ final readonly class DiveStatisticsController
             'depth_distribution' => $depthDistribution,
             'depth_distribution_json' => json_encode($depthDistribution, JSON_THROW_ON_ERROR),
             'depth_distribution_unit' => $this->converter->depthLabel(),
+            'title' => 'Dive Statistics',
+            'meta_description' => $this->descriptionTruncator->truncate($description),
         ];
     }
 

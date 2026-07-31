@@ -7,6 +7,7 @@ namespace PhpDivingLog\Adapters\Web\Controller;
 use PhpDivingLog\Repository\TripRepository;
 use PhpDivingLog\Repository\DiveRepository;
 use PhpDivingLog\Support\Formatter;
+use PhpDivingLog\Support\Seo\DescriptionTruncator;
 use PhpDivingLog\Support\UnitConverter;
 
 final readonly class TripController
@@ -16,6 +17,7 @@ final readonly class TripController
         private DiveRepository $dives,
         private Formatter $formatter,
         private UnitConverter $converter,
+        private DescriptionTruncator $descriptionTruncator,
     ) {
     }
 
@@ -25,6 +27,8 @@ final readonly class TripController
     public function overview(): array
     {
         $rows = $this->trips->listWithDiveCounts();
+        $total = count($rows);
+
         return [
             'trips' => array_map(function (array $row): array {
                 return [
@@ -32,6 +36,8 @@ final readonly class TripController
                     'diveCount' => $row['diveCount'],
                 ];
             }, $rows),
+            'title' => 'Dive Trips',
+            'meta_description' => sprintf('Browse %d dive %s logged in this logbook.', $total, $total === 1 ? 'trip' : 'trips'),
         ];
     }
 
@@ -45,9 +51,34 @@ final readonly class TripController
             return null;
         }
 
+        $diveRows = $this->dives->listOverviewByTrip($id);
+        $diveCount = count($diveRows);
+
+        $dateRange = '';
+        if ($trip->dateFrom !== null) {
+            $dateRange = ' from ' . $this->formatter->formatDate($trip->dateFrom);
+            if ($trip->dateTo !== null) {
+                $dateRange .= ' to ' . $this->formatter->formatDate($trip->dateTo);
+            }
+        }
+
+        $descriptionParts = [sprintf(
+            '%s%s: %d logged %s.',
+            $trip->name,
+            $dateRange,
+            $diveCount,
+            $diveCount === 1 ? 'dive' : 'dives'
+        )];
+        $comment = $trip->comment !== null ? trim($trip->comment) : '';
+        if ($comment !== '') {
+            $descriptionParts[] = $comment;
+        }
+
         return [
             'trip' => $trip,
-            'dives' => $this->mapDiveRows($this->dives->listOverviewByTrip($id)),
+            'dives' => $this->mapDiveRows($diveRows),
+            'title' => sprintf('%s — Dive Trip', $trip->name),
+            'meta_description' => $this->descriptionTruncator->truncate(implode(' ', $descriptionParts)),
         ];
     }
 

@@ -382,6 +382,144 @@ final class WebSmokeTest extends TestCase
         self::assertStringContainsString('"code":"not_found"', $response['body']);
     }
 
+    public function testDiveDetailSeoMetadataIsUniquePerDive(): void
+    {
+        $env = ['APP_URL' => 'https://dives.example.com'];
+
+        $responseOne = $this->request('/dives/1', [], $env);
+        $responseTwo = $this->request('/dives/2', [], $env);
+
+        $titleOne = $this->extractTag('/<title>.*?<\/title>/s', $responseOne['body']);
+        $titleTwo = $this->extractTag('/<title>.*?<\/title>/s', $responseTwo['body']);
+        $descriptionOne = $this->extractTag('/<meta name="description"[^>]*>/', $responseOne['body']);
+        $descriptionTwo = $this->extractTag('/<meta name="description"[^>]*>/', $responseTwo['body']);
+        $canonicalOne = $this->extractTag('/<link rel="canonical"[^>]*>/', $responseOne['body']);
+        $canonicalTwo = $this->extractTag('/<link rel="canonical"[^>]*>/', $responseTwo['body']);
+
+        self::assertNotNull($titleOne);
+        self::assertNotNull($descriptionOne);
+        self::assertNotNull($canonicalOne);
+        self::assertNotSame($titleOne, $titleTwo);
+        self::assertNotSame($descriptionOne, $descriptionTwo);
+        self::assertNotSame($canonicalOne, $canonicalTwo);
+        self::assertStringContainsString('/dives/1', (string) $canonicalOne);
+        self::assertStringContainsString('/dives/2', (string) $canonicalTwo);
+    }
+
+    public function testSiteDetailSeoMetadataIsUniquePerSite(): void
+    {
+        $env = ['APP_URL' => 'https://dives.example.com'];
+
+        $responseOne = $this->request('/sites/10', [], $env);
+        $responseTwo = $this->request('/sites/11', [], $env);
+
+        $titleOne = $this->extractTag('/<title>.*?<\/title>/s', $responseOne['body']);
+        $titleTwo = $this->extractTag('/<title>.*?<\/title>/s', $responseTwo['body']);
+        $descriptionOne = $this->extractTag('/<meta name="description"[^>]*>/', $responseOne['body']);
+        $descriptionTwo = $this->extractTag('/<meta name="description"[^>]*>/', $responseTwo['body']);
+        $canonicalOne = $this->extractTag('/<link rel="canonical"[^>]*>/', $responseOne['body']);
+        $canonicalTwo = $this->extractTag('/<link rel="canonical"[^>]*>/', $responseTwo['body']);
+
+        self::assertNotNull($titleOne);
+        self::assertNotNull($descriptionOne);
+        self::assertNotNull($canonicalOne);
+        self::assertNotSame($titleOne, $titleTwo);
+        self::assertNotSame($descriptionOne, $descriptionTwo);
+        self::assertNotSame($canonicalOne, $canonicalTwo);
+    }
+
+    public function testDiveDetailJsonLdIsValidWebPageMatchingCanonicalAndTitle(): void
+    {
+        $response = $this->request('/dives/1', [], ['APP_URL' => 'https://dives.example.com']);
+
+        $canonical = $this->extractTag('/<link rel="canonical" href="([^"]*)"[^>]*>/', $response['body']);
+        self::assertNotNull($canonical);
+        preg_match('/href="([^"]*)"/', $canonical, $hrefMatch);
+        $canonicalUrl = $hrefMatch[1] ?? null;
+
+        preg_match('/<title>(.*?)<\/title>/s', $response['body'], $titleMatch);
+        $titleText = $titleMatch[1] ?? null;
+
+        $jsonLd = $this->extractJsonLd($response['body']);
+
+        self::assertNotNull($jsonLd);
+        self::assertSame('https://schema.org', $jsonLd['@context'] ?? null);
+        self::assertSame('WebPage', $jsonLd['@type'] ?? null);
+        self::assertSame($canonicalUrl, $jsonLd['url'] ?? null);
+        self::assertSame($titleText, $jsonLd['name'] ?? null);
+        self::assertArrayHasKey('description', $jsonLd);
+    }
+
+    public function testCanonicalUrlUsesQueryStringFormWhenQueryStringModeIsActive(): void
+    {
+        $response = $this->request('/dives/1', [], [
+            'APP_URL' => 'https://dives.example.com',
+            'APP_QUERY_STRING' => 'true',
+        ]);
+
+        $canonical = $this->extractTag('/<link rel="canonical"[^>]*>/', $response['body']);
+
+        self::assertNotNull($canonical);
+        self::assertStringContainsString('?type=dives&amp;id=1', $canonical);
+    }
+
+    public function testCanonicalUrlUsesPathFormWhenPathModeIsActive(): void
+    {
+        $response = $this->request('/dives/1', [], [
+            'APP_URL' => 'https://dives.example.com',
+            'APP_QUERY_STRING' => 'false',
+        ]);
+
+        $canonical = $this->extractTag('/<link rel="canonical"[^>]*>/', $response['body']);
+
+        self::assertNotNull($canonical);
+        self::assertStringContainsString('href="https://dives.example.com/dives/1"', $canonical);
+    }
+
+    public function testSeoOptOutEmitsNoindexAndOmitsCanonicalAndSchema(): void
+    {
+        $response = $this->request('/dives/1', [], [
+            'APP_URL' => 'https://dives.example.com',
+            'APP_SEO_ENABLED' => 'false',
+        ]);
+
+        self::assertSame(200, $response['status']);
+        self::assertStringContainsString('<meta name="robots" content="noindex,nofollow">', $response['body']);
+        self::assertStringNotContainsString('rel="canonical"', $response['body']);
+        self::assertStringNotContainsString('application/ld+json', $response['body']);
+        self::assertStringNotContainsString('Dive #1', $this->extractTag('/<title>.*?<\/title>/s', $response['body']) ?? '');
+    }
+
+    /**
+     * The embeddable summary fragment (divesummary.html.twig) intentionally has no <head> --
+     * it's designed to be dropped into another page without imposing this app's chrome -- so
+     * its noindex signal is sent via an X-Robots-Tag response header (public/index.php's
+     * renderPage()), not a <meta> tag. PHP's plain `cli` SAPI never populates headers_list()
+     * (confirmed: header_remove() + headers_list() stays empty even after header() calls,
+     * regardless of SAPI settings), so the header itself can't be asserted through this
+     * include()-based harness without a real HTTP server, which is out of scope here. What IS
+     * verified here and by PageSeoContextBuilderTest (Support/Seo) together:
+     *  - PageSeoContextBuilder::build() returns robots => 'noindex,nofollow' for
+     *    'summary.overview' when SEO is enabled (testSummaryOverviewOnlySetsRobotsNoIndex).
+     *  - It also returns 'noindex,nofollow' for ANY route -- including summary.overview --
+     *    when the global opt-out is active, since that branch is checked first and doesn't
+     *    inspect the route (testOptedOutForcesTitleAndDescriptionNullAndSetsNoindex).
+     * Together those prove "regardless of the flag" for the computed value; this test proves
+     * the route still renders correctly (no crash, same content) under both flag states, i.e.
+     * that wiring PageSeoContextBuilder into this route didn't regress it.
+     */
+    public function testSummaryRendersConsistentlyRegardlessOfSeoFlag(): void
+    {
+        $enabledResponse = $this->request('/summary', [], ['APP_SEO_ENABLED' => 'true']);
+        $disabledResponse = $this->request('/summary', [], ['APP_SEO_ENABLED' => 'false']);
+
+        self::assertSame(200, $enabledResponse['status']);
+        self::assertSame(200, $disabledResponse['status']);
+        self::assertStringContainsString('Dive Summary', $enabledResponse['body']);
+        self::assertStringContainsString('Dive Summary', $disabledResponse['body']);
+        self::assertSame($enabledResponse['body'], $disabledResponse['body']);
+    }
+
     private function seedFixtureDatabase(): void
     {
         $fixturesPath = dirname(__DIR__) . '/fixtures';
@@ -408,9 +546,13 @@ final class WebSmokeTest extends TestCase
 
     /**
      * @param array<string, string> $headers
+     * @param array<string, string> $env Overrides/additions to the default environment (e.g.
+     *                                    APP_URL, APP_QUERY_STRING, APP_SEO_ENABLED). Applied on
+     *                                    top of the defaults, so every call is fully deterministic
+     *                                    regardless of previous calls in the same test process.
      * @return array{status:int, body:string}
      */
-    private function request(string $uri, array $headers = []): array
+    private function request(string $uri, array $headers = [], array $env = []): array
     {
         http_response_code(200);
 
@@ -424,11 +566,19 @@ final class WebSmokeTest extends TestCase
         }
         $_GET = [];
 
-        putenv('DB_DSN=sqlite:' . dirname(__DIR__) . '/fixtures/http-smoke.sqlite');
-        putenv('DB_USER=test');
-        putenv('DB_PASSWORD=');
-        putenv('APP_QUERY_STRING=false');
-        putenv('APP_ENV=test');
+        $defaults = [
+            'DB_DSN' => 'sqlite:' . dirname(__DIR__) . '/fixtures/http-smoke.sqlite',
+            'DB_USER' => 'test',
+            'DB_PASSWORD' => '',
+            'APP_QUERY_STRING' => 'false',
+            'APP_ENV' => 'test',
+            'APP_URL' => '',
+            'APP_SEO_ENABLED' => 'true',
+        ];
+
+        foreach (array_merge($defaults, $env) as $name => $value) {
+            putenv($name . '=' . $value);
+        }
 
         ob_start();
         include dirname(__DIR__, 2) . '/public/index.php';
@@ -438,5 +588,24 @@ final class WebSmokeTest extends TestCase
             'status' => http_response_code(),
             'body' => $body,
         ];
+    }
+
+    private function extractTag(string $pattern, string $body): ?string
+    {
+        return preg_match($pattern, $body, $matches) === 1 ? $matches[0] : null;
+    }
+
+    /**
+     * @return array<string, mixed>|null
+     */
+    private function extractJsonLd(string $body): ?array
+    {
+        if (preg_match('#<script type="application/ld\+json">(.*?)</script>#s', $body, $matches) !== 1) {
+            return null;
+        }
+
+        $decoded = json_decode($matches[1], true);
+
+        return is_array($decoded) ? $decoded : null;
     }
 }

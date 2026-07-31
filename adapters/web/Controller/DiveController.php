@@ -18,6 +18,7 @@ use PhpDivingLog\Support\Formatter;
 use PhpDivingLog\Support\DiveMetricsCalculator;
 use PhpDivingLog\Support\MediaResolver;
 use PhpDivingLog\Support\RtfConverter;
+use PhpDivingLog\Support\Seo\DescriptionTruncator;
 use PhpDivingLog\Support\UnitConverter;
 
 final readonly class DiveController
@@ -37,7 +38,8 @@ final readonly class DiveController
         private Formatter $formatter,
         private DiveMetricsCalculator $metrics,
         private RtfConverter $rtf,
-        private MediaResolver $media
+        private MediaResolver $media,
+        private DescriptionTruncator $descriptionTruncator
     ) {
     }
 
@@ -85,6 +87,8 @@ final readonly class DiveController
             'search' => $search,
             'sort' => $sort,
             'totalDives' => $total,
+            'title' => $page > 1 ? sprintf('All Dives — Page %d', $page) : 'All Dives',
+            'meta_description' => sprintf('Browse %d logged %s.', $total, $total === 1 ? 'dive' : 'dives'),
         ];
     }
 
@@ -324,12 +328,29 @@ final readonly class DiveController
             }
         }
 
+        $depthDisplay = $this->converter->depthToDisplay($dive->depthMax);
+        $depthLabel = $this->converter->depthLabel();
+        $dateDisplay = $this->formatter->formatDate($dive->dateTime);
+
+        $title = $locationDisplay !== '-'
+            ? sprintf('Dive #%d — %s (%s)', $dive->number, $locationDisplay, $dateDisplay)
+            : sprintf('Dive #%d (%s)', $dive->number, $dateDisplay);
+
+        $descriptionParts = [sprintf('Dive #%d on %s', $dive->number, $dateDisplay)];
+        if ($locationDisplay !== '-') {
+            $descriptionParts[] = 'at ' . $locationDisplay;
+        }
+        $descriptionParts[] = sprintf('with a maximum depth of %s %s.', number_format($depthDisplay, 1), $depthLabel);
+        $metaDescription = $this->descriptionTruncator->truncate(implode(' ', $descriptionParts));
+
         return [
             'dive' => $dive,
-            'depth_display' => $this->converter->depthToDisplay($dive->depthMax),
-            'depth_label' => $this->converter->depthLabel(),
-            'date_display' => $this->formatter->formatDate($dive->dateTime),
+            'depth_display' => $depthDisplay,
+            'depth_label' => $depthLabel,
+            'date_display' => $dateDisplay,
             'location_display' => $locationDisplay,
+            'title' => $title,
+            'meta_description' => $metaDescription,
             'start_time_display' => $startTime,
             'end_time_display' => $endTime,
             'duration_hours' => $durationHours,
