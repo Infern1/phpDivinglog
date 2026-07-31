@@ -2,6 +2,50 @@
 
 All notable changes to phpDivingLog are documented in this file.
 
+## v4.2.0 — 2026-07-31
+
+### SEO metadata (unique title, description, canonical, WebPage schema)
+- Every content page (dives, sites, countries, cities, shops, trips, equipment, stats, both
+  galleries) now renders a unique `<title>`, `<meta name="description">`,
+  `<link rel="canonical">`, and a `schema.org` `WebPage` JSON-LD block, built from data each
+  controller already fetches — no page shares a generic title anymore.
+- Canonical URLs correctly match whichever routing mode is active (`?type=&id=` query-string vs.
+  clean `/resource/id` paths), and self-reference on paginated overview pages.
+- Added `APP_SEO_ENABLED` (`.env`, default `true`) to disable all of the above for private/personal
+  installs — falls back to the previous generic title plus a `noindex,nofollow` signal.
+- The embeddable summary widget (`/summary`) and the AJAX dive-detail fragment are excluded from
+  indexing/enhancement, since neither is a standalone document.
+
+### Implementation
+- Repurposed `Config::appUrl()` (previously the GitHub project link, unused elsewhere) as the
+  deployment's public base URL used to build canonical/schema URLs; defaults to empty so nothing
+  is emitted until configured.
+- Added `Support\Seo\CanonicalUrlBuilder`, `WebPageSchemaBuilder`, `DescriptionTruncator`, and
+  `PageSeoContextBuilder` (core, framework-agnostic) plus a `renderPage()` helper in
+  `public/index.php` that merges the computed overrides into every content route's view-model
+  before rendering — centralizing the cross-cutting mechanics in one place instead of duplicating
+  them across all nine controllers.
+- Extracted `Router::RESOURCE_SEGMENTS` as a shared, reusable route↔path-segment table.
+- JSON-LD is encoded with `JSON_HEX_*` flags so user-authored dive/site/comment text can't break
+  out of the `<script>` block.
+- The `noindex` signal is sent both as a `<meta name="robots">` tag and an `X-Robots-Tag` HTTP
+  header, since some routes (the embeddable summary fragment) have no `<head>` at all.
+
+### Tests
+- Added unit tests for all four new `Support\Seo\` classes (URL construction in both routing
+  modes, JSON-LD structure and injection-safety, description truncation, and the opt-out/summary
+  branching logic).
+- Extended `WebSmokeTest` with 7 HTTP-level tests proving genuine per-page uniqueness (two
+  different dives/sites render different title/description/canonical), JSON-LD validity matching
+  canonical/title, canonical mode-awareness, and opt-out behavior.
+- Manual structured-data validation: no publicly-reachable deployment exists to run through
+  Google's Rich Results Test / the schema.org validator against, so an equivalent rigorous
+  structural check was run locally instead — 27 real rendered pages across all 9 controllers (plus
+  the opt-out and query-string-mode cases) were confirmed to produce valid, parseable JSON-LD with
+  the required `@context`/`@type`/`url`/`name` properties, `url` matching the page's canonical
+  link, and `name` matching its `<title>`. Full gate (`composer test && composer stan && composer
+  cs`) green.
+
 ## v4.1.2 — 2026-07-06
 
 ### Seamless dive detail navigation (in-place AJAX)

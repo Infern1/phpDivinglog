@@ -10,6 +10,7 @@ use PhpDivingLog\Repository\EquipmentRepository;
 use PhpDivingLog\Support\Config;
 use PhpDivingLog\Support\Formatter;
 use PhpDivingLog\Support\MediaResolver;
+use PhpDivingLog\Support\Seo\DescriptionTruncator;
 use PhpDivingLog\Support\UnitConverter;
 
 final readonly class EquipmentController
@@ -21,6 +22,7 @@ final readonly class EquipmentController
         private Formatter $formatter,
         private UnitConverter $converter,
         private MediaResolver $media,
+        private DescriptionTruncator $descriptionTruncator,
     ) {
     }
 
@@ -30,6 +32,7 @@ final readonly class EquipmentController
     public function overview(): array
     {
         $rows = $this->equipment->listWithDiveCounts();
+        $total = count($rows);
 
         return [
             'equipment' => array_map(function (array $row): array {
@@ -37,6 +40,8 @@ final readonly class EquipmentController
                 $mapped['diveCount'] = $row['diveCount'];
                 return $mapped;
             }, $rows),
+            'title' => 'Equipment',
+            'meta_description' => sprintf('Browse %d equipment %s logged in this logbook.', $total, $total === 1 ? 'item' : 'items'),
         ];
     }
 
@@ -52,11 +57,28 @@ final readonly class EquipmentController
 
         $diveRows = $this->dives->listOverviewByEquipment($id);
         $dives = $this->mapDiveRows($diveRows ?? []);
+        $mapped = $this->mapEquipment($item);
+
+        $manufacturer = $mapped['manufacturer'] !== null ? trim((string) $mapped['manufacturer']) : '';
+        $title = $manufacturer !== '' ? sprintf('%s %s', $manufacturer, $mapped['object']) : $mapped['object'];
+
+        $descriptionParts = [$manufacturer !== ''
+            ? sprintf('%s %s — dive equipment tracked in this logbook.', $manufacturer, $mapped['object'])
+            : sprintf('%s — dive equipment tracked in this logbook.', $mapped['object'])];
+        if ($mapped['serviceDueSoon']) {
+            $descriptionParts[] = 'Service due soon.';
+        }
+        $comment = $mapped['comment'] !== null ? trim((string) $mapped['comment']) : '';
+        if ($comment !== '') {
+            $descriptionParts[] = $comment;
+        }
 
         return [
-            'item' => $this->mapEquipment($item),
+            'item' => $mapped,
             'dives' => $dives,
             'showDiveLinking' => $diveRows !== null,
+            'title' => $title,
+            'meta_description' => $this->descriptionTruncator->truncate(implode(' ', $descriptionParts)),
         ];
     }
 

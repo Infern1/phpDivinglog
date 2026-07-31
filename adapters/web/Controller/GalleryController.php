@@ -9,6 +9,7 @@ use PhpDivingLog\Repository\PersonalRepository;
 use PhpDivingLog\Repository\PictureRepository;
 use PhpDivingLog\Support\Formatter;
 use PhpDivingLog\Support\MediaResolver;
+use PhpDivingLog\Support\Seo\DescriptionTruncator;
 
 final readonly class GalleryController
 {
@@ -18,6 +19,7 @@ final readonly class GalleryController
         private DiveRepository $dives,
         private PersonalRepository $personal,
         private Formatter $formatter,
+        private DescriptionTruncator $descriptionTruncator,
     ) {
     }
 
@@ -36,7 +38,33 @@ final readonly class GalleryController
             $this->pictures->findByLogId($logId)
         );
 
-        return ['pictures' => $pictures];
+        $meta = $this->dives->findMetaByLogIds([$logId])[$logId] ?? null;
+        $diveNumber = is_array($meta) && $meta['number'] > 0 ? $meta['number'] : null;
+
+        $title = $diveNumber !== null ? sprintf('Photos — Dive #%d', $diveNumber) : 'Dive Photos';
+
+        if (is_array($meta) && $diveNumber !== null) {
+            $site = trim((string) ($meta['place_name'] ?? ''));
+            $locationParts = array_values(array_filter([
+                trim((string) ($meta['city_name'] ?? '')),
+                trim((string) ($meta['country_name'] ?? '')),
+            ], static fn (string $part): bool => $part !== ''));
+            $location = implode(', ', $locationParts);
+            $dateDisplay = $this->formatter->formatDate($meta['date_time']);
+
+            $description = sprintf('Photos from dive #%d', $diveNumber)
+                . ($site !== '' ? ' at ' . $site : '')
+                . ($location !== '' ? ' in ' . $location : '')
+                . ' on ' . $dateDisplay . '.';
+        } else {
+            $description = 'Photos from a logged dive in this dive log.';
+        }
+
+        return [
+            'pictures' => $pictures,
+            'title' => $title,
+            'meta_description' => $this->descriptionTruncator->truncate($description),
+        ];
     }
 
     /**
@@ -99,6 +127,8 @@ final readonly class GalleryController
             'currentPage' => $currentPage,
             'pages' => $pages,
             'total' => $total,
+            'title' => $currentPage > 1 ? sprintf('Dive Log Gallery — Page %d', $currentPage) : 'Dive Log Gallery',
+            'meta_description' => sprintf('Browse %d photo%s across the logbook.', $total, $total === 1 ? '' : 's'),
         ];
     }
 }

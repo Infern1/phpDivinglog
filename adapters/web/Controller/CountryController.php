@@ -9,6 +9,7 @@ use PhpDivingLog\Repository\DiveRepository;
 use PhpDivingLog\Repository\DiveSiteRepository;
 use PhpDivingLog\Support\Formatter;
 use PhpDivingLog\Support\MediaResolver;
+use PhpDivingLog\Support\Seo\DescriptionTruncator;
 use PhpDivingLog\Support\UnitConverter;
 
 final readonly class CountryController
@@ -20,6 +21,7 @@ final readonly class CountryController
         private MediaResolver $media,
         private Formatter $formatter,
         private UnitConverter $converter,
+        private DescriptionTruncator $descriptionTruncator,
     ) {
     }
 
@@ -29,6 +31,7 @@ final readonly class CountryController
     public function overview(): array
     {
         $rows = $this->countries->listWithDiveCounts();
+        $total = count($rows);
 
         return [
             'countries' => array_map(function (array $row): array {
@@ -36,6 +39,8 @@ final readonly class CountryController
                 $country['diveCount'] = $row['diveCount'];
                 return $country;
             }, $rows),
+            'title' => 'Countries',
+            'meta_description' => sprintf('Browse %d %s logged in this logbook.', $total, $total === 1 ? 'country' : 'countries'),
         ];
     }
 
@@ -49,10 +54,26 @@ final readonly class CountryController
             return null;
         }
 
+        $siteRows = $this->sites->listByCountry($id);
+        $diveRows = $this->dives->listOverviewByCountry($id);
+        $siteCount = count($siteRows);
+        $diveCount = count($diveRows);
+
+        $description = sprintf(
+            '%s: %d logged %s across %d dive %s.',
+            $country->name,
+            $diveCount,
+            $diveCount === 1 ? 'dive' : 'dives',
+            $siteCount,
+            $siteCount === 1 ? 'site' : 'sites'
+        );
+
         return [
             'country' => $this->mapCountry($country),
-            'sites' => array_map([$this, 'mapSite'], $this->sites->listByCountry($id)),
-            'dives' => $this->mapDiveRows($this->dives->listOverviewByCountry($id)),
+            'sites' => array_map([$this, 'mapSite'], $siteRows),
+            'dives' => $this->mapDiveRows($diveRows),
+            'title' => sprintf('%s — Diving Destination', $country->name),
+            'meta_description' => $this->descriptionTruncator->truncate($description),
         ];
     }
 

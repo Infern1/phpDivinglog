@@ -49,6 +49,23 @@ $renderer = new TwigRenderer(
     ['app_name' => $appName]
 );
 
+$seoContextBuilder = $services['pageSeoContextBuilder'];
+
+/**
+ * @param array<string, mixed> $payload
+ */
+$renderPage = static function (string $template, array $payload, string $route, ?int $id) use ($renderer, $seoContextBuilder): string {
+    $overrides = $seoContextBuilder->build($route, $id, $_GET, $payload['title'] ?? null, $payload['meta_description'] ?? null);
+
+    if (isset($overrides['robots']) && $overrides['robots'] !== '') {
+        // Sent as an HTTP header too (not just the <meta> tag) since some templates -- the
+        // embeddable summary fragment, the AJAX dive-detail partial -- have no <head> at all.
+        header('X-Robots-Tag: ' . $overrides['robots']);
+    }
+
+    return $renderer->render($template, array_merge($payload, $overrides));
+};
+
 $diveController = new DiveController(
     $repositories['dives'],
     $repositories['buddies'],
@@ -64,23 +81,25 @@ $diveController = new DiveController(
     $services['formatter'],
     $services['diveMetrics'],
     $services['rtfConverter'],
-    $services['mediaResolver']
+    $services['mediaResolver'],
+    $services['descriptionTruncator']
 );
 
 $profileController = new ProfileController($repositories['dives'], $services['unitConverter']);
-$siteController = new DiveSiteController($repositories['diveSites'], $repositories['dives'], $repositories['pictures'], $services['formatter'], $services['unitConverter'], $services['mediaResolver']);
-$countryController = new CountryController($repositories['countries'], $repositories['dives'], $repositories['diveSites'], $services['mediaResolver'], $services['formatter'], $services['unitConverter']);
-$cityController = new CityController($repositories['cities']);
-$shopController = new ShopController($repositories['shops']);
-$tripController = new TripController($repositories['trips'], $repositories['dives'], $services['formatter'], $services['unitConverter']);
-$equipmentController = new EquipmentController($repositories['equipment'], $repositories['dives'], $container['config'], $services['formatter'], $services['unitConverter'], $services['mediaResolver']);
-$statsController = new DiveStatisticsController($repositories['diveStatistics'], $repositories['certifications'], $services['diveStatisticsFormatter'], $services['formatter'], $services['unitConverter'], $services['mediaResolver'], $container['config']);
+$siteController = new DiveSiteController($repositories['diveSites'], $repositories['dives'], $repositories['pictures'], $services['formatter'], $services['unitConverter'], $services['mediaResolver'], $services['descriptionTruncator']);
+$countryController = new CountryController($repositories['countries'], $repositories['dives'], $repositories['diveSites'], $services['mediaResolver'], $services['formatter'], $services['unitConverter'], $services['descriptionTruncator']);
+$cityController = new CityController($repositories['cities'], $services['descriptionTruncator']);
+$shopController = new ShopController($repositories['shops'], $services['descriptionTruncator']);
+$tripController = new TripController($repositories['trips'], $repositories['dives'], $services['formatter'], $services['unitConverter'], $services['descriptionTruncator']);
+$equipmentController = new EquipmentController($repositories['equipment'], $repositories['dives'], $container['config'], $services['formatter'], $services['unitConverter'], $services['mediaResolver'], $services['descriptionTruncator']);
+$statsController = new DiveStatisticsController($repositories['diveStatistics'], $repositories['certifications'], $services['diveStatisticsFormatter'], $services['formatter'], $services['unitConverter'], $services['mediaResolver'], $container['config'], $services['descriptionTruncator']);
 $galleryController = new GalleryController(
     $repositories['pictures'],
     $services['mediaResolver'],
     $repositories['dives'],
     $repositories['personal'],
-    $services['formatter']
+    $services['formatter'],
+    $services['descriptionTruncator']
 );
 $summaryController = new SummaryController($repositories['stats']);
 
@@ -103,7 +122,7 @@ if ($match['route'] === 'dives.overview') {
     $search = isset($_GET['q']) ? trim((string) $_GET['q']) : '';
     $sort = isset($_GET['sort']) ? (string) $_GET['sort'] : 'newest';
     header('Content-Type: text/html; charset=UTF-8');
-    echo $renderer->render('dives_overview.html.twig', $diveController->overview($page, 20, $search, $sort));
+    echo $renderPage('dives_overview.html.twig', $diveController->overview($page, 20, $search, $sort), $match['route'], $match['id']);
     return;
 }
 
@@ -121,13 +140,13 @@ if ($match['route'] === 'dives.detail' && $match['id'] !== null) {
         || (isset($_GET['partial']) && (string) $_GET['partial'] !== '' && (string) $_GET['partial'] !== '0');
 
     header('Content-Type: text/html; charset=UTF-8');
-    echo $renderer->render($isPartial ? 'dive_detail_partial.html.twig' : 'dive_detail.html.twig', $payload);
+    echo $renderPage($isPartial ? 'dive_detail_partial.html.twig' : 'dive_detail.html.twig', $payload, $match['route'], $match['id']);
     return;
 }
 
 if ($match['route'] === 'sites.overview') {
     header('Content-Type: text/html; charset=UTF-8');
-    echo $renderer->render('divesite_overview.html.twig', $siteController->overview());
+    echo $renderPage('divesite_overview.html.twig', $siteController->overview(), $match['route'], $match['id']);
     return;
 }
 
@@ -141,13 +160,13 @@ if ($match['route'] === 'sites.detail' && $match['id'] !== null) {
     }
 
     header('Content-Type: text/html; charset=UTF-8');
-    echo $renderer->render('divesite_detail.html.twig', $payload);
+    echo $renderPage('divesite_detail.html.twig', $payload, $match['route'], $match['id']);
     return;
 }
 
 if ($match['route'] === 'countries.overview') {
     header('Content-Type: text/html; charset=UTF-8');
-    echo $renderer->render('divecountry_overview.html.twig', $countryController->overview());
+    echo $renderPage('divecountry_overview.html.twig', $countryController->overview(), $match['route'], $match['id']);
     return;
 }
 
@@ -161,13 +180,13 @@ if ($match['route'] === 'countries.detail' && $match['id'] !== null) {
     }
 
     header('Content-Type: text/html; charset=UTF-8');
-    echo $renderer->render('divecountry_detail.html.twig', $payload);
+    echo $renderPage('divecountry_detail.html.twig', $payload, $match['route'], $match['id']);
     return;
 }
 
 if ($match['route'] === 'cities.overview') {
     header('Content-Type: text/html; charset=UTF-8');
-    echo $renderer->render('divecity_overview.html.twig', $cityController->overview());
+    echo $renderPage('divecity_overview.html.twig', $cityController->overview(), $match['route'], $match['id']);
     return;
 }
 
@@ -181,13 +200,13 @@ if ($match['route'] === 'cities.detail' && $match['id'] !== null) {
     }
 
     header('Content-Type: text/html; charset=UTF-8');
-    echo $renderer->render('divecity_detail.html.twig', $payload);
+    echo $renderPage('divecity_detail.html.twig', $payload, $match['route'], $match['id']);
     return;
 }
 
 if ($match['route'] === 'shops.overview') {
     header('Content-Type: text/html; charset=UTF-8');
-    echo $renderer->render('diveshop_overview.html.twig', $shopController->overview());
+    echo $renderPage('diveshop_overview.html.twig', $shopController->overview(), $match['route'], $match['id']);
     return;
 }
 
@@ -201,13 +220,13 @@ if ($match['route'] === 'shops.detail' && $match['id'] !== null) {
     }
 
     header('Content-Type: text/html; charset=UTF-8');
-    echo $renderer->render('diveshop_detail.html.twig', $payload);
+    echo $renderPage('diveshop_detail.html.twig', $payload, $match['route'], $match['id']);
     return;
 }
 
 if ($match['route'] === 'trips.overview') {
     header('Content-Type: text/html; charset=UTF-8');
-    echo $renderer->render('divetrip_overview.html.twig', $tripController->overview());
+    echo $renderPage('divetrip_overview.html.twig', $tripController->overview(), $match['route'], $match['id']);
     return;
 }
 
@@ -221,13 +240,13 @@ if ($match['route'] === 'trips.detail' && $match['id'] !== null) {
     }
 
     header('Content-Type: text/html; charset=UTF-8');
-    echo $renderer->render('divetrip_detail.html.twig', $payload);
+    echo $renderPage('divetrip_detail.html.twig', $payload, $match['route'], $match['id']);
     return;
 }
 
 if ($match['route'] === 'equipment.overview') {
     header('Content-Type: text/html; charset=UTF-8');
-    echo $renderer->render('equipment_overview.html.twig', $equipmentController->overview());
+    echo $renderPage('equipment_overview.html.twig', $equipmentController->overview(), $match['route'], $match['id']);
     return;
 }
 
@@ -241,32 +260,32 @@ if ($match['route'] === 'equipment.detail' && $match['id'] !== null) {
     }
 
     header('Content-Type: text/html; charset=UTF-8');
-    echo $renderer->render('equipment_detail.html.twig', $payload);
+    echo $renderPage('equipment_detail.html.twig', $payload, $match['route'], $match['id']);
     return;
 }
 
 if ($match['route'] === 'stats.overview') {
     header('Content-Type: text/html; charset=UTF-8');
-    echo $renderer->render('divestats.html.twig', $statsController->view());
+    echo $renderPage('divestats.html.twig', $statsController->view(), $match['route'], $match['id']);
     return;
 }
 
 if ($match['route'] === 'gallery.overview') {
     $page = isset($_GET['page']) && is_numeric($_GET['page']) ? max(1, (int) $_GET['page']) : 1;
     header('Content-Type: text/html; charset=UTF-8');
-    echo $renderer->render('dive_log_gallery.html.twig', $galleryController->overview($page, 24));
+    echo $renderPage('dive_log_gallery.html.twig', $galleryController->overview($page, 24), $match['route'], $match['id']);
     return;
 }
 
 if ($match['route'] === 'gallery.detail' && $match['id'] !== null) {
     header('Content-Type: text/html; charset=UTF-8');
-    echo $renderer->render('divegallery.html.twig', $galleryController->forDive($match['id']));
+    echo $renderPage('divegallery.html.twig', $galleryController->forDive($match['id']), $match['route'], $match['id']);
     return;
 }
 
 if ($match['route'] === 'summary.overview') {
     header('Content-Type: text/html; charset=UTF-8');
-    echo $renderer->render('divesummary.html.twig', $summaryController->embeddable());
+    echo $renderPage('divesummary.html.twig', $summaryController->embeddable(), $match['route'], $match['id']);
     return;
 }
 

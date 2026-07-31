@@ -7,6 +7,45 @@ namespace PhpDivingLog\Adapters\Web;
 final class Router
 {
     /**
+     * Canonical resource key to URL path segment, shared with
+     * Support\Seo\CanonicalUrlBuilder so route resolution and canonical-URL construction stay
+     * in sync instead of duplicating this table.
+     *
+     * @var array<string, string>
+     */
+    public const RESOURCE_SEGMENTS = [
+        'dives' => 'dives',
+        'sites' => 'sites',
+        'countries' => 'countries',
+        'cities' => 'cities',
+        'shops' => 'shops',
+        'trips' => 'trips',
+        'equipment' => 'equipment',
+        'gallery' => 'gallery',
+        'stats' => 'stats',
+        'summary' => 'summary',
+        'profile' => 'profile',
+    ];
+
+    /**
+     * Resource keys that support an overview (list) route.
+     *
+     * @var list<string>
+     */
+    private const OVERVIEW_RESOURCES = [
+        'dives', 'sites', 'countries', 'cities', 'shops', 'trips', 'equipment', 'gallery', 'stats', 'summary',
+    ];
+
+    /**
+     * Resource keys that support a detail (single-item) route.
+     *
+     * @var list<string>
+     */
+    private const DETAIL_RESOURCES = [
+        'dives', 'sites', 'countries', 'cities', 'shops', 'trips', 'equipment', 'gallery', 'profile',
+    ];
+
+    /**
      * @return array{route: string, id: int|null}
      */
     public function resolve(string $requestUri): array
@@ -18,39 +57,18 @@ final class Router
             return ['route' => 'dives.overview', 'id' => null];
         }
 
-        $overviewRoutes = [
-            'dives' => 'dives.overview',
-            'sites' => 'sites.overview',
-            'countries' => 'countries.overview',
-            'cities' => 'cities.overview',
-            'shops' => 'shops.overview',
-            'trips' => 'trips.overview',
-            'equipment' => 'equipment.overview',
-            'gallery' => 'gallery.overview',
-            'stats' => 'stats.overview',
-            'summary' => 'summary.overview',
-        ];
-
-        $detailRoutes = [
-            'dives' => 'dives.detail',
-            'sites' => 'sites.detail',
-            'countries' => 'countries.detail',
-            'cities' => 'cities.detail',
-            'shops' => 'shops.detail',
-            'trips' => 'trips.detail',
-            'equipment' => 'equipment.detail',
-            'gallery' => 'gallery.detail',
-            'profile' => 'profile.detail',
-        ];
-
         $resource = $segments[0];
 
-        if (isset($overviewRoutes[$resource]) && count($segments) === 1) {
-            return ['route' => $overviewRoutes[$resource], 'id' => null];
+        if (!isset(self::RESOURCE_SEGMENTS[$resource])) {
+            return ['route' => 'not-found', 'id' => null];
         }
 
-        if (isset($detailRoutes[$resource]) && isset($segments[1]) && ctype_digit($segments[1])) {
-            return ['route' => $detailRoutes[$resource], 'id' => (int) $segments[1]];
+        if (in_array($resource, self::OVERVIEW_RESOURCES, true) && count($segments) === 1) {
+            return ['route' => $resource . '.overview', 'id' => null];
+        }
+
+        if (in_array($resource, self::DETAIL_RESOURCES, true) && isset($segments[1]) && ctype_digit($segments[1])) {
+            return ['route' => $resource . '.detail', 'id' => (int) $segments[1]];
         }
 
         return ['route' => 'not-found', 'id' => null];
