@@ -147,8 +147,9 @@ final readonly class DiveStatisticsRepository
      */
     private function computeClassifications(int $total): array
     {
-        $deco = $this->countWhere("Deco = 'True'");
-        $rep = $this->countWhere("Rep = 'True'");
+        $deco = $this->countBooleanTrue('Deco');
+        $rep = $this->countBooleanTrue('Rep');
+        $twin = $this->countBooleanTrue('DblTank');
 
         return [
             'shore' => $this->countWhere('Entry = :entry', [':entry' => 1]),
@@ -166,12 +167,55 @@ final readonly class DiveStatisticsRepository
             'nodeco' => $deco === null ? null : max(0, $total - $deco),
             'rep' => $rep,
             'norep' => $rep === null ? null : max(0, $total - $rep),
-            'single' => $this->countWhere("(DblTank = 'False' OR DblTank = 'false')"),
-            'twin' => $this->countWhere("DblTank = 'True'"),
+            'single' => $twin === null ? null : max(0, $total - $twin),
+            'twin' => $twin,
             'oc' => $this->countWhere('SupplyType = :supply', [':supply' => 0]),
             'scr' => $this->countWhere('SupplyType = :supply', [':supply' => 1]),
             'ccr' => $this->countWhere('SupplyType = :supply', [':supply' => 2]),
         ];
+    }
+
+    /**
+     * Counts truthy values in a boolean-style Logbook column, tolerating both the
+     * MySQL-export representation ('True'/'False' text) and the native Diving Log SQLite
+     * export representation (1/0 integers). Counting is done in PHP after a single fetch
+     * rather than in SQL, to avoid MySQL's implicit string-to-number coercion silently
+     * miscounting a text-valued column if a numeric literal were compared against it in SQL.
+     */
+    private function countBooleanTrue(string $column): ?int
+    {
+        $sql = sprintf('SELECT %1$s AS Val FROM %2$sLogbook', $column, $this->tablePrefix);
+
+        try {
+            $statement = $this->pdo->query($sql);
+            $rows = $statement === false ? [] : $statement->fetchAll(PDO::FETCH_ASSOC);
+        } catch (\PDOException $exception) {
+            if ($this->isMissingColumn($exception)) {
+                return null;
+            }
+
+            throw $exception;
+        }
+
+        $count = 0;
+        foreach ($rows as $row) {
+            if ($this->isTruthyBooleanValue($row['Val'] ?? null)) {
+                $count++;
+            }
+        }
+
+        return $count;
+    }
+
+    private function isTruthyBooleanValue(mixed $value): bool
+    {
+        if ($value === null) {
+            return false;
+        }
+
+        $normalized = strtolower(trim((string) $value));
+
+        return $normalized === 'true' || $normalized === '1';
     }
 
     private function countDiveType(int $code): ?int

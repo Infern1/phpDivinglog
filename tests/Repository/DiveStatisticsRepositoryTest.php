@@ -96,4 +96,37 @@ final class DiveStatisticsRepositoryTest extends TestCase
         self::assertNull($stats->classifications['deco']);
         self::assertSame(1, $stats->depthBuckets['b0_18']);
     }
+
+    public function testComputeClassifiesIntegerBooleanColumnsLikeNativeSqliteExport(): void
+    {
+        if (!in_array('sqlite', PDO::getAvailableDrivers(), true)) {
+            $this->markTestSkipped('pdo_sqlite driver is not available in this environment.');
+        }
+
+        $pdo = new PDO('sqlite::memory:');
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $pdo->exec(
+            'CREATE TABLE DL_Logbook (Number INTEGER PRIMARY KEY, Divedate TEXT, Divetime INTEGER, Depth REAL, '
+            . 'Deco INTEGER, Rep INTEGER, DblTank INTEGER)'
+        );
+        // Mirrors tests/fixtures/seed.sql's deco/rep/dbltank values, but stored as the native
+        // Diving Log SQLite export's 1/0 integers instead of 'True'/'False' text.
+        $pdo->exec(
+            "INSERT INTO DL_Logbook (Number, Divedate, Divetime, Depth, Deco, Rep, DblTank) VALUES "
+            . "(1, '2026-01-01', 40, 18.0, 0, 1, 0), "
+            . "(2, '2026-02-01', 50, 22.4, 1, 1, 1), "
+            . "(3, '2026-03-15', 65, 41.0, 0, 1, 1)"
+        );
+
+        $repo = new DiveStatisticsRepository($pdo, 'DL_');
+        $stats = $repo->compute();
+
+        self::assertSame(3, $stats->totalDives);
+        self::assertSame(1, $stats->classifications['deco']);
+        self::assertSame(2, $stats->classifications['nodeco']);
+        self::assertSame(3, $stats->classifications['rep']);
+        self::assertSame(0, $stats->classifications['norep']);
+        self::assertSame(1, $stats->classifications['single']);
+        self::assertSame(2, $stats->classifications['twin']);
+    }
 }

@@ -10,7 +10,7 @@ This project supports both:
 - PHP 8.3+
 - Extensions:
   - `pdo`
-  - `pdo_mysql`
+  - `pdo_mysql` (MySQL/MariaDB deployments) or `pdo_sqlite` (SQLite deployments)
   - `mbstring`
   - `json`
 - Writable directories:
@@ -30,12 +30,34 @@ This project supports both:
   - `mysql:host=127.0.0.1;port=3306;dbname=divelog;charset=utf8mb4`
 - Unix socket:
   - `mysql:unix_socket=/var/run/mysqld/mysqld.sock;dbname=divelog;charset=utf8mb4`
+- SQLite (no database server):
+  - `sqlite:/absolute/path/to/divinglog.sqlite`
 
 If `DB_DSN` is empty, the app builds DSN from `DB_HOST`, `DB_PORT`, and `DB_NAME`.
 3. Keep secrets out of VCS (`.env` is git-ignored).
 4. Set routing mode:
    - `APP_QUERY_STRING=false` for rewritten pretty URLs (recommended),
    - `APP_QUERY_STRING=true` when rewrites are unavailable.
+
+## SQLite deployments (no database server)
+
+For hosts without MySQL access, point `DB_DSN` at a SQLite file instead:
+
+1. Install/enable the `pdo_sqlite` PHP extension (no `pdo_mysql` needed).
+2. Copy your SQLite file to a location outside `public/` -- e.g. `var/divinglog.sqlite` --
+   so it's never web-accessible. It only needs to be readable by the web server user; the
+   app opens it read-only.
+3. Set `DB_DSN=sqlite:/absolute/path/to/divinglog.sqlite`. Leave `DB_USER`/`DB_PASSWORD`
+   empty -- SQLite has no server-side authentication.
+4. Set `TABLE_PREFIX` based on the file's shape:
+   - Empty (`TABLE_PREFIX=`) for a native Diving Log SQLite export (unprefixed tables like
+     `Logbook`, `Place`, `Country`).
+   - `DL_` (the usual default) for a MySQL-export-shaped SQLite file.
+
+Known limitation: a native Diving Log export can store photos/maps/certification scans as
+in-database BLOBs; phpDivingLog only renders images from filesystem-path columns (matching
+its MySQL-export behavior), so BLOB-only images won't display. Everything else -- dive
+listings, statistics, sites, trips, equipment, certifications -- works the same as MySQL.
 
 ## Standalone service (recommended)
 

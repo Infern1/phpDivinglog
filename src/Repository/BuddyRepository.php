@@ -54,7 +54,8 @@ final readonly class BuddyRepository
             $statement->execute();
             return $statement->fetchAll();
         } catch (\PDOException $exception) {
-            if (($exception->errorInfo[0] ?? null) === '42S22') {
+            $sqlState = $exception->errorInfo[0] ?? null;
+            if ($sqlState === '42S22' || ($sqlState === 'HY000' && str_contains(strtolower($exception->getMessage()), 'no such column'))) {
                 return null;
             }
 
