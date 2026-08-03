@@ -2,6 +2,29 @@
 
 All notable changes to phpDivingLog are documented in this file.
 
+## v4.3.0 — 2026-08-03
+
+### Added
+- SQLite is now a fully supported alternative to MySQL: set `DB_DSN=sqlite:/path/to/file.sqlite`
+  in `.env` and no database server is required at all. Two schema shapes are supported via the
+  existing `TABLE_PREFIX` setting: a **native Diving Log SQLite export** (`TABLE_PREFIX=` empty,
+  unprefixed tables like `Logbook`/`Place`) or a **MySQL-export-shaped SQLite file**
+  (`TABLE_PREFIX=DL_`, unchanged default). `Connection::fromConfig()` opens SQLite read-only and
+  fails fast with a path-specific error if the file is missing or unreadable; `DB_USER` is no
+  longer required for a `sqlite:` DSN. Documented in README, INSTALL, `docs/deployment.md`, and
+  `.env.example`.
+
+### Fixes (surfaced by testing against a real Diving Log SQLite export)
+- `DiveStatisticsRepository` classified `Deco`/`Rep`/`DblTank` via literal SQL string comparisons
+  (`'True'`/`'False'`), which don't match the native export's integer `1`/`0` representation.
+  Classification now happens in PHP after a single fetch, which also sidesteps a MySQL
+  implicit-coercion hazard a naive SQL-level fix would have introduced.
+- `AppInfoRepository` selected a hardcoded `Version` column with no fallback or error handling at
+  all; the native export names it `DBVersion` instead, which would have fatal-errored on every
+  page load against that schema.
+- `BuddyRepository` only caught MySQL's `42S22` missing-column SQLSTATE, not SQLite's, breaking
+  the dive detail page wherever `BuddyID` doesn't exist as a column name.
+
 ## v4.2.1 — 2026-08-01
 
 ### Fixes (surfaced by a real SEO audit against the v4.2.0 release)
