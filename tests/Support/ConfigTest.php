@@ -46,4 +46,25 @@ final class ConfigTest extends TestCase
         self::assertSame('mysql:host=db;port=3307;dbname=divelog;charset=utf8mb4', $config->dsn());
         self::assertSame('divelog', $config->databaseUser());
     }
+
+    public function testAcceptsSqliteDsnWithoutDatabaseUser(): void
+    {
+        $config = Config::fromArray([
+            'DB_DSN' => 'sqlite:/var/data/divinglog.sqlite',
+            'TABLE_PREFIX' => '',
+        ]);
+
+        self::assertSame('sqlite:/var/data/divinglog.sqlite', $config->dsn());
+        self::assertSame('', $config->databaseUser());
+        self::assertSame('', $config->tablePrefix());
+    }
+
+    public function testStillThrowsWhenDsnIsEmptyAndNoHostSettingsProvided(): void
+    {
+        $this->expectException(ConfigException::class);
+
+        Config::fromArray([
+            'DB_DSN' => '',
+        ]);
+    }
 }

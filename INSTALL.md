@@ -8,12 +8,10 @@ Requirements
 ------------
 
 - PHP 8.3+
-- Extensions: pdo, pdo_mysql, mbstring, json
+- Extensions: pdo, mbstring, json, plus one of:
+  - pdo_mysql (for a MySQL/MariaDB database), or
+  - pdo_sqlite (for a SQLite file -- no database server required)
 - Composer 2+
-
-Optional for local test parity:
-
-- pdo_sqlite
 
 Quick Start
 -----------
@@ -41,11 +39,24 @@ Quick Start
 
   `DB_DSN="mysql:unix_socket=/var/run/mysqld/mysqld.sock;dbname=divelog;charset=utf8mb4"`
 
+- SQLite file (no database server needed):
+
+  `DB_DSN="sqlite:/absolute/path/to/divinglog.sqlite"`
+
 Notes:
 
-- Keep `charset=utf8mb4` in DSN.
+- Keep `charset=utf8mb4` in MySQL DSNs.
 - If `DB_DSN` is empty, the app builds it from `DB_HOST` + `DB_PORT` + `DB_NAME`.
-- `DB_USER` is always required.
+- `DB_USER` is required for MySQL; not required for a `sqlite:` DSN.
+
+SQLite notes:
+
+- Requires the `pdo_sqlite` extension instead of `pdo_mysql`.
+- Store the SQLite file outside `public/` (e.g. under `var/`).
+- Set `TABLE_PREFIX=` (empty) to read a native Diving Log SQLite export directly (unprefixed
+  tables like `Logbook`, `Place`, `Country`), or keep `TABLE_PREFIX=DL_` for a MySQL-export-
+  shaped SQLite file. See the "Database: MySQL or SQLite" section in `README.md` for details,
+  including the known limitation around BLOB-embedded photos.
 
 4) Ensure writable runtime directories
 

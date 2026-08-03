@@ -15,12 +15,11 @@ The application reads from a Diving Log MySQL export schema (table prefix config
 ## Requirements
 
 - PHP 8.3+
-- Extensions: `pdo`, `pdo_mysql`, `mbstring`, `json`
+- Extensions: `pdo`, `mbstring`, `json`, plus one of:
+  - `pdo_mysql` (for a MySQL/MariaDB database), or
+  - `pdo_sqlite` (for a SQLite file -- no database server required; also used by the
+    fixture-backed integration/smoke tests regardless of which driver you deploy with)
 - Composer 2+
-
-For local test coverage parity:
-
-- `pdo_sqlite` (for fixture-backed integration/smoke tests)
 
 ## Installation
 
@@ -67,6 +66,31 @@ Complete option list: `.env.example`.
 
 - `mysql:host=127.0.0.1;port=3306;dbname=divelog;charset=utf8mb4`
 - `mysql:unix_socket=/var/run/mysqld/mysqld.sock;dbname=divelog;charset=utf8mb4`
+- `sqlite:/absolute/path/to/divinglog.sqlite`
+
+### Database: MySQL or SQLite
+
+phpDivingLog can run against either engine -- switching is a `.env` change, not a code
+change:
+
+- **MySQL** (default): set `DB_DSN` (or `DB_HOST`/`DB_PORT`/`DB_NAME`) plus `DB_USER`/
+  `DB_PASSWORD`, and keep `TABLE_PREFIX=DL_` (or your custom prefix).
+- **SQLite**: set `DB_DSN=sqlite:/absolute/path/to/your-file.sqlite`. No `DB_USER`/
+  `DB_PASSWORD` is needed -- SQLite has no server-side authentication. Requires the
+  `pdo_sqlite` PHP extension. Store the file outside `public/` (e.g. under `var/`), since
+  it's opened read-only and never needs to be web-accessible.
+
+  Two SQLite file shapes are supported, selected via `TABLE_PREFIX`:
+  - A **native Diving Log SQLite export** (the file Diving Log itself can export, with
+    unprefixed tables like `Logbook`, `Place`, `Country`): set `TABLE_PREFIX=` (empty).
+  - A **MySQL-export-shaped SQLite file** (tables named like `DL_Logbook`): keep
+    `TABLE_PREFIX=DL_` as usual.
+
+  Known limitation: photos, maps, and certification scans stored as in-database BLOBs in a
+  native Diving Log export are not rendered -- phpDivingLog only reads filesystem-path
+  columns (e.g. `PhotoPath`-style fields) for images, matching its MySQL-export behavior.
+  If your SQLite file only has BLOB image data, those images simply won't display; nothing
+  else is affected.
 
 ## Entry points
 

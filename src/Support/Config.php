@@ -400,10 +400,16 @@ final class Config
      */
     private static function validateRequiredDatabase(array $values): void
     {
-        $hasDsn = trim($values['DB_DSN']) !== '';
+        $dsn = trim($values['DB_DSN']);
+        $hasDsn = $dsn !== '';
+        $isSqliteDsn = $hasDsn && str_starts_with(strtolower($dsn), 'sqlite:');
         $hasHost = trim($values['DB_HOST']) !== '';
         $hasName = trim($values['DB_NAME']) !== '';
         $hasUser = trim($values['DB_USER']) !== '';
+
+        if ($isSqliteDsn) {
+            return;
+        }
 
         if ($hasDsn && $hasUser) {
             return;
